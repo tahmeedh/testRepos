@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".", // This must be specified if "paths" is.
+        "paths": {
+            "Constants/*": [
+                "constants/*"
+            ],
+            "Controllers/*": [
+                "controllers/*"
+            ],
+            "Poms/*": [
+                "poms/*"
+            ],
+            "Helpers/*": [
+                "helpers/*"
+            ],
+            "Assets/*": [
+                "assets/*"
+            ]
+        }
+    },
+    "include": [
+        "."
+    ],
+    "exclude": [
+        "node_modules",
+        "playwright-report",
+        "test-results"
+    ]
+}
