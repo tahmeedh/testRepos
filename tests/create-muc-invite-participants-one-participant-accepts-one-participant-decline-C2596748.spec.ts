@@ -1,6 +1,6 @@
 import { test, expect, chromium, Page, Browser, Locator } from '@playwright/test';
 import { BaseController } from '../controller/base-controller';
-import { users } from 'Constants/users';
+import { companyCreateManager }  from '../helper/company-create-manager';
 import { baseURL } from 'playwright.config';
 
 test.describe('@Smoke @MUC', () => {
@@ -12,28 +12,37 @@ test.describe('@Smoke @MUC', () => {
     let context3 = null;
     let app2 = null;
 
+    let createManager : companyCreateManager;
+    let user1 = null;
+    let user2 = null;
+    let user3 = null;
+
     test.beforeEach(async () => {
         browser = await chromium.launch();
+        createManager = new companyCreateManager();
+        const company = await createManager.init(3);
+        user1 = createManager.users[0];
+        user2 = createManager.users[1];
+        user3 = createManager.users[2];
     });
     
     test('@Real @Smoke C2596748 l Create MUC, invite 2 participants to MUC, 1 participant accept, 1 participant decline', 
     async () => {
         // change timeout
-        test.setTimeout(120000);
+        test.setTimeout(150000);
 
         // user1 login 
-        browser = await chromium.launch();
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
         app = new BaseController(page1);
         await page1.goto( baseURL );
-        await app.login.loginToPortal(users.USER1.EMAIL, users.USER1.PASSWORD);
+        await app.login.loginToPortal(user1.email, user1.password);
         await app.closeTooltips();
 
         // user create MUC 
         await app.startChat.ClickONStartMUC();
         const title = app.stringUtils.generateString(3,5);
-        await app.createChat.createMUC([users.USER2.NAME, users.USER3.NAME], title);
+        await app.createChat.createMUC([user2.firstName, user3.firstName], title);
 
         // user send message in MUC 
         const randomContend = app.stringUtils.generateString();
@@ -44,7 +53,7 @@ test.describe('@Smoke @MUC', () => {
         const page2 = await context2.newPage();
         app1 = new BaseController(page2);
         await page2.goto( baseURL );
-        await app1.login.loginToPortal(users.USER2.EMAIL, users.USER2.PASSWORD);
+        await app1.login.loginToPortal(user2.email, user2.password);
         await app1.closeTooltips();
 
         // accept invite 
@@ -65,7 +74,7 @@ test.describe('@Smoke @MUC', () => {
         const page3 = await context3.newPage();
         app2 = new BaseController(page3);
         await page3.goto( baseURL );
-        await app2.login.loginToPortal(users.USER3.EMAIL, users.USER3.PASSWORD);
+        await app2.login.loginToPortal(user3.email, user3.password);
         await app2.closeTooltips();
 
         // decline invite
@@ -80,6 +89,9 @@ test.describe('@Smoke @MUC', () => {
         await context1.close();
         await app1.logout();
         await context2.close();
+        await app2.logout();
+        await context3.close();
+        await createManager.cleanup();
     });
     
 })

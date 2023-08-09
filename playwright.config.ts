@@ -1,53 +1,70 @@
 import { defineConfig, devices } from '@playwright/test';
-var baseUrl
+var baseUrl;
+export const smThrift = { host: null, port: 7443 };
+export const companyPrefixName = 'portal';
 
 switch (process.env.SERVER) {
   case 'prod':
       baseUrl = 'https://portal.globalrelay.com';
+      smThrift.host = null; // Don't use SM thrift on PROD environment!!!
       break;
   case 'stg1':
       baseUrl = 'https://portalstg1.globalrelay.com';
+      smThrift.host = null; // Don't use SM thrift on PROD environment!!!
       break;
   case 'cpci1':
       baseUrl = 'https://lb-portal-cpci1-nvan.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-cpci1-nvan.dev-globalrelay.net';
       break;
   case 'local':
       baseUrl = 'https://portal.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
       break;
   case 'mbqa1':
       baseUrl = 'https://lb-portal-mbqa1-nvan.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-mbqa1-nvan.dev-globalrelay.net';
       break;
   case 'mbqa1-bvt':
       baseUrl = 'https://lb2-portal-mbqa1-nvan.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-mbqa1-nvan.dev-globalrelay.net';
       break;
   case 'cpqa1':
       baseUrl = 'https://cpqa1portal.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-cpqa1-nvan.dev-globalrelay.net';
       break;
   case 'cpqa2':
       baseUrl = 'https://cpqa2portal.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
       break;
   case 'cpqa2-pd1':
       baseUrl = 'https://lb3-portal-cpqa2-nvan.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
       break;
   case 'cpqa2-pd2':
       baseUrl = 'https://lb4-portal-cpqa2-nvan.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
       break;
   case 'cpqa2-va1':
       baseUrl = 'https://lb7-portal-cpqa2-nvan.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
       break;
   case 'cpqa2-ca1':
       baseUrl = 'https://lb9-portal-cpqa2-nvan.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
       break;
   case 'cpqa2-sq1':
       baseUrl = 'https://lb8-portal-cpqa2-nvan.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
       break;
   case 'mbsnap2-at':
       baseUrl = 'https://lb2-portal-mbsnap2-nvan.dev-globalrelay.net';
+      smThrift.host = 'lb-sm-mbsnap2-nvan.dev-globalrelay.net';
       break;
-  case 'mbsnap2':
-  default:
-      process.env.SERVER = 'cpqa2-va1';
-      baseUrl = 'https://lb7-portal-cpqa2-nvan.dev-globalrelay.net';
+    case 'mbsnap2':
+    default:
+      process.env.SERVER = 'mbsnap2';
+        baseUrl = 'https://lb-portal-mbsnap2-nvan.dev-globalrelay.net';
+        smThrift.host = 'lb-sm-mbsnap2-nvan.dev-globalrelay.net';
 }
 
 /**

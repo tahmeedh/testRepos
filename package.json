@@ -4,17 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test" : "npx playwright test --workers 3",
-    "test-headed" : "npx playwright test --headed --workers 3",
-    "test-filter" : "npx playwright test -- --spec --debug", 
-    "test-browser" : "npx playwright test --headed -- --spec",
-    "test-debug" : "npx playwright test --headed --debug -- --spec", 
-    "report" : "npx playwright show-report"
+    "test": "npx playwright test --workers 3",
+    "test-headed": "npx playwright test --headed --workers 3",
+    "test-filter": "npx playwright test -- --spec --debug",
+    "test-browser": "npx playwright test --headed -- --spec",
+    "test-debug": "npx playwright test --headed --debug -- --spec",
+    "report": "npx playwright show-report"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.36.1"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
   }
 }

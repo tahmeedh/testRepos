@@ -1,8 +1,6 @@
 import { test, expect, chromium } from '@playwright/test';
 import { BaseController } from '../controller/base-controller';
-import { users } from 'Constants/users';
-
-// import { baseURL } from 'playwright.config';
+import { companyCreateManager }  from '../helper/company-create-manager';
 import { baseURL } from 'playwright.config';
 
 test.describe('@Smoke @SUC', () => {
@@ -12,8 +10,16 @@ test.describe('@Smoke @SUC', () => {
     let app : BaseController;
     let app1 : BaseController;
 
+    let createManager : companyCreateManager;
+    let user1 = null;
+    let user2 = null;
+
     test.beforeEach(async () => {
         browser = await chromium.launch();
+        createManager = new companyCreateManager();
+        const company = await createManager.init(2);
+        user1 = createManager.users[0];
+        user2 = createManager.users[1];
     });
     
 
@@ -22,7 +28,6 @@ test.describe('@Smoke @SUC', () => {
         test.setTimeout(120000);
 
         // user1 login 
-        browser = await chromium.launch();
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
         app = new BaseController(page1);
@@ -30,12 +35,12 @@ test.describe('@Smoke @SUC', () => {
         await page1.goto( baseURL );
         
         // user login 
-        await app.login.loginToPortal(users.USER1.EMAIL, users.USER1.PASSWORD);
+        await app.login.loginToPortal(user1.email, user1.password);
         await app.closeTooltips();
         
         // user start 1-1
         await app.startChat.ClickOnStartOneToOne();
-        await app.createChat.CreateSUC(users.USER2.NAME);
+        await app.createChat.CreateSUC(user2.firstName);
 
         // user send message in conversation
         const randomContend = app.stringUtils.generateString();
@@ -47,16 +52,33 @@ test.describe('@Smoke @SUC', () => {
         await page2.goto( baseURL );
         app1 = new BaseController(page2);
 
-        await app1.login.loginToPortal(users.USER2.EMAIL, users.USER2.PASSWORD);
+        await app1.login.loginToPortal(user2.email, user2.password);
         await app1.closeTooltips();
 
         // user 2 open conversation with user 1
         await app1.startChat.ClickOnStartOneToOne();
-        await app1.createChat.CreateSUC(users.USER1.NAME);
+        await app1.createChat.CreateSUC(user1.firstName);
+
+        // accept invite 
+        await app1.chat.acceptSUC();
 
         // assert receive message 
+        await app1.chat.waitForHeader();
         const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContend);
         await expect(messageReceived).toHaveText(randomContend);
+
+        // check system event
+
+
+
+        // send message
+        const randomContend1 = app.stringUtils.generateString();
+        await app.chat.sendContent(randomContend1);
+
+        // assert receive message 
+        await app1.chat.waitForHeader();
+        const messageReceived1 = app1.Pom.CHATIFRAME.getByText(randomContend1);
+        await expect(messageReceived1).toHaveText(randomContend1);
 
         // assert sent and read timestamp
         await app.chat.checkLastRead();
@@ -67,6 +89,7 @@ test.describe('@Smoke @SUC', () => {
         await context1.close();
         await app1.logout();
         await context2.close();
+        await createManager.cleanup();
     });
 
 })

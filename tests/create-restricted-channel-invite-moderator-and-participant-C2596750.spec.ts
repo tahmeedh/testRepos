@@ -1,6 +1,6 @@
 import { test, expect, chromium, Page, Browser, Locator } from '@playwright/test';
 import { BaseController } from '../controller/base-controller';
-import { users } from 'Constants/users';
+import { companyCreateManager }  from '../helper/company-create-manager';
 import { baseURL } from 'playwright.config';
 
 test.describe('@Smoke @Channel', () => {
@@ -12,8 +12,18 @@ test.describe('@Smoke @Channel', () => {
     let context3 = null;
     let app2 = null;
 
+    let createManager : companyCreateManager;
+    let user1 = null;
+    let user2 = null;
+    let user3 = null;
+
     test.beforeEach(async () => {
         browser = await chromium.launch();
+        createManager = new companyCreateManager();
+        const company = await createManager.init(3);
+        user1 = createManager.users[0];
+        user2 = createManager.users[1];
+        user3 = createManager.users[2];
     });
 
     test('@Real C2596750: Create restricted Channel, invite participant and moderator', async () => {
@@ -21,12 +31,11 @@ test.describe('@Smoke @Channel', () => {
         test.setTimeout(120000);
 
         // user1 login 
-        browser = await chromium.launch();
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
         app = new BaseController(page1);
         await page1.goto(baseURL);
-        await app.login.loginToPortal(users.USER1.EMAIL, users.USER1.PASSWORD);
+        await app.login.loginToPortal(user1.email, user1.password);
         await app.closeTooltips();
 
         // user create channel 
@@ -34,7 +43,7 @@ test.describe('@Smoke @Channel', () => {
         const title = app.stringUtils.generateString(3, 5);
         await app.createChat.fillOutWhatIsItAboutForm(title, "sub", "descri");
         await app.createChat.fillOutWhoCanPostForm();
-        await app.createChat.fillOutWhoCanJoinForm("restricted", [users.USER2.NAME], [users.USER3.NAME]);
+        await app.createChat.fillOutWhoCanJoinForm("restricted", [user2.firstName], [user3.firstName]);
         await app.createChat.CreateChannel();
 
         // send content in channel
@@ -47,7 +56,7 @@ test.describe('@Smoke @Channel', () => {
         await page2.goto(baseURL);
         app1 = new BaseController(page2);
 
-        await app1.login.loginToPortal(users.USER2.EMAIL, users.USER2.PASSWORD);
+        await app1.login.loginToPortal(user2.email, user2.password);
         await app1.closeTooltips();
 
         // user 2 open and accept channel invite
@@ -65,7 +74,7 @@ test.describe('@Smoke @Channel', () => {
         await page3.goto(baseURL);
         app2 = new BaseController(page3);
 
-        await app2.login.loginToPortal(users.USER3.EMAIL, users.USER3.PASSWORD);
+        await app2.login.loginToPortal(user3.email, user3.password);
         await app2.closeTooltips();
 
         // user 3 open and decline channel invite
@@ -79,6 +88,9 @@ test.describe('@Smoke @Channel', () => {
         await context1.close();
         await app1.logout();
         await context2.close();
+        await app2.logout();
+        await context3.close();
+        await createManager.cleanup();
     });
 
 })
