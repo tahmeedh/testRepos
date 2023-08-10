@@ -11,52 +11,24 @@ export class InviteController {
         this.Pom = new CreateChatPage(this.page);
     }
 
-    async acceptInvite (type : string = "SUC", title ?: string) {
+    async acceptInvite (type : string = "SUC") {
         await test.step ("Create Chat Controller : Accept Invite", async() => {
             if (type == "MUC") {
-                const invitePage = this.Pom.MESSAGEIFRAME.getByText(title);
-                await invitePage.click();
                 await this.Pom.ACCEPT_BUTTON_MUC.click();
-            }
-            if (type == "Channel") {
-                const invitePage = this.Pom.MESSAGEIFRAME.getByText(title);
-                await invitePage.click();
-                await this.Pom.ACCEPT_BUTTON.click();
-            }
-            if (type == "SUC") {
+            } else {
                 await this.Pom.ACCEPT_BUTTON.click();
             }
         })
     }
 
-    async declineInvite (type : string = "SUC", title ?: string) {
+    async declineInvite (type : string = "SUC") {
         await test.step ("Create Chat Controller : Accept Invite", async() => {
             if (type == "MUC") {
-                const invitePage = this.Pom.MESSAGEIFRAME.getByText(title);
-                await invitePage.click();
                 await this.Pom.DECLINE_BUTTON_MUC.click();
-            }
-            if (type == "Channel") {
-                const invitePage = this.Pom.MESSAGEIFRAME.getByText(title);
-                await invitePage.click();
-                await this.Pom.DECLINE_BUTTON.click();
-            }
-            if (type == "SUC") {
+            } else {
                 await this.Pom.DECLINE_BUTTON.click();
             }
         })
     }
-
-
-
-    
-
-    
-
-
-
-
-
-
 
 }

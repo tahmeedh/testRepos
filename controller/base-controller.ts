@@ -84,6 +84,14 @@ export class BaseController {
         })
     }
 
-
+    /**
+    * @param {String} title Title of MUC / Channel to be opened 
+    */
+    async open(title : string) {
+        await test.step ("Base Controller : Open MUC or Channel", async() => {
+            const chat = this.Pom.MESSAGEIFRAME.getByText(title);
+            await chat.click();
+        })
+    }
 
 }

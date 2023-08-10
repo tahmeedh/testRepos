@@ -54,7 +54,8 @@ test.describe('@Smoke @Local @MUC @FileSharing @Audio', () => {
         await app1.closeTooltips();
 
         // accept invite 
-        await app1.inviteController.acceptInvite("MUC", title);
+        await app1.open(title);
+        await app1.inviteController.acceptInvite("MUC");
 
         // assert system message 
         await app1.chatController.waitForHeader();
@@ -76,7 +77,8 @@ test.describe('@Smoke @Local @MUC @FileSharing @Audio', () => {
         await app2.closeTooltips();
 
         // decline invite
-        await app2.inviteController.declineInvite("MUC", title);
+        await app2.open(title);
+        await app2.inviteController.declineInvite("MUC");
 
     })
 

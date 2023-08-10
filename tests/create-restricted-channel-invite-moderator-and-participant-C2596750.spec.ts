@@ -57,7 +57,8 @@ test.describe('@Smoke @Channel', () => {
         await app1.closeTooltips();
 
         // user 2 open and accept channel invite
-        await app1.inviteController.acceptInvite("Channel",title);
+        await app1.open(title);
+        await app1.inviteController.acceptInvite("Channel");
 
         // assert receive message 
         const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
@@ -73,7 +74,8 @@ test.describe('@Smoke @Channel', () => {
         await app2.closeTooltips();
 
         // user 3 open and decline channel invite
-        await app2.inviteController.declineInvite("Channel",title);
+        await app2.open(title);
+        await app2.inviteController.declineInvite("Channel");
     })
 
     test.afterEach(async () => {

@@ -53,7 +53,8 @@ test.describe('@Smoke @Channel', () => {
         await app1.closeTooltips();
 
         // user 2 accept invite to channel
-        await app1.inviteController.acceptInvite("Channel", title);
+        await app1.open(title);
+        await app1.inviteController.acceptInvite("Channel");
 
         // assert receive message 
         const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);

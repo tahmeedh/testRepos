@@ -55,7 +55,8 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
         await app1.closeTooltips();
 
         // user 2 open channel
-        await app1.inviteController.acceptInvite("Channel", title);
+        await app1.open(title);
+        await app1.inviteController.acceptInvite("Channel");
 
         // assert receive video 
         await app1.chatController.waitForHeader()
