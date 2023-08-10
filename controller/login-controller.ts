@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test';
 import { loginPage } from '../poms/login-page';
 import { test, expect } from '@playwright/test';
 
-export class loginController {
+export class LoginController {
 
     readonly page: Page;
     readonly Pom: loginPage;

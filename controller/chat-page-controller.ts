@@ -67,11 +67,5 @@ export class ChatController {
         })
     }
 
-    async acceptSUC() {
-        await test.step ("Chat Controller : Accept new SUC", async() => {
-            await this.Pom.ACCEPT_BUTTON.click();
-        })
-    }
-
 
 }

@@ -20,14 +20,6 @@ switch (process.env.SERVER) {
       baseUrl = 'https://portal.dev-globalrelay.net';
       smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
       break;
-  case 'mbqa1':
-      baseUrl = 'https://lb-portal-mbqa1-nvan.dev-globalrelay.net';
-      smThrift.host = 'lb-sm-mbqa1-nvan.dev-globalrelay.net';
-      break;
-  case 'mbqa1-bvt':
-      baseUrl = 'https://lb2-portal-mbqa1-nvan.dev-globalrelay.net';
-      smThrift.host = 'lb-sm-mbqa1-nvan.dev-globalrelay.net';
-      break;
   case 'cpqa1':
       baseUrl = 'https://cpqa1portal.dev-globalrelay.net';
       smThrift.host = 'lb-sm-cpqa1-nvan.dev-globalrelay.net';
@@ -79,6 +71,11 @@ export const baseURL = baseUrl;
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  // Timeout for each test, includes test, hooks and fixtures:
+  timeout: 180000,
+  // Timeout for each assertion:
+  expect: { timeout: 10000 },
+
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,

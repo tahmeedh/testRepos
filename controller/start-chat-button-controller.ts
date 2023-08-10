@@ -22,11 +22,11 @@ export class StartChatButtonController {
         await this.clickOnStartButton(this.Pom.START_ONE_ON_ONE);
     }
 
-    async ClickONStartMUC() {
+    async ClickOnStartMUC() {
         await this.clickOnStartButton(this.Pom.START_MUC);
     }
 
-    async ClickONStartChannel() {
+    async ClickOnStartChannel() {
         await this.clickOnStartButton(this.Pom.START_CHANNEL);
     }
 
