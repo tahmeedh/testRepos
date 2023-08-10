@@ -68,8 +68,9 @@ test.describe('@Smoke @SUC', () => {
         await expect(messageReceived).toHaveText(randomContend);
 
         // check system event
-
-
+        await app1.chat.waitForHeader();
+        const systemEvent = app1.Pom.CHATIFRAME.getByText("You joined");
+        await expect(systemEvent).toHaveText("You joined");
 
         // send message
         const randomContend1 = app.stringUtils.generateString();
