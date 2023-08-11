@@ -59,7 +59,6 @@ export class CreateChatController {
             await this.Pom.NEXT_BUTTON.click();
         })
     }
-    // fillOutWhoCanJoinForm (type, moderators, participants) {
 
     async fillOutWhoCanJoinForm (type : string, moderators : string[], participants : string[]) {
         await test.step("Create Chat Controller : Fill Out Who Can Join", async () => {
@@ -94,42 +93,5 @@ export class CreateChatController {
             await this.Pom.CREATE_BUTTON.click();
         })
     }
-
- 
-
-
-
-
-
-
-    async acceptInvite (type : string) {
-        await test.step ("Create Chat Controller : Accept Invite", async() => {
-            if (type == "MUC") {
-                await this.Pom.ACCEPT_BUTTON_MUC.click();
-            }
-            if (type == "Channel") {
-                await this.Pom.ACCEPT_BUTTON.click();
-            }
-        })
-    }
-
-    async declineInvite (type : string) {
-        await test.step ("Create Chat Controller : Accept Invite", async() => {
-            if (type == "MUC") {
-                await this.Pom.DECLINE_BUTTON_MUC.click();
-            }
-            if (type == "Channel") {
-                await this.Pom.DECLINE_BUTTON.click();
-            }
-        })
-    }
-
-    
-
-
-
-
-
-
 
 }

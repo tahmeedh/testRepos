@@ -7,6 +7,7 @@ export class chatPage extends BasePage {
     readonly CHAT_INPUT_WRAPPER : Locator;
     readonly CHAT_INPUT : Locator;
     readonly SEND_BUTTON : Locator;
+    readonly ACCEPT_BUTTON : Locator;
     readonly CHAT_HEADER_MENU: Locator;
 
     readonly ALL_CONTENT : Locator;
@@ -23,6 +24,7 @@ export class chatPage extends BasePage {
         this.CHAT_INPUT_WRAPPER = this.CHATIFRAME.locator('.chat-input-wrapper');
         this.CHAT_INPUT = this.CHATIFRAME.getByRole('textbox', { name: 'input-label' });
         this.SEND_BUTTON = this.CHATIFRAME.locator('.m-auto-send-btn');
+        this.ACCEPT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-accept');
 
         this.CHAT_HEADER_MENU = this.CHATIFRAME.locator('.chat-header-menu-button');
         

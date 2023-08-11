@@ -1,25 +1,27 @@
-import type { Browser, Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 
 import { BasePage } from '../poms/base-page';
-import { loginController } from './login-controller';
+import { LoginController } from './login-controller';
 import { StartChatButtonController } from './start-chat-button-controller';
 import { CreateChatController } from './create-chat-controller';
 import { ChatController } from './chat-page-controller';
 import { PreviewAttachmentController } from './preview-attachment-controller';
 
 import { StringUtils } from '../helper/string-utils';
+import { InviteController } from './invite-controller';
 
 
 export class BaseController {
 
     readonly page: Page;
     readonly Pom : BasePage;
-    readonly login: loginController;
-    readonly startChat : StartChatButtonController;
-    readonly createChat : CreateChatController;
-    readonly chat : ChatController;
+    readonly loginController: LoginController;
+    readonly startChatButtonController : StartChatButtonController;
+    readonly createChatController : CreateChatController;
+    readonly chatController : ChatController;
     readonly attachmentController : PreviewAttachmentController;
+    readonly inviteController : InviteController
 
     readonly stringUtils : StringUtils;
 
@@ -30,11 +32,12 @@ export class BaseController {
     constructor(page: Page) {
         this.page = page;
         this.Pom = new BasePage(this.page);
-        this.login = new loginController(this.page);
-        this.startChat = new StartChatButtonController(this.page);
-        this.createChat = new CreateChatController(this.page);
-        this.chat = new ChatController(this.page);
+        this.loginController = new LoginController(this.page);
+        this.startChatButtonController = new StartChatButtonController(this.page);
+        this.createChatController = new CreateChatController(this.page);
+        this.chatController = new ChatController(this.page);
         this.attachmentController = new PreviewAttachmentController(this.page);
+        this.inviteController = new InviteController(this.page);
 
         this.stringUtils = new StringUtils();
         
@@ -81,6 +84,14 @@ export class BaseController {
         })
     }
 
-
+    /**
+    * @param {String} title Title of MUC / Channel to be opened 
+    */
+    async open(title : string) {
+        await test.step ("Base Controller : Open MUC or Channel", async() => {
+            const chat = this.Pom.MESSAGEIFRAME.getByText(title);
+            await chat.click();
+        })
+    }
 
 }

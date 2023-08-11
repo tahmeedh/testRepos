@@ -1,6 +1,6 @@
 import { test, expect, chromium, Page, Browser, Locator } from '@playwright/test';
 import { BaseController } from '../controller/base-controller';
-import { users } from 'Constants/users';
+import { companyCreateManager }  from '../helper/company-create-manager';
 import { baseURL } from 'playwright.config';
 
 test.describe('@Smoke @MUC', () => {
@@ -12,49 +12,54 @@ test.describe('@Smoke @MUC', () => {
     let context3 = null;
     let app2 = null;
 
+    let createManager : companyCreateManager;
+    let user1 = null;
+    let user2 = null;
+    let user3 = null;
+
     test.beforeEach(async () => {
         browser = await chromium.launch();
+        createManager = new companyCreateManager();
+        const company = await createManager.init(3);
+        user1 = createManager.users[0];
+        user2 = createManager.users[1];
+        user3 = createManager.users[2];
     });
     
-    test('@Real @Smoke C2596748 l Create MUC, invite 2 participants to MUC, 1 participant accept, 1 participant decline', 
+    test('@Real @Smoke C2596748 Create MUC, invite 2 participants to MUC, 1 participant accept, 1 participant decline', 
     async () => {
-        // change timeout
-        test.setTimeout(120000);
-
         // user1 login 
-        browser = await chromium.launch();
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
         app = new BaseController(page1);
         await page1.goto( baseURL );
-        await app.login.loginToPortal(users.USER1.EMAIL, users.USER1.PASSWORD);
+        await app.loginController.loginToPortal(user1.email, user1.password);
         await app.closeTooltips();
 
         // user create MUC 
-        await app.startChat.ClickONStartMUC();
+        await app.startChatButtonController.ClickOnStartMUC();
         const title = app.stringUtils.generateString(3,5);
-        await app.createChat.createMUC([users.USER2.NAME, users.USER3.NAME], title);
+        await app.createChatController.createMUC([user2.firstName, user3.firstName], title);
 
         // user send message in MUC 
-        const randomContend = app.stringUtils.generateString();
-        await app.chat.sendContent(randomContend);
+        const randomContent = app.stringUtils.generateString();
+        await app.chatController.sendContent(randomContent);
 
         // user 2 login
         context2 = await browser.newContext();
         const page2 = await context2.newPage();
         app1 = new BaseController(page2);
         await page2.goto( baseURL );
-        await app1.login.loginToPortal(users.USER2.EMAIL, users.USER2.PASSWORD);
+        await app1.loginController.loginToPortal(user2.email, user2.password);
         await app1.closeTooltips();
 
         // accept invite 
-        const mucAccept = app1.Pom.MESSAGEIFRAME.getByText(title);
-        await mucAccept.click({ timeout: 15000 });
-        await app1.createChat.acceptInvite("MUC");
+        await app1.open(title);
+        await app1.inviteController.acceptInvite("MUC");
         
         // assert message
-        const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContend);
-        await expect(messageReceived).toHaveText(randomContend);
+        const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
+        await expect(messageReceived).toHaveText(randomContent);
 
         // assert system message 
         const systemEvent = app1.Pom.CHATIFRAME.getByText("You joined");
@@ -65,13 +70,12 @@ test.describe('@Smoke @MUC', () => {
         const page3 = await context3.newPage();
         app2 = new BaseController(page3);
         await page3.goto( baseURL );
-        await app2.login.loginToPortal(users.USER3.EMAIL, users.USER3.PASSWORD);
+        await app2.loginController.loginToPortal(user3.email, user3.password);
         await app2.closeTooltips();
 
         // decline invite
-        const mucDecline = app2.Pom.MESSAGEIFRAME.getByText(title);
-        await mucDecline.click({ timeout: 20000 });
-        await app2.createChat.declineInvite("MUC");
+        await app2.open(title);
+        await app2.inviteController.declineInvite("MUC");
 
     })
 
@@ -80,6 +84,9 @@ test.describe('@Smoke @MUC', () => {
         await context1.close();
         await app1.logout();
         await context2.close();
+        await app2.logout();
+        await context3.close();
+        await createManager.cleanup();
     });
     
 })
