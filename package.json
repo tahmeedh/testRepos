@@ -9,13 +9,21 @@
     "test-filter": "npx playwright test -- --spec --debug",
     "test-browser": "npx playwright test --headed -- --spec",
     "test-debug": "npx playwright test --headed --debug -- --spec",
-    "report": "npx playwright show-report"
+    "report": "npx playwright show-report",
+    "lint": "eslint . --fix --cache --ext .js,.jsx,.ts,.tsx",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.36.1"
+    "@globalrelay/eslint-config": "^6.1.0",
+    "@playwright/test": "^1.36.1",
+    "eslint": "^8.42.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.2.1",
+    "typescript": "^5.1.3"
   },
   "dependencies": {
     "uuid": "^9.0.0"
