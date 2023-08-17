@@ -1,0 +1,109 @@
+def email_recipients = 'jeff.jiang@globalrelay.net'
+def nodeVersion = 'v16.16.0'
+def buildsToKeep = 20
+def timeOutTime = 40
+def buildNumber = env.BUILD_NUMBER.toInteger()
+def buildImageVersion = '0.0.2-beta'
+def buildImage = "docker-repo.globalrelay.net/test-automation/va-test-image:${buildImageVersion}"
+def buildNode = 'linux'
+def targetEnv = ["cpqa2-va1", "cpqa2-pd1", "cpqa2-pd2", "cpqa2-ca1", "cpqa2-sq1", "cpqa2", "cpqa1"]
+def pdEnvUrlConfigFileID = '83b77aee-74de-42a5-8492-a94b5452e6f6'
+
+pipeline {
+    agent {
+        label "${buildNode}"
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: "${buildsToKeep}"))
+        timestamps()
+        timeout(time: timeOutTime, unit: "MINUTES")
+    }
+    parameters {
+        choice(name:"targetEnvParam", choices: targetEnv, description:"set the label of the build node")
+    }
+    stages {
+        stage('Preparation') {
+            steps {
+                configFileProvider([configFile(fileId: "${pdEnvUrlConfigFileID}", targetLocation: '', variable: 'pdEnvUrlConfig')]) {
+                    // Wipe out workspace for clean build each time
+                    deleteDir()
+                    sh '''
+                        git clone ssh://git@stash.globalrelay.net:7999/portal/jsat-e2e-chat-window.git
+                    '''
+
+                    script {
+                        nodeVersion = readFile(file: './jsat-e2e-chat-window/.nvmrc').trim()
+                        echo "Node version loaded from .nvmrc file is [$nodeVersion]"
+                        pdEnvUrlJSONConfig = readJSON file: "$pdEnvUrlConfig"
+                        targetEnvUrlJSONConfig = pdEnvUrlJSONConfig["${params.targetEnvParam}"]
+                        echo "JSON configurations loaded for is ${targetEnvUrlJSONConfig}"
+                        targetEnvChatwindowUrl = targetEnvUrlJSONConfig['chat-window']
+                        echo "Chat-window module versio string URL loaded is ${targetEnvChatwindowUrl}"
+                        sh """
+                            curl "${targetEnvChatwindowUrl}" > chat-window-version.txt
+                            if [ -a chat-window-version.txt ]; then
+                              cat chat-window-version.txt
+                            fi
+                        """
+                    }
+
+                    nvm(nvmInstallURL: 'https://raw.githubusercontent.com/creationix/nvm/v0.37.2/install.sh',
+                        nvmInstallDir: '~/.nvm',
+                        nvmIoJsOrgMirror: 'https://nodejs.org/dist',
+                        nvmNodeJsOrgMirror: 'https://nodejs.org/dist',
+                        version: "${nodeVersion}") {
+                        sh '''
+                            cd jsat-e2e-chat-window
+                            git submodule init
+                            git submodule update
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                  echo "Target environment selected is [${params.targetEnvParam}]"
+                  returnCode = sh (
+                    script: "docker run --rm -v ${WORKSPACE}/jsat-e2e-chat-window:/opt/jsat-e2e-chat-window -w /opt/jsat-e2e-chat-window ${buildImage} bash -c '/opt/jsat-e2e-chat-window/test.sh -en ${params.targetEnvParam} > va-e2e-test.log 2>&1'",
+                    returnStatus: true)
+                  echo "Exit code for docker run command is [${returnCode}]"
+                  if (returnCode != 0) {
+                    echo "Set build job status to [FAILED] because docker container return non-zero code"
+                    error("Build failed because of lint tests failed with some errors")
+                  }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                echo "Publish test result report"
+                publishHTML target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: './jsat-e2e-chat-window/playwright-report',
+                    reportFiles: 'index.html',
+                    reportName: 'jsat-e2e-chat-window Test Report'
+                ]
+                currentBuild.displayName = "#${buildNumber} Target Env.: ${params.targetEnvParam}"
+                if (fileExists('chat-window-version.txt')) {
+                  def chatWindowVer = readFile(file: 'chat-window-version.txt').trim()
+                  currentBuild.description = "Chat-window version: [${chat-window-version}]"
+                }
+            }
+        }
+
+        failure {
+            script {
+                echo "Sending notification email to $email_recipients"
+                emailext body: "Build failed, see: $JOB_URL", recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: "Jenkins job failed: $JOB_NAME", to: email_recipients
+            }
+        }
+    }
+}
