@@ -99,7 +99,7 @@ export class User {
             return result;
         }
         throw new Error(
-            `User with${this.userId} already exist. Use createUser() in Company class to create additional users.`
+            `User with userId '${this.userId}' already exist. Use createUser() in Company class to create additional users.`
         );
     }
 
@@ -148,7 +148,7 @@ export class User {
     async getUserDirectoryEntitlements() {
         const entitlments = await this.company.platformController.getUserDirectoryEntitlements(this.userId);
         console.info(
-            consoleColor.BgBlack,
+            consoleColor.BgGray,
             `=== User '${this.userId}' currently has the following entitlments [${entitlments}] ===`
         );
         return entitlments;
