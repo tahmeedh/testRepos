@@ -1,7 +1,25 @@
 {
-    "extends": ["@globalrelay", "@globalrelay/eslint-config/prettier/.eslintrc"],
+    "extends": [
+        "@globalrelay",
+        "@globalrelay/eslint-config/prettier/.eslintrc"
+    ],
     "rules": {
-        "max-len": ["error", { "code": 150, "ignoreUrls": true }],
-        "no-console": ["error", { "allow": ["info", "warn", "error"] }]
-    },
+        "max-len": [
+            "error",
+            {
+                "code": 150,
+                "ignoreUrls": true
+            }
+        ],
+        "no-console": [
+            "error",
+            {
+                "allow": [
+                    "info",
+                    "warn",
+                    "error"
+                ]
+            }
+        ]
+    }
 }
