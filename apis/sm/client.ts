@@ -1,5 +1,3 @@
-/* eslint no-restricted-syntax: 0 */
-
 import * as thrift from 'thrift';
 import * as PlatformService from './platform/thrift-generated/PlatformService';
 import * as DirectoryService from './directory/thrift-generated/DirectoryService';
