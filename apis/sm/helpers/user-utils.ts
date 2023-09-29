@@ -3,7 +3,7 @@ import { User } from 'Apis/user';
 
 export class UserUtils {
     static async createCompanyAndUsers(count: 1 | 2 | 3 | 4, company: Company) {
-        const company1 = await company.initializeCompany();
+        const company1 = await company.createCompany();
         const listOfUsers = await this.createUsers(count, company1);
         await this.addUserToEachOthersRoster(listOfUsers);
         return listOfUsers;

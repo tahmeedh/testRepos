@@ -1,9 +1,9 @@
 import { consoleColor } from './helpers/console-utils';
 
 const thrift = require('thrift');
-const PlatformService = require('./generated/PlatformService');
-const MessageService = require('./generated/MessageService');
-const DirectoryService = require('./generated/DirectoryService');
+const PlatformService = require('./platform/thrift-generated/PlatformService');
+const MessageService = require('./message/thrift-generated/MessageService');
+const DirectoryService = require('./directory/thrift-generated/DirectoryService');
 
 export class SMClient {
     host: string;

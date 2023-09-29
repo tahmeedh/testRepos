@@ -7,6 +7,15 @@ import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { consoleColor } from './sm/helpers/console-utils';
 import { MessageController } from './sm/message/message-controller';
 
+export interface CompanyType {
+    client: SMClient;
+    platformController: PlatformController;
+    directoryController: DirectoryController;
+    messageController: MessageController;
+    companyName: string;
+    companyDomain: string;
+    companyId: number;
+}
 export class Company {
     client: SMClient;
     platformController: PlatformController;
@@ -25,7 +34,7 @@ export class Company {
         this.companyName = null;
     }
 
-    async initializeCompany() {
+    async createCompany() {
         console.info('===================== START: Creating company =====================');
         if (!this.companyId) {
             const companyName = `${COMPANY_DEFAULT_SETTINGS.NAME_PREFIX}${COMPANY_DEFAULT_SETTINGS.NAME()}`;
@@ -48,7 +57,7 @@ export class Company {
             this.companyDomain = companyDomain;
             this.companyName = companyName;
             console.info(
-                consoleColor.BgBlack,
+                consoleColor.BgGray,
                 `=== Company Name: ${this.companyName} | Company Domain: ${this.companyDomain} | Company Id:${this.companyId} ===`
             );
             console.info('===================== END: Company created =====================');
@@ -61,36 +70,51 @@ export class Company {
         if (this.companyId) {
             await this.platformController.deleteCompany(this.companyId);
         } else {
-            console.error('Company ID is empty. No company were deleted.');
+            throw new Error('Company ID is empty. No company were deleted.');
         }
     }
 
     async getDirectoryRoles(format = true) {
-        const { companyId } = this;
-        const applicationId = ApplicationName.Directory;
-        return this.platformController.getCompanyRoles(companyId, applicationId, format);
+        if (this.companyId) {
+            const { companyId } = this;
+            const applicationId = ApplicationName.Directory;
+            return this.platformController.getCompanyRoles(companyId, applicationId, format);
+        }
+        throw new Error('Company ID is empty. Please initialize company first.');
     }
 
     async getServiceManagerRoles(format = true) {
-        const { companyId } = this;
-        const applicationId = ApplicationName.ServiceManager;
-        return this.platformController.getCompanyRoles(companyId, applicationId, format);
+        if (this.companyId) {
+            const { companyId } = this;
+            const applicationId = ApplicationName.ServiceManager;
+            return this.platformController.getCompanyRoles(companyId, applicationId, format);
+        }
+        throw new Error('Company ID is empty. Please initialize company first.');
     }
 
     async createUser() {
-        const defaultUserConfig = {
-            firstName: USER_DEFAULT_SETTINGS.FIRST_NAME,
-            lastName: USER_DEFAULT_SETTINGS.LAST_NAME(),
-            password: USER_DEFAULT_SETTINGS.PASSWORD,
-            jobTitle: USER_DEFAULT_SETTINGS.JOB_TITLE,
-            mobilePhone: USER_DEFAULT_SETTINGS.MOBILE_PHONE(),
-            workPhone: USER_DEFAULT_SETTINGS.WORK_PHONE(),
-            homePhone: USER_DEFAULT_SETTINGS.HOME_PHONE(),
-            entitlements: USER_DEFAULT_SETTINGS.ENTITLEMENTS
-        };
+        if (this.companyId) {
+            const defaultUserConfig = {
+                firstName: USER_DEFAULT_SETTINGS.FIRST_NAME,
+                lastName: USER_DEFAULT_SETTINGS.LAST_NAME(),
+                password: USER_DEFAULT_SETTINGS.PASSWORD,
+                jobTitle: USER_DEFAULT_SETTINGS.JOB_TITLE,
+                mobilePhone: USER_DEFAULT_SETTINGS.MOBILE_PHONE(),
+                workPhone: USER_DEFAULT_SETTINGS.WORK_PHONE(),
+                homePhone: USER_DEFAULT_SETTINGS.HOME_PHONE(),
+                entitlements: USER_DEFAULT_SETTINGS.ENTITLEMENTS,
+                userId: null,
+                grcpAlias: null,
+                email: null,
+                roleName: null,
+                roleId: null,
+                company: this
+            };
 
-        const user = new User(this, defaultUserConfig);
-        await user.initializeUser();
-        return user;
+            const user = new User(defaultUserConfig);
+            await user.createUser();
+            return user;
+        }
+        throw new Error('Company ID is empty. Please initialize company first.');
     }
 }

@@ -16,7 +16,7 @@ export class DirectoryController {
 
     async updateDirectorySettings(companyId: number, directorySettings: DirectorySettingsStruct) {
         try {
-            const directorySettingWithId = structuredClone(directorySettings);
+            const directorySettingWithId = JSON.parse(JSON.stringify(directorySettings));
             directorySettingWithId.companyId = companyId;
             console.info(`...Sending request to update directory settings for company '${companyId}'`);
             const result = await this.client.directory.updateDirectorySettings(directorySettingWithId);

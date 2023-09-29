@@ -1,12 +1,14 @@
+import { Int64 } from 'node-int64';
 import { consoleColor } from './sm/helpers/console-utils';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { ServiceManagerRoles, DirectoryEntitlments, DirectoryRoles } from './sm/constants/constants';
+import type { CompanyType } from './company';
 
-export class User {
+export interface UserType {
     firstName: string;
     lastName: string;
     password: string;
-    userId: number;
+    userId: Int64;
     grcpAlias: string;
     email: string;
     jobTitle: string;
@@ -15,27 +17,43 @@ export class User {
     homePhone: string;
     entitlements: string[];
     roleName: string;
-    roleId;
-    company;
+    roleId: Int64;
+    company: CompanyType;
+}
+export class User {
+    firstName: string;
+    lastName: string;
+    password: string;
+    userId: Int64;
+    grcpAlias: string;
+    email: string;
+    jobTitle: string;
+    mobilePhone: string;
+    workPhone: string;
+    homePhone: string;
+    entitlements: string[];
+    roleName: string;
+    roleId: Int64;
+    company: CompanyType;
 
-    constructor(company, user) {
+    constructor(user: UserType) {
         this.firstName = user.firstName;
         this.lastName = user.lastName;
         this.password = user.password;
-        this.userId = null;
-        this.grcpAlias = null;
-        this.email = null;
         this.jobTitle = user.jobTitle;
         this.mobilePhone = user.mobilePhone;
         this.workPhone = user.workPhone;
         this.homePhone = user.homePhone;
         this.entitlements = user.entitlements;
+        this.userId = null;
+        this.grcpAlias = null;
+        this.email = null;
         this.roleName = this.lastName;
         this.roleId = null;
-        this.company = company;
+        this.company = user.company;
     }
 
-    async initializeUser() {
+    async createUser() {
         console.info('===================== START: Creating user =====================');
         if (!this.userId) {
             const result = await this.company.platformController.createUser(
@@ -74,7 +92,7 @@ export class User {
             this.roleId = roleId;
 
             console.info(
-                consoleColor.BgBlack,
+                consoleColor.BgGray,
                 `=== Username: ${this.email} | Password: ${this.password} | UserId: ${this.userId} | grcpAlias: ${this.grcpAlias}===`
             );
             console.info('===================== END: User created =====================');
@@ -87,37 +105,43 @@ export class User {
 
     async updateJobTitle(userInput: string) {
         const field = 'jobTitle';
-        await this.company.directoryController.updateProfile(this.userId, { [field]: userInput });
+        const { userId } = this;
+        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
         this[field] = userInput;
     }
 
     async updateFirstName(userInput: string) {
         const field = 'firstName';
-        await this.company.directoryController.updateProfile(this.userId, { [field]: userInput });
+        const { userId } = this;
+        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
         this[field] = userInput;
     }
 
     async updateLastName(userInput: string) {
         const field = 'lastName';
-        await this.company.directoryController.updateProfile(this.userId, { [field]: userInput });
+        const { userId } = this;
+        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
         this[field] = userInput;
     }
 
     async updateWorkPhone(userInput: string) {
         const field = 'workPhone';
-        await this.company.directoryController.updateProfile(this.userId, { [field]: userInput });
+        const { userId } = this;
+        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
         this[field] = userInput;
     }
 
     async updateHomePhone(userInput: string) {
         const field = 'homePhone';
-        await this.company.directoryController.updateProfile(this.userId, { [field]: userInput });
+        const { userId } = this;
+        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
         this[field] = userInput;
     }
 
     async updateMobilePhone(userInput: string) {
         const field = 'mobilePhone';
-        await this.company.directoryController.updateProfile(this.userId, { [field]: userInput });
+        const { userId } = this;
+        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
         this[field] = userInput;
     }
 
