@@ -1,9 +1,9 @@
-import * as thrift from 'thrift';
-import * as PlatformService from './platform/thrift-generated/PlatformService';
-import * as DirectoryService from './directory/thrift-generated/DirectoryService';
-import * as MessageService from './message/thrift-generated/MessageService';
-
 import { consoleColor } from './helpers/console-utils';
+
+const thrift = require('thrift');
+const PlatformService = require('./generated/PlatformService');
+const MessageService = require('./generated/MessageService');
+const DirectoryService = require('./generated/DirectoryService');
 
 export class SMClient {
     host: string;
