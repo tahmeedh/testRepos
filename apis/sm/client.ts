@@ -1,4 +1,4 @@
-import { consoleColor } from './helpers/console-utils';
+import { Log } from './helpers/log-utils';
 
 const thrift = require('thrift');
 const PlatformService = require('./platform/thrift-generated/PlatformService');
@@ -25,7 +25,7 @@ export class SMClient {
         });
 
         connection.on('error', (err) => {
-            console.error(consoleColor.FgRed, 'FAILURE: Connection Error:', err);
+            Log.error('FAILURE: Connection Error:', err);
             throw err;
         });
         return connection;

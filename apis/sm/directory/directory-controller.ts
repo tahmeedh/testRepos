@@ -1,5 +1,5 @@
 import { getErrorDescription } from '../helpers/error-utils';
-import { consoleColor } from '../helpers/console-utils';
+import { Log } from '../helpers/log-utils';
 import { SMClient } from '../client';
 import {
     DirectorySettingsStruct,
@@ -18,20 +18,13 @@ export class DirectoryController {
         try {
             const directorySettingWithId = JSON.parse(JSON.stringify(directorySettings));
             directorySettingWithId.companyId = companyId;
-            console.info(`...Sending request to update directory settings for company '${companyId}'`);
+            Log.info(`...Sending request to update directory settings for company '${companyId}'`);
             const result = await this.client.directory.updateDirectorySettings(directorySettingWithId);
-            console.info(
-                consoleColor.FgGreen,
-                `SUSCESS: Profile Policy is updated for company '${companyId}'`
-            );
+            Log.suscess(`SUSCESS: Profile Policy is updated for company '${companyId}'`);
             return result;
         } catch (err) {
             const description = getErrorDescription(err);
-            console.error(
-                consoleColor.FgRed,
-                `FAILURE: Unable to update Profile Policy for company '${companyId}'`,
-                description
-            );
+            Log.error(`FAILURE: Unable to update Profile Policy for company '${companyId}'`, description);
             throw err;
         }
     }
@@ -46,55 +39,44 @@ export class DirectoryController {
                 profileObj[attr] = new UserProfileAttributeValueStruct({ profileValue: profileInput[attr] });
             });
 
-            console.info(`...Sending request to update user profile '${keys}' for user '${userId}'`);
+            Log.info(`...Sending request to update user profile '${keys}' for user '${userId}'`);
             const profileStruct = new UserProfileUserSetAttributesStruct(profileObj);
             const result = await this.client.directory.updateUserProfile(userId, profileStruct);
-            console.info(consoleColor.FgGreen, `SUSCESS: Profile '${keys}' is updated for user '${userId}'`);
+            Log.suscess(`SUSCESS: Profile '${keys}' is updated for user '${userId}'`);
             return result;
         } catch (err) {
             const description = getErrorDescription(err);
-            console.error(
-                consoleColor.FgRed,
-                `FAILURE: Unable to update user profile for user '${userId}'`,
-                description
-            );
+            Log.error(`FAILURE: Unable to update user profile for user '${userId}'`, description);
             throw err;
         }
     }
 
     async createDirectoryRoleForUser(userIds: number[], operations: string[], roleName: string) {
         try {
-            console.info(`...Sending request to create role '${roleName}' in directory`);
+            Log.info(`...Sending request to create role '${roleName}' in directory`);
             const result = await this.client.directory.setUserDirectoryOperations(
                 userIds,
                 operations,
                 roleName
             );
-            console.info(
-                consoleColor.FgGreen,
-                `SUSCESS: Role '${roleName}' has been created and assigned to user`
-            );
+            Log.suscess(`SUSCESS: Role '${roleName}' has been created and assigned to user`);
             return result;
         } catch (err) {
             const description = getErrorDescription(err);
-            console.error(consoleColor.FgRed, `FAILURE: Role ${roleName} NOT created`, description);
+            Log.error(`FAILURE: Role ${roleName} NOT created`, description);
             throw err;
         }
     }
 
     async getUserProfile(userId: number) {
         try {
-            console.info(`...Sending request to get profile of user '${userId}'`);
+            Log.info(`...Sending request to get profile of user '${userId}'`);
             const result = await this.client.directory.getUserProfile(userId, userId);
-            console.info(consoleColor.FgGreen, `SUSCESS: User profile of '${userId}' has been obtained`);
+            Log.suscess(`SUSCESS: User profile of '${userId}' has been obtained`);
             return result;
         } catch (err) {
             const description = getErrorDescription(err);
-            console.error(
-                consoleColor.FgRed,
-                `FAILURE: Unable to obtain user profile of user '${userId}'`,
-                description
-            );
+            Log.error(`FAILURE: Unable to obtain user profile of user '${userId}'`, description);
             throw err;
         }
     }

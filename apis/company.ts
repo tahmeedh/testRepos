@@ -4,7 +4,7 @@ import { DirectoryController } from './sm/directory/directory-controller';
 import { USER_DEFAULT_SETTINGS, COMPANY_DEFAULT_SETTINGS } from '../smconfig.config';
 import { User } from './user';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
-import { consoleColor } from './sm/helpers/console-utils';
+import { Log } from './sm/helpers/log-utils';
 import { MessageController } from './sm/message/message-controller';
 
 export interface CompanyType {
@@ -35,7 +35,7 @@ export class Company {
     }
 
     async createCompany() {
-        console.info('===================== START: Creating company =====================');
+        Log.info('===================== START: Creating company =====================');
         if (!this.companyId) {
             const companyName = `${COMPANY_DEFAULT_SETTINGS.NAME_PREFIX}${COMPANY_DEFAULT_SETTINGS.NAME()}`;
             const companyDomain = `${companyName}.com`;
@@ -56,11 +56,10 @@ export class Company {
             this.companyId = companyId;
             this.companyDomain = companyDomain;
             this.companyName = companyName;
-            console.info(
-                consoleColor.BgGray,
+            Log.highlight(
                 `=== Company Name: ${this.companyName} | Company Domain: ${this.companyDomain} | Company Id:${this.companyId} ===`
             );
-            console.info('===================== END: Company created =====================');
+            Log.info('===================== END: Company created =====================');
             return this;
         }
         throw new Error(`Company with '${this.companyId}' already exist!`);

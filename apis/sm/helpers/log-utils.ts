@@ -1,4 +1,4 @@
-export const consoleColor = {
+const consoleColor = {
     FgBlack: '\x1b[30m%s\x1b[0m',
     FgRed: '\x1b[31m%s\x1b[0m',
     FgGreen: '\x1b[32m%s\x1b[0m',
@@ -18,3 +18,25 @@ export const consoleColor = {
     BgWhite: '\x1b[47m%s\x1b[0m',
     BgGray: '\x1b[100m%s\x1b[0m'
 };
+
+export class Log {
+    static async info(message: string) {
+        console.info(message);
+    }
+
+    static async suscess(message: string) {
+        console.info(consoleColor.FgGreen, message);
+    }
+
+    static async error(message: string, error) {
+        console.error(consoleColor.FgRed, message, error);
+    }
+
+    static async warn(message: string) {
+        console.warn(consoleColor.FgYellow, message);
+    }
+
+    static async highlight(message: string) {
+        console.info(consoleColor.BgGray, message);
+    }
+}

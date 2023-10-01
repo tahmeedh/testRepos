@@ -1,5 +1,5 @@
 import { SMClient } from '../client';
-import { consoleColor } from '../helpers/console-utils';
+import { Log } from '../helpers/log-utils';
 import { getErrorDescription } from '../helpers/error-utils';
 import {
     PresenceSharingLevel,
@@ -25,12 +25,12 @@ export class MessageController {
                 rosterEntry: entryStruct,
                 operation: entryOperation
             });
-            console.info(`Sending request to modify roster for user '${userId}'`);
+            Log.info(`Sending request to modify roster for user '${userId}'`);
             await this.client.message.updateRoster(userId, [deltaStruct]);
-            console.info(consoleColor.FgGreen, `SUSCESS: Roster has been modified for user '${userId}'`);
+            Log.suscess(`SUSCESS: Roster has been modified for user '${userId}'`);
         } catch (err) {
             const description = getErrorDescription(err);
-            console.error(consoleColor.FgRed, `FAILURE: Unable to modify roster of '${userId}'`, description);
+            Log.error(`FAILURE: Unable to modify roster of '${userId}'`, description);
             throw err;
         }
     }
@@ -38,19 +38,12 @@ export class MessageController {
     async addUserToRoster(userId: number, targetGrcpAlias: string) {
         try {
             const entryOperation = RosterEntryOperation.ADD;
-            console.info(`...Sending request to add '${targetGrcpAlias}' to the roster of '${userId}'`);
+            Log.info(`...Sending request to add '${targetGrcpAlias}' to the roster of '${userId}'`);
             await this._modifyRoster(userId, targetGrcpAlias, entryOperation);
-            console.info(
-                consoleColor.FgGreen,
-                `SUSCESS: User '${targetGrcpAlias}' has been added to the roster of '${userId}'`
-            );
+            Log.suscess(`SUSCESS: User '${targetGrcpAlias}' has been added to the roster of '${userId}'`);
         } catch (err) {
             const description = getErrorDescription(err);
-            console.error(
-                consoleColor.FgRed,
-                `FAILURE: Unable to add ${targetGrcpAlias} to roster of '${userId}'`,
-                description
-            );
+            Log.error(`FAILURE: Unable to add ${targetGrcpAlias} to roster of '${userId}'`, description);
             throw err;
         }
     }
@@ -58,19 +51,12 @@ export class MessageController {
     async removeUserFromRoster(userId: number, targetGrcpAlias: string) {
         try {
             const entryOperation = RosterEntryOperation.DELETE;
-            console.info(`...Sending request to add '${targetGrcpAlias}' to the roster of '${userId}'`);
+            Log.info(`...Sending request to add '${targetGrcpAlias}' to the roster of '${userId}'`);
             await this._modifyRoster(userId, targetGrcpAlias, entryOperation);
-            console.info(
-                consoleColor.FgGreen,
-                `SUSCESS: User '${targetGrcpAlias}' has been added to the roster of '${userId}'`
-            );
+            Log.suscess(`SUSCESS: User '${targetGrcpAlias}' has been added to the roster of '${userId}'`);
         } catch (err) {
             const description = getErrorDescription(err);
-            console.error(
-                consoleColor.FgRed,
-                `FAILURE: Unable to remove ${targetGrcpAlias} to roster of '${userId}'`,
-                description
-            );
+            Log.error(`FAILURE: Unable to remove ${targetGrcpAlias} to roster of '${userId}'`, description);
             throw err;
         }
     }

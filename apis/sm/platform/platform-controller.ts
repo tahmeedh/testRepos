@@ -1,5 +1,5 @@
 import { getErrorDescription } from '../helpers/error-utils';
-import { consoleColor } from '../helpers/console-utils';
+import { Log, consoleColor } from '../helpers/log-utils';
 import { UserNameStruct, ApplicationInstanceStruct } from './thrift-generated/Platform_types';
 import { hashPbkdf2 } from '../helpers/hash-utils';
 import { SMClient } from '../client';
@@ -12,20 +12,15 @@ export class PlatformController {
 
     async createCompanyWithDomain(companyName: string, domain: string) {
         try {
-            console.info(`...Sending request to create company '${companyName}' with domain '${domain}'`);
+            Log.info(`...Sending request to create company '${companyName}' with domain '${domain}'`);
             const companyId = await this.client.platform.createCompanyWithDomain(companyName, domain);
-            console.info(
-                consoleColor.FgGreen,
+            Log.suscess(
                 `SUSCESS: Company '${companyName}' created with domain '${domain}'. CompnayId is '${companyId}'`
             );
             return companyId;
         } catch (err) {
             const description = getErrorDescription(err);
-            console.error(
-                consoleColor.FgRed,
-                `FAILURE: Unable to create company '${companyName}'`,
-                description
-            );
+            Log.error(`FAILURE: Unable to create company '${companyName}'`, description);
             throw err;
         }
     }

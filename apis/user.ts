@@ -1,5 +1,5 @@
 import { Int64 } from 'node-int64';
-import { consoleColor } from './sm/helpers/console-utils';
+import { Log } from './sm/helpers/log-utils';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { ServiceManagerRoles, DirectoryEntitlments, DirectoryRoles } from './sm/constants/constants';
 import type { CompanyType } from './company';
@@ -63,6 +63,7 @@ export class User {
                 this.lastName,
                 this.company.companyDomain
             );
+
             this.userId = result.userId;
             this.grcpAlias = result.grcpAlias;
             this.email = result.userName.email;
@@ -91,11 +92,10 @@ export class User {
             const roleId = allDirectoryRoles[this.roleName];
             this.roleId = roleId;
 
-            console.info(
-                consoleColor.BgGray,
+            Log.highlight(
                 `=== Username: ${this.email} | Password: ${this.password} | UserId: ${this.userId} | grcpAlias: ${this.grcpAlias}===`
             );
-            console.info('===================== END: User created =====================');
+            Log.info('===================== END: User created =====================');
             return result;
         }
         throw new Error(
@@ -147,8 +147,7 @@ export class User {
 
     async getUserDirectoryEntitlements() {
         const entitlments = await this.company.platformController.getUserDirectoryEntitlements(this.userId);
-        console.info(
-            consoleColor.BgGray,
+        Log.highlight(
             `=== User '${this.userId}' currently has the following entitlments [${entitlments}] ===`
         );
         return entitlments;
