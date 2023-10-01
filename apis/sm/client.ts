@@ -1,4 +1,4 @@
-import { Log } from './helpers/log-utils';
+import { Log } from '../api-helpers/log-utils';
 
 const thrift = require('thrift');
 const PlatformService = require('./platform/thrift-generated/PlatformService');

@@ -4,7 +4,7 @@ import { DirectoryController } from './sm/directory/directory-controller';
 import { USER_DEFAULT_SETTINGS, COMPANY_DEFAULT_SETTINGS } from '../smconfig.config';
 import { User } from './user';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
-import { Log } from './sm/helpers/log-utils';
+import { Log } from './api-helpers/log-utils';
 import { MessageController } from './sm/message/message-controller';
 
 export interface CompanyType {

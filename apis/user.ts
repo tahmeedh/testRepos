@@ -1,5 +1,5 @@
 import { Int64 } from 'node-int64';
-import { Log } from './sm/helpers/log-utils';
+import { Log } from './api-helpers/log-utils';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { ServiceManagerRoles, DirectoryEntitlments, DirectoryRoles } from './sm/constants/constants';
 import type { CompanyType } from './company';

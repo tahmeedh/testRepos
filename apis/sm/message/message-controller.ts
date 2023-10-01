@@ -1,5 +1,5 @@
 import { SMClient } from '../client';
-import { Log } from '../helpers/log-utils';
+import { Log } from '../../api-helpers/log-utils';
 import { getErrorDescription } from '../helpers/error-utils';
 import {
     PresenceSharingLevel,
