@@ -3,15 +3,15 @@ import { END_POINTS } from 'Apis/endpoints';
 import axios from 'axios';
 
 export class MdsController {
-    endpoint: string;
+    env: string;
     constructor() {
-        this.endpoint = END_POINTS.MDS[process.env.SERVER];
+        this.env = process.env.SERVER;
     }
 
     async getCsrfToken(gsk: string) {
         const config = {
             method: 'get',
-            url: `${this.endpoint}/csrf`,
+            url: `${END_POINTS.MDS[this.env]}/csrf`,
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
