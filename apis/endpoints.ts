@@ -43,5 +43,8 @@ export const END_POINTS = {
     },
     LOG_IN: {
         'cpqa2-va1': 'https://cpqa2login.dev-globalrelay.net/main/json/v1'
+    },
+    SERVICE_URL: {
+        'cpqa2-va1': 'https://lb7-portal-cpqa2-nvan.dev-globalrelay.net/portal/login'
     }
 };

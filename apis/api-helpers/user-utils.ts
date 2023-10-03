@@ -10,25 +10,25 @@ export class UserUtils {
     }
 
     static async createUsers(count: 1 | 2 | 3 | 4, company: Company) {
-        const array = [];
+        const arrayOfPromises = [];
         for (let x = 0; x < count; x++) {
-            array.push(company.createUser());
+            arrayOfPromises.push(company.createUser());
         }
-        return Promise.all(array).then((data: User[]) => {
+        return Promise.all(arrayOfPromises).then((data: User[]) => {
             return data;
         });
     }
 
     static async addUserToEachOthersRoster(arrayOfUsers: User[]) {
-        const array = [];
+        const arrayOfPromises = [];
         for (let x = 0; x < arrayOfUsers.length; x++) {
             for (let y = 0; y < arrayOfUsers.length; y++) {
                 if (x !== y) {
-                    array.push(arrayOfUsers[x].addUserToRoster(arrayOfUsers[y]));
+                    arrayOfPromises.push(arrayOfUsers[x].addUserToRoster(arrayOfUsers[y]));
                 }
             }
         }
 
-        await Promise.all(array);
+        await Promise.all(arrayOfPromises);
     }
 }
