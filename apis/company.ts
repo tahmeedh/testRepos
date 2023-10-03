@@ -6,6 +6,7 @@ import { User } from './user';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { Log } from './api-helpers/log-utils';
 import { MessageController } from './sm/message/message-controller';
+import { END_POINTS } from './endpoints';
 
 export interface CompanyType {
     client: SMClient;
@@ -25,7 +26,7 @@ export class Company {
     companyDomain: string;
     companyId: number;
     constructor() {
-        this.client = new SMClient('lb-sm-cpqa2-nvan.dev-globalrelay.net', 7443);
+        this.client = new SMClient(END_POINTS.SM_THRIFT_HOST[process.env.SERVER], 7443);
         this.platformController = new PlatformController(this.client);
         this.directoryController = new DirectoryController(this.client);
         this.messageController = new MessageController(this.client);
