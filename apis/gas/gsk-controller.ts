@@ -2,37 +2,31 @@ import { Log } from 'Apis/api-helpers/log-utils';
 import { END_POINTS } from 'Apis/endpoints';
 import axios from 'axios';
 
-export class GasController {
-    endpoint: string;
-    constructor() {
-        this.endpoint = END_POINTS.LOG_IN[process.env.SERVER];
-    }
-
-    async getSessionId(username: string, password: string) {
+export class GskController {
+    static async getGskToken(username: string, password: string, env: string) {
         try {
-            const data = {
-                msgType: 'authportal.ServerAuthnPW',
-                userName: username,
-                password,
-                serviceName: 'grPortal',
-                svcUrl: END_POINTS.SERVICE_URL[process.env.SERVER]
-            };
-
             const config = {
                 method: 'post',
-                url: this.endpoint,
+                url: END_POINTS.LOG_IN[env],
                 headers: {
                     Accept: 'application/json',
                     X_GR_NO_REDIRECT: '1',
                     'Content-Type': 'application/json'
                 },
-                data
+                data: {
+                    msgType: 'authportal.ServerAuthnPW',
+                    userName: username,
+                    password,
+                    serviceName: 'grPortal',
+                    svcUrl: END_POINTS.SERVICE_URL[env]
+                }
             };
 
+            Log.info('...Sending request to GAS to get GSK token');
             const response = await axios.request(config);
             const cookies = response.headers['set-cookie'];
             const gskCookie = cookies.filter((cookie: string) => cookie.includes('gsk='))[0];
-            Log.suscess('SUSCESS: GSK cookie obtained');
+            Log.suscess(`SUSCESS: GSK cookie obtained ${gskCookie}`);
             return gskCookie;
         } catch (error) {
             Log.error('FAILURE: Unable to get GSK token from GAS', error);

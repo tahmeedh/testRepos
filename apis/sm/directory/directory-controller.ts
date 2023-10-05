@@ -51,11 +51,11 @@ export class DirectoryController {
         }
     }
 
-    async createDirectoryRoleForUser(userIds: number[], operations: string[], roleName: string) {
+    async createDirectoryRoleForUser(userIds: number, operations: string[], roleName: string) {
         try {
             Log.info(`...Sending request to create role '${roleName}' in directory`);
             const result = await this.client.directory.setUserDirectoryOperations(
-                userIds,
+                [userIds],
                 operations,
                 roleName
             );

@@ -3,176 +3,136 @@ import { Log } from './api-helpers/log-utils';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { ServiceManagerRoles, DirectoryEntitlments, DirectoryRoles } from './sm/constants/constants';
 import type { CompanyType } from './company';
+import { GskController } from './gas/gsk-controller';
+import { MdsController } from './mds/mds-controller';
+import { CsrfController } from './mds/csrf-controller';
 
 export interface UserType {
     firstName: string;
     lastName: string;
     password: string;
-    userId: Int64;
-    grcpAlias: string;
     email: string;
     jobTitle: string;
     mobilePhone: string;
     workPhone: string;
     homePhone: string;
+    userId: Int64;
+    grcpAlias: string;
+    twilioNumber?: string;
     entitlements: string[];
     roleName: string;
     roleId: Int64;
     company: CompanyType;
+    mdsController?: MdsController;
 }
-export class User {
+
+export interface UserConfigType {
     firstName: string;
     lastName: string;
     password: string;
-    userId: Int64;
-    grcpAlias: string;
-    email: string;
     jobTitle: string;
     mobilePhone: string;
     workPhone: string;
     homePhone: string;
     entitlements: string[];
-    roleName: string;
-    roleId: Int64;
     company: CompanyType;
-
+}
+export class User {
+    user: UserType;
     constructor(user: UserType) {
-        this.firstName = user.firstName;
-        this.lastName = user.lastName;
-        this.password = user.password;
-        this.jobTitle = user.jobTitle;
-        this.mobilePhone = user.mobilePhone;
-        this.workPhone = user.workPhone;
-        this.homePhone = user.homePhone;
-        this.entitlements = user.entitlements;
-        this.userId = null;
-        this.grcpAlias = null;
-        this.email = null;
-        this.roleName = this.lastName;
-        this.roleId = null;
-        this.company = user.company;
+        this.user = user;
     }
 
-    async createUser() {
-        console.info('===================== START: Creating user =====================');
-        if (!this.userId) {
-            const result = await this.company.platformController.createUser(
-                this.company.companyId,
-                this.password,
-                this.firstName,
-                this.lastName,
-                this.company.companyDomain
-            );
-
-            this.userId = result.userId;
-            this.grcpAlias = result.grcpAlias;
-            this.email = result.userName.email;
-
-            const profile = {
-                jobTitle: this.jobTitle,
-                mobilePhone: this.mobilePhone,
-                workPhone: this.workPhone,
-                homePhone: this.homePhone
-            };
-
-            await Promise.all([
-                await this.company.directoryController.updateProfile(this.userId, profile),
-                await this.company.directoryController.createDirectoryRoleForUser(
-                    [this.userId],
-                    this.entitlements,
-                    this.roleName
-                )
-            ]);
-
-            const allDirectoryRoles = await this.company.platformController.getCompanyRoles(
-                this.company.companyId,
-                ApplicationName.Directory,
-                true
-            );
-            const roleId = allDirectoryRoles[this.roleName];
-            this.roleId = roleId;
-
-            Log.highlight(
-                `=== Username: ${this.email} | Password: ${this.password} | UserId: ${this.userId} | grcpAlias: ${this.grcpAlias}===`
-            );
-            Log.info('===================== END: User created =====================');
-            return result;
-        }
-        throw new Error(
-            `User with userId '${this.userId}' already exist. Use createUser() in Company class to create additional users.`
+    static async createUser(userConfig: UserConfigType) {
+        Log.info('===================== START: Creating user =====================');
+        const result = await userConfig.company.platformController.createUser(
+            userConfig.company.companyId,
+            userConfig.password,
+            userConfig.firstName,
+            userConfig.lastName,
+            userConfig.company.companyDomain
         );
+        const { userId } = result;
+        const { grcpAlias } = result;
+        const { email } = result.userName;
+
+        const profile = {
+            jobTitle: userConfig.jobTitle,
+            mobilePhone: userConfig.mobilePhone,
+            workPhone: userConfig.workPhone,
+            homePhone: userConfig.homePhone
+        };
+
+        const roleName = userConfig.lastName;
+
+        await Promise.all([
+            await userConfig.company.directoryController.updateProfile(userId, profile),
+            await userConfig.company.directoryController.createDirectoryRoleForUser(
+                userId,
+                userConfig.entitlements,
+                roleName
+            )
+        ]);
+
+        const allDirectoryRoles = await userConfig.company.platformController.getCompanyRoles(
+            userConfig.company.companyId,
+            ApplicationName.Directory,
+            true
+        );
+        const roleId = allDirectoryRoles[roleName];
+
+        const user = new User({
+            firstName: userConfig.firstName,
+            lastName: userConfig.lastName,
+            password: userConfig.password,
+            email,
+            jobTitle: userConfig.jobTitle,
+            mobilePhone: userConfig.mobilePhone,
+            workPhone: userConfig.workPhone,
+            homePhone: userConfig.homePhone,
+            userId,
+            grcpAlias,
+            entitlements: userConfig.entitlements,
+            roleName,
+            roleId,
+            company: userConfig.company
+        });
+
+        Log.highlight(
+            `=== Username: ${email} | Password: ${userConfig.password} | UserId: ${userId} | grcpAlias: ${grcpAlias}===`
+        );
+        Log.info('===================== END: User created =====================');
+        return user;
     }
 
-    async updateJobTitle(userInput: string) {
-        const field = 'jobTitle';
-        const { userId } = this;
-        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
-        this[field] = userInput;
-    }
-
-    async updateFirstName(userInput: string) {
-        const field = 'firstName';
-        const { userId } = this;
-        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
-        this[field] = userInput;
-    }
-
-    async updateLastName(userInput: string) {
-        const field = 'lastName';
-        const { userId } = this;
-        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
-        this[field] = userInput;
-    }
-
-    async updateWorkPhone(userInput: string) {
-        const field = 'workPhone';
-        const { userId } = this;
-        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
-        this[field] = userInput;
-    }
-
-    async updateHomePhone(userInput: string) {
-        const field = 'homePhone';
-        const { userId } = this;
-        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
-        this[field] = userInput;
-    }
-
-    async updateMobilePhone(userInput: string) {
-        const field = 'mobilePhone';
-        const { userId } = this;
-        await this.company.directoryController.updateProfile(userId, { [field]: userInput });
-        this[field] = userInput;
+    async updateProfile(
+        field: 'jobTitle' | 'firstName' | 'lastName' | 'workPhone' | 'homePhone' | 'mobilePhone',
+        userInput: string
+    ) {
+        const { userId } = this.user;
+        await this.user.company.directoryController.updateProfile(userId, { [field]: userInput });
+        this.user[field] = userInput;
     }
 
     async getUserDirectoryEntitlements() {
-        const entitlments = await this.company.platformController.getUserDirectoryEntitlements(this.userId);
-        Log.highlight(
-            `=== User '${this.userId}' currently has the following entitlments [${entitlments}] ===`
-        );
+        const { userId } = this.user;
+        const entitlments = await this.user.company.platformController.getUserDirectoryEntitlements(userId);
+        Log.highlight(`=== User '${userId}' currently has the following entitlments [${entitlments}] ===`);
         return entitlments;
     }
 
     async getUserProfile() {
-        const { userId } = this;
-        const userProfile = await this.company.directoryController.getUserProfile(userId);
+        const { userId } = this.user;
+        const userProfile = await this.user.company.directoryController.getUserProfile(userId);
         return userProfile;
     }
 
-    async assignMessageAdminRole() {
-        const { userId } = this;
-        const roleName = ServiceManagerRoles.MESSAGE_ADMINISTRATOR;
-        const { companyId } = this.company;
+    async assignServiceManagerRole(role: 'MESSAGE_ADMINISTRATOR') {
+        const { userId } = this.user;
+        const roleName = ServiceManagerRoles[role];
+        const { companyId } = this.user.company;
         const applicationName = ApplicationName.ServiceManager;
-        await this.company.platformController.assignRoleToUser(userId, roleName, companyId, applicationName);
-    }
-
-    async unassignMessageAdminRole() {
-        const { userId } = this;
-        const roleName = ServiceManagerRoles.MESSAGE_ADMINISTRATOR;
-        const { companyId } = this.company;
-        const applicationName = ApplicationName.ServiceManager;
-        await this.company.platformController.removeRoleFromUser(
+        await this.user.company.platformController.assignRoleToUser(
             userId,
             roleName,
             companyId,
@@ -180,20 +140,12 @@ export class User {
         );
     }
 
-    async assignSMSUserWithCallForwardRole() {
-        const { userId } = this;
-        const roleName = DirectoryRoles.SMS_USER_WITH_CALL_FORWARD;
-        const { companyId } = this.company;
-        const applicationName = ApplicationName.Directory;
-        await this.company.platformController.assignRoleToUser(userId, roleName, companyId, applicationName);
-    }
-
-    async unassignSMSUserWithCallForwardRole() {
-        const { userId } = this;
-        const roleName = DirectoryRoles.SMS_USER_WITH_CALL_FORWARD;
-        const { companyId } = this.company;
-        const applicationName = ApplicationName.Directory;
-        await this.company.platformController.removeRoleFromUser(
+    async unassignServiceManagerRole(role: 'MESSAGE_ADMINISTRATOR') {
+        const { userId } = this.user;
+        const roleName = ServiceManagerRoles[role];
+        const { companyId } = this.user.company;
+        const applicationName = ApplicationName.ServiceManager;
+        await this.user.company.platformController.removeRoleFromUser(
             userId,
             roleName,
             companyId,
@@ -201,155 +153,138 @@ export class User {
         );
     }
 
-    async addCompanyEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.COMPANY;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.addEntitlementToRole(roleId, entitlement, currentEntitlements);
-        this.entitlements = await this.getUserDirectoryEntitlements();
+    async assignDirectoryRole(role: 'SMS_USER_WITH_CALL_FORWARD') {
+        const { userId } = this.user;
+        const roleName = DirectoryRoles[role];
+        const { companyId } = this.user.company;
+        const applicationName = ApplicationName.Directory;
+        await this.user.company.platformController.assignRoleToUser(
+            userId,
+            roleName,
+            companyId,
+            applicationName
+        );
     }
 
-    async addPublicEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.PUBLIC;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.addEntitlementToRole(roleId, entitlement, currentEntitlements);
-        this.entitlements = await this.getUserDirectoryEntitlements();
+    async unassignDirectoryRole(role: 'SMS_USER_WITH_CALL_FORWARD') {
+        const { userId } = this.user;
+        const roleName = DirectoryRoles[role];
+        const { companyId } = this.user.company;
+        const applicationName = ApplicationName.Directory;
+        await this.user.company.platformController.removeRoleFromUser(
+            userId,
+            roleName,
+            companyId,
+            applicationName
+        );
     }
 
-    async addFileSharingEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.FILE_SHARING;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.addEntitlementToRole(roleId, entitlement, currentEntitlements);
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async addInstantMessageEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.INSTANT_MESSAGING;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.addEntitlementToRole(roleId, entitlement, currentEntitlements);
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async addManageBusinessChannelsEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.MANAGE_BUSINESS_CHANNELS;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.addEntitlementToRole(roleId, entitlement, currentEntitlements);
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async addManageCompanyChannelsEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.MANAGE_COMPANY_CHANNELS;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.addEntitlementToRole(roleId, entitlement, currentEntitlements);
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async addMessageApplicationEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.MESSAGE_APPLICATION;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.addEntitlementToRole(roleId, entitlement, currentEntitlements);
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async removeCompanyEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.COMPANY;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.removeEntitlementFromRole(
+    async addEntitlement(
+        entitlementName:
+            | 'COMPANY'
+            | 'PUBLIC'
+            | 'FILE_SHARING'
+            | 'INSTANT_MESSAGING'
+            | 'MANAGE_BUSINESS_CHANNELS'
+            | 'MANAGE_COMPANY_CHANNELS'
+            | 'MESSAGE_APPLICATION'
+    ) {
+        const { roleId } = this.user;
+        const entitlement = DirectoryEntitlments[entitlementName];
+        const currentEntitlements = this.user.entitlements;
+        await this.user.company.platformController.addEntitlementToRole(
             roleId,
             entitlement,
             currentEntitlements
         );
-        this.entitlements = await this.getUserDirectoryEntitlements();
+        this.user.entitlements = await this.getUserDirectoryEntitlements();
     }
 
-    async removePublicEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.PUBLIC;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.removeEntitlementFromRole(
+    async removeEntitlement(
+        entitlementName:
+            | 'COMPANY'
+            | 'PUBLIC'
+            | 'FILE_SHARING'
+            | 'INSTANT_MESSAGING'
+            | 'MANAGE_BUSINESS_CHANNELS'
+            | 'MANAGE_COMPANY_CHANNELS'
+            | 'MESSAGE_APPLICATION'
+    ) {
+        const { roleId } = this.user;
+        const entitlement = DirectoryEntitlments[entitlementName];
+        const currentEntitlements = this.user.entitlements;
+        await this.user.company.platformController.removeEntitlementFromRole(
             roleId,
             entitlement,
             currentEntitlements
         );
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async removeFileSharingEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.FILE_SHARING;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.removeEntitlementFromRole(
-            roleId,
-            entitlement,
-            currentEntitlements
-        );
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async removeInstantMessageEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.INSTANT_MESSAGING;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.removeEntitlementFromRole(
-            roleId,
-            entitlement,
-            currentEntitlements
-        );
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async removeManageBusinessChannelsEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.MANAGE_BUSINESS_CHANNELS;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.removeEntitlementFromRole(
-            roleId,
-            entitlement,
-            currentEntitlements
-        );
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async removeManageCompanyChannelsEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.MANAGE_COMPANY_CHANNELS;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.removeEntitlementFromRole(
-            roleId,
-            entitlement,
-            currentEntitlements
-        );
-        this.entitlements = await this.getUserDirectoryEntitlements();
-    }
-
-    async removeMessageApplicationEntitlement() {
-        const { roleId } = this;
-        const entitlement = DirectoryEntitlments.MESSAGE_APPLICATION;
-        const currentEntitlements = this.entitlements;
-        await this.company.platformController.removeEntitlementFromRole(
-            roleId,
-            entitlement,
-            currentEntitlements
-        );
-        this.entitlements = await this.getUserDirectoryEntitlements();
+        this.user.entitlements = await this.getUserDirectoryEntitlements();
     }
 
     async addUserToRoster(targetUser: User) {
-        const { userId } = this;
-        const targetGrcpAlias = targetUser.grcpAlias;
-        await this.company.messageController.addUserToRoster(userId, targetGrcpAlias);
+        const { userId } = this.user;
+        const targetGrcpAlias = targetUser.user.grcpAlias;
+        await this.user.company.messageController.addUserToRoster(userId, targetGrcpAlias);
     }
 
     async removeUserFromRoster(targetUser: User) {
-        const { userId } = this;
-        const targetGrcpAlias = targetUser.grcpAlias;
-        await this.company.messageController.removeUserFromRoster(userId, targetGrcpAlias);
+        const { userId } = this.user;
+        const targetGrcpAlias = targetUser.user.grcpAlias;
+        await this.user.company.messageController.removeUserFromRoster(userId, targetGrcpAlias);
+    }
+
+    async requestAndAssignTwilioNumber() {
+        await this.assignServiceManagerRole('MESSAGE_ADMINISTRATOR');
+        await this.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
+
+        const { env, companyId } = this.user.company;
+        const { email, password, userId } = this.user;
+
+        const gskToken = await GskController.getGskToken(email, password, env);
+        const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
+
+        const mdsController = new MdsController(gskToken, csrfToken, env);
+        this.user.mdsController = mdsController;
+
+        const twilioPhoneNumber = await mdsController.requestTwilioNumber(companyId, 'CA', '604');
+        this.user.twilioNumber = twilioPhoneNumber;
+
+        const phoneNumerSettings = {
+            disclaimerRequired: false,
+            forwardingAllowed: true,
+            mmsAllowed: true,
+            recordingRequired: false,
+            smsAllowed: true,
+            voiceAllowed: true,
+            location: 'LOCAL',
+            voicemailAllowed: true
+        };
+        await mdsController.setTwilioNumberFeatures(companyId, twilioPhoneNumber, phoneNumerSettings);
+        await mdsController.assignTwilioNumber(userId, twilioPhoneNumber);
+        this.user.twilioNumber = twilioPhoneNumber;
+    }
+
+    async assignTwilioNumber() {
+        await this.user.mdsController.unassignTwilioNumber(this.user.userId, this.user.twilioNumber);
+    }
+
+    async unassignTwilioNumber() {
+        await this.user.mdsController.unassignTwilioNumber(this.user.userId, this.user.twilioNumber);
+    }
+
+    async releaseTwilioNumber() {
+        await this.user.mdsController.releaseTwilioNumber(
+            this.user.company.companyId,
+            this.user.twilioNumber
+        );
+    }
+
+    async unassignAndReleaseTwilioNumber() {
+        await this.unassignTwilioNumber();
+        await this.releaseTwilioNumber();
+    }
+
+    async releaseAllNumbers() {
+        await this.user.mdsController.releaseAllNumbers(this.user.company.companyId);
     }
 }
