@@ -7,6 +7,7 @@ import { GskController } from './gas/gsk-controller';
 import { TwilioController } from './mds/twilio-controller';
 import { CsrfController } from './mds/csrf-controller';
 import { WhatsAppController } from './mds/whatsApp-controller';
+import { PhoneNumberUtils } from './api-helpers/phoneNumber-utils';
 
 export interface UserType {
     firstName: string;
@@ -20,6 +21,7 @@ export interface UserType {
     userId: Int64;
     grcpAlias: string;
     twilioNumber?: string;
+    whatsAppNumber?: string;
     entitlements: string[];
     roleName: string;
     roleId: Int64;
@@ -266,28 +268,12 @@ export class User {
         this.user.twilioNumber = twilioPhoneNumber;
     }
 
-    async assignTwilioNumber() {
+    async unassignAndReleaseTwilioNumber() {
         await this.user.twilioController.unassignTwilioNumber(this.user.userId, this.user.twilioNumber);
-    }
-
-    async unassignTwilioNumber() {
-        await this.user.twilioController.unassignTwilioNumber(this.user.userId, this.user.twilioNumber);
-    }
-
-    async releaseTwilioNumber() {
         await this.user.twilioController.releaseTwilioNumber(
             this.user.company.companyId,
             this.user.twilioNumber
         );
-    }
-
-    async unassignAndReleaseTwilioNumber() {
-        await this.unassignTwilioNumber();
-        await this.releaseTwilioNumber();
-    }
-
-    async releaseAllNumbers() {
-        await this.user.twilioController.releaseAllNumbers(this.user.company.companyId);
     }
 
     async requestAndAssignWhatsAppNumber() {
@@ -296,7 +282,7 @@ export class User {
 
         const { env, companyId } = this.user.company;
         const { email, password, userId } = this.user;
-        const accountId = '7786811235';
+        const accountId = PhoneNumberUtils.randomPhone();
         const gskToken = await GskController.getGskToken(email, password, env);
         const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
 
@@ -306,13 +292,20 @@ export class User {
         await whatsAppController.addWhatsAppProviderToCompany(companyId, accountId);
         await whatsAppController.setWhatsAppAccountToActive(companyId, accountId);
         await whatsAppController.assignWhatsAppAccountToUser(userId, accountId);
+        this.user.whatsAppNumber = accountId;
     }
 
     async unasssignAndReleaseWhatAppNumber() {
-        const { companyId } = this.user.company;
-        const { userId } = this.user;
-        const accountId = '7786811235';
-        await this.user.whatsAppController.unassignWhatsAppAccountFromUser(userId, accountId);
-        await this.user.whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
+        const accountId = this.user.whatsAppNumber;
+
+        if (accountId) {
+            const { companyId } = this.user.company;
+            const { userId } = this.user;
+
+            await this.user.whatsAppController.unassignWhatsAppAccountFromUser(userId, accountId);
+            await this.user.whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
+        } else {
+            Log.error('User has no assigned WhatsApp phone number. No requests were sent', new Error());
+        }
     }
 }
