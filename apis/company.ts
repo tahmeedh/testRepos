@@ -43,7 +43,7 @@ export class Company {
             directoryController.updateDirectorySettings(companyId, COMPANY_DEFAULT_SETTINGS.DIRCTORY_SETTINGS)
         ]);
 
-        const company = new Company({
+        const company: Company = new Company({
             smClient,
             platformController,
             directoryController,
@@ -84,7 +84,7 @@ export class Company {
             homePhone: USER_DEFAULT_SETTINGS.HOME_PHONE(),
             company: this.company
         };
-        const user = await User.createUser(defaultUserConfig);
+        const user: User = await User.createUser(defaultUserConfig);
         return user;
     }
 }

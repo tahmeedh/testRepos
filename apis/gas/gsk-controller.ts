@@ -29,8 +29,8 @@ export class GskController {
             Log.suscess(`SUSCESS: GSK cookie obtained ${gskCookie}`);
             return gskCookie;
         } catch (error) {
-            Log.error('FAILURE: Unable to get GSK token from GAS', error);
-            throw error;
+            Log.error('FAILURE: Unable to get GSK token from GAS: ', error.response.data);
+            throw error.response.data;
         }
     }
 }

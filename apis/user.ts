@@ -4,8 +4,9 @@ import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { ServiceManagerRoles, DirectoryEntitlments, DirectoryRoles } from './sm/constants/constants';
 import type { CompanyType } from './company';
 import { GskController } from './gas/gsk-controller';
-import { MdsController } from './mds/mds-controller';
+import { TwilioController } from './mds/twilio-controller';
 import { CsrfController } from './mds/csrf-controller';
+import { WhatsAppController } from './mds/whatsApp-controller';
 
 export interface UserType {
     firstName: string;
@@ -23,7 +24,8 @@ export interface UserType {
     roleName: string;
     roleId: Int64;
     company: CompanyType;
-    mdsController?: MdsController;
+    twilioController?: TwilioController;
+    whatsAppController?: WhatsAppController;
 }
 
 export interface UserConfigType {
@@ -243,10 +245,10 @@ export class User {
         const gskToken = await GskController.getGskToken(email, password, env);
         const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
 
-        const mdsController = new MdsController(gskToken, csrfToken, env);
-        this.user.mdsController = mdsController;
+        const twilioController = new TwilioController(gskToken, csrfToken, env);
+        this.user.twilioController = twilioController;
 
-        const twilioPhoneNumber = await mdsController.requestTwilioNumber(companyId, 'CA', '604');
+        const twilioPhoneNumber = await twilioController.requestTwilioNumber(companyId, 'CA', '604');
         this.user.twilioNumber = twilioPhoneNumber;
 
         const phoneNumerSettings = {
@@ -259,21 +261,21 @@ export class User {
             location: 'LOCAL',
             voicemailAllowed: true
         };
-        await mdsController.setTwilioNumberFeatures(companyId, twilioPhoneNumber, phoneNumerSettings);
-        await mdsController.assignTwilioNumber(userId, twilioPhoneNumber);
+        await twilioController.setTwilioNumberFeatures(companyId, twilioPhoneNumber, phoneNumerSettings);
+        await twilioController.assignTwilioNumber(userId, twilioPhoneNumber);
         this.user.twilioNumber = twilioPhoneNumber;
     }
 
     async assignTwilioNumber() {
-        await this.user.mdsController.unassignTwilioNumber(this.user.userId, this.user.twilioNumber);
+        await this.user.twilioController.unassignTwilioNumber(this.user.userId, this.user.twilioNumber);
     }
 
     async unassignTwilioNumber() {
-        await this.user.mdsController.unassignTwilioNumber(this.user.userId, this.user.twilioNumber);
+        await this.user.twilioController.unassignTwilioNumber(this.user.userId, this.user.twilioNumber);
     }
 
     async releaseTwilioNumber() {
-        await this.user.mdsController.releaseTwilioNumber(
+        await this.user.twilioController.releaseTwilioNumber(
             this.user.company.companyId,
             this.user.twilioNumber
         );
@@ -285,6 +287,32 @@ export class User {
     }
 
     async releaseAllNumbers() {
-        await this.user.mdsController.releaseAllNumbers(this.user.company.companyId);
+        await this.user.twilioController.releaseAllNumbers(this.user.company.companyId);
+    }
+
+    async requestAndAssignWhatsAppNumber() {
+        await this.assignServiceManagerRole('MESSAGE_ADMINISTRATOR');
+        await this.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
+
+        const { env, companyId } = this.user.company;
+        const { email, password, userId } = this.user;
+        const accountId = '7786811235';
+        const gskToken = await GskController.getGskToken(email, password, env);
+        const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
+
+        const whatsAppController = new WhatsAppController(gskToken, csrfToken, env);
+        this.user.whatsAppController = whatsAppController;
+
+        await whatsAppController.addWhatsAppProviderToCompany(companyId, accountId);
+        await whatsAppController.setWhatsAppAccountToActive(companyId, accountId);
+        await whatsAppController.assignWhatsAppAccountToUser(userId, accountId);
+    }
+
+    async unasssignAndReleaseWhatAppNumber() {
+        const { companyId } = this.user.company;
+        const { userId } = this.user;
+        const accountId = '7786811235';
+        await this.user.whatsAppController.unassignWhatsAppAccountFromUser(userId, accountId);
+        await this.user.whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
     }
 }

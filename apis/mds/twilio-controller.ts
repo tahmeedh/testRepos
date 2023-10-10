@@ -2,7 +2,7 @@ import { Log } from 'Apis/api-helpers/log-utils';
 import { END_POINTS } from 'Apis/endpoints';
 import axios from 'axios';
 
-export class MdsController {
+export class TwilioController {
     env: string;
     endpoint: string;
     gsk: string;
@@ -37,8 +37,11 @@ export class MdsController {
             Log.suscess(`SUSCESS: New phone number '${phoneNumber}' requested for company '${companyId}'`);
             return phoneNumber;
         } catch (error) {
-            Log.error(`FAILURE: Unable to request new phone number for company '${companyId}'`, error);
-            throw error;
+            Log.error(
+                `FAILURE: Unable to request new phone number for company '${companyId}': `,
+                error.response.data
+            );
+            throw error.response.data;
         }
     }
 
@@ -65,10 +68,10 @@ export class MdsController {
             );
         } catch (error) {
             Log.error(
-                `FAILURE: Unable to release Phone number '${phoneNumber}' from company '${companyId}'`,
-                error
+                `FAILURE: Unable to release Phone number '${phoneNumber}' from company '${companyId}: '`,
+                error.response.data
             );
-            throw error;
+            throw error.response.data;
         }
     }
 
@@ -95,10 +98,10 @@ export class MdsController {
             );
         } catch (error) {
             Log.error(
-                `FAILURE: Unable to release set Twilio phone number '${phoneNumber}' feature for company '${companyId}'`,
-                error
+                `FAILURE: Unable to release set Twilio phone number '${phoneNumber}' feature for company '${companyId}: '`,
+                error.response.data
             );
-            throw error;
+            throw error.response.data;
         }
     }
 
@@ -123,8 +126,11 @@ export class MdsController {
                 `SUSCESS: Twilio Phone number '${phoneNumber}' has been assigned to user '${userId}'`
             );
         } catch (error) {
-            Log.error(`FAILURE: Unable to assign Twilio phone number '${phoneNumber}' to '${userId}'`, error);
-            throw error;
+            Log.error(
+                `FAILURE: Unable to assign Twilio phone number '${phoneNumber}' to '${userId}': `,
+                error.response.data
+            );
+            throw error.response.data;
         }
     }
 
@@ -150,10 +156,10 @@ export class MdsController {
             );
         } catch (error) {
             Log.error(
-                `FAILURE: Unable to unassign Twilio phone number '${phoneNumber}' from '${userId}'`,
-                error
+                `FAILURE: Unable to unassign Twilio phone number '${phoneNumber}' from '${userId}': `,
+                error.response.data
             );
-            throw error;
+            throw error.response.data;
         }
     }
 
@@ -177,8 +183,11 @@ export class MdsController {
             Log.suscess(`SUSCESS: Twilio numbers belong to company '${companyId}' obtained `);
             return arrayOfNumbers;
         } catch (error) {
-            Log.error(`FAILURE: Unable get Twilio numbers belong to company '${companyId}'`, error);
-            throw error;
+            Log.error(
+                `FAILURE: Unable get Twilio numbers belong to company '${companyId}': `,
+                error.response.data
+            );
+            throw error.response.data;
         }
     }
 
@@ -189,5 +198,64 @@ export class MdsController {
             results.push(this.releaseTwilioNumber(companyId, number));
         }
         await Promise.all(results);
+    }
+
+    async addWhatsAppProvider(companyId: number, accountId: string) {
+        const config = {
+            method: 'post',
+            url: `${this.endpoint}/company/${companyId}/providers/WHATSAPP/accounts`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'gr-csrf': this.csrf,
+                Cookie: this.gsk
+            },
+            body: {
+                accountId,
+                provider: 'WHATSAPP',
+                type: 'FEDERATED'
+            }
+        };
+
+        try {
+            Log.info(`...Sending request to MDS to add WhatsApp Provider to company '${companyId}'`);
+            const result = await axios.request(config);
+            Log.suscess(`SUSCESS: WhatsApp Provider '${accountId}' added to company '${companyId}'`);
+            return result;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable add WhatsApp Provider '${accountId}' to company '${companyId}': `,
+                error.response.data
+            );
+            throw error.response.data;
+        }
+    }
+
+    async removeWhatsAppProvider(companyId: number, accountId: string) {
+        const config = {
+            method: 'DELETE',
+            url: `${this.endpoint}/company/${companyId}/providers/WHATSAPP/accounts/${accountId}`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'gr-csrf': this.csrf,
+                Cookie: this.gsk
+            }
+        };
+
+        try {
+            Log.info(
+                `...Sending request to MDS to remove WhatsApp Provider '${accountId}' from company '${companyId}'`
+            );
+            const result = await axios.request(config);
+            Log.suscess(`SUSCESS: WhatsApp Provider '${accountId}' added to company '${companyId}'`);
+            return result;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable add WhatsApp Provider '${accountId}' to company '${companyId}': `,
+                error.response.data
+            );
+            throw error.response.data;
+        }
     }
 }

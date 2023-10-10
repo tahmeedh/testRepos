@@ -21,8 +21,8 @@ export class CsrfController {
             Log.suscess(`SUSCESS: CSRF token obtained: '${csrfToken}`);
             return csrfToken;
         } catch (error) {
-            Log.error('FAILURE: Unable to get CSRF token from MDS', error);
-            throw error;
+            Log.error('FAILURE: Unable to get CSRF token from MDS: ', error.response.data);
+            throw error.response.data;
         }
     }
 }
