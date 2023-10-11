@@ -15,7 +15,7 @@ export class TwilioController {
         this.csrf = csrf;
     }
 
-    async requestTwilioNumber(companyId: number, countryCode: string, prefix: string) {
+    async requestTwilioNumberToCompany(companyId: number, countryCode: string, prefix: string) {
         const config = {
             method: 'post',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -45,7 +45,7 @@ export class TwilioController {
         }
     }
 
-    async releaseTwilioNumber(companyId: number, phoneNumber: string) {
+    async releaseTwilioNumberFromCompany(companyId: number, phoneNumber: string) {
         const config = {
             method: 'delete',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}`,
@@ -105,7 +105,7 @@ export class TwilioController {
         }
     }
 
-    async assignTwilioNumber(userId: number, phoneNumber: string) {
+    async assignTwilioNumberToUser(userId: number, phoneNumber: string) {
         const config = {
             method: 'post',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -134,7 +134,7 @@ export class TwilioController {
         }
     }
 
-    async unassignTwilioNumber(userId: number, phoneNumber: string) {
+    async unassignTwilioNumberFromUser(userId: number, phoneNumber: string) {
         const config = {
             method: 'delete',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -195,67 +195,8 @@ export class TwilioController {
         const listOfNumbers = await this.getNumbersBelongToCompany(companyId);
         const results = [];
         for (const number of listOfNumbers) {
-            results.push(this.releaseTwilioNumber(companyId, number));
+            results.push(this.releaseTwilioNumberFromCompany(companyId, number));
         }
         await Promise.all(results);
-    }
-
-    async addWhatsAppProvider(companyId: number, accountId: string) {
-        const config = {
-            method: 'post',
-            url: `${this.endpoint}/company/${companyId}/providers/WHATSAPP/accounts`,
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'gr-csrf': this.csrf,
-                Cookie: this.gsk
-            },
-            body: {
-                accountId,
-                provider: 'WHATSAPP',
-                type: 'FEDERATED'
-            }
-        };
-
-        try {
-            Log.info(`...Sending request to MDS to add WhatsApp Provider to company '${companyId}'`);
-            const result = await axios.request(config);
-            Log.suscess(`SUSCESS: WhatsApp Provider '${accountId}' added to company '${companyId}'`);
-            return result;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable add WhatsApp Provider '${accountId}' to company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
-    }
-
-    async removeWhatsAppProvider(companyId: number, accountId: string) {
-        const config = {
-            method: 'DELETE',
-            url: `${this.endpoint}/company/${companyId}/providers/WHATSAPP/accounts/${accountId}`,
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'gr-csrf': this.csrf,
-                Cookie: this.gsk
-            }
-        };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to remove WhatsApp Provider '${accountId}' from company '${companyId}'`
-            );
-            const result = await axios.request(config);
-            Log.suscess(`SUSCESS: WhatsApp Provider '${accountId}' added to company '${companyId}'`);
-            return result;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable add WhatsApp Provider '${accountId}' to company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
     }
 }
