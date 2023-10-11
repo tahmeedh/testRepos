@@ -1,12 +1,13 @@
 import { SMClient } from './sm/client';
 import { PlatformController } from './sm/platform/platform-controller';
 import { DirectoryController } from './sm/directory/directory-controller';
-import { COMPANY_DEFAULT_SETTINGS, USER_DEFAULT_SETTINGS } from '../smconfig.config';
+import { COMPANY_DEFAULT_SETTINGS, USER_DEFAULT_SETTINGS } from './smconfig.config';
 import { User } from './user';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { Log } from './api-helpers/log-utils';
 import { MessageController } from './sm/message/message-controller';
 import { END_POINTS } from './endpoints';
+import { EndpointUtils } from './api-helpers/endpoint-utils';
 
 export interface CompanyType {
     smClient: SMClient;
@@ -28,8 +29,17 @@ export class Company {
     static async createCompany(
         companyName = `${COMPANY_DEFAULT_SETTINGS.NAME_PREFIX}${COMPANY_DEFAULT_SETTINGS.NAME()}`
     ) {
-        const companyDomain = `${companyName}.com`;
+        if (!EndpointUtils.isEndPointValid(process.env.SERVER)) {
+            const error = new Error();
+            Log.error(
+                `FAILURE: Process.env.SERVER '${process.env.SERVER}' is not valid. Create company aborted`,
+                error
+            );
+            throw error;
+        }
+
         const env = process.env.SERVER;
+        const companyDomain = `${companyName}.com`;
         const smClient = new SMClient(END_POINTS.SM_THRIFT_HOST[env], 7443);
         const platformController = new PlatformController(smClient);
         const directoryController = new DirectoryController(smClient);
