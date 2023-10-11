@@ -2,6 +2,7 @@ export class EndpointUtils {
     static isEndPointValid(endpoint: string) {
         switch (endpoint) {
             case 'local':
+            case 'cpqa2':
             case 'cpqa2-pd1':
             case 'cpqa2-pd2':
             case 'cpqa2-va1':
