@@ -1,6 +1,6 @@
 import { SMClient } from '../client';
 import { Log } from '../../api-helpers/log-utils';
-import { getErrorDescription } from '../helpers/error-utils';
+import { getErrorDescription } from '../sm-helpers/error-utils';
 import {
     PresenceSharingLevel,
     RosterEntryStruct,

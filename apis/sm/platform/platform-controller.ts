@@ -1,7 +1,7 @@
-import { getErrorDescription } from '../helpers/error-utils';
+import { getErrorDescription } from '../sm-helpers/error-utils';
 import { Log } from '../../api-helpers/log-utils';
 import { UserNameStruct, ApplicationInstanceStruct } from './thrift-generated/Platform_types';
-import { hashPbkdf2 } from '../helpers/hash-utils';
+import { hashPbkdf2 } from '../sm-helpers/hash-utils';
 import { SMClient } from '../client';
 
 export class PlatformController {

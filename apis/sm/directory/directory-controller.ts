@@ -1,4 +1,4 @@
-import { getErrorDescription } from '../helpers/error-utils';
+import { getErrorDescription } from '../sm-helpers/error-utils';
 import { Log } from '../../api-helpers/log-utils';
 import { SMClient } from '../client';
 import {
