@@ -251,8 +251,6 @@ export class User {
         this.user.twilioController = twilioController;
 
         const twilioPhoneNumber = await twilioController.requestTwilioNumber(companyId, 'CA', '604');
-        this.user.twilioNumber = twilioPhoneNumber;
-
         const phoneNumerSettings = {
             disclaimerRequired: false,
             forwardingAllowed: true,
@@ -269,11 +267,10 @@ export class User {
     }
 
     async unassignAndReleaseTwilioNumber() {
-        await this.user.twilioController.unassignTwilioNumber(this.user.userId, this.user.twilioNumber);
-        await this.user.twilioController.releaseTwilioNumber(
-            this.user.company.companyId,
-            this.user.twilioNumber
-        );
+        const { companyId } = this.user.company;
+        const { userId, twilioNumber } = this.user;
+        await this.user.twilioController.unassignTwilioNumber(userId, twilioNumber);
+        await this.user.twilioController.releaseTwilioNumber(companyId, twilioNumber);
     }
 
     async requestAndAssignWhatsAppNumber() {
