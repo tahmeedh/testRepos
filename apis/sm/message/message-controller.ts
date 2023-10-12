@@ -1,6 +1,5 @@
 import { SMClient } from '../client';
 import { Log } from '../../api-helpers/log-utils';
-import { getErrorDescription } from '../sm-helpers/error-utils';
 import {
     PresenceSharingLevel,
     RosterEntryStruct,
@@ -28,10 +27,9 @@ export class MessageController {
             Log.info(`Sending request to modify roster for user '${userId}'`);
             await this.client.message.updateRoster(userId, [deltaStruct]);
             Log.suscess(`SUSCESS: Roster has been modified for user '${userId}'`);
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to modify roster of '${userId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to modify roster of '${userId}'`, error.description);
+            throw error;
         }
     }
 
@@ -41,10 +39,12 @@ export class MessageController {
             Log.info(`...Sending request to add '${targetGrcpAlias}' to the roster of '${userId}'`);
             await this._modifyRoster(userId, targetGrcpAlias, entryOperation);
             Log.suscess(`SUSCESS: User '${targetGrcpAlias}' has been added to the roster of '${userId}'`);
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to add ${targetGrcpAlias} to roster of '${userId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to add ${targetGrcpAlias} to roster of '${userId}'`,
+                error.description
+            );
+            throw error;
         }
     }
 
@@ -54,10 +54,12 @@ export class MessageController {
             Log.info(`...Sending request to add '${targetGrcpAlias}' to the roster of '${userId}'`);
             await this._modifyRoster(userId, targetGrcpAlias, entryOperation);
             Log.suscess(`SUSCESS: User '${targetGrcpAlias}' has been added to the roster of '${userId}'`);
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to remove ${targetGrcpAlias} to roster of '${userId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to remove ${targetGrcpAlias} to roster of '${userId}'`,
+                error.description
+            );
+            throw error;
         }
     }
 }

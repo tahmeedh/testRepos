@@ -1,4 +1,3 @@
-import { getErrorDescription } from '../sm-helpers/error-utils';
 import { Log } from '../../api-helpers/log-utils';
 import { SMClient } from '../client';
 import {
@@ -22,10 +21,12 @@ export class DirectoryController {
             const result = await this.client.directory.updateDirectorySettings(directorySettingWithId);
             Log.suscess(`SUSCESS: Profile Policy is updated for company '${companyId}'`);
             return result;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to update Profile Policy for company '${companyId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to update Profile Policy for company '${companyId}'`,
+                error.description
+            );
+            throw error;
         }
     }
 
@@ -44,10 +45,9 @@ export class DirectoryController {
             const result = await this.client.directory.updateUserProfile(userId, profileStruct);
             Log.suscess(`SUSCESS: Profile '${keys}' is updated for user '${userId}'`);
             return result;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to update user profile for user '${userId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to update user profile for user '${userId}'`, error.description);
+            throw error;
         }
     }
 
@@ -61,10 +61,9 @@ export class DirectoryController {
             );
             Log.suscess(`SUSCESS: Role '${roleName}' has been created and assigned to user`);
             return result;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Role ${roleName} NOT created`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Role ${roleName} NOT created`, error.description);
+            throw error;
         }
     }
 
@@ -74,10 +73,9 @@ export class DirectoryController {
             const result = await this.client.directory.getUserProfile(userId, userId);
             Log.suscess(`SUSCESS: User profile of '${userId}' has been obtained`);
             return result;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to obtain user profile of user '${userId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to obtain user profile of user '${userId}'`, error.description);
+            throw error;
         }
     }
 }

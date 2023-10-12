@@ -1,4 +1,3 @@
-import { getErrorDescription } from '../sm-helpers/error-utils';
 import { Log } from '../../api-helpers/log-utils';
 import { UserNameStruct, ApplicationInstanceStruct } from './thrift-generated/Platform_types';
 import { hashPbkdf2 } from '../sm-helpers/hash-utils';
@@ -18,10 +17,9 @@ export class PlatformController {
                 `SUSCESS: Company '${companyName}' created with domain '${domain}'. CompnayId is '${companyId}'`
             );
             return companyId;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to create company '${companyName}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to create company '${companyName}'`, error.description);
+            throw error;
         }
     }
 
@@ -30,10 +28,9 @@ export class PlatformController {
             Log.info(`...Sending request to delete company '${companyId}'`);
             await this.client.platform.deleteCompany(companyId);
             Log.suscess(`SUSCESS: Company ${companyId} has been deleted`);
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to delete company '${companyId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to delete company '${companyId}'`, error.description);
+            throw error;
         }
     }
 
@@ -43,10 +40,12 @@ export class PlatformController {
             const result = await this.client.platform.enableAllServicesForCompany(companyId);
             Log.suscess(`SUSCESS: All services enabled for company '${companyId}'`);
             return result;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to enabling all services for company '${companyId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to enabling all services for company '${companyId}'`,
+                error.description
+            );
+            throw error;
         }
     }
 
@@ -56,10 +55,9 @@ export class PlatformController {
             const result = await this.client.platform.enableGrMessageForCompany(companyId);
             Log.suscess(`SUSCESS: GR message enabled for company '${companyId}'`);
             return result;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to enabling GR message for company '${companyId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to enabling GR message for company '${companyId}'`, error.description);
+            throw error;
         }
     }
 
@@ -82,10 +80,12 @@ export class PlatformController {
             }
 
             return rolesOfCompany;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to retrive roles assigned to company '${companyId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to retrive roles assigned to company '${companyId}'`,
+                error.description
+            );
+            throw error;
         }
     }
 
@@ -95,10 +95,12 @@ export class PlatformController {
             const companyDomains = await this.client.platform.getCompanyDomains(companyId);
             Log.suscess(`SUSCESS: Domains for company '${companyId}' obtained`);
             return companyDomains;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to retrive domains assigned to company '${companyId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to retrive domains assigned to company '${companyId}'`,
+                error.description
+            );
+            throw error;
         }
     }
 
@@ -122,10 +124,12 @@ export class PlatformController {
             const createdUsers = await this.client.platform.createUser(companyId, passwordHash, user);
             Log.suscess(`SUSCESS: User '${email}' created for company '${companyId}'`);
             return createdUsers;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to create user '${email}' for company '${companyId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to create user '${email}' for company '${companyId}'`,
+                error.description
+            );
+            throw error;
         }
     }
 
@@ -135,10 +139,12 @@ export class PlatformController {
             const createdRole = await this.client.platform.createRole(roleName, companyId, applicationName);
             Log.suscess(`SUSCESS: Role '${roleName}' has been created for company '${companyId}'`);
             return createdRole;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to create '${roleName}' for company '${companyId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to create '${roleName}' for company '${companyId}'`,
+                error.description
+            );
+            throw error;
         }
     }
 
@@ -147,10 +153,9 @@ export class PlatformController {
             Log.info(`...Sending request to update entitlments of role '${roleId}'`);
             await this.client.platform.setOperationsForRole(roleId, entitlements);
             Log.suscess(`SUSCESS: Entitlements has been updated '${roleId}'`);
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to set entitlements for ${roleId}`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to set entitlements for ${roleId}`, error.description);
+            throw error;
         }
     }
 
@@ -166,10 +171,9 @@ export class PlatformController {
             await this.setEntitlementsForRole(roleId, newEntitlements);
             Log.suscess(`SUSCESS: '${entitlementToAdd}' has been added to role '${roleId}'`);
             return newEntitlements;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to add '${entitlementToAdd}' for ${roleId}`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to add '${entitlementToAdd}' for ${roleId}`, error.description);
+            throw error;
         }
     }
 
@@ -184,10 +188,9 @@ export class PlatformController {
 
             await this.setEntitlementsForRole(roleId, newEntitlements);
             Log.suscess(`SUSCESS: '${entitlementToRemove}' has been removed from role '${roleId}'`);
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to remove '${entitlementToRemove}' for ${roleId}`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to remove '${entitlementToRemove}' for ${roleId}`, error.description);
+            throw error;
         }
     }
 
@@ -205,10 +208,9 @@ export class PlatformController {
             );
             await this.client.platform.addRoleToUser(roleId, userId, applicationInstance);
             Log.suscess(`SUSCESS: Role '${roleName}' assigned to user '${userId}'`);
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to assign '${roleName}' to user '${userId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to assign '${roleName}' to user '${userId}'`, error.description);
+            throw error;
         }
     }
 
@@ -226,10 +228,12 @@ export class PlatformController {
             );
             await this.client.platform.removeRoleFromUser(roleId, userId, applicationInstance);
             Log.suscess(`SUSCESS: Role '${roleName}' removed from user '${userId}'`);
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to remove role '${roleName}' from user '${userId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to remove role '${roleName}' from user '${userId}'`,
+                error.description
+            );
+            throw error;
         }
     }
 
@@ -242,10 +246,9 @@ export class PlatformController {
             );
             Log.suscess(`SUSCESS: Entitlements for user '${userId}' obtained`);
             return userEntitlments;
-        } catch (err) {
-            const description = getErrorDescription(err);
-            Log.error(`FAILURE: Unable to get entitlements for user '${userId}'`, description);
-            throw err;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to get entitlements for user '${userId}'`, error.description);
+            throw error;
         }
     }
 }

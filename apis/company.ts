@@ -97,4 +97,17 @@ export class Company {
         const user: User = await User.createUser(defaultUserConfig);
         return user;
     }
+
+    async addUserToEachOthersRoster(arrayOfUsers: User[]) {
+        const arrayOfPromises = [];
+        for (let x = 0; x < arrayOfUsers.length; x++) {
+            for (let y = 0; y < arrayOfUsers.length; y++) {
+                if (x !== y) {
+                    arrayOfPromises.push(arrayOfUsers[x].addUserToRoster(arrayOfUsers[y]));
+                }
+            }
+        }
+
+        await Promise.all(arrayOfPromises);
+    }
 }
