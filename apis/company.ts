@@ -137,8 +137,10 @@ export class Company {
         Log.highlight(`Tearing down: Detected ${twilioNumbers.length} Twilio number.`);
         for (const numberObj of twilioNumbers) {
             const { number } = numberObj;
-            const { id } = numberObj.user;
-            await twilioController.unassignTwilioNumberFromUser(id, number);
+            if (numberObj.user) {
+                const { id } = numberObj.user;
+                await twilioController.unassignTwilioNumberFromUser(id, number);
+            }
             await twilioController.releaseTwilioNumberFromCompany(companyId, number);
         }
     }
@@ -154,8 +156,10 @@ export class Company {
         Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp number.`);
         for (const numberObj of whatsAppProviders) {
             const { accountId } = numberObj;
-            const { id } = numberObj.user;
-            await whatsAppController.unassignWhatsAppAccountFromUser(id, accountId);
+            if (numberObj.user) {
+                const { id } = numberObj.user;
+                await whatsAppController.unassignWhatsAppAccountFromUser(id, accountId);
+            }
             await whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
         }
     }
