@@ -1,4 +1,4 @@
-export const END_POINTS = {
+export const API_ENDPOINTS = {
     CORE: {
         local: 'https://lb-msg-cpqa2-nvan.dev-globalrelay.net:9443/core/v1/',
         cpqa2: 'https://lb-msg-cpqa2-nvan.dev-globalrelay.net:9443/core/v1/',

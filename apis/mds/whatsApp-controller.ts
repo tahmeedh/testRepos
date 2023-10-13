@@ -1,5 +1,5 @@
+import { API_ENDPOINTS } from 'Apis/api-endpoints';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { END_POINTS } from 'Apis/endpoints';
 import axios from 'axios';
 
 export class WhatsAppController {
@@ -10,7 +10,7 @@ export class WhatsAppController {
 
     constructor(gsk: string, csrf: string, env: string) {
         this.env = env;
-        this.endpoint = END_POINTS.MDS[this.env];
+        this.endpoint = API_ENDPOINTS.MDS[this.env];
         this.gsk = gsk;
         this.csrf = csrf;
     }
@@ -157,6 +157,32 @@ export class WhatsAppController {
         } catch (error) {
             Log.error(
                 `FAILURE: Unable to unassign WhatsApp Account '${accountId}' from user '${userId}': `,
+                error.response.data
+            );
+            throw error.response.data;
+        }
+    }
+
+    async getAllWhatsAppAccountFromCompany(companyId: number) {
+        const config = {
+            method: 'get',
+            url: `${this.endpoint}/company/${companyId}/providers/WHATSAPP/accounts`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'gr-csrf': this.csrf,
+                Cookie: this.gsk
+            }
+        };
+
+        try {
+            Log.info(`...Sending request to MDS to get a list of WhatsApp Account from '${companyId}'`);
+            const result = await axios.request(config);
+            Log.suscess(`SUSCESS: A list of WhatsApp Account for '${companyId}' is obtained`);
+            return result.data.accounts;
+        } catch (error) {
+            Log.error(
+                `FAILURE: Unable to obtain list of WhatsApp Account from company '${companyId}': `,
                 error.response.data
             );
             throw error.response.data;

@@ -1,5 +1,5 @@
+import { API_ENDPOINTS } from 'Apis/api-endpoints';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { END_POINTS } from 'Apis/endpoints';
 import axios from 'axios';
 
 export class TwilioController {
@@ -10,7 +10,7 @@ export class TwilioController {
 
     constructor(gsk: string, csrf: string, env: string) {
         this.env = env;
-        this.endpoint = END_POINTS.MDS[this.env];
+        this.endpoint = API_ENDPOINTS.MDS[this.env];
         this.gsk = gsk;
         this.csrf = csrf;
     }
@@ -163,7 +163,7 @@ export class TwilioController {
         }
     }
 
-    async getNumbersBelongToCompany(companyId: number) {
+    async getAllTwilioNumbersFromCompany(companyId: number) {
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -178,10 +178,8 @@ export class TwilioController {
         try {
             Log.info(`...Sending request to MDS to get all Twilio numbers belong to company '${companyId}'`);
             const result = await axios.request(config);
-            const { numbers } = result.data;
-            const arrayOfNumbers = numbers.map((element) => element.number);
             Log.suscess(`SUSCESS: Twilio numbers belong to company '${companyId}' obtained `);
-            return arrayOfNumbers;
+            return result.data.numbers;
         } catch (error) {
             Log.error(
                 `FAILURE: Unable get Twilio numbers belong to company '${companyId}': `,
@@ -189,14 +187,5 @@ export class TwilioController {
             );
             throw error.response.data;
         }
-    }
-
-    async releaseAllNumbers(companyId: number) {
-        const listOfNumbers = await this.getNumbersBelongToCompany(companyId);
-        const results = [];
-        for (const number of listOfNumbers) {
-            results.push(this.releaseTwilioNumberFromCompany(companyId, number));
-        }
-        await Promise.all(results);
     }
 }

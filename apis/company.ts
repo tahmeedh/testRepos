@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+
 import { SMClient } from './sm/client';
 import { PlatformController } from './sm/platform/platform-controller';
 import { DirectoryController } from './sm/directory/directory-controller';
@@ -6,8 +8,12 @@ import { User } from './user';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { Log } from './api-helpers/log-utils';
 import { MessageController } from './sm/message/message-controller';
-import { END_POINTS } from './endpoints';
-import { EndpointUtils } from './api-helpers/endpoint-utils';
+import { API_ENDPOINTS } from './api-endpoints';
+import { ApiEndpointUtils } from './api-helpers/api-endpoint-utils';
+import { GskController } from './gas/gsk-controller';
+import { CsrfController } from './mds/csrf-controller';
+import { TwilioController } from './mds/twilio-controller';
+import { WhatsAppController } from './mds/whatsApp-controller';
 
 export interface CompanyType {
     smClient: SMClient;
@@ -20,16 +26,16 @@ export interface CompanyType {
     env: string;
 }
 export class Company {
-    company: CompanyType;
+    companyInfo: CompanyType;
 
     constructor(company: CompanyType) {
-        this.company = company;
+        this.companyInfo = company;
     }
 
     static async createCompany(
         companyName = `${COMPANY_DEFAULT_SETTINGS.NAME_PREFIX}${COMPANY_DEFAULT_SETTINGS.NAME()}`
     ) {
-        if (!EndpointUtils.isEndPointValid(process.env.SERVER)) {
+        if (!ApiEndpointUtils.isApiEndPointValid(process.env.SERVER)) {
             const error = new Error();
             Log.error(
                 `FAILURE: Process.env.SERVER '${process.env.SERVER}' is not valid. Create company aborted`,
@@ -40,12 +46,12 @@ export class Company {
 
         const env = process.env.SERVER;
         const companyDomain = `${companyName}.com`;
-        const smClient = new SMClient(END_POINTS.SM_THRIFT_HOST[env], 7443);
+        const smClient = new SMClient(API_ENDPOINTS.SM_THRIFT_HOST[env], 7443);
         const platformController = new PlatformController(smClient);
         const directoryController = new DirectoryController(smClient);
         const messsageController = new MessageController(smClient);
 
-        Log.info('===================== START: Creating company =====================');
+        Log.info(`===================== START: Creating company on ${env} enviroment =====================`);
         const companyId = await platformController.createCompanyWithDomain(companyName, companyDomain);
         await platformController.enableAllServices(companyId);
         await Promise.all([
@@ -72,14 +78,14 @@ export class Company {
     }
 
     async deleteCompany() {
-        const { companyId } = this.company;
-        await this.company.platformController.deleteCompany(companyId);
+        const { companyId } = this.companyInfo;
+        await this.companyInfo.platformController.deleteCompany(companyId);
     }
 
     async getRoles(applicationName: 'Directory' | 'ServiceManager', format = true) {
-        const { companyId } = this.company;
+        const { companyId } = this.companyInfo;
         const applicationId = ApplicationName[applicationName];
-        return this.company.platformController.getCompanyRoles(companyId, applicationId, format);
+        return this.companyInfo.platformController.getCompanyRoles(companyId, applicationId, format);
     }
 
     async createUser() {
@@ -92,7 +98,7 @@ export class Company {
             mobilePhone: USER_DEFAULT_SETTINGS.MOBILE_PHONE(),
             workPhone: USER_DEFAULT_SETTINGS.WORK_PHONE(),
             homePhone: USER_DEFAULT_SETTINGS.HOME_PHONE(),
-            company: this.company
+            company: this.companyInfo
         };
         const user: User = await User.createUser(defaultUserConfig);
         return user;
@@ -107,7 +113,50 @@ export class Company {
                 }
             }
         }
-
         await Promise.all(arrayOfPromises);
+    }
+
+    async teardown() {
+        Log.info(`===================== START: Tearing down company =====================`);
+        await Promise.all([
+            this._unassignAndReleaseAllTwilioNumbers(),
+            this._unassignAndRemoveAllWhatsAppAccount()
+        ]);
+        await this.deleteCompany();
+        Log.info('===================== END: Tear down completed =====================');
+    }
+
+    async _unassignAndReleaseAllTwilioNumbers() {
+        const { env, companyId } = this.companyInfo;
+        const gskToken = await GskController.getGskToken('slui@gr.net', 'Pwd123*', env);
+        const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
+
+        const twilioController = new TwilioController(gskToken, csrfToken, env);
+        const twilioNumbers = await twilioController.getAllTwilioNumbersFromCompany(companyId);
+
+        Log.highlight(`Tearing down: Detected ${twilioNumbers.length} Twilio number.`);
+        for (const numberObj of twilioNumbers) {
+            const { number } = numberObj;
+            const { id } = numberObj.user;
+            await twilioController.unassignTwilioNumberFromUser(id, number);
+            await twilioController.releaseTwilioNumberFromCompany(companyId, number);
+        }
+    }
+
+    async _unassignAndRemoveAllWhatsAppAccount() {
+        const { env, companyId } = this.companyInfo;
+        const gskToken = await GskController.getGskToken('slui@gr.net', 'Pwd123*', env);
+        const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
+
+        const whatsAppController = new WhatsAppController(gskToken, csrfToken, env);
+        const whatsAppProviders = await whatsAppController.getAllWhatsAppAccountFromCompany(companyId);
+
+        Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp number.`);
+        for (const numberObj of whatsAppProviders) {
+            const { accountId } = numberObj;
+            const { id } = numberObj.user;
+            await whatsAppController.unassignWhatsAppAccountFromUser(id, accountId);
+            await whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
+        }
     }
 }

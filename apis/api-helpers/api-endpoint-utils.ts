@@ -1,5 +1,5 @@
-export class EndpointUtils {
-    static isEndPointValid(endpoint: string) {
+export class ApiEndpointUtils {
+    static isApiEndPointValid(endpoint: string) {
         switch (endpoint) {
             case 'local':
             case 'cpqa2':

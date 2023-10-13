@@ -42,9 +42,9 @@ export interface UserConfigType {
     company: CompanyType;
 }
 export class User {
-    user: UserType;
+    userInfo: UserType;
     constructor(user: UserType) {
-        this.user = user;
+        this.userInfo = user;
     }
 
     static async createUser(userConfig: UserConfigType) {
@@ -113,30 +113,32 @@ export class User {
         field: 'jobTitle' | 'firstName' | 'lastName' | 'workPhone' | 'homePhone' | 'mobilePhone',
         userInput: string
     ) {
-        const { userId } = this.user;
-        await this.user.company.directoryController.updateProfile(userId, { [field]: userInput });
-        this.user[field] = userInput;
+        const { userId } = this.userInfo;
+        await this.userInfo.company.directoryController.updateProfile(userId, { [field]: userInput });
+        this.userInfo[field] = userInput;
     }
 
     async getUserDirectoryEntitlements() {
-        const { userId } = this.user;
-        const entitlments = await this.user.company.platformController.getUserDirectoryEntitlements(userId);
+        const { userId } = this.userInfo;
+        const entitlments = await this.userInfo.company.platformController.getUserDirectoryEntitlements(
+            userId
+        );
         Log.highlight(`=== User '${userId}' currently has the following entitlments [${entitlments}] ===`);
         return entitlments;
     }
 
     async getUserProfile() {
-        const { userId } = this.user;
-        const userProfile = await this.user.company.directoryController.getUserProfile(userId);
+        const { userId } = this.userInfo;
+        const userProfile = await this.userInfo.company.directoryController.getUserProfile(userId);
         return userProfile;
     }
 
     async assignServiceManagerRole(role: 'MESSAGE_ADMINISTRATOR') {
-        const { userId } = this.user;
+        const { userId } = this.userInfo;
         const roleName = ServiceManagerRoles[role];
-        const { companyId } = this.user.company;
+        const { companyId } = this.userInfo.company;
         const applicationName = ApplicationName.ServiceManager;
-        await this.user.company.platformController.assignRoleToUser(
+        await this.userInfo.company.platformController.assignRoleToUser(
             userId,
             roleName,
             companyId,
@@ -145,11 +147,11 @@ export class User {
     }
 
     async unassignServiceManagerRole(role: 'MESSAGE_ADMINISTRATOR') {
-        const { userId } = this.user;
+        const { userId } = this.userInfo;
         const roleName = ServiceManagerRoles[role];
-        const { companyId } = this.user.company;
+        const { companyId } = this.userInfo.company;
         const applicationName = ApplicationName.ServiceManager;
-        await this.user.company.platformController.removeRoleFromUser(
+        await this.userInfo.company.platformController.removeRoleFromUser(
             userId,
             roleName,
             companyId,
@@ -158,11 +160,11 @@ export class User {
     }
 
     async assignDirectoryRole(role: 'SMS_USER_WITH_CALL_FORWARD') {
-        const { userId } = this.user;
+        const { userId } = this.userInfo;
         const roleName = DirectoryRoles[role];
-        const { companyId } = this.user.company;
+        const { companyId } = this.userInfo.company;
         const applicationName = ApplicationName.Directory;
-        await this.user.company.platformController.assignRoleToUser(
+        await this.userInfo.company.platformController.assignRoleToUser(
             userId,
             roleName,
             companyId,
@@ -171,11 +173,11 @@ export class User {
     }
 
     async unassignDirectoryRole(role: 'SMS_USER_WITH_CALL_FORWARD') {
-        const { userId } = this.user;
+        const { userId } = this.userInfo;
         const roleName = DirectoryRoles[role];
-        const { companyId } = this.user.company;
+        const { companyId } = this.userInfo.company;
         const applicationName = ApplicationName.Directory;
-        await this.user.company.platformController.removeRoleFromUser(
+        await this.userInfo.company.platformController.removeRoleFromUser(
             userId,
             roleName,
             companyId,
@@ -193,15 +195,15 @@ export class User {
             | 'MANAGE_COMPANY_CHANNELS'
             | 'MESSAGE_APPLICATION'
     ) {
-        const { roleId } = this.user;
+        const { roleId } = this.userInfo;
         const entitlement = DirectoryEntitlments[entitlementName];
-        const currentEntitlements = this.user.entitlements;
-        await this.user.company.platformController.addEntitlementToRole(
+        const currentEntitlements = this.userInfo.entitlements;
+        await this.userInfo.company.platformController.addEntitlementToRole(
             roleId,
             entitlement,
             currentEntitlements
         );
-        this.user.entitlements = await this.getUserDirectoryEntitlements();
+        this.userInfo.entitlements = await this.getUserDirectoryEntitlements();
     }
 
     async removeEntitlement(
@@ -214,35 +216,32 @@ export class User {
             | 'MANAGE_COMPANY_CHANNELS'
             | 'MESSAGE_APPLICATION'
     ) {
-        const { roleId } = this.user;
+        const { roleId } = this.userInfo;
         const entitlement = DirectoryEntitlments[entitlementName];
-        const currentEntitlements = this.user.entitlements;
-        await this.user.company.platformController.removeEntitlementFromRole(
+        const currentEntitlements = this.userInfo.entitlements;
+        await this.userInfo.company.platformController.removeEntitlementFromRole(
             roleId,
             entitlement,
             currentEntitlements
         );
-        this.user.entitlements = await this.getUserDirectoryEntitlements();
+        this.userInfo.entitlements = await this.getUserDirectoryEntitlements();
     }
 
     async addUserToRoster(targetUser: User) {
-        const { userId } = this.user;
-        const targetGrcpAlias = targetUser.user.grcpAlias;
-        await this.user.company.messageController.addUserToRoster(userId, targetGrcpAlias);
+        const { userId } = this.userInfo;
+        const targetGrcpAlias = targetUser.userInfo.grcpAlias;
+        await this.userInfo.company.messageController.addUserToRoster(userId, targetGrcpAlias);
     }
 
     async removeUserFromRoster(targetUser: User) {
-        const { userId } = this.user;
-        const targetGrcpAlias = targetUser.user.grcpAlias;
-        await this.user.company.messageController.removeUserFromRoster(userId, targetGrcpAlias);
+        const { userId } = this.userInfo;
+        const targetGrcpAlias = targetUser.userInfo.grcpAlias;
+        await this.userInfo.company.messageController.removeUserFromRoster(userId, targetGrcpAlias);
     }
 
     async requestAndAssignTwilioNumber() {
-        await this.assignServiceManagerRole('MESSAGE_ADMINISTRATOR');
-        await this.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
-
-        const { env, companyId } = this.user.company;
-        const { email, password, userId } = this.user;
+        const { env, companyId } = this.userInfo.company;
+        const { email, password, userId } = this.userInfo;
 
         const gskToken = await GskController.getGskToken(email, password, env);
         const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
@@ -262,28 +261,25 @@ export class User {
 
         await twilioController.setTwilioNumberFeatures(companyId, twilioPhoneNumber, phoneNumerSettings);
         await twilioController.assignTwilioNumberToUser(userId, twilioPhoneNumber);
-        this.user.twilioController = twilioController;
 
-        this.user.twilioNumber = twilioPhoneNumber;
+        this.userInfo.twilioController = twilioController;
+        this.userInfo.twilioNumber = twilioPhoneNumber;
     }
 
     async unassignAndReleaseTwilioNumber() {
-        if (this.user.twilioNumber) {
-            const { companyId } = this.user.company;
-            const { userId, twilioNumber } = this.user;
-            await this.user.twilioController.unassignTwilioNumberFromUser(userId, twilioNumber);
-            await this.user.twilioController.releaseTwilioNumberFromCompany(companyId, twilioNumber);
+        if (this.userInfo.twilioNumber) {
+            const { companyId } = this.userInfo.company;
+            const { userId, twilioNumber } = this.userInfo;
+            await this.userInfo.twilioController.unassignTwilioNumberFromUser(userId, twilioNumber);
+            await this.userInfo.twilioController.releaseTwilioNumberFromCompany(companyId, twilioNumber);
         } else {
             Log.error('User has no assigned Twilio phone number. No requests were sent', new Error());
         }
     }
 
     async requestAndAssignWhatsAppNumber() {
-        await this.assignServiceManagerRole('MESSAGE_ADMINISTRATOR');
-        await this.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
-
-        const { env, companyId } = this.user.company;
-        const { email, password, userId } = this.user;
+        const { env, companyId } = this.userInfo.company;
+        const { email, password, userId } = this.userInfo;
         const accountId = PhoneNumberUtils.randomPhone();
         const gskToken = await GskController.getGskToken(email, password, env);
         const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
@@ -293,19 +289,18 @@ export class User {
         await whatsAppController.setWhatsAppAccountToActive(companyId, accountId);
         await whatsAppController.assignWhatsAppAccountToUser(userId, accountId);
 
-        this.user.whatsAppController = whatsAppController;
-        this.user.whatsAppNumber = accountId;
+        this.userInfo.whatsAppController = whatsAppController;
+        this.userInfo.whatsAppNumber = accountId;
     }
 
     async unasssignAndReleaseWhatAppNumber() {
-        const accountId = this.user.whatsAppNumber;
+        const accountId = this.userInfo.whatsAppNumber;
 
         if (accountId) {
-            const { companyId } = this.user.company;
-            const { userId } = this.user;
-
-            await this.user.whatsAppController.unassignWhatsAppAccountFromUser(userId, accountId);
-            await this.user.whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
+            const { companyId } = this.userInfo.company;
+            const { userId } = this.userInfo;
+            await this.userInfo.whatsAppController.unassignWhatsAppAccountFromUser(userId, accountId);
+            await this.userInfo.whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
         } else {
             Log.error('User has no assigned WhatsApp phone number. No requests were sent', new Error());
         }

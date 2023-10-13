@@ -1,5 +1,5 @@
+import { API_ENDPOINTS } from 'Apis/api-endpoints';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { END_POINTS } from 'Apis/endpoints';
 import axios from 'axios';
 
 export class GskController {
@@ -7,7 +7,7 @@ export class GskController {
         try {
             const config = {
                 method: 'post',
-                url: END_POINTS.LOG_IN[env],
+                url: API_ENDPOINTS.LOG_IN[env],
                 headers: {
                     Accept: 'application/json',
                     X_GR_NO_REDIRECT: '1',
@@ -18,7 +18,7 @@ export class GskController {
                     userName: username,
                     password,
                     serviceName: 'grPortal',
-                    svcUrl: END_POINTS.SERVICE_URL[env]
+                    svcUrl: API_ENDPOINTS.SERVICE_URL[env]
                 }
             };
 
