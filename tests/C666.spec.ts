@@ -7,12 +7,24 @@ test('C666', async ({ page }) => {
     try {
         company1 = await Company.createCompany();
         const user1 = await company1.createUser();
+        const user2 = await company1.createUser();
+
         await Promise.all([
             user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
             user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD'),
-            user1.removeEntitlement('FILE_SHARING')
+            user1.removeEntitlement('FILE_SHARING'),
+            user2.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
+            user2.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD'),
+            user2.removeEntitlement('FILE_SHARING')
         ]);
-        await Promise.all([user1.requestAndAssignWhatsAppNumber(), user1.requestAndAssignTwilioNumber()]);
+        await Promise.all([
+            user1.requestAndAssignWhatsAppNumber(),
+            user1.requestAndAssignTwilioNumber(),
+            user2.requestAndAssignWhatsAppNumber(),
+            user2.requestAndAssignTwilioNumber()
+        ]);
+
+        await company1.addUserToEachOthersRoster([user1, user2]);
 
         const app = new BaseController(page);
         await app.goToLoginPage();

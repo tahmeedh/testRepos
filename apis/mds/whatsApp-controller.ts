@@ -63,11 +63,13 @@ export class WhatsAppController {
                 `...Sending request to MDS to remove WhatsApp Provider '${accountId}' from company '${companyId}'`
             );
             const result = await axios.request(config);
-            Log.suscess(`SUSCESS: WhatsApp Provider '${accountId}' added to company '${companyId}'`);
+            Log.suscess(
+                `SUSCESS: WhatsApp Provider '${accountId}' has been removed from company '${companyId}'`
+            );
             return result;
         } catch (error) {
             Log.error(
-                `FAILURE: Unable to add WhatsApp Provider '${accountId}' to company '${companyId}': `,
+                `FAILURE: Unable to remove WhatsApp Provider '${accountId}' from company '${companyId}': `,
                 error.response.data
             );
             throw error.response.data;
