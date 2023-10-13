@@ -93,10 +93,10 @@ export class BaseController {
     async goToLoginPage() {
         await test.step('Base Controller : Go to login page', async () => {
             const env = process.env.SERVER;
-            if (!LoginEndpointUtils.isLoginEndPointValid(process.env.SERVER)) {
+            if (!LoginEndpointUtils.isLoginEndPointValid(env)) {
                 const error = new Error();
                 Log.error(
-                    `FAILURE: Process.env.SERVER '${process.env.SERVER}' is not valid. Unable to find login URL.`,
+                    `FAILURE: Process.env.SERVER '${env}' is not valid. Unable to find login URL.`,
                     error
                 );
                 throw error;
