@@ -24,7 +24,7 @@ export class Log {
         console.info(message);
     }
 
-    static async suscess(message: string) {
+    static async success(message: string) {
         console.info(consoleColor.FgGreen, message);
     }
 

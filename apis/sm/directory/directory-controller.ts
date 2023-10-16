@@ -19,7 +19,7 @@ export class DirectoryController {
             directorySettingWithId.companyId = companyId;
             Log.info(`...Sending request to update directory settings for company '${companyId}'`);
             const result = await this.client.directory.updateDirectorySettings(directorySettingWithId);
-            Log.suscess(`SUSCESS: Profile Policy is updated for company '${companyId}'`);
+            Log.success(`SUCCESS: Profile Policy is updated for company '${companyId}'`);
             return result;
         } catch (error) {
             Log.error(
@@ -43,7 +43,7 @@ export class DirectoryController {
             Log.info(`...Sending request to update user profile '${keys}' for user '${userId}'`);
             const profileStruct = new UserProfileUserSetAttributesStruct(profileObj);
             const result = await this.client.directory.updateUserProfile(userId, profileStruct);
-            Log.suscess(`SUSCESS: Profile '${keys}' is updated for user '${userId}'`);
+            Log.success(`SUCCESS: Profile '${keys}' is updated for user '${userId}'`);
             return result;
         } catch (error) {
             Log.error(`FAILURE: Unable to update user profile for user '${userId}'`, error.description);
@@ -59,7 +59,7 @@ export class DirectoryController {
                 operations,
                 roleName
             );
-            Log.suscess(`SUSCESS: Role '${roleName}' has been created and assigned to user`);
+            Log.success(`SUCCESS: Role '${roleName}' has been created and assigned to user`);
             return result;
         } catch (error) {
             Log.error(`FAILURE: Role ${roleName} NOT created`, error.description);
@@ -71,7 +71,7 @@ export class DirectoryController {
         try {
             Log.info(`...Sending request to get profile of user '${userId}'`);
             const result = await this.client.directory.getUserProfile(userId, userId);
-            Log.suscess(`SUSCESS: User profile of '${userId}' has been obtained`);
+            Log.success(`SUCCESS: User profile of '${userId}' has been obtained`);
             return result;
         } catch (error) {
             Log.error(`FAILURE: Unable to obtain user profile of user '${userId}'`, error.description);

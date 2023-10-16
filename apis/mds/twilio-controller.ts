@@ -34,7 +34,7 @@ export class TwilioController {
             Log.info(`...Sending request to MDS to request phone number for company  '${companyId}'`);
             const response = await axios.request(config);
             const phoneNumber = response.data.number;
-            Log.suscess(`SUSCESS: New phone number '${phoneNumber}' requested for company '${companyId}'`);
+            Log.success(`SUCCESS: New phone number '${phoneNumber}' requested for company '${companyId}'`);
             return phoneNumber;
         } catch (error) {
             Log.error(
@@ -63,8 +63,8 @@ export class TwilioController {
                 `...Sending request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`
             );
             await axios.request(config);
-            Log.suscess(
-                `SUSCESS: Phone number '${phoneNumber}' has been released from company '${companyId}'`
+            Log.success(
+                `SUCCESS: Phone number '${phoneNumber}' has been released from company '${companyId}'`
             );
         } catch (error) {
             Log.error(
@@ -93,8 +93,8 @@ export class TwilioController {
                 `...Sending request to MDS to set Twilio phone number '${phoneNumber}' features for company '${companyId}'`
             );
             await axios.request(config);
-            Log.suscess(
-                `SUSCESS: Twilio Phone number '${phoneNumber}' features has been set for company '${companyId}'`
+            Log.success(
+                `SUCCESS: Twilio Phone number '${phoneNumber}' features has been set for company '${companyId}'`
             );
         } catch (error) {
             Log.error(
@@ -122,8 +122,8 @@ export class TwilioController {
                 `...Sending request to MDS to assign Twilio phone number '${phoneNumber}' to user '${userId}'`
             );
             await axios.request(config);
-            Log.suscess(
-                `SUSCESS: Twilio Phone number '${phoneNumber}' has been assigned to user '${userId}'`
+            Log.success(
+                `SUCCESS: Twilio Phone number '${phoneNumber}' has been assigned to user '${userId}'`
             );
         } catch (error) {
             Log.error(
@@ -151,8 +151,8 @@ export class TwilioController {
                 `...Sending request to MDS to unassign Twilio phone number '${phoneNumber}' from user '${userId}'`
             );
             await axios.request(config);
-            Log.suscess(
-                `SUSCESS: Twilio Phone number '${phoneNumber}' has been unassigned from user '${userId}'`
+            Log.success(
+                `SUCCESS: Twilio Phone number '${phoneNumber}' has been unassigned from user '${userId}'`
             );
         } catch (error) {
             Log.error(
@@ -178,7 +178,7 @@ export class TwilioController {
         try {
             Log.info(`...Sending request to MDS to get all Twilio numbers belong to company '${companyId}'`);
             const result = await axios.request(config);
-            Log.suscess(`SUSCESS: Twilio numbers belong to company '${companyId}' obtained `);
+            Log.success(`SUCCESS: Twilio numbers belong to company '${companyId}' obtained `);
             return result.data.numbers;
         } catch (error) {
             Log.error(

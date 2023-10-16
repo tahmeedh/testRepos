@@ -35,7 +35,7 @@ export class WhatsAppController {
         try {
             Log.info(`...Sending request to MDS to add WhatsApp Provider to company '${companyId}'`);
             const result = await axios.request(config);
-            Log.suscess(`SUSCESS: WhatsApp Provider '${accountId}' added to company '${companyId}'`);
+            Log.success(`SUCCESS: WhatsApp Provider '${accountId}' added to company '${companyId}'`);
             return result;
         } catch (error) {
             Log.error(
@@ -63,8 +63,8 @@ export class WhatsAppController {
                 `...Sending request to MDS to remove WhatsApp Provider '${accountId}' from company '${companyId}'`
             );
             const result = await axios.request(config);
-            Log.suscess(
-                `SUSCESS: WhatsApp Provider '${accountId}' has been removed from company '${companyId}'`
+            Log.success(
+                `SUCCESS: WhatsApp Provider '${accountId}' has been removed from company '${companyId}'`
             );
             return result;
         } catch (error) {
@@ -96,8 +96,8 @@ export class WhatsAppController {
                 `...Sending request to MDS to set WhatsApp Account '${accountId}' to ACTIVE on company '${companyId}'`
             );
             const result = await axios.request(config);
-            Log.suscess(
-                `SUSCESS: WhatsApp Provider '${accountId}' is now set to ACTIVE on company '${companyId}'`
+            Log.success(
+                `SUCCESS: WhatsApp Provider '${accountId}' is now set to ACTIVE on company '${companyId}'`
             );
             return result;
         } catch (error) {
@@ -126,7 +126,7 @@ export class WhatsAppController {
                 `...Sending request to MDS to assign WhatsApp Account '${accountId}' to user '${userId}'`
             );
             const result = await axios.request(config);
-            Log.suscess(`SUSCESS: WhatsApp Account '${accountId}' is assigned to user '${userId}'`);
+            Log.success(`SUCCESS: WhatsApp Account '${accountId}' is assigned to user '${userId}'`);
             return result;
         } catch (error) {
             Log.error(
@@ -154,7 +154,7 @@ export class WhatsAppController {
                 `...Sending request to MDS to unassign WhatsApp Account '${accountId}' to user '${userId}'`
             );
             const result = await axios.request(config);
-            Log.suscess(`SUSCESS: WhatsApp Account '${accountId}' is unassign to user '${userId}'`);
+            Log.success(`SUCCESS: WhatsApp Account '${accountId}' is unassign to user '${userId}'`);
             return result;
         } catch (error) {
             Log.error(
@@ -180,7 +180,7 @@ export class WhatsAppController {
         try {
             Log.info(`...Sending request to MDS to get a list of WhatsApp Account from '${companyId}'`);
             const result = await axios.request(config);
-            Log.suscess(`SUSCESS: A list of WhatsApp Account for '${companyId}' is obtained`);
+            Log.success(`SUCCESS: A list of WhatsApp Account for '${companyId}' is obtained`);
             return result.data.accounts;
         } catch (error) {
             Log.error(

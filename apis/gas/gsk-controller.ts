@@ -26,7 +26,7 @@ export class GskController {
             const response = await axios.request(config);
             const cookies = response.headers['set-cookie'];
             const gskCookie = cookies.filter((cookie: string) => cookie.includes('gsk='))[0];
-            Log.suscess(`SUSCESS: GSK cookie obtained ${gskCookie}`);
+            Log.success(`SUCCESS: GSK cookie obtained ${gskCookie}`);
             return gskCookie;
         } catch (error) {
             Log.error('FAILURE: Unable to get GSK token from GAS: ', error.response.data);

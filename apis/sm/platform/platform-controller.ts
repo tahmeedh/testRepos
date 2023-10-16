@@ -13,8 +13,8 @@ export class PlatformController {
         try {
             Log.info(`...Sending request to create company '${companyName}' with domain '${domain}'`);
             const companyId = await this.client.platform.createCompanyWithDomain(companyName, domain);
-            Log.suscess(
-                `SUSCESS: Company '${companyName}' created with domain '${domain}'. CompnayId is '${companyId}'`
+            Log.success(
+                `SUCCESS: Company '${companyName}' created with domain '${domain}'. CompnayId is '${companyId}'`
             );
             return companyId;
         } catch (error) {
@@ -27,7 +27,7 @@ export class PlatformController {
         try {
             Log.info(`...Sending request to delete company '${companyId}'`);
             await this.client.platform.deleteCompany(companyId);
-            Log.suscess(`SUSCESS: Company ${companyId} has been deleted`);
+            Log.success(`SUCCESS: Company ${companyId} has been deleted`);
         } catch (error) {
             Log.error(`FAILURE: Unable to delete company '${companyId}'`, error.description);
             throw error;
@@ -38,7 +38,7 @@ export class PlatformController {
         try {
             Log.info(`...Sending request to enable all services for company '${companyId}'`);
             const result = await this.client.platform.enableAllServicesForCompany(companyId);
-            Log.suscess(`SUSCESS: All services enabled for company '${companyId}'`);
+            Log.success(`SUCCESS: All services enabled for company '${companyId}'`);
             return result;
         } catch (error) {
             Log.error(
@@ -53,7 +53,7 @@ export class PlatformController {
         try {
             Log.info(`...Sending request to enable GR message for company '${companyId}'`);
             const result = await this.client.platform.enableGrMessageForCompany(companyId);
-            Log.suscess(`SUSCESS: GR message enabled for company '${companyId}'`);
+            Log.success(`SUCCESS: GR message enabled for company '${companyId}'`);
             return result;
         } catch (error) {
             Log.error(`FAILURE: Unable to enabling GR message for company '${companyId}'`, error.description);
@@ -67,8 +67,8 @@ export class PlatformController {
                 `...Sending request to get roles assigned to company '${companyId}' for application '${applicationID}'`
             );
             const rolesOfCompany = await this.client.platform.getRolesForCompany(companyId, applicationID);
-            Log.suscess(
-                `SUSCESS: Roles from Application ID '${applicationID}' for company '${companyId}' obtained`
+            Log.success(
+                `SUCCESS: Roles from Application ID '${applicationID}' for company '${companyId}' obtained`
             );
 
             if (formatResults) {
@@ -93,7 +93,7 @@ export class PlatformController {
         try {
             Log.info(`...Sending request to get domains belong to company '${companyId}'`);
             const companyDomains = await this.client.platform.getCompanyDomains(companyId);
-            Log.suscess(`SUSCESS: Domains for company '${companyId}' obtained`);
+            Log.success(`SUCCESS: Domains for company '${companyId}' obtained`);
             return companyDomains;
         } catch (error) {
             Log.error(
@@ -122,7 +122,7 @@ export class PlatformController {
         try {
             Log.info(`...Sending request to create user in Company '${companyId}'`);
             const createdUsers = await this.client.platform.createUser(companyId, passwordHash, user);
-            Log.suscess(`SUSCESS: User '${email}' created for company '${companyId}'`);
+            Log.success(`SUCCESS: User '${email}' created for company '${companyId}'`);
             return createdUsers;
         } catch (error) {
             Log.error(
@@ -137,7 +137,7 @@ export class PlatformController {
         try {
             Log.info(`...Sending request to create role with name '${roleName}'`);
             const createdRole = await this.client.platform.createRole(roleName, companyId, applicationName);
-            Log.suscess(`SUSCESS: Role '${roleName}' has been created for company '${companyId}'`);
+            Log.success(`SUCCESS: Role '${roleName}' has been created for company '${companyId}'`);
             return createdRole;
         } catch (error) {
             Log.error(
@@ -152,7 +152,7 @@ export class PlatformController {
         try {
             Log.info(`...Sending request to update entitlments of role '${roleId}'`);
             await this.client.platform.setOperationsForRole(roleId, entitlements);
-            Log.suscess(`SUSCESS: Entitlements has been updated '${roleId}'`);
+            Log.success(`SUCCESS: Entitlements has been updated '${roleId}'`);
         } catch (error) {
             Log.error(`FAILURE: Unable to set entitlements for ${roleId}`, error.description);
             throw error;
@@ -169,7 +169,7 @@ export class PlatformController {
             }
 
             await this.setEntitlementsForRole(roleId, newEntitlements);
-            Log.suscess(`SUSCESS: '${entitlementToAdd}' has been added to role '${roleId}'`);
+            Log.success(`SUCCESS: '${entitlementToAdd}' has been added to role '${roleId}'`);
             return newEntitlements;
         } catch (error) {
             Log.error(`FAILURE: Unable to add '${entitlementToAdd}' for ${roleId}`, error.description);
@@ -187,7 +187,7 @@ export class PlatformController {
             );
 
             await this.setEntitlementsForRole(roleId, newEntitlements);
-            Log.suscess(`SUSCESS: '${entitlementToRemove}' has been removed from role '${roleId}'`);
+            Log.success(`SUCCESS: '${entitlementToRemove}' has been removed from role '${roleId}'`);
         } catch (error) {
             Log.error(`FAILURE: Unable to remove '${entitlementToRemove}' for ${roleId}`, error.description);
             throw error;
@@ -207,7 +207,7 @@ export class PlatformController {
                 `...Sending request to assign role '${roleName} 'to user '${userId}' for application '${applicationID}'`
             );
             await this.client.platform.addRoleToUser(roleId, userId, applicationInstance);
-            Log.suscess(`SUSCESS: Role '${roleName}' assigned to user '${userId}'`);
+            Log.success(`SUCCESS: Role '${roleName}' assigned to user '${userId}'`);
         } catch (error) {
             Log.error(`FAILURE: Unable to assign '${roleName}' to user '${userId}'`, error.description);
             throw error;
@@ -227,7 +227,7 @@ export class PlatformController {
                 `...Sending request to add role '${roleName}' to user '${userId}' for application ${applicationID}`
             );
             await this.client.platform.removeRoleFromUser(roleId, userId, applicationInstance);
-            Log.suscess(`SUSCESS: Role '${roleName}' removed from user '${userId}'`);
+            Log.success(`SUCCESS: Role '${roleName}' removed from user '${userId}'`);
         } catch (error) {
             Log.error(
                 `FAILURE: Unable to remove role '${roleName}' from user '${userId}'`,
@@ -244,7 +244,7 @@ export class PlatformController {
                 userId,
                 3
             );
-            Log.suscess(`SUSCESS: Entitlements for user '${userId}' obtained`);
+            Log.success(`SUCCESS: Entitlements for user '${userId}' obtained`);
             return userEntitlments;
         } catch (error) {
             Log.error(`FAILURE: Unable to get entitlements for user '${userId}'`, error.description);

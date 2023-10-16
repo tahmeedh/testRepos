@@ -18,7 +18,7 @@ export class CsrfController {
             Log.info('...Sending request to MDS to get CSRF cookie ');
             const response = await axios.request(config);
             const csrfToken = response.data.token;
-            Log.suscess(`SUSCESS: CSRF token obtained: '${csrfToken}`);
+            Log.success(`SUCCESS: CSRF token obtained: '${csrfToken}`);
             return csrfToken;
         } catch (error) {
             Log.error('FAILURE: Unable to get CSRF token from MDS: ', error.response.data);
