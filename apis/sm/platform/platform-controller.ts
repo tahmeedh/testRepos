@@ -239,7 +239,7 @@ export class PlatformController {
 
     async getUserDirectoryEntitlements(userId: number) {
         try {
-            Log.info(`...Sending request to get entilements belongs to user : ${userId}`);
+            Log.info(`...Sending request to get entilements belong to user : ${userId}`);
             const userEntitlments = await this.client.platform.getOperationsForUserByApplicationName(
                 userId,
                 3
