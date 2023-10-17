@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 export class ApiEndpointUtils {
     static isApiEndPointValid(endpoint: string) {
         switch (endpoint) {
