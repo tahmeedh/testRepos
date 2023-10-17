@@ -1,72 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
-let baseUrl;
-export const smThrift = { host: null, port: 7443 };
-export const companyPrefixName = 'portal';
-
-switch (process.env.SERVER) {
-    case 'prod':
-        baseUrl = 'https://portal.globalrelay.com';
-        smThrift.host = null; // Don't use SM thrift on PROD environment!!!
-        break;
-    case 'stg1':
-        baseUrl = 'https://portalstg1.globalrelay.com';
-        smThrift.host = null; // Don't use SM thrift on PROD environment!!!
-        break;
-    case 'cpci1':
-        baseUrl = 'https://lb-portal-cpci1-nvan.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-cpci1-nvan.dev-globalrelay.net';
-        break;
-    case 'local':
-        baseUrl = 'https://portal.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
-        break;
-    case 'cpqa1':
-        baseUrl = 'https://cpqa1portal.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-cpqa1-nvan.dev-globalrelay.net';
-        break;
-    case 'cpqa2':
-        baseUrl = 'https://cpqa2portal.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
-        break;
-    case 'cpqa2-pd1':
-        baseUrl = 'https://lb3-portal-cpqa2-nvan.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
-        break;
-    case 'cpqa2-pd2':
-        baseUrl = 'https://lb4-portal-cpqa2-nvan.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
-        break;
-    case 'cpqa2-va1':
-        baseUrl = 'https://lb7-portal-cpqa2-nvan.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
-        break;
-    case 'cpqa2-ca1':
-        baseUrl = 'https://lb9-portal-cpqa2-nvan.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
-        break;
-    case 'cpqa2-sq1':
-        baseUrl = 'https://lb8-portal-cpqa2-nvan.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-cpqa2-nvan.dev-globalrelay.net';
-        break;
-    case 'mbsnap2-at':
-        baseUrl = 'https://lb2-portal-mbsnap2-nvan.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-mbsnap2-nvan.dev-globalrelay.net';
-        break;
-    case 'mbsnap2':
-    default:
-        process.env.SERVER = 'mbsnap2';
-        baseUrl = 'https://lb-portal-mbsnap2-nvan.dev-globalrelay.net';
-        smThrift.host = 'lb-sm-mbsnap2-nvan.dev-globalrelay.net';
-}
-
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
 // require('dotenv').config();
-
-export const baseURL = baseUrl;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -103,10 +41,10 @@ export default defineConfig({
 
     /* Configure projects for major browsers */
     projects: [
-        {
-            name: 'chromium',
-            use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 } }
-        }
+        // {
+        //     name: 'chromium',
+        //     use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 } }
+        // }
 
         // {
         //   name: 'firefox',
@@ -133,10 +71,10 @@ export default defineConfig({
         //   name: 'Microsoft Edge',
         //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
         // },
-        // {
-        //   name: 'Google Chrome',
-        //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-        // },
+        {
+            name: 'Google Chrome',
+            use: { ...devices['Desktop Chrome'], channel: 'chrome', viewport: { width: 1280, height: 900 } }
+        }
     ]
 
     /* Run your local dev server before starting the tests */

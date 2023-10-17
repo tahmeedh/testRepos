@@ -1,6 +1,9 @@
 import type { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 
+import { LOGIN_ENDPOINTS } from 'Constants/login-endpoints';
+import { LoginEndpointUtils } from 'helper/login-endpoint-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 import { BasePage } from '../poms/base-page';
 import { LoginController } from './login-controller';
 import { StartChatButtonController } from './start-chat-button-controller';
@@ -11,24 +14,21 @@ import { PreviewAttachmentController } from './preview-attachment-controller';
 import { StringUtils } from '../helper/string-utils';
 import { InviteController } from './invite-controller';
 
-
 export class BaseController {
-
     readonly page: Page;
-    readonly Pom : BasePage;
+    readonly Pom: BasePage;
     readonly loginController: LoginController;
-    readonly startChatButtonController : StartChatButtonController;
-    readonly createChatController : CreateChatController;
-    readonly chatController : ChatController;
-    readonly attachmentController : PreviewAttachmentController;
-    readonly inviteController : InviteController
+    readonly startChatButtonController: StartChatButtonController;
+    readonly createChatController: CreateChatController;
+    readonly chatController: ChatController;
+    readonly attachmentController: PreviewAttachmentController;
+    readonly inviteController: InviteController;
 
-    readonly stringUtils : StringUtils;
-
+    readonly stringUtils: StringUtils;
 
     /**
-    * @param {import('@playwright/test').Page} page
-    */
+     * @param {import('@playwright/test').Page} page
+     */
     constructor(page: Page) {
         this.page = page;
         this.Pom = new BasePage(this.page);
@@ -40,21 +40,19 @@ export class BaseController {
         this.inviteController = new InviteController(this.page);
 
         this.stringUtils = new StringUtils();
-        
     }
 
     async closeTooltips() {
-        await test.step ("Base Controller : Close SMS Tooltips", async () => {
-
+        await test.step('Base Controller : Close SMS Tooltips', async () => {
             try {
-                await expect(this.Pom.TOOLTIP_NEXT_BUTTON).toBeVisible({timeout: 5000 });
+                await expect(this.Pom.TOOLTIP_NEXT_BUTTON).toBeVisible({ timeout: 5000 });
             } catch (e) {
                 try {
                     await expect(this.Pom.TOOLTIP_CLOSE_BUTTONA).toBeVisible();
-                } catch (e) {
+                } catch (err) {
                     try {
                         await expect(this.Pom.TOOLTIP_CLOSE_BUTTON).toBeVisible();
-                    } catch (e) {
+                    } catch (error) {
                         return;
                     }
                 }
@@ -72,26 +70,38 @@ export class BaseController {
             } else if (closeButtonAVisible) {
                 await this.Pom.TOOLTIP_CLOSE_BUTTONA.click();
             }
-
-        })
-
+        });
     }
 
     async logout() {
-        await test.step("Base Controller : Log Out", async () => {
+        await test.step('Base Controller : Log Out', async () => {
             await this.Pom.SETTINGS_BAR_BUTTON.click();
             await this.Pom.LOG_OUT_BUTTON.click();
-        })
+        });
     }
 
     /**
-    * @param {String} title Title of MUC / Channel to be opened 
-    */
-    async open(title : string) {
-        await test.step ("Base Controller : Open MUC or Channel", async() => {
+     * @param {String} title Title of MUC / Channel to be opened
+     */
+    async open(title: string) {
+        await test.step('Base Controller : Open MUC or Channel', async () => {
             const chat = this.Pom.MESSAGEIFRAME.getByText(title);
             await chat.click();
-        })
+        });
     }
 
+    async goToLoginPage() {
+        await test.step('Base Controller : Go to login page', async () => {
+            const env = process.env.SERVER;
+            if (!LoginEndpointUtils.isLoginEndPointValid(env)) {
+                const error = new Error();
+                Log.error(
+                    `FAILURE: Process.env.SERVER '${env}' is not valid. Unable to find login URL.`,
+                    error
+                );
+                throw error;
+            }
+            await this.page.goto(LOGIN_ENDPOINTS[env]);
+        });
+    }
 }

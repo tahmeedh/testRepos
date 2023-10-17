@@ -16,8 +16,12 @@
             ],
             "Assets/*": [
                 "assets/*"
+            ],
+            "Apis/*": [
+                "apis/*"
             ]
-        }
+        },
+        "allowJs": true,
     },
     "include": [
         "."
