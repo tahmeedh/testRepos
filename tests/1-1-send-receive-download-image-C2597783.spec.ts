@@ -1,7 +1,6 @@
 import { test,chromium} from '@playwright/test';
 import { BaseController } from '../controller/base-controller';
-import { companyCreateManager }  from '../helper/company-create-manager';
-import { baseURL } from '../playwright.config'; 
+
 
 test.describe('@Smoke @MUC @Local @FileSharing @Image', () => {
     let browser = null;
