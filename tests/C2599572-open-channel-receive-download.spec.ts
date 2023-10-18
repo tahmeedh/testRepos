@@ -1,4 +1,5 @@
 import { test, chromium } from '@playwright/test';
+import { Company } from 'Apis/company';
 import { BaseController } from '../controller/base-controller';
 
 test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
@@ -7,12 +8,16 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
     let app = null;
     let context2 = null;
     let app1 = null;
-
-    const user1 = null;
-    const user2 = null;
+    let company: Company;
+    let user1 = null;
+    let user2 = null;
 
     test.beforeEach(async () => {
         browser = await chromium.launch();
+        company = await Company.createCompany();
+        user1 = await company.createUser();
+        user2 = await company.createUser();
+        await company.addUserToEachOthersRoster([user1, user2]);
     });
 
     test('@Real C2599572 : Send, receive and download video file from channel', async () => {
@@ -20,7 +25,8 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
         app = new BaseController(page1);
-        await app.loginController.loginToPortal(user1.email, user1.password);
+        await app.goToLoginPage();
+        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
         await app.closeTooltips();
 
         // user create channel
@@ -28,7 +34,11 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
         const title = app.stringUtils.generateString(3, 5);
         await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
         await app.createChatController.fillOutWhoCanPostForm();
-        await app.createChatController.fillOutWhoCanJoinForm('open', [], [user2.firstName]);
+        await app.createChatController.fillOutWhoCanJoinForm(
+            'open',
+            [],
+            [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
+        );
         await app.createChatController.CreateChannel();
 
         // send video in channel
@@ -40,8 +50,8 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
         context2 = await browser.newContext();
         const page2 = await context2.newPage();
         app1 = new BaseController(page2);
-
-        await app1.loginController.loginToPortal(user2.email, user2.password);
+        await app1.goToLoginPage();
+        await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
         await app1.closeTooltips();
 
         // user 2 open channel
@@ -54,5 +64,7 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
         await page2.waitForEvent('download');
     });
 
-    test.afterEach(async () => {});
+    test.afterEach(async () => {
+        await company.teardown();
+    });
 });

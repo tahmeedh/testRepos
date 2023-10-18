@@ -57,7 +57,7 @@ export class CreateChatPage extends BasePage {
         this.ADD_COMPANIES_BUTTON = this.CHATIFRAME.locator('.m-auto-add-companies');
         this.COMPANY_SEARCH_INPUT = this.CHATIFRAME.getByPlaceholder('Search to select companies');
         this.INPUT_RADIO_OPEN_CHANNEL = this.CHATIFRAME.locator(
-            '.gr-RadioGroup-radioButtonRow-acad m-auto-open-membership-radio'
+            '.gr-RadioGroup-radioButtonRow-acad .m-auto-open-membership-radio'
         );
         this.SELECT_MODERATORS_BUTTON = this.CHATIFRAME.locator('.m-auto-invite-moderators-button');
         this.SELECT_MODERATORS_INPUT = this.CHATIFRAME.getByPlaceholder('Search to select moderators');
