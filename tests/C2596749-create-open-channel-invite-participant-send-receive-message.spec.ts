@@ -32,7 +32,11 @@ test.describe('@Smoke @Channel', () => {
         const title = app.stringUtils.generateString(3, 5);
         await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'description');
         await app.createChatController.fillOutWhoCanPostForm();
-        await app.createChatController.fillOutWhoCanJoinForm('open', [], [user2.userInfo.firstName]);
+        await app.createChatController.fillOutWhoCanJoinForm(
+            'open',
+            [],
+            [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
+        );
         await app.createChatController.CreateChannel();
 
         // send content in channel
@@ -54,10 +58,9 @@ test.describe('@Smoke @Channel', () => {
         // assert receive message
         const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
         await expect(messageReceived).toHaveText(randomContent);
+    });
 
-        // logout
-        test.afterEach(async () => {
-            await company.teardown();
-        });
+    test.afterEach(async () => {
+        await company.teardown();
     });
 });
