@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 import { test } from '@playwright/test';
 import { CreateChatPage } from '../poms/create-chat-page';
+/* eslint-disable no-await-in-loop */
 
 export class CreateChatController {
     readonly page: Page;
@@ -24,9 +25,9 @@ export class CreateChatController {
     async createMUC(users: string[], subject: string) {
         await test.step('Create Chat Controller : Select User', async () => {
             for (const username of users) {
-                this.Pom.MUC_SEARCH_INPUT.click();
-                this.Pom.MUC_SEARCH_INPUT.fill(username);
-                //await this.Pom.CHATIFRAME.getByText(username).click();
+                await this.Pom.MUC_SEARCH_INPUT.click();
+                await this.Pom.MUC_SEARCH_INPUT.fill(username);
+                await this.Pom.CHATIFRAME.getByText(username).click();
             }
             await this.Pom.NEXT_BUTTON.click();
             // add subject name to MUC
