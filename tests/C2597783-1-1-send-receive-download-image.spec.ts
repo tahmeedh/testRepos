@@ -18,6 +18,7 @@ test.describe('@Smoke @MUC @Local @FileSharing @Image', () => {
         company = await Company.createCompany();
         user1 = await company.createUser();
         user2 = await company.createUser();
+        await company.addUserToEachOthersRoster([user1, user2]);
     });
 
     test('@Real C2597783: Send, receive and download image from SUC', async () => {

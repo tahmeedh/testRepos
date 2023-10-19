@@ -22,6 +22,7 @@ test.describe('@Smoke @Local @MUC @FileSharing @Audio', () => {
         user1 = await company.createUser();
         user2 = await company.createUser();
         user3 = await company.createUser();
+        await company.addUserToEachOthersRoster([user1, user2, user3]);
     });
 
     test('@Real C2599571: Send, receive and download audio from MUC', async () => {

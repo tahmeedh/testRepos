@@ -22,6 +22,7 @@ test.describe('@Smoke @Channel', () => {
         user1 = await company.createUser();
         user2 = await company.createUser();
         user3 = await company.createUser();
+        await company.addUserToEachOthersRoster([user1, user2, user3]);
     });
 
     test('@Real C2596750: Create restricted Channel, invite participant and moderator', async () => {

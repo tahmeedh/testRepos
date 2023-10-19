@@ -18,6 +18,7 @@ test.describe('@Smoke @SUC', () => {
         company = await Company.createCompany();
         user1 = await company.createUser();
         user2 = await company.createUser();
+        await company.addUserToEachOthersRoster([user1, user2]);
     });
 
     test('@Real C2596427: Create 1-1, send and receive message', async () => {

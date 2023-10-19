@@ -22,6 +22,7 @@ test.describe('@Smoke @MUC', () => {
         user1 = await company.createUser();
         user2 = await company.createUser();
         user3 = await company.createUser();
+        // await company.addUserToEachOthersRoster([user1, user2, user3]);
     });
 
     test('@Real @Smoke C2596748 Create MUC, invite 2 participants to MUC, 1 participant accept, 1 participant decline', async () => {
@@ -38,13 +39,9 @@ test.describe('@Smoke @MUC', () => {
         // user create MUC
         await app.startChatButtonController.ClickOnStartMUC();
         const title = app.stringUtils.generateString(3, 5);
-        await app.createChatController.createMUC(
-            [
-                `${user2.userInfo.firstName} ${user2.userInfo.lastName}`,
-                `${user3.userInfo.firstName} ${user3.userInfo.lastName}`
-            ],
-            title
-        );
+        const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
+        const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
+        await app.createChatController.createMUC([user2fullName, user3fullName], title);
 
         // user send message in MUC
         const randomContent = app.stringUtils.generateString();

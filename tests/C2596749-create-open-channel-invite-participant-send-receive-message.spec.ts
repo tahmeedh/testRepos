@@ -17,6 +17,7 @@ test.describe('@Smoke @Channel', () => {
         company = await Company.createCompany();
         user1 = await company.createUser();
         user2 = await company.createUser();
+        await company.addUserToEachOthersRoster([user1, user2]);
     });
 
     test('@Real C2596749 : Create Open Channel, invite participant, send and receive message', async () => {

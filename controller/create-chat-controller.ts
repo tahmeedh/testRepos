@@ -26,7 +26,7 @@ export class CreateChatController {
             for (const username of users) {
                 this.Pom.MUC_SEARCH_INPUT.click();
                 this.Pom.MUC_SEARCH_INPUT.fill(username);
-                this.Pom.CHATIFRAME.getByText(username).click();
+                //await this.Pom.CHATIFRAME.getByText(username).click();
             }
             await this.Pom.NEXT_BUTTON.click();
             // add subject name to MUC
