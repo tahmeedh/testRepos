@@ -22,7 +22,7 @@ test.describe('@Smoke @MUC', () => {
         user1 = await company.createUser();
         user2 = await company.createUser();
         user3 = await company.createUser();
-        // await company.addUserToEachOthersRoster([user1, user2, user3]);
+        await company.addUserToEachOthersRoster([user1, user2, user3]);
     });
 
     test('@Real @Smoke C2596748 Create MUC, invite 2 participants to MUC, 1 participant accept, 1 participant decline', async () => {
