@@ -69,9 +69,9 @@ export class CreateChatController {
                 await this.Pom.SELECT_MODERATORS_BUTTON.click();
                 // Search for moderator
                 for (const modertor of moderators) {
-                    this.Pom.SELECT_MODERATORS_INPUT.click();
-                    this.Pom.SELECT_MODERATORS_INPUT.fill(modertor);
-                    this.Pom.CHATIFRAME.getByText(modertor).click();
+                    await this.Pom.SELECT_MODERATORS_INPUT.click();
+                    await this.Pom.SELECT_MODERATORS_INPUT.fill(modertor);
+                    await this.Pom.CHATIFRAME.getByText(modertor).click();
                 }
                 await this.Pom.SELECT_BUTTON.click();
             }
@@ -79,9 +79,9 @@ export class CreateChatController {
                 await this.Pom.SELECT_PARTICIPANTS_BUTTON.click();
                 // serach for participants
                 for (const participant of participants) {
-                    this.Pom.SELECT_PARTICIPANTS_INPUT.click();
-                    this.Pom.SELECT_PARTICIPANTS_INPUT.fill(participant);
-                    this.Pom.CHATIFRAME.getByText(participant).click();
+                    await this.Pom.SELECT_PARTICIPANTS_INPUT.click();
+                    await this.Pom.SELECT_PARTICIPANTS_INPUT.fill(participant);
+                    await this.Pom.CHATIFRAME.getByText(participant).click();
                 }
                 await this.Pom.SELECT_BUTTON.click();
             }
