@@ -3,16 +3,14 @@ import { BasePage } from './base-page';
 
 export class InvitePage extends BasePage {
     // SUC, Channel
-    readonly ACCEPT_BUTTON : Locator;
-    readonly DECLINE_BUTTON : Locator;
+    readonly ACCEPT_BUTTON: Locator;
+    readonly DECLINE_BUTTON: Locator;
 
     // MUC
-    readonly ACCEPT_BUTTON_MUC : Locator;
-    readonly DECLINE_BUTTON_MUC : Locator;
+    readonly ACCEPT_BUTTON_MUC: Locator;
+    readonly DECLINE_BUTTON_MUC: Locator;
 
-
-
-    constructor (page:Page) {
+    constructor(page: Page) {
         super(page);
         // SUC, Channel
         this.ACCEPT_BUTTON = this.CHATIFRAME.getByRole('button', { name: 'Accept' });
@@ -22,5 +20,4 @@ export class InvitePage extends BasePage {
         this.ACCEPT_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-accept');
         this.DECLINE_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-decline');
     }
-
 }
