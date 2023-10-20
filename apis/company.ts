@@ -14,6 +14,7 @@ import { GskController } from './gas/gsk-controller';
 import { CsrfController } from './mds/csrf-controller';
 import { TwilioController } from './mds/twilio-controller';
 import { WhatsAppController } from './mds/whatsApp-controller';
+import 'dotenv/config';
 
 export interface CompanyType {
     smClient: SMClient;
@@ -147,7 +148,10 @@ export class Company {
 
     async _unassignAndRemoveAllWhatsAppAccount() {
         const { env, companyId } = this.companyInfo;
-        const gskToken = await GskController.getGskToken('slui@gr.net', 'Pwd123*', env);
+        const adminUser = process.env.ADMIN_USERNAME;
+        const adminPassword = process.env.ADMIN_PASSWORD;
+
+        const gskToken = await GskController.getGskToken(adminUser, adminPassword, env);
         const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
 
         const whatsAppController = new WhatsAppController(gskToken, csrfToken, env);
