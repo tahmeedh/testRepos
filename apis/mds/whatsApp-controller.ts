@@ -1,16 +1,13 @@
-import { API_ENDPOINTS } from 'Apis/api-endpoints';
 import { Log } from 'Apis/api-helpers/log-utils';
 import axios from 'axios';
 
 export class WhatsAppController {
-    env: string;
     endpoint: string;
     gsk: string;
     csrf: string;
 
-    constructor(gsk: string, csrf: string, env: string) {
-        this.env = env;
-        this.endpoint = API_ENDPOINTS.MDS[this.env];
+    constructor(gsk: string, csrf: string, mdsEndpoint: string) {
+        this.endpoint = mdsEndpoint;
         this.gsk = gsk;
         this.csrf = csrf;
     }

@@ -1,12 +1,11 @@
-import { API_ENDPOINTS } from 'Apis/api-endpoints';
 import { Log } from 'Apis/api-helpers/log-utils';
 import axios from 'axios';
 
 export class CsrfController {
-    static async getCsrfToken(gsk: string, env: string) {
+    static async getCsrfToken(gsk: string, mdsEndpoint: string) {
         const config = {
             method: 'get',
-            url: `${API_ENDPOINTS.MDS[env]}/csrf`,
+            url: `${mdsEndpoint}/csrf`,
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
