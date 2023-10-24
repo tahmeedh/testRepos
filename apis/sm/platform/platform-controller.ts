@@ -1,5 +1,9 @@
 import { Log } from '../../api-helpers/log-utils';
-import { UserNameStruct, ApplicationInstanceStruct } from './thrift-generated/Platform_types';
+import {
+    UserNameStruct,
+    ApplicationInstanceStruct,
+    CompanyQueryStruct
+} from './thrift-generated/Platform_types';
 import { hashPbkdf2 } from '../sm-helpers/hash-utils';
 import { SMClient } from '../client';
 
@@ -100,6 +104,19 @@ export class PlatformController {
                 `FAILURE: Unable to retrive domains assigned to company '${companyId}'`,
                 error.description
             );
+            throw error;
+        }
+    }
+
+    async getCompanies(companyName: string) {
+        try {
+            Log.info(`...Sending request to get companies with name that contain string '${companyName}'`);
+            const companyObject = new CompanyQueryStruct({ name: companyName });
+            const listOfCompanies = await this.client.platform.findCompanies(companyObject);
+            Log.success(`SUCCESS: Companies obtained`);
+            return listOfCompanies;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to retrive companies`, error.description);
             throw error;
         }
     }
