@@ -68,4 +68,10 @@ export class ChatController {
             await expect(lastTimeStamp.locator('.icon-read')).toBeVisible();
         });
     }
+
+    async skipRecipientInfo() {
+        await test.step('Chat Controller : Skip Adding Recipient Information', async () => {
+            await this.Pom.RECIPIENT_INFO_SKIP_BUTTON.click();
+        });
+    }
 }
