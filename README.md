@@ -28,7 +28,7 @@ To run test:
 | SERVER=cpqa2-va1 npx playwright codegen | run playwright codegen |
 | npx playwright show-report | run HTML Reporter |
 
-| Flags | Example |
+| Flag | Example |
 | --- | --- |
 | `-g "abcd"` | Run the tests that contain the string "abcd" in test title |
 | `--headed` | Run tests in headed browsers |
@@ -38,7 +38,7 @@ To run test:
 
 ## Conventions
 
-| Flags | Example  | 
+| Type | Example  | 
 | --- | --- |
 | Folder name | all lower case and kebab case |
 | File name/Test name | kebab case |
