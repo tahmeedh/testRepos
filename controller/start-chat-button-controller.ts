@@ -26,6 +26,14 @@ export class StartChatButtonController {
         await this.clickOnStartButton(this.Pom.START_MUC);
     }
 
+    async ClickOnStartSMS() {
+        await this.clickOnStartButton(this.Pom.START_SMS);
+    }
+
+    async ClickOnStartWhatsapp() {
+        await this.clickOnStartButton(this.Pom.START_WHATSAPP);
+    }
+
     async ClickOnStartChannel() {
         await this.clickOnStartButton(this.Pom.START_CHANNEL);
     }

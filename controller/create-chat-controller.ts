@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { test } from '@playwright/test';
+import { StringUtils } from 'helper/string-utils';
 import { CreateChatPage } from '../poms/create-chat-page';
 /* eslint-disable no-await-in-loop */
 
@@ -22,7 +23,7 @@ export class CreateChatController {
         });
     }
 
-    async createMUC(users: string[], subject: string) {
+    async createMUC(users: string[], subject: string = StringUtils.generateString()) {
         await test.step('Create Chat Controller : Select User', async () => {
             for (const username of users) {
                 await this.Pom.MUC_SEARCH_INPUT.click();
@@ -32,6 +33,29 @@ export class CreateChatController {
             await this.Pom.NEXT_BUTTON.click();
             // add subject name to MUC
             await this.Pom.INPUT_SUBJECT.fill(subject);
+            await this.Pom.NEXT_BUTTON.click();
+        });
+    }
+
+    async CreateSMS(phoneNumber: string = StringUtils.generatePhoneNumber()) {
+        await test.step('Create Chat Controller : create SUC', async () => {
+            // Search for user
+            const formatted = StringUtils.formatPhoneNumber(phoneNumber);
+            await this.Pom.NUMBER_SEARCH_INPUT.click();
+            await this.Pom.NUMBER_SEARCH_INPUT.fill(formatted);
+            // click on user
+            await this.Pom.CHATIFRAME.getByText(formatted).click();
+            await this.Pom.NEXT_BUTTON.click();
+        });
+    }
+    async CreateWhatsapp(phoneNumber: string = StringUtils.generatePhoneNumber()) {
+        await test.step('Create Chat Controller : create SUC', async () => {
+            // Search for user
+            const formatted = StringUtils.formatPhoneNumber(phoneNumber);
+            await this.Pom.NUMBER_SEARCH_INPUT.click();
+            await this.Pom.NUMBER_SEARCH_INPUT.fill(formatted);
+            // click on user
+            await this.Pom.CHATIFRAME.getByText(formatted).click();
             await this.Pom.NEXT_BUTTON.click();
         });
     }
