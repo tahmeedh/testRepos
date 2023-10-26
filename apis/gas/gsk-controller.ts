@@ -1,13 +1,12 @@
-import { API_ENDPOINTS } from 'Apis/api-endpoints';
 import { Log } from 'Apis/api-helpers/log-utils';
 import axios from 'axios';
 
 export class GskController {
-    static async getGskToken(username: string, password: string, env: string) {
+    static async getGskToken(username: string, password: string, gasEndpoint: string, gasServiceUrl: string) {
         try {
             const config = {
                 method: 'post',
-                url: API_ENDPOINTS.LOG_IN[env],
+                url: gasEndpoint,
                 headers: {
                     Accept: 'application/json',
                     X_GR_NO_REDIRECT: '1',
@@ -18,7 +17,7 @@ export class GskController {
                     userName: username,
                     password,
                     serviceName: 'grPortal',
-                    svcUrl: API_ENDPOINTS.SERVICE_URL[env]
+                    svcUrl: gasServiceUrl
                 }
             };
 
