@@ -23,7 +23,7 @@ To run test:
 | Example | Description | 
 | --- | --- |
 | SERVER=cpqa2-va1 npx playwright test | run all tests |
-| SERVER=cpqa2-va1 npx playwright test -g C2596427 | run specific test |
+| SERVER=cpqa2-va1 npx playwright test C2596427 | run test with specific string in test file name |
 | SERVER=cpqa2-va1 npx playwright test -g @smoke | run test with specific string in test title |
 | SERVER=cpqa2-va1 npx playwright codegen | run playwright codegen |
 | npx playwright show-report | run HTML Reporter |
