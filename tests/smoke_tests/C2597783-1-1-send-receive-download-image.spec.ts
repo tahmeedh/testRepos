@@ -1,13 +1,15 @@
 import { test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { BaseController } from '../controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { BaseController } from '../../controller/base-controller';
 
-test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
+test.describe('@Smoke @SUC @Local @FileSharing @Image', () => {
     let browser = null;
     let context1 = null;
-    let app = null;
     let context2 = null;
-    let app1 = null;
+    let app: BaseController;
+    let app1: BaseController;
+
     let company: Company;
     let user1 = null;
     let user2 = null;
@@ -20,33 +22,24 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C2599572 : Send, receive and download video file from channel', async () => {
+    test('@Real C2597783: Send, receive and download image from SUC', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
         app = new BaseController(page1);
         await app.goToLoginPage();
+        // user login
         await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
         await app.closeTooltips();
 
-        // user create channel
-        await app.startChatButtonController.ClickOnStartChannel();
-        const title = app.stringUtils.generateString(3, 5);
-        await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
-        await app.createChatController.fillOutWhoCanPostForm();
-        await app.createChatController.fillOutWhoCanJoinForm(
-            'open',
-            [],
-            [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
-        );
-        await app.createChatController.CreateChannel();
+        // user start 1-1
+        await app.startChatButtonController.ClickOnStartOneToOne();
+        await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+        // user start conversation with user 2
+        const randomContent = StringUtils.generateString();
+        await app.chatController.sendContent(randomContent);
 
-        // send video in channel
-        const video = './asset/video.mp4';
-        await app.chatController.waitForHeader();
-        await app.attachmentController.sendAttachment(video);
-
-        // user2 login
+        // user 2 login
         context2 = await browser.newContext();
         const page2 = await context2.newPage();
         app1 = new BaseController(page2);
@@ -54,11 +47,17 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
         await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
         await app1.closeTooltips();
 
-        // user 2 open channel
-        await app1.open(title);
-        await app1.inviteController.acceptInvite('Channel');
+        // user 2 accept invitation with user 1
+        await app1.startChatButtonController.ClickOnStartOneToOne();
+        await app1.createChatController.CreateSUC(`${user1.userInfo.firstName} ${user1.userInfo.lastName}`);
+        await app1.inviteController.acceptInvite('SUC');
 
-        // assert receive video
+        // user send image in conversation
+        const PNG = './asset/download.png';
+        await app.chatController.waitForHeader();
+        await app.attachmentController.sendAttachment(PNG);
+
+        // user 2 download image
         await app1.chatController.waitForHeader();
         await app1.chatController.downloadLastMedia();
         await page2.waitForEvent('download');
