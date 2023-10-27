@@ -4,6 +4,7 @@ import { BasePage } from './base-page';
 export class ChatPage extends BasePage {
     readonly page: Page;
     readonly CHAT_INPUT_WRAPPER: Locator;
+    readonly CHAT_INPUT_SMS_WRAPPER: Locator;
     readonly CHAT_INPUT: Locator;
     readonly SEND_BUTTON: Locator;
     readonly ACCEPT_BUTTON: Locator;
@@ -16,10 +17,12 @@ export class ChatPage extends BasePage {
     readonly INCOMING_PARTIAL_MUC: Locator;
     readonly FILESHARING_OPTION_DROPDOWN_BTN: Locator;
     readonly FILESHARING_DOWNLOAD_BTN: Locator;
+    readonly RECIPIENT_INFO_SKIP_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
-        this.CHAT_INPUT_WRAPPER = this.CHATIFRAME.locator('.chat-input-wrapper');
+        this.CHAT_INPUT_WRAPPER = this.CHATIFRAME.locator('.public-DraftEditor-content');
+        this.CHAT_INPUT_SMS_WRAPPER = this.CHATIFRAME.locator('.chat-input-wrapper-sms');
         this.CHAT_INPUT = this.CHATIFRAME.getByRole('textbox', { name: 'input-label' });
         this.SEND_BUTTON = this.CHATIFRAME.locator('.m-auto-send-btn');
         this.ACCEPT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-accept');
@@ -35,5 +38,6 @@ export class ChatPage extends BasePage {
         this.INCOMING_PARTIAL_MUC = this.CHATIFRAME.locator('.m-auto-muc-chat-bubble-incoming');
         this.FILESHARING_OPTION_DROPDOWN_BTN = this.CHATIFRAME.locator('.m-auto-file-menu-icon');
         this.FILESHARING_DOWNLOAD_BTN = this.CHATIFRAME.getByRole('menuitem', { name: 'Download' });
+        this.RECIPIENT_INFO_SKIP_BUTTON = this.CHATIFRAME.getByText('Skip');
     }
 }
