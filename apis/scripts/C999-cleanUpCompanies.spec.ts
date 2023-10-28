@@ -73,6 +73,7 @@ test('C999', async () => {
         Log.success(`SUCCESS: ${listOfCompanies.length} companies has been deleted`);
     } catch (error) {
         Log.error(`FAILURE: An error occured when deleting companies`, error);
+        test.fail();
     }
     Log.info(`===================== END: Company cleanup complete =====================`);
 });
