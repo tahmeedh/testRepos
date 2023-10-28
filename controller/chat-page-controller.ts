@@ -30,6 +30,13 @@ export class ChatController {
         });
     }
 
+    async removeContent() {
+        await test.step('Chat Controller : Send Content', async () => {
+            await this.Pom.CHAT_INPUT_WRAPPER.click();
+            await this.Pom.CHAT_INPUT.clear();
+        });
+    }
+
     async waitForHeader() {
         await test.step('Base Controller : Wait For Header', async () => {
             await expect(this.Pom.CHAT_HEADER_MENU).toBeVisible();
