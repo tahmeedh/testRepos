@@ -8,18 +8,19 @@ If you are running playwright for the first time, you might also need to do
 ```js script
 npx playwright install
 ```
-## Setup Enviromental Variable
+## Setup Enviroment Variable
 Create a .env file in the jsat-e2e-chat-window folder and fill in the enviroment variables. Don't push the .env file to the repo.
+##
 | Variable | Example | Description | 
 | --- | --- | --- |
-| `SERVER` | `SERVER='cpqa2-va1'` | Run test against this test enviroment:|
+| `SERVER` | `SERVER='cpqa2-va1'` | Run test against this test enviroment|
 | `ADMIN_USERNAME` | `ADMIN_USERNAME='slui@gr.net` | Email of a user with admin privileges|
 | `ADMIN_PASSWORD` | `ADMIN_PASSWORD='PasswordOfSlui'` | Password of the above user|
 
 
 ## Run tests
 Playwright commands : https://playwright.dev/docs/test-cli
-To run test:
+##
 | Example | Description | 
 | --- | --- |
 | SERVER=cpqa2-va1 npx playwright test | run all tests |
@@ -27,8 +28,8 @@ To run test:
 | SERVER=cpqa2-va1 npx playwright test -g @smoke | run test with specific string in test title |
 | SERVER=cpqa2-va1 npx playwright codegen | run playwright codegen |
 | npx playwright show-report | run HTML Reporter |
-
-| Flag | Example |
+##
+| Flag | Description |
 | --- | --- |
 | `-g "abcd"` | Run the tests that contain the string "abcd" in test title |
 | `--headed` | Run tests in headed browsers |
