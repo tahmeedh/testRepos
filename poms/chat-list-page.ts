@@ -46,7 +46,7 @@ export class ChatListPage extends BasePage {
         this.CONTACTS_BUTTON = this.CHATIFRAME.locator('.m-auto-contacts-button');
 
         // Row Information
-        this.CHAT_NAME = this.CHATIFRAME.locator('.m-auto-name');
+        this.CHAT_NAME = this.MESSAGEIFRAME.locator('.twemoji-wrapper');
         this.SECONDARY_LINE = this.CHATIFRAME.locator('.m-auto-secondary-line');
         this.CHANNEL_DRAFT_LINE = this.CHATIFRAME.locator('.m-auto-list-item-draft');
 
