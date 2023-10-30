@@ -55,6 +55,7 @@ test('C777', async () => {
         Log.success(`SUCCESS: WhatsApp entitlement has been suscessfully assigned to user ${userEmail}`);
     } catch (error) {
         Log.error(`FAILURE: An error occured when assigning WhatsApp entitlements`, error);
+        test.fail();
     }
     Log.info(`===================== END: WhatsApp assign script ended =====================`);
 });
