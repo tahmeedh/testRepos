@@ -8,12 +8,12 @@ import { User } from './user';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { Log } from './api-helpers/log-utils';
 import { MessageController } from './sm/message/message-controller';
-import { API_ENDPOINTS } from './api-endpoints';
-import { ApiEndpointUtils } from './api-helpers/api-endpoint-utils';
 import { GskController } from './gas/gsk-controller';
 import { CsrfController } from './mds/csrf-controller';
 import { TwilioController } from './mds/twilio-controller';
 import { WhatsAppController } from './mds/whatsApp-controller';
+import 'dotenv/config';
+import { EndpointsType, EnvUtils } from './api-helpers/env-utils';
 
 export interface CompanyType {
     smClient: SMClient;
@@ -23,7 +23,7 @@ export interface CompanyType {
     companyName: string;
     companyDomain: string;
     companyId: number;
-    env: string;
+    endpoints: EndpointsType;
 }
 export class Company {
     companyInfo: CompanyType;
@@ -35,23 +35,16 @@ export class Company {
     static async createCompany(
         companyName = `${COMPANY_DEFAULT_SETTINGS.NAME_PREFIX}${COMPANY_DEFAULT_SETTINGS.NAME()}`
     ) {
-        if (!ApiEndpointUtils.isApiEndPointValid(process.env.SERVER)) {
-            const error = new Error();
-            Log.error(
-                `FAILURE: Process.env.SERVER '${process.env.SERVER}' is not valid. Create company aborted`,
-                error
-            );
-            throw error;
-        }
+        const END_POINTS = EnvUtils.getEndPoints();
+        const { ENV, SM_THRIFT_HOST, SM_THRIFT_PORT } = END_POINTS;
 
-        const env = process.env.SERVER;
         const companyDomain = `${companyName}.com`;
-        const smClient = new SMClient(API_ENDPOINTS.SM_THRIFT_HOST[env], 7443);
+        const smClient = new SMClient(SM_THRIFT_HOST, SM_THRIFT_PORT);
         const platformController = new PlatformController(smClient);
         const directoryController = new DirectoryController(smClient);
         const messsageController = new MessageController(smClient);
 
-        Log.info(`===================== START: Creating company on ${env} enviroment =====================`);
+        Log.info(`===================== START: Creating company on ${ENV} enviroment =====================`);
         const companyId = await platformController.createCompanyWithDomain(companyName, companyDomain);
         await platformController.enableAllServices(companyId);
         await Promise.all([
@@ -67,7 +60,7 @@ export class Company {
             companyName,
             companyDomain,
             companyId,
-            env
+            endpoints: END_POINTS
         });
 
         Log.highlight(
@@ -127,11 +120,19 @@ export class Company {
     }
 
     async _unassignAndReleaseAllTwilioNumbers() {
-        const { env, companyId } = this.companyInfo;
-        const gskToken = await GskController.getGskToken('slui@gr.net', 'Pwd123*', env);
-        const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
+        const { endpoints, companyId } = this.companyInfo;
+        const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
+        const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
 
-        const twilioController = new TwilioController(gskToken, csrfToken, env);
+        const gskToken = await GskController.getGskToken(
+            ADMIN_USERNAME,
+            ADMIN_PASSWORD,
+            GAS_LOGIN_ENDPOINT,
+            GAS_SERVICE_URL
+        );
+        const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
+
+        const twilioController = new TwilioController(gskToken, csrfToken, MDS_ENDPOINT);
         const twilioNumbers = await twilioController.getAllTwilioNumbersFromCompany(companyId);
 
         Log.highlight(`Tearing down: Detected ${twilioNumbers.length} Twilio number.`);
@@ -146,11 +147,19 @@ export class Company {
     }
 
     async _unassignAndRemoveAllWhatsAppAccount() {
-        const { env, companyId } = this.companyInfo;
-        const gskToken = await GskController.getGskToken('slui@gr.net', 'Pwd123*', env);
-        const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
+        const { endpoints, companyId } = this.companyInfo;
+        const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
+        const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
 
-        const whatsAppController = new WhatsAppController(gskToken, csrfToken, env);
+        const gskToken = await GskController.getGskToken(
+            ADMIN_USERNAME,
+            ADMIN_PASSWORD,
+            GAS_LOGIN_ENDPOINT,
+            GAS_SERVICE_URL
+        );
+        const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
+
+        const whatsAppController = new WhatsAppController(gskToken, csrfToken, MDS_ENDPOINT);
         const whatsAppProviders = await whatsAppController.getAllWhatsAppAccountFromCompany(companyId);
 
         Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp number.`);

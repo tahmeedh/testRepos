@@ -74,7 +74,18 @@ export default defineConfig({
         {
             name: 'Google Chrome',
             use: { ...devices['Desktop Chrome'], channel: 'chrome', viewport: { width: 1280, height: 900 } }
-        }
+        },
+        /* This is to prevent the scripts from accidentally being ran. Please read apis/scripts/README.md for instructions */
+        process.env.SCRIPT
+            ? {
+                  name: 'scripts',
+                  testDir: './apis/scripts',
+                  testMatch: /.*.spec.ts/
+              }
+            : {
+                  name: 'ignoreAllTest',
+                  testIgnore: '*.spec.ts'
+              }
     ]
 
     /* Run your local dev server before starting the tests */

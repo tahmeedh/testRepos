@@ -240,13 +240,19 @@ export class User {
     }
 
     async requestAndAssignTwilioNumber() {
-        const { env, companyId } = this.userInfo.company;
+        const { endpoints, companyId } = this.userInfo.company;
+        const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
         const { email, password, userId } = this.userInfo;
 
-        const gskToken = await GskController.getGskToken(email, password, env);
-        const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
+        const gskToken = await GskController.getGskToken(
+            email,
+            password,
+            GAS_LOGIN_ENDPOINT,
+            GAS_SERVICE_URL
+        );
+        const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
 
-        const twilioController = new TwilioController(gskToken, csrfToken, env);
+        const twilioController = new TwilioController(gskToken, csrfToken, MDS_ENDPOINT);
         const twilioPhoneNumber = await twilioController.requestTwilioNumberToCompany(companyId, 'CA', '604');
         const phoneNumerSettings = {
             disclaimerRequired: false,
@@ -278,13 +284,19 @@ export class User {
     }
 
     async requestAndAssignWhatsAppNumber() {
-        const { env, companyId } = this.userInfo.company;
+        const { endpoints, companyId } = this.userInfo.company;
+        const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
         const { email, password, userId } = this.userInfo;
         const accountId = PhoneNumberUtils.randomPhone();
-        const gskToken = await GskController.getGskToken(email, password, env);
-        const csrfToken = await CsrfController.getCsrfToken(gskToken, env);
+        const gskToken = await GskController.getGskToken(
+            email,
+            password,
+            GAS_LOGIN_ENDPOINT,
+            GAS_SERVICE_URL
+        );
+        const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
 
-        const whatsAppController = new WhatsAppController(gskToken, csrfToken, env);
+        const whatsAppController = new WhatsAppController(gskToken, csrfToken, MDS_ENDPOINT);
         await whatsAppController.addWhatsAppProviderToCompany(companyId, accountId);
         await whatsAppController.setWhatsAppAccountToActive(companyId, accountId);
         await whatsAppController.assignWhatsAppAccountToUser(userId, accountId);
