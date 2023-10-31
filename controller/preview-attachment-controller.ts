@@ -20,4 +20,10 @@ export class PreviewAttachmentController {
             await this.Pom.SEND_BUTTON.click();
         });
     }
+
+    async draftAttachment(filePath: string) {
+        await test.step('Preview Attachment Controller : Send Attachment', async () => {
+            await this.Pom.ATTACH_FILES_BUTTON.setInputFiles(filePath);
+        });
+    }
 }
