@@ -3,8 +3,6 @@ import { BasePage } from './base-page';
 
 export class MessageHubPage extends BasePage {
     readonly page: Page;
-    readonly CHAT_CONTAINER: Locator;
-    readonly CHANNELS_CONTAINER: Locator;
     readonly CHATS_BUTTON: Locator;
     readonly CONTACTS_BUTTON: Locator;
 
@@ -12,10 +10,6 @@ export class MessageHubPage extends BasePage {
     readonly DRAFT_TEXT_LINE: Locator;
     readonly ATTACHMENT_ICON: Locator;
     readonly ATTACHMENT_TEXT_LINE: Locator;
-    readonly CHANNEL_INFO: Locator;
-    readonly INVITE_BADGE: Locator;
-    readonly CHAT_ROWS: Locator;
-    readonly CHANNEL_ROWS: Locator;
 
     constructor(page: Page) {
         super(page);
