@@ -12,7 +12,7 @@ import { ChatController } from './chat-page-controller';
 import { PreviewAttachmentController } from './preview-attachment-controller';
 
 import { InviteController } from './invite-controller';
-import { ChatListController } from './chat-list-controller';
+import { MessageHubController } from './message-hub-controller';
 
 export class BaseController {
     readonly page: Page;
@@ -23,7 +23,7 @@ export class BaseController {
     readonly chatController: ChatController;
     readonly attachmentController: PreviewAttachmentController;
     readonly inviteController: InviteController;
-    readonly chatListController: ChatListController;
+    readonly messageHubController: MessageHubController;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -37,7 +37,7 @@ export class BaseController {
         this.chatController = new ChatController(this.page);
         this.attachmentController = new PreviewAttachmentController(this.page);
         this.inviteController = new InviteController(this.page);
-        this.chatListController = new ChatListController(this.page);
+        this.messageHubController = new MessageHubController(this.page);
     }
 
     async closeTooltips() {

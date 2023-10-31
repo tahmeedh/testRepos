@@ -1,7 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 import { BasePage } from './base-page';
 
-export class ChatListPage extends BasePage {
+export class MessageHubPage extends BasePage {
     readonly page: Page;
     readonly CHAT_CONTAINER: Locator;
     readonly CHANNELS_CONTAINER: Locator;
