@@ -82,7 +82,10 @@ export default defineConfig({
                   testDir: './apis/scripts',
                   testMatch: /.*.spec.ts/
               }
-            : {}
+            : {
+                  name: 'ignoreAllTest',
+                  testIgnore: '*.spec.ts'
+              }
     ]
 
     /* Run your local dev server before starting the tests */
