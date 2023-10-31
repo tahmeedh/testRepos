@@ -1,11 +1,4 @@
 import parsePhoneNumber from 'libphonenumber-js';
-import {
-    PASSWORD_MINIMUM_LENGTH,
-    PASSWORD_MINIMUM_UPPER_CASE,
-    PASSWORD_MINIMUM_LOWER_CASE,
-    PASSWORD_MINIMUM_NUMERIC,
-    PASSWORD_MINIMUM_SPECIAL
-} from 'constants/password';
 
 export class StringUtils {
     static getAreaCode() {
@@ -16,41 +9,6 @@ export class StringUtils {
         return (
             Math.random().toString(36).substring(min, max) + Math.random().toString(36).substring(min, max)
         );
-    }
-
-    static generatePassword(
-        len = PASSWORD_MINIMUM_LENGTH,
-        minUpper = PASSWORD_MINIMUM_UPPER_CASE,
-        minLower = PASSWORD_MINIMUM_LOWER_CASE,
-        minNumber = PASSWORD_MINIMUM_NUMERIC,
-        minSpecial = PASSWORD_MINIMUM_SPECIAL
-    ) {
-        const chars = String.fromCharCode(...Array(127).keys()).slice(33); // chars
-        const upperCase = String.fromCharCode(...Array(91).keys()).slice(65); // A-Z
-        const lowerCase = String.fromCharCode(...Array(123).keys()).slice(97); // a-z
-        const numbers = String.fromCharCode(...Array(58).keys()).slice(48); // 0-9
-        const specials = chars.replace(/\w/g, '');
-        const minRequired = minSpecial + minUpper + minLower + minNumber;
-        const generatedPassword = [].concat(
-            Array.from(
-                { length: minSpecial || 0 },
-                () => specials[Math.floor(Math.random() * specials.length)]
-            ),
-            Array.from(
-                { length: minUpper || 0 },
-                () => upperCase[Math.floor(Math.random() * upperCase.length)]
-            ),
-            Array.from(
-                { length: minLower || 0 },
-                () => lowerCase[Math.floor(Math.random() * lowerCase.length)]
-            ),
-            Array.from({ length: minNumber || 0 }, () => numbers[Math.floor(Math.random() * numbers.length)]),
-            Array.from(
-                { length: Math.max(len, minRequired) - (minRequired || 0) },
-                () => chars[Math.floor(Math.random() * chars.length)]
-            )
-        );
-        return generatedPassword.sort(() => Math.random()).join(''); // eslint-disable-line
     }
 
     static generatePhoneNumber() {
