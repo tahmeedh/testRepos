@@ -39,15 +39,15 @@ test.describe('@Restricted @Channel @Draft', () => {
             [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
         );
         await app.createChatController.CreateChannel();
-        const randomContent = StringUtils.generateString();
+
+        const draftText = StringUtils.generateString();
         await app.chatController.sendContent();
-        await app.chatController.typeContent(randomContent);
+        await app.chatController.typeContent(draftText);
         await app.chatListController.clickSideBarChatsButton();
 
-        // await expect(page1.getByText(randomContent)).toBeVisible();
         await app.chatListController.Pom.CHAT_NAME.getByText(title).click();
-        const messageReceived = app.Pom.MESSAGEIFRAME.getByText(randomContent);
-        await expect(messageReceived).toHaveText(randomContent);
+        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await expect(secondaryLine).toHaveText(draftText);
 
         // send video in channel
     });

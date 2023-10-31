@@ -1,7 +1,6 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { BaseController } from '../../../controller/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
 
 test.describe('@SMS @Draft', () => {
     let browser = null;
@@ -45,9 +44,7 @@ test.describe('@SMS @Draft', () => {
         app.createChatController.CreateSMS();
         await app.chatController.skipRecipientInfo();
         // user send message in conversation
-        const randomContent = StringUtils.generateString();
         await app.chatController.sendContent();
-        await app.chatController.typeContent(randomContent);
 
         // user drafts image in conversation
         const PNG = './asset/download.png';

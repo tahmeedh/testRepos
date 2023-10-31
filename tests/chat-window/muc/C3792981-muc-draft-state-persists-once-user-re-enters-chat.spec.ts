@@ -40,15 +40,14 @@ test.describe('@MUC @Draft', () => {
         const subject = await app.createChatController.createMUC([user2fullName, user3fullName]);
 
         // user send message in conversation
-        const randomContent = StringUtils.generateString();
+        const draftText = StringUtils.generateString();
         await app.chatController.sendContent();
-        await app.chatController.typeContent(randomContent);
+        await app.chatController.typeContent(draftText);
         await app.chatListController.clickSideBarChatsButton();
 
-        // await expect(page1.getByText(randomContent)).toBeVisible();
         await app.chatListController.Pom.CHAT_NAME.getByText(subject).click();
-        const messageReceived = app.Pom.MESSAGEIFRAME.getByText(randomContent);
-        await expect(messageReceived).toHaveText(randomContent);
+        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await expect(secondaryLine).toHaveText(draftText);
     });
 
     test.afterEach(async () => {

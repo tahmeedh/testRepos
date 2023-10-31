@@ -28,7 +28,7 @@ test.describe('@SMS @Draft', () => {
         await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
     });
 
-    test('@Real C3792626: Conversation list displays correct elements of SMS draft state for unsent message', async () => {
+    test('@Real C3792626: SMS draft state is removed from Message Hub after chat input is discarded', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
@@ -45,14 +45,13 @@ test.describe('@SMS @Draft', () => {
         app.createChatController.CreateSMS();
         await app.chatController.skipRecipientInfo();
         // user send message in conversation
-        const randomContent = StringUtils.generateString();
+        const draftText = StringUtils.generateString();
         await app.chatController.sendContent();
-        await app.chatController.typeContent(randomContent);
+        await app.chatController.typeContent(draftText);
         await app.chatListController.clickSideBarChatsButton();
 
-        // await expect(page1.getByText(randomContent)).toBeVisible();
-        const messageReceived = app.Pom.MESSAGEIFRAME.getByText(randomContent);
-        await expect(messageReceived).toHaveText(randomContent);
+        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await expect(secondaryLine).toHaveText(draftText);
     });
 
     test.afterEach(async () => {

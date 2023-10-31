@@ -19,7 +19,7 @@ test.describe('@Restricted @Channel @Draft', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C3792999 : Send, receive and download video file from channel', async () => {
+    test('@Real C3792999 : Restricted channel draft state is removed from Message Hub after chat input is discarded', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
@@ -39,17 +39,16 @@ test.describe('@Restricted @Channel @Draft', () => {
             [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
         );
         await app.createChatController.CreateChannel();
-        const randomContent = StringUtils.generateString();
+        const draftText = StringUtils.generateString();
         await app.chatController.sendContent();
-        await app.chatController.typeContent(randomContent);
+        await app.chatController.typeContent(draftText);
         await app.chatListController.clickSideBarChatsButton();
 
-        // await expect(page1.getByText(randomContent)).toBeVisible();
         await app.chatListController.Pom.CHAT_NAME.getByText(title).click();
         await app.chatController.removeContent();
         await app.chatListController.clickSideBarChatsButton();
-        const messageReceived = app.Pom.MESSAGEIFRAME.getByText(randomContent);
-        await expect(messageReceived).toHaveCount(0);
+        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await expect(secondaryLine).toHaveCount(0);
 
         // send video in channel
     });

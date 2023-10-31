@@ -28,7 +28,7 @@ test.describe('@Whatsapp @Draft', () => {
         await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
     });
 
-    test('@Real C3792983: Conversation list displays correct elements of Whatsapp draft state for unsent message', async () => {
+    test('@Real C3792983: Whatsapp draft state is removed from Message Hub after chat input is discarded', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
@@ -44,17 +44,16 @@ test.describe('@Whatsapp @Draft', () => {
         const randonNumber = await app.createChatController.CreateWhatsapp();
         await app.chatController.skipRecipientInfo();
         // user send message in conversation
-        const randomContent = StringUtils.generateString();
+        const draftText = StringUtils.generateString();
         await app.chatController.sendContent();
-        await app.chatController.typeContent(randomContent);
+        await app.chatController.typeContent(draftText);
         await app.chatListController.clickSideBarChatsButton();
 
-        // await expect(page1.getByText(randomContent)).toBeVisible();
         await app.chatListController.Pom.CHAT_NAME.getByText(randonNumber).click();
         await app.chatController.removeContent();
         await app.chatListController.clickSideBarChatsButton();
-        const messageReceived = app.Pom.MESSAGEIFRAME.getByText(randomContent);
-        await expect(messageReceived).toHaveCount(0);
+        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await expect(secondaryLine).toHaveCount(0);
     });
 
     test.afterEach(async () => {

@@ -20,7 +20,7 @@ test.describe('@SUC @Draft', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C3792995: Conversation list displays correct elements of 1-1 draft state for unsent message', async () => {
+    test('@Real C3792995: SUC draft state is removed from Message Hub after chat input is discarded', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
@@ -36,19 +36,18 @@ test.describe('@SUC @Draft', () => {
         await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
 
         // user send message in conversation
-        const randomContent = StringUtils.generateString();
+        const draftState = StringUtils.generateString();
         await app.chatController.sendContent();
-        await app.chatController.typeContent(randomContent);
+        await app.chatController.typeContent(draftState);
         await app.chatListController.clickSideBarChatsButton();
 
-        // await expect(page1.getByText(randomContent)).toBeVisible();
         await app.chatListController.Pom.CHAT_NAME.getByText(
             `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
         ).click();
         await app.chatController.removeContent();
         await app.chatListController.clickSideBarChatsButton();
-        const messageReceived = app.Pom.MESSAGEIFRAME.getByText(randomContent);
-        await expect(messageReceived).toHaveCount(0);
+        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftState);
+        await expect(secondaryLine).toHaveCount(0);
     });
 
     test.afterEach(async () => {

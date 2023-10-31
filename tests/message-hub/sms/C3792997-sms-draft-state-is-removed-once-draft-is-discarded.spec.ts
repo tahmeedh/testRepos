@@ -44,17 +44,16 @@ test.describe('@SMS @Draft', () => {
         const randonNumber = await app.createChatController.CreateSMS();
         await app.chatController.skipRecipientInfo();
         // user send message in conversation
-        const randomContent = StringUtils.generateString();
+        const draftText = StringUtils.generateString();
         await app.chatController.sendContent();
-        await app.chatController.typeContent(randomContent);
+        await app.chatController.typeContent(draftText);
         await app.chatListController.clickSideBarChatsButton();
 
-        // await expect(page1.getByText(randomContent)).toBeVisible();
         await app.chatListController.Pom.CHAT_NAME.getByText(randonNumber).click();
         await app.chatController.removeContent();
         await app.chatListController.clickSideBarChatsButton();
-        const messageReceived = app.Pom.MESSAGEIFRAME.getByText(randomContent);
-        await expect(messageReceived).toHaveCount(0);
+        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await expect(secondaryLine).toHaveCount(0);
     });
 
     test.afterEach(async () => {
