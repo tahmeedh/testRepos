@@ -19,7 +19,7 @@ test.describe('@Restricted @Channel @Draft', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C2599572 : Send, receive and download video file from channel', async () => {
+    test('@Real C2599572 : Restricted channel displays correct elements of draft state for unsent message', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();

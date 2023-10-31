@@ -27,7 +27,7 @@ test.describe('@SMS @Draft', () => {
         await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
     });
 
-    test('@Real C31866953: SMS draft state has file attachment icon and text for unsent files', async () => {
+    test('@Real C1866953: SMS draft state has file attachment icon and text for unsent files', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();

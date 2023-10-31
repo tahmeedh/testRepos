@@ -20,7 +20,7 @@ test.describe('@SUC @Draft', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C2511819: Conversation list displays correct elements of 1-1 draft state for unsent message', async () => {
+    test('@Real C2511819: SUC displays correct elements of draft state for unsent message', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();

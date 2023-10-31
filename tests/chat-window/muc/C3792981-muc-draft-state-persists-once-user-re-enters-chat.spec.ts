@@ -22,7 +22,7 @@ test.describe('@MUC @Draft', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C3792981: Conversation list displays correct elements of MUC draft state for unsent message', async () => {
+    test('@Real C3792981: MUC draft state persists for chat-window returning from message hub', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();

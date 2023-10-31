@@ -28,7 +28,7 @@ test.describe('@Whatsapp @Draft', () => {
         await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
     });
 
-    test('@Real C3792626: Conversation list displays correct elements of Whatsapp draft state for unsent message', async () => {
+    test('@Real C3792626: Whatsapp displays correct elements of draft state for unsent message', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();

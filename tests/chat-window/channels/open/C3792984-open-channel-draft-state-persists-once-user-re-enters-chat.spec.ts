@@ -19,7 +19,7 @@ test.describe('@Open @Channel @Draft', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C3792984 : Send, receive and download video file from channel', async () => {
+    test('@Real C3792984 : Open channel draft state persists for chat-window returning from message hub', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();

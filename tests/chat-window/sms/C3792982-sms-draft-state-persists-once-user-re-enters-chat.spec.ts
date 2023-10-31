@@ -28,7 +28,7 @@ test.describe('@SMS @Draft', () => {
         await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
     });
 
-    test('@Real C3792982: Conversation list displays correct elements of SMS draft state for unsent message', async () => {
+    test('@Real C3792982: SMS draft state persists for chat-window returning from message hub', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();

@@ -28,7 +28,7 @@ test.describe('@SMS @Draft', () => {
         await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
     });
 
-    test('@Real C3792626: SMS draft state is removed from Message Hub after chat input is discarded', async () => {
+    test('@Real C3792626: SMS displays correct elements of draft state for unsent message', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
