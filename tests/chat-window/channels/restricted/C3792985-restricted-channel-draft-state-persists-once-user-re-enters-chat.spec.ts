@@ -34,7 +34,7 @@ test.describe('@Restricted @Channel @Draft', () => {
         await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
         await app.createChatController.fillOutWhoCanPostForm();
         await app.createChatController.fillOutWhoCanJoinForm(
-            'open',
+            'restricted',
             [],
             [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
         );
