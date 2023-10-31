@@ -39,8 +39,8 @@ test.describe('@SUC @Draft', () => {
         const draftText = StringUtils.generateString();
         await app.chatController.sendContent();
         await app.chatController.typeContent(draftText);
-        await app.chatListController.clickSideBarChatsButton();
-        await app.chatListController.Pom.CHAT_NAME.getByText(
+        await app.messageHubController.clickSideBarChatsButton();
+        await app.messageHubController.Pom.CHAT_NAME.getByText(
             `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
         ).click();
         const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);

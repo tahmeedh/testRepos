@@ -50,11 +50,11 @@ test.describe('@Whatsapp @Draft', () => {
         const PNG = './asset/download.png';
         await app.chatController.waitForHeader();
         await app.attachmentController.draftAttachment(PNG);
-        await app.chatListController.clickSideBarChatsButton();
+        await app.messageHubController.clickSideBarChatsButton();
 
-        expect(app.chatListController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-        expect(app.chatListController.Pom.ATTACHMENT_ICON).toBeVisible();
-        expect(app.chatListController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+        expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
+        expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
+        expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
     });
 
     test.afterEach(async () => {

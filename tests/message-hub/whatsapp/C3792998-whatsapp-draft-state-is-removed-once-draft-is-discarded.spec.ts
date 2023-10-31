@@ -47,11 +47,11 @@ test.describe('@Whatsapp @Draft', () => {
         const draftText = StringUtils.generateString();
         await app.chatController.sendContent();
         await app.chatController.typeContent(draftText);
-        await app.chatListController.clickSideBarChatsButton();
+        await app.messageHubController.clickSideBarChatsButton();
 
-        await app.chatListController.Pom.CHAT_NAME.getByText(randonNumber).click();
+        await app.messageHubController.Pom.CHAT_NAME.getByText(randonNumber).click();
         await app.chatController.removeContent();
-        await app.chatListController.clickSideBarChatsButton();
+        await app.messageHubController.clickSideBarChatsButton();
         const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveCount(0);
     });

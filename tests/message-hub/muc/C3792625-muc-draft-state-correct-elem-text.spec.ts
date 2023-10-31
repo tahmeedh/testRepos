@@ -43,7 +43,7 @@ test.describe('@MUC @Draft', () => {
         const draftText = StringUtils.generateString();
         await app.chatController.sendContent();
         await app.chatController.typeContent(draftText);
-        await app.chatListController.clickSideBarChatsButton();
+        await app.messageHubController.clickSideBarChatsButton();
 
         const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveText(draftText);

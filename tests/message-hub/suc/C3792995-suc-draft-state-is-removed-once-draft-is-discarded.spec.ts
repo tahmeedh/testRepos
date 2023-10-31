@@ -39,13 +39,13 @@ test.describe('@SUC @Draft', () => {
         const draftState = StringUtils.generateString();
         await app.chatController.sendContent();
         await app.chatController.typeContent(draftState);
-        await app.chatListController.clickSideBarChatsButton();
+        await app.messageHubController.clickSideBarChatsButton();
 
-        await app.chatListController.Pom.CHAT_NAME.getByText(
+        await app.messageHubController.Pom.CHAT_NAME.getByText(
             `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
         ).click();
         await app.chatController.removeContent();
-        await app.chatListController.clickSideBarChatsButton();
+        await app.messageHubController.clickSideBarChatsButton();
         const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftState);
         await expect(secondaryLine).toHaveCount(0);
     });
