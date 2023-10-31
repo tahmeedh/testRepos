@@ -112,16 +112,4 @@ export class StringUtils {
 
         return contactNumber;
     }
-
-    /**
-     * Checks whether the phone number has an extension or not.
-     * @param {String} phoneNumber Phone number of the contact
-     * @returns {Boolean} true if it has an extension, otherwise, false.
-     */
-    static isPhoneNumberExtension(phoneNumber) {
-        if (phoneNumber.includes(',')) {
-            return true;
-        }
-        return false;
-    }
 }
