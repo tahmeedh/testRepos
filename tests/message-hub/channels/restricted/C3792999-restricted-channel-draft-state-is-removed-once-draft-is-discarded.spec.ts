@@ -3,7 +3,7 @@ import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { BaseController } from '../../../../controller/base-controller';
 
-test.describe('@Open @Channel @Draft', () => {
+test.describe('@Restricted @Channel @Draft', () => {
     let browser = null;
     let context1 = null;
     let app = null;
@@ -19,7 +19,7 @@ test.describe('@Open @Channel @Draft', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C3793179 : Open Channel draft state has file attachment icon and text for unsent files ', async () => {
+    test('@Real C3792999 : Send, receive and download video file from channel', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
@@ -34,22 +34,22 @@ test.describe('@Open @Channel @Draft', () => {
         await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
         await app.createChatController.fillOutWhoCanPostForm();
         await app.createChatController.fillOutWhoCanJoinForm(
-            'open',
+            'restricted',
             [],
             [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
         );
         await app.createChatController.CreateChannel();
+        const randomContent = StringUtils.generateString();
         await app.chatController.sendContent();
-
-        // user drafts image in conversation
-        const PNG = './asset/download.png';
-        await app.chatController.waitForHeader();
-        await app.attachmentController.draftAttachment(PNG);
+        await app.chatController.typeContent(randomContent);
         await app.chatListController.clickSideBarChatsButton();
 
-        expect(app.chatListController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-        expect(app.chatListController.Pom.ATTACHMENT_ICON).toBeVisible();
-        expect(app.chatListController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+        // await expect(page1.getByText(randomContent)).toBeVisible();
+        await app.chatListController.Pom.CHAT_NAME.getByText(title).click();
+        await app.chatController.removeContent();
+        await app.chatListController.clickSideBarChatsButton();
+        const messageReceived = app.Pom.MESSAGEIFRAME.getByText(randomContent);
+        await expect(messageReceived).toHaveCount(0);
 
         // send video in channel
     });
