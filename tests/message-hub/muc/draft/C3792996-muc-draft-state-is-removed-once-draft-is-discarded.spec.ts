@@ -1,7 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { BaseController } from '../../../controller/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
+import { BaseController } from '../../../../controller/base-controller';
+import { StringUtils } from '../../../../helper/string-utils';
 
 test.describe('@MUC @Draft', () => {
     let browser = null;
@@ -22,7 +22,7 @@ test.describe('@MUC @Draft', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C3792625: MUC displays correct elements of draft state for unsent message', async () => {
+    test('@Real C3792981: MUC draft state is removed from Message Hub after chat input is discarded ', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
@@ -37,7 +37,7 @@ test.describe('@MUC @Draft', () => {
         await app.startChatButtonController.ClickOnStartMUC();
         const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
         const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
-        await app.createChatController.createMUC([user2fullName, user3fullName]);
+        const subject = await app.createChatController.createMUC([user2fullName, user3fullName]);
 
         // user send message in conversation
         const draftText = StringUtils.generateString();
@@ -45,8 +45,11 @@ test.describe('@MUC @Draft', () => {
         await app.chatController.typeContent(draftText);
         await app.messageHubController.clickSideBarChatsButton();
 
+        await app.messageHubController.Pom.CHAT_NAME.getByText(subject).click();
+        await app.chatController.removeContent();
+        await app.messageHubController.clickSideBarChatsButton();
         const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
-        await expect(secondaryLine).toHaveText(draftText);
+        await expect(secondaryLine).toHaveCount(0);
     });
 
     test.afterEach(async () => {
