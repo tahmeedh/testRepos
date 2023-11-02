@@ -19,13 +19,13 @@ test.describe('@Whatsapp @Draft', () => {
         user2 = await company.createUser();
         await company.addUserToEachOthersRoster([user1, user2]);
 
-        // user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
         await Promise.all([
             user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
             user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
         ]);
 
-        await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
+        // await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
+        await user1.requestAndAssignWhatsAppNumber();
     });
 
     test('@Real C3792626: Whatsapp displays correct elements of draft state for unsent message', async () => {

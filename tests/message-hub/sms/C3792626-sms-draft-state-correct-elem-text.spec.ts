@@ -19,7 +19,6 @@ test.describe('@SMS @Draft', () => {
         user2 = await company.createUser();
         await company.addUserToEachOthersRoster([user1, user2]);
 
-        // user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
         await Promise.all([
             user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
             user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
@@ -41,7 +40,6 @@ test.describe('@SMS @Draft', () => {
 
         // user start 1-1
         await app.startChatButtonController.ClickOnStartSMS();
-        // const randonNumber = app.createChatController.CreateSMS();
         app.createChatController.CreateSMS();
         await app.chatController.skipRecipientInfo();
         // user send message in conversation
