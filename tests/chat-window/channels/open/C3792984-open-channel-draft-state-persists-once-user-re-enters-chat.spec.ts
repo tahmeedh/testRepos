@@ -47,8 +47,6 @@ test.describe('@Open @Channel @Draft', () => {
         await app.messageHubController.Pom.CHAT_NAME.getByText(title).click();
         const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveText(draftText);
-
-        // send video in channel
     });
 
     test.afterEach(async () => {

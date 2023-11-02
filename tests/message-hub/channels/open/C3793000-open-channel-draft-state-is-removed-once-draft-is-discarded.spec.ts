@@ -50,8 +50,6 @@ test.describe('@Open @Channel @Draft', () => {
         await app.messageHubController.clickSideBarChatsButton();
         const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveCount(0);
-
-        // send video in channel
     });
 
     test.afterEach(async () => {

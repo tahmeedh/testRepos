@@ -46,8 +46,6 @@ test.describe('@Restricted @Channel @Draft', () => {
 
         const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveText(draftText);
-
-        // send video in channel
     });
 
     test.afterEach(async () => {
