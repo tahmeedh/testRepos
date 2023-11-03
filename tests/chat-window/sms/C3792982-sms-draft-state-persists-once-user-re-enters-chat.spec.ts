@@ -51,8 +51,8 @@ test.describe('@SMS @Draft', () => {
         await app.chatController.typeContent(draftText);
         await app.messageHubController.clickSideBarChatsButton();
 
-        await app.messageHubController.Pom.CHAT_NAME.getByText(randonNumber).click();
-        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await app.messageHubController.clickMessageHubRow(randonNumber);
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveText(draftText);
     });
 

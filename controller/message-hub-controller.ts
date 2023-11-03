@@ -21,7 +21,7 @@ export class MessageHubController {
         await this.Pom.CONTACTS_BUTTON.click();
     }
 
-    async findChat(chatName) {
+    async clickMessageHubRow(chatName) {
         const chat = this.page.getByText(chatName);
         return chat;
     }

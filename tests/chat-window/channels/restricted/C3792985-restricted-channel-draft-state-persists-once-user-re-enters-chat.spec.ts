@@ -45,8 +45,8 @@ test.describe('@Restricted @Channel @Draft', () => {
         await app.chatController.typeContent(draftText);
         await app.messageHubController.clickSideBarChatsButton();
 
-        await app.messageHubController.Pom.CHAT_NAME.getByText(title).click();
-        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await app.messageHubController.clickMessageHubRow.getByText(title);
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveText(draftText);
     });
 

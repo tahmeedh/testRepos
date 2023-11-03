@@ -45,10 +45,10 @@ test.describe('@Open @Channel @Draft', () => {
         await app.chatController.typeContent(draftText);
         await app.messageHubController.clickSideBarChatsButton();
 
-        await app.messageHubController.Pom.CHAT_NAME.getByText(title).click();
+        await app.messageHubController.clickMessageHubRow(title).click();
         await app.chatController.removeContent();
         await app.messageHubController.clickSideBarChatsButton();
-        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveCount(0);
     });
 

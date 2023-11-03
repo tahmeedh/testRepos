@@ -49,10 +49,10 @@ test.describe('@SMS @Draft', () => {
         await app.chatController.typeContent(draftText);
         await app.messageHubController.clickSideBarChatsButton();
 
-        await app.messageHubController.Pom.CHAT_NAME.getByText(randonNumber).click();
+        await app.messageHubController.clickMessageHubRow(randonNumber);
         await app.chatController.removeContent();
         await app.messageHubController.clickSideBarChatsButton();
-        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveCount(0);
     });
 

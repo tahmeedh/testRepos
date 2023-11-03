@@ -44,7 +44,7 @@ test.describe('@Open @Channel @Draft', () => {
         await app.chatController.typeContent(draftText);
         await app.messageHubController.clickSideBarChatsButton();
 
-        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveText(draftText);
     });
 

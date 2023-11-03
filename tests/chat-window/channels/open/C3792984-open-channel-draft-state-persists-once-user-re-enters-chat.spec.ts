@@ -19,7 +19,7 @@ test.describe('@Open @Channel @Draft', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C3792984 : Open channel draft state persists for chat-window returning from message hub', async () => {
+    test('@Real C3792985 : Open channel draft state persists for chat-window returning from message hub', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
@@ -44,8 +44,8 @@ test.describe('@Open @Channel @Draft', () => {
         await app.chatController.typeContent(draftText);
         await app.messageHubController.clickSideBarChatsButton();
 
-        await app.messageHubController.Pom.CHAT_NAME.getByText(title).click();
-        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await app.messageHubController.clickMessageHubRow(title);
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveText(draftText);
     });
 
