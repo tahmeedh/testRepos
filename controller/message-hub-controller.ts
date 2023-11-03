@@ -22,7 +22,7 @@ export class MessageHubController {
     }
 
     async clickMessageHubRow(chatName) {
-        const chat = this.page.getByText(chatName);
-        return chat;
+        const ClickName = this.Pom.CHAT_NAME.getByText(chatName).click();
+        return ClickName;
     }
 }
