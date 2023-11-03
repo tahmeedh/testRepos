@@ -112,14 +112,14 @@ export class Company {
     async teardown() {
         Log.info(`===================== START: Tearing down company =====================`);
         await Promise.all([
-            this._unassignAndReleaseAllTwilioNumbers(),
-            this._unassignAndRemoveAllWhatsAppAccount()
+            this._releaseAllTwilioNumbersFromCompany(),
+            this._removeAllWhatsAppAccountFromCompany()
         ]);
         await this.deleteCompany();
         Log.info('===================== END: Tear down completed =====================');
     }
 
-    async _unassignAndReleaseAllTwilioNumbers() {
+    async _releaseAllTwilioNumbersFromCompany() {
         const { endpoints, companyId } = this.companyInfo;
         const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
         const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
@@ -138,15 +138,11 @@ export class Company {
         Log.highlight(`Tearing down: Detected ${twilioNumbers.length} Twilio number.`);
         for (const numberObj of twilioNumbers) {
             const { number } = numberObj;
-            if (numberObj.user) {
-                const { id } = numberObj.user;
-                await twilioController.unassignTwilioNumberFromUser(id, number);
-            }
             await twilioController.releaseTwilioNumberFromCompany(companyId, number);
         }
     }
 
-    async _unassignAndRemoveAllWhatsAppAccount() {
+    async _removeAllWhatsAppAccountFromCompany() {
         const { endpoints, companyId } = this.companyInfo;
         const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
         const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
@@ -165,10 +161,6 @@ export class Company {
         Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp number.`);
         for (const numberObj of whatsAppProviders) {
             const { accountId } = numberObj;
-            if (numberObj.user) {
-                const { id } = numberObj.user;
-                await whatsAppController.unassignWhatsAppAccountFromUser(id, accountId);
-            }
             await whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
         }
     }

@@ -27,9 +27,15 @@ test('C999', async () => {
         const listOfCompanies = await platformController.getCompanies(stringToSearch);
         Log.highlight(`${listOfCompanies.length} companies found`);
 
+        if (listOfCompanies.length === 0) {
+            Log.highlight(`0 company found. Aborting script.`);
+            return;
+        }
+
         const listOfCompanyIds = listOfCompanies.map((element) => {
             return element.companyId;
         });
+
         Log.highlight(`Deleteing the following companies: ${listOfCompanyIds}`);
 
         const gskToken = await GskController.getGskToken(
@@ -49,23 +55,17 @@ test('C999', async () => {
             const twilioNumbers = await twilioController.getAllTwilioNumbersFromCompany(companyId);
             const whatsAppProviders = await whatsAppController.getAllWhatsAppAccountFromCompany(companyId);
 
+            // MDS will unassign number from user automatically when we release/remove Twilio/WhatsApp number from a company.
+            // Hence, no need to unassign number from user before releasing.
             Log.highlight(`Tearing down: Detected ${twilioNumbers.length} Twilio number.`);
             for (const numberObj of twilioNumbers) {
                 const { number } = numberObj;
-                if (numberObj.user) {
-                    const { id } = numberObj.user;
-                    await twilioController.unassignTwilioNumberFromUser(id, number);
-                }
                 await twilioController.releaseTwilioNumberFromCompany(companyId, number);
             }
 
             Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp number.`);
             for (const numberObj of whatsAppProviders) {
                 const { accountId } = numberObj;
-                if (numberObj.user) {
-                    const { id } = numberObj.user;
-                    await whatsAppController.unassignWhatsAppAccountFromUser(id, accountId);
-                }
                 await whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
             }
             await platformController.deleteCompany(companyId);
