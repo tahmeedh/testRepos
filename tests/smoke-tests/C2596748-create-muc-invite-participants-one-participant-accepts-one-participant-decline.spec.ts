@@ -1,6 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { BaseController } from '../controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { BaseController } from '../../controller/base-controller';
 
 test.describe('@Smoke @MUC', () => {
     let browser = null;
@@ -38,13 +39,13 @@ test.describe('@Smoke @MUC', () => {
 
         // user create MUC
         await app.startChatButtonController.ClickOnStartMUC();
-        const title = app.stringUtils.generateString(3, 5);
+        const title = StringUtils.generateString(3, 5);
         const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
         const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
         await app.createChatController.createMUC([user2fullName, user3fullName], title);
 
         // user send message in MUC
-        const randomContent = app.stringUtils.generateString();
+        const randomContent = StringUtils.generateString();
         await app.chatController.sendContent(randomContent);
 
         // user 2 login

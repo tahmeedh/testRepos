@@ -1,13 +1,12 @@
-import { test, chromium } from '@playwright/test';
+import { expect, test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { BaseController } from '../controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { BaseController } from '../../../../controller/base-controller';
 
-test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
+test.describe('@Restricted @Channel @Draft', () => {
     let browser = null;
     let context1 = null;
     let app = null;
-    let context2 = null;
-    let app1 = null;
     let company: Company;
     let user1 = null;
     let user2 = null;
@@ -20,7 +19,7 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C2599572 : Send, receive and download video file from channel', async () => {
+    test('@Real C2599572 : Restricted channel displays correct elements of draft state for unsent message', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
@@ -31,37 +30,22 @@ test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
 
         // user create channel
         await app.startChatButtonController.ClickOnStartChannel();
-        const title = app.stringUtils.generateString(3, 5);
+        const title = StringUtils.generateString(3, 5);
         await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
         await app.createChatController.fillOutWhoCanPostForm();
         await app.createChatController.fillOutWhoCanJoinForm(
-            'open',
+            'restricted',
             [],
             [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
         );
         await app.createChatController.CreateChannel();
+        const draftText = StringUtils.generateString();
+        await app.chatController.sendContent();
+        await app.chatController.typeContent(draftText);
+        await app.messageHubController.clickSideBarChatsButton();
 
-        // send video in channel
-        const video = './asset/video.mp4';
-        await app.chatController.waitForHeader();
-        await app.attachmentController.sendAttachment(video);
-
-        // user2 login
-        context2 = await browser.newContext();
-        const page2 = await context2.newPage();
-        app1 = new BaseController(page2);
-        await app1.goToLoginPage();
-        await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-        await app1.closeTooltips();
-
-        // user 2 open channel
-        await app1.open(title);
-        await app1.inviteController.acceptInvite('Channel');
-
-        // assert receive video
-        await app1.chatController.waitForHeader();
-        await app1.chatController.downloadLastMedia();
-        await page2.waitForEvent('download');
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
+        await expect(secondaryLine).toHaveText(draftText);
     });
 
     test.afterEach(async () => {

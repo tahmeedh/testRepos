@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
+import { StringUtils } from 'helper/string-utils';
 import { ChatPage } from '../poms/chat-page';
 
 export class ChatController {
@@ -14,11 +15,25 @@ export class ChatController {
         this.Pom = new ChatPage(this.page);
     }
 
-    async sendContent(message: string) {
+    async sendContent(message: string = StringUtils.generateString()) {
         await test.step('Chat Controller : Send Content', async () => {
             await this.Pom.CHAT_INPUT_WRAPPER.click();
             await this.Pom.CHAT_INPUT.fill(message);
             await this.Pom.SEND_BUTTON.click();
+        });
+    }
+
+    async typeContent(message: string = StringUtils.generateString()) {
+        await test.step('Chat Controller : Send Content', async () => {
+            await this.Pom.CHAT_INPUT_WRAPPER.click();
+            await this.Pom.CHAT_INPUT.fill(message);
+        });
+    }
+
+    async removeContent() {
+        await test.step('Chat Controller : Send Content', async () => {
+            await this.Pom.CHAT_INPUT_WRAPPER.click();
+            await this.Pom.CHAT_INPUT.clear();
         });
     }
 
@@ -58,6 +73,12 @@ export class ChatController {
             await lastTimeStamp.click();
             await expect(lastTimeStamp.locator('.icon-sent')).toBeVisible();
             await expect(lastTimeStamp.locator('.icon-read')).toBeVisible();
+        });
+    }
+
+    async skipRecipientInfo() {
+        await test.step('Chat Controller : Skip Adding Recipient Information', async () => {
+            await this.Pom.RECIPIENT_INFO_SKIP_BUTTON.click();
         });
     }
 }

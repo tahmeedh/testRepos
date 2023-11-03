@@ -1,31 +1,27 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { BaseController } from '../controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { BaseController } from '../../controller/base-controller';
 
-test.describe('@Smoke @Channel', () => {
+test.describe('@Smoke @Local @Channel @FileSharing @Video', () => {
     let browser = null;
     let context1 = null;
     let app = null;
     let context2 = null;
     let app1 = null;
-    let context3 = null;
-    let app2 = null;
-
     let company: Company;
     let user1 = null;
     let user2 = null;
-    let user3 = null;
 
     test.beforeEach(async () => {
         browser = await chromium.launch();
         company = await Company.createCompany();
         user1 = await company.createUser();
         user2 = await company.createUser();
-        user3 = await company.createUser();
-        await company.addUserToEachOthersRoster([user1, user2, user3]);
+        await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real C2596750: Create restricted Channel, invite participant and moderator', async () => {
+    test('@Real C2599572 : Send, receive and download video file from channel', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
@@ -36,19 +32,20 @@ test.describe('@Smoke @Channel', () => {
 
         // user create channel
         await app.startChatButtonController.ClickOnStartChannel();
-        const title = app.stringUtils.generateString(3, 5);
+        const title = StringUtils.generateString(3, 5);
         await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
         await app.createChatController.fillOutWhoCanPostForm();
         await app.createChatController.fillOutWhoCanJoinForm(
-            'restricted',
-            [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`],
-            [`${user3.userInfo.firstName} ${user3.userInfo.lastName}`]
+            'open',
+            [],
+            [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
         );
         await app.createChatController.CreateChannel();
 
-        // send content in channel
-        const randomContent = app.stringUtils.generateString();
-        await app.chatController.sendContent(randomContent);
+        // send video in channel
+        const video = './asset/video.mp4';
+        await app.chatController.waitForHeader();
+        await app.attachmentController.sendAttachment(video);
 
         // user2 login
         context2 = await browser.newContext();
@@ -58,25 +55,14 @@ test.describe('@Smoke @Channel', () => {
         await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
         await app1.closeTooltips();
 
-        // user 2 open and accept channel invite
+        // user 2 open channel
         await app1.open(title);
         await app1.inviteController.acceptInvite('Channel');
 
-        // assert receive message
-        const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
-        await expect(messageReceived).toHaveText(randomContent);
-
-        // usere login
-        context3 = await browser.newContext();
-        const page3 = await context3.newPage();
-        app2 = new BaseController(page3);
-        await app2.goToLoginPage();
-        await app2.loginController.loginToPortal(user3.userInfo.email, user3.userInfo.password);
-        await app2.closeTooltips();
-
-        // user 3 open and decline channel invite
-        await app2.open(title);
-        await app2.inviteController.declineInvite('Channel');
+        // assert receive video
+        await app1.chatController.waitForHeader();
+        await app1.chatController.downloadLastMedia();
+        await page2.waitForEvent('download');
     });
 
     test.afterEach(async () => {

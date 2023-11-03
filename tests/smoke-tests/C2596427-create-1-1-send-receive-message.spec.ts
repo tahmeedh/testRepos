@@ -1,6 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { BaseController } from '../controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { BaseController } from '../../controller/base-controller';
 
 test.describe('@Smoke @SUC', () => {
     let browser = null;
@@ -37,7 +38,7 @@ test.describe('@Smoke @SUC', () => {
         await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
 
         // user send message in conversation
-        const randomContent = app.stringUtils.generateString();
+        const randomContent = StringUtils.generateString();
         await app.chatController.sendContent(randomContent);
 
         // user 2 login
@@ -67,7 +68,7 @@ test.describe('@Smoke @SUC', () => {
         await expect(systemEvent).toHaveText('You joined');
 
         // send message
-        const randomContent1 = app.stringUtils.generateString();
+        const randomContent1 = StringUtils.generateString();
         await app.chatController.sendContent(randomContent1);
 
         // assert receive message

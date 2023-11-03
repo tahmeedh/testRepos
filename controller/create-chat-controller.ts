@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { test } from '@playwright/test';
+import { StringUtils } from 'helper/string-utils';
 import { CreateChatPage } from '../poms/create-chat-page';
 /* eslint-disable no-await-in-loop */
 
@@ -22,8 +23,8 @@ export class CreateChatController {
         });
     }
 
-    async createMUC(users: string[], subject: string) {
-        await test.step('Create Chat Controller : Select User', async () => {
+    async createMUC(users: string[], subject: string = StringUtils.generateString()) {
+        return test.step('Create Chat Controller : Select User', async () => {
             for (const username of users) {
                 await this.Pom.MUC_SEARCH_INPUT.click();
                 await this.Pom.MUC_SEARCH_INPUT.fill(username);
@@ -33,6 +34,35 @@ export class CreateChatController {
             // add subject name to MUC
             await this.Pom.INPUT_SUBJECT.fill(subject);
             await this.Pom.NEXT_BUTTON.click();
+
+            return subject;
+        });
+    }
+
+    async CreateSMS(phoneNumber: string = StringUtils.generatePhoneNumber()) {
+        return test.step('Create Chat Controller : create SUC', async () => {
+            // Search for user
+            const formatted = StringUtils.formatPhoneNumber(phoneNumber);
+            await this.Pom.NUMBER_SEARCH_INPUT.click();
+            await this.Pom.NUMBER_SEARCH_INPUT.fill(formatted);
+            // click on user
+            await this.Pom.CHATIFRAME.getByText(formatted).click();
+            await this.Pom.NEXT_BUTTON.click();
+
+            return formatted;
+        });
+    }
+    async CreateWhatsapp(phoneNumber: string = StringUtils.generatePhoneNumber()) {
+        return test.step('Create Chat Controller : create SUC', async () => {
+            // Search for user
+            const formatted = StringUtils.formatPhoneNumber(phoneNumber);
+            await this.Pom.NUMBER_SEARCH_INPUT.click();
+            await this.Pom.NUMBER_SEARCH_INPUT.fill(formatted);
+            // click on user
+            await this.Pom.CHATIFRAME.getByText(formatted).click();
+            await this.Pom.NEXT_BUTTON.click();
+
+            return formatted;
         });
     }
 

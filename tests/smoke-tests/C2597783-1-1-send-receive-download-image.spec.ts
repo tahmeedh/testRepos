@@ -1,8 +1,9 @@
 import { test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { BaseController } from '../controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { BaseController } from '../../controller/base-controller';
 
-test.describe('@Smoke @MUC @Local @FileSharing @Image', () => {
+test.describe('@Smoke @SUC @Local @FileSharing @Image', () => {
     let browser = null;
     let context1 = null;
     let context2 = null;
@@ -35,7 +36,7 @@ test.describe('@Smoke @MUC @Local @FileSharing @Image', () => {
         await app.startChatButtonController.ClickOnStartOneToOne();
         await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
         // user start conversation with user 2
-        const randomContent = app.stringUtils.generateString();
+        const randomContent = StringUtils.generateString();
         await app.chatController.sendContent(randomContent);
 
         // user 2 login

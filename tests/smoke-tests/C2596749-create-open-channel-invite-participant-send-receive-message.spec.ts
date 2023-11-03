@@ -1,6 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { BaseController } from '../controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { BaseController } from '../../controller/base-controller';
 
 test.describe('@Smoke @Channel', () => {
     let browser = null;
@@ -30,7 +31,7 @@ test.describe('@Smoke @Channel', () => {
 
         // user create channel
         await app.startChatButtonController.ClickOnStartChannel();
-        const title = app.stringUtils.generateString(3, 5);
+        const title = StringUtils.generateString(3, 5);
         await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'description');
         await app.createChatController.fillOutWhoCanPostForm();
         await app.createChatController.fillOutWhoCanJoinForm(
@@ -41,7 +42,7 @@ test.describe('@Smoke @Channel', () => {
         await app.createChatController.CreateChannel();
 
         // send content in channel
-        const randomContent = app.stringUtils.generateString();
+        const randomContent = StringUtils.generateString();
         await app.chatController.sendContent(randomContent);
 
         // user2 login

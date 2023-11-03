@@ -16,6 +16,10 @@ export class CreateChatPage extends BasePage {
     readonly ACCEPT_BUTTON_MUC: Locator;
     readonly DECLINE_BUTTON_MUC: Locator;
 
+    //SMS
+    readonly NUMBER_SEARCH_INPUT: Locator;
+    readonly ADD_EXTERNAL_NUMBER: Locator;
+
     // Channel
     readonly CHANNEL_NAME_BUTTON: Locator;
     readonly CHANNEL_SUBJECT_REGION: Locator;
@@ -43,6 +47,10 @@ export class CreateChatPage extends BasePage {
         this.INPUT_SUBJECT = this.CHATIFRAME.getByLabel('input-label');
         this.ACCEPT_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-accept');
         this.DECLINE_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-decline');
+
+        //SMS
+        this.NUMBER_SEARCH_INPUT = this.CHATIFRAME.getByPlaceholder('Search for contact or number');
+        this.ADD_EXTERNAL_NUMBER = this.CHATIFRAME.locator('.m-auto-add-number-section');
 
         // Channel
         this.CHANNEL_NAME_BUTTON = this.CHATIFRAME.locator('.m-auto-create-channel-name-region').getByLabel(

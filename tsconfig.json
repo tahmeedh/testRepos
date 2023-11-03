@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+        "lib": [ "es2015" ],
+    // or
+    "downlevelIteration": true,
         "baseUrl": ".", // This must be specified if "paths" is.
         "paths": {
             "Constants/*": [
