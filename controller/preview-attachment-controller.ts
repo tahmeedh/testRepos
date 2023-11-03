@@ -21,8 +21,8 @@ export class PreviewAttachmentController {
         });
     }
 
-    async draftAttachment(filePath: string) {
-        await test.step('Preview Attachment Controller : Send Attachment', async () => {
+    async attachFile(filePath: string) {
+        await test.step('Preview Attachment Controller : Attach file ', async () => {
             await this.Pom.ATTACH_FILES_BUTTON.setInputFiles(filePath);
         });
     }

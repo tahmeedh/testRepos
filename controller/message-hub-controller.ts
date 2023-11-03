@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { MessageHubPage } from '../poms/message-hub';
+import { MessageHubPage } from '../poms/message-hub-page';
 
 export class MessageHubController {
     readonly page: Page;
