@@ -10,22 +10,18 @@ test.describe('@SMS @Draft', () => {
 
     let company: Company;
     let user1 = null;
-    let user2 = null;
 
     test.beforeEach(async () => {
         browser = await chromium.launch();
         company = await Company.createCompany();
         user1 = await company.createUser();
-        user2 = await company.createUser();
-        await company.addUserToEachOthersRoster([user1, user2]);
 
-        // user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
         await Promise.all([
             user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
             user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
         ]);
 
-        await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
+        await user1.requestAndAssignTwilioNumber();
     });
 
     test('@Real C3792982: Conversation list displays correct elements of SMS draft state for unsent message', async () => {
@@ -49,10 +45,10 @@ test.describe('@SMS @Draft', () => {
         await app.chatController.typeContent(draftText);
         await app.messageHubController.clickSideBarChatsButton();
 
-        await app.messageHubController.Pom.CHAT_NAME.getByText(randonNumber).click();
+        await app.messageHubController.clickMessageHubRow(randonNumber);
         await app.chatController.removeContent();
         await app.messageHubController.clickSideBarChatsButton();
-        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveCount(0);
     });
 

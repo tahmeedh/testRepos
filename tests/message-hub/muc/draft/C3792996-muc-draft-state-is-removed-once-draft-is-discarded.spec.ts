@@ -45,10 +45,10 @@ test.describe('@MUC @Draft', () => {
         await app.chatController.typeContent(draftText);
         await app.messageHubController.clickSideBarChatsButton();
 
-        await app.messageHubController.Pom.CHAT_NAME.getByText(subject).click();
+        await app.messageHubController.clickMessageHubRow(subject);
         await app.chatController.removeContent();
         await app.messageHubController.clickSideBarChatsButton();
-        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftText);
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
         await expect(secondaryLine).toHaveCount(0);
     });
 

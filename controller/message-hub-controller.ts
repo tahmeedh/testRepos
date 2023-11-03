@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { MessageHubPage } from '../poms/message-hub';
+import { MessageHubPage } from '../poms/message-hub-page';
 
 export class MessageHubController {
     readonly page: Page;
@@ -21,7 +21,7 @@ export class MessageHubController {
         await this.Pom.CONTACTS_BUTTON.click();
     }
 
-    async findChat(chatName) {
+    async clickMessageHubRow(chatName) {
         const chat = this.page.getByText(chatName);
         return chat;
     }

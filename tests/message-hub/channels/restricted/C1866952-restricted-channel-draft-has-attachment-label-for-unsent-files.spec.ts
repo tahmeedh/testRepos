@@ -44,14 +44,12 @@ test.describe('@Restricted @Channel @Draft', () => {
         // user drafts image in conversation
         const PNG = './asset/download.png';
         await app.chatController.waitForHeader();
-        await app.attachmentController.draftAttachment(PNG);
+        await app.attachmentController.attachFile(PNG);
         await app.messageHubController.clickSideBarChatsButton();
 
         expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
         expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
         expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
-
-        // send video in channel
     });
 
     test.afterEach(async () => {

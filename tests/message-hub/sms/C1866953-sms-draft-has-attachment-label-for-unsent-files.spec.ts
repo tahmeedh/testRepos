@@ -9,22 +9,19 @@ test.describe('@SMS @Draft', () => {
 
     let company: Company;
     let user1 = null;
-    let user2 = null;
 
     test.beforeEach(async () => {
         browser = await chromium.launch();
         company = await Company.createCompany();
         user1 = await company.createUser();
-        user2 = await company.createUser();
-        await company.addUserToEachOthersRoster([user1, user2]);
 
-        // user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
+        //user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
         await Promise.all([
             user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
             user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
         ]);
 
-        await Promise.all([user1.requestAndAssignTwilioNumber(), user1.requestAndAssignWhatsAppNumber()]);
+        await user1.requestAndAssignTwilioNumber();
     });
 
     test('@Real C1866953: SMS draft state has file attachment icon and text for unsent files', async () => {
@@ -40,7 +37,6 @@ test.describe('@SMS @Draft', () => {
 
         // user start 1-1
         await app.startChatButtonController.ClickOnStartSMS();
-        // const randonNumber = app.createChatController.CreateSMS();
         app.createChatController.CreateSMS();
         await app.chatController.skipRecipientInfo();
         // user send message in conversation
@@ -49,7 +45,7 @@ test.describe('@SMS @Draft', () => {
         // user drafts image in conversation
         const PNG = './asset/download.png';
         await app.chatController.waitForHeader();
-        await app.attachmentController.draftAttachment(PNG);
+        await app.attachmentController.attachFile(PNG);
         await app.messageHubController.clickSideBarChatsButton();
 
         expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();

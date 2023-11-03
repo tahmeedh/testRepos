@@ -41,12 +41,12 @@ test.describe('@SUC @Draft', () => {
         await app.chatController.typeContent(draftState);
         await app.messageHubController.clickSideBarChatsButton();
 
-        await app.messageHubController.Pom.CHAT_NAME.getByText(
+        await app.messageHubController.clickMessageHubRow(
             `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
-        ).click();
+        );
         await app.chatController.removeContent();
         await app.messageHubController.clickSideBarChatsButton();
-        const secondaryLine = app.Pom.MESSAGEIFRAME.getByText(draftState);
+        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftState);
         await expect(secondaryLine).toHaveCount(0);
     });
 
