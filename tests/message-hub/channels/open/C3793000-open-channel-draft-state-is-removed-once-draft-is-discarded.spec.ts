@@ -47,7 +47,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
 
-    await app.messageHubController.clickMessageHubRow(title).click();
+    await app.messageHubController.clickMessageHubRow(title);
     await app.chatController.removeContent();
     await app.messageHubController.clickSideBarChatsButton();
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
