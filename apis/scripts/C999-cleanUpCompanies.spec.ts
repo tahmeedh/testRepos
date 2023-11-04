@@ -1,4 +1,4 @@
-/* eslint-disable no-await-in-loop, max-depth*/
+/* eslint-disable no-await-in-loop */
 
 import { SMClient } from 'Apis/sm/client';
 import { PlatformController } from 'Apis/sm/platform/platform-controller';
