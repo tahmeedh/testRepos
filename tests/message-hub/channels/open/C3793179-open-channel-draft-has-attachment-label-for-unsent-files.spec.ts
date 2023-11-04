@@ -46,7 +46,7 @@ test(`${testName} ${testTags}`, async () => {
     // user drafts image in conversation
     const PNG = './asset/download.png';
     await app.chatController.waitForHeader();
-    await app.attachmentController.draftAttachment(PNG);
+    await app.attachmentController.attachFile(PNG);
     await app.messageHubController.clickSideBarChatsButton();
 
     expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
