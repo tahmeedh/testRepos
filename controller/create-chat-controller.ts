@@ -40,7 +40,7 @@ export class CreateChatController {
     }
 
     async CreateSMS(phoneNumber: string = StringUtils.generatePhoneNumber()) {
-        return test.step('Create Chat Controller : create SUC', async () => {
+        return test.step('Create Chat Controller : create SMS', async () => {
             // Search for user
             const formatted = StringUtils.formatPhoneNumber(phoneNumber);
             await this.Pom.NUMBER_SEARCH_INPUT.click();
