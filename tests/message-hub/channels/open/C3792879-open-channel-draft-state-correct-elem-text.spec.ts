@@ -2,9 +2,10 @@ import { expect, test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 import { BaseController } from '../../../../controller/base-controller';
 
-const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
+const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
 let app = null;
@@ -22,7 +23,9 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    // user1 login
+    Log.info(
+        `===================== START TEST: Create browser and login with ${user1.userInfo.email} =====================`
+    );
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
@@ -30,7 +33,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    // user create channel
+    Log.info(`Start ${testChatType} chat`);
     await app.startChatButtonController.ClickOnStartChannel();
     const title = StringUtils.generateString(3, 5);
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
@@ -44,6 +47,10 @@ test(`${testName} ${testTags}`, async () => {
     const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
     await app.chatController.typeContent(draftText);
+    Log.success(
+        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}'
+         and random text string in draft state ${draftText} '`
+    );
     await app.messageHubController.clickSideBarChatsButton();
 
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
