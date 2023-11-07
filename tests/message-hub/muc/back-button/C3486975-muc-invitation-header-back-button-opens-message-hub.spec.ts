@@ -1,6 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 import { BaseController } from '../../../../controller/base-controller';
 
 test.describe('@Smoke @MUC', () => {
@@ -27,7 +28,9 @@ test.describe('@Smoke @MUC', () => {
     });
 
     test('@Real @Smoke C2596748 Create MUC, invite 2 participants to MUC, 1 participant accept, 1 participant decline', async () => {
-        // user1 login
+        Log.info(
+            `=================== START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName} ===================`
+        );
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
         app = new BaseController(page1);

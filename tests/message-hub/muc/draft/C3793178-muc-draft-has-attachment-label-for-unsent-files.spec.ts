@@ -1,6 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 import { BaseController } from '../../../../controller/base-controller';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
@@ -24,7 +25,9 @@ test(`${testName} ${testTags}`, async () => {
 });
 
 test('@Real C3793178: MUC draft state has file attachment icon and text for unsent files', async () => {
-    // user1 login
+    Log.info(
+        `===================== START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName} =====================`
+    );
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);

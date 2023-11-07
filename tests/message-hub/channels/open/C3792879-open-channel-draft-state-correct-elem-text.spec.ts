@@ -24,7 +24,7 @@ test.beforeEach(async () => {
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
     Log.info(
-        `===================== START TEST: Create browser and login with ${user1.userInfo.email} =====================`
+        `===================== START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName} =====================`
     );
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
