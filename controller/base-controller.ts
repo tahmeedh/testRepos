@@ -88,6 +88,12 @@ export class BaseController {
         });
     }
 
+    async waitForFlag() {
+        await test.step('Base Controller : Wait For Header', async () => {
+            await expect(this.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
+        });
+    }
+
     async goToLoginPage() {
         await test.step('Base Controller : Go to login page', async () => {
             const env = process.env.SERVER;

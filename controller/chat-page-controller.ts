@@ -43,6 +43,18 @@ export class ChatController {
         });
     }
 
+    async naviagteToMessageHub() {
+        await test.step('Chat Controller: Naviagate back to Message Hub', async () => {
+            await this.Pom.CHAT_BACK_BUTTON.click();
+        });
+    }
+
+    async clickChatFlagButton() {
+        await test.step('Chat Controller: Flag Chat', async () => {
+            await this.Pom.CHAT_FLAG_BUTTON.click();
+        });
+    }
+
     async downloadLastMedia(type?: string) {
         await test.step('Chat Controller : Download Media Content', async () => {
             await this.page.waitForTimeout(1000);
