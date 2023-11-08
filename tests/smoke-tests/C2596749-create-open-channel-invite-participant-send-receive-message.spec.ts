@@ -25,8 +25,8 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    Log.info(
-        `===================== START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName} =====================`
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
@@ -46,12 +46,10 @@ test(`${testName} ${testTags}`, async () => {
         [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
     );
     await app.createChatController.CreateChannel();
-
-    // send content in channel
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
 
-    // user2 login
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await browser.newContext();
     const page2 = await context2.newPage();
     app1 = new BaseController(page2);
@@ -59,11 +57,10 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
 
-    // user 2 accept invite to channel
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
     await app1.open(title);
     await app1.inviteController.acceptInvite('Channel');
 
-    // assert receive message
     const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
     await expect(messageReceived).toHaveText(randomContent);
 });

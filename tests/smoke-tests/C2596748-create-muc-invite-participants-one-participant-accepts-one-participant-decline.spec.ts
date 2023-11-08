@@ -30,8 +30,8 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    Log.info(
-        `===================== START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName} =====================`
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
@@ -47,11 +47,10 @@ test(`${testName} ${testTags}`, async () => {
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
     await app.createChatController.createMUC([user2fullName, user3fullName], title);
 
-    // user send message in MUC
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
 
-    // user 2 login
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await browser.newContext();
     const page2 = await context2.newPage();
     app1 = new BaseController(page2);
@@ -59,19 +58,19 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
 
-    // accept invite
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
     await app1.open(title);
     await app1.inviteController.acceptInvite('MUC');
 
-    // assert message
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives message`);
     const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
     await expect(messageReceived).toHaveText(randomContent);
 
-    // assert system message
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
     const systemEvent = app1.Pom.CHATIFRAME.getByText('You joined');
     await expect(systemEvent).toHaveText('You joined');
 
-    // user 3 login
+    Log.info(`login with ${user3.userInfo.firstName} ${user3.userInfo.lastName}`);
     context3 = await browser.newContext();
     const page3 = await context3.newPage();
     app2 = new BaseController(page3);
@@ -79,7 +78,7 @@ test(`${testName} ${testTags}`, async () => {
     await app2.loginController.loginToPortal(user3.userInfo.email, user3.userInfo.password);
     await app2.closeTooltips();
 
-    // decline invite
+    Log.info(`${user3.userInfo.firstName} ${user3.userInfo.lastName} declines invite`);
     await app2.open(title);
     await app2.inviteController.declineInvite('MUC');
 });

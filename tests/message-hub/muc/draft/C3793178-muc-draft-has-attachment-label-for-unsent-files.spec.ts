@@ -25,8 +25,8 @@ test(`${testName} ${testTags}`, async () => {
 });
 
 test('@Real C3793178: MUC draft state has file attachment icon and text for unsent files', async () => {
-    Log.info(
-        `===================== START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName} =====================`
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
@@ -40,11 +40,12 @@ test('@Real C3793178: MUC draft state has file attachment icon and text for unse
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
     await app.createChatController.createMUC([user2fullName, user3fullName]);
-
-    // user send message in conversation
     await app.chatController.sendContent();
+    Log.success(
+        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
+    );
 
-    // user drafts image in conversation
+    Log.info(`${testChatType} chat expects file attachment icon and string in draft state `);
     const PNG = './asset/download.png';
     await app.chatController.waitForHeader();
     await app.attachmentController.attachFile(PNG);

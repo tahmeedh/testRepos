@@ -26,8 +26,8 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    Log.info(
-        `===================== START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName} =====================`
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
@@ -41,13 +41,15 @@ test(`${testName} ${testTags}`, async () => {
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
     await app.createChatController.createMUC([user2fullName, user3fullName]);
-
-    // user send message in conversation
     const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
+    Log.success(
+        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
+    );
+
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
     await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
-
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveText(draftText);
 });

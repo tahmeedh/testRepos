@@ -39,4 +39,12 @@ export class Log {
     static async highlight(message: string) {
         console.info(consoleColor.BgGray, message);
     }
+
+    static async equalsDivider(message: string) {
+        console.info(consoleColor.FgGray, `===================== ${message} =====================`);
+    }
+
+    static async starDivider(message: string) {
+        console.info(consoleColor.FgGray, `********************* ${message} **********************`);
+    }
 }
