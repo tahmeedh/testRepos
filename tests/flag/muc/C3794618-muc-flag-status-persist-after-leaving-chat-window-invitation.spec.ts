@@ -57,8 +57,9 @@ test.describe('@Smoke @MUC @Flag', () => {
         await app1.open(title);
         await app1.chatController.clickChatFlagButton();
         await app1.messageHubController.clickSideBarChatsButton();
+
         // verify that chat is flagged
-        await app1.waitForFlag();
+        await expect(app1.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
         // again open the chat again
         await app1.open(title);
 

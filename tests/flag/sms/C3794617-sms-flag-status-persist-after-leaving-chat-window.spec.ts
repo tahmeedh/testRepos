@@ -1,4 +1,4 @@
-import { test, chromium } from '@playwright/test';
+import { test, chromium, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { BaseController } from '../../../controller/base-controller';
 
@@ -48,7 +48,7 @@ test.describe('@SMS @FLag', () => {
         await app.chatController.naviagteToMessageHub();
 
         // Verify the flag
-        await app.waitForFlag();
+        await expect(app.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
     });
 
     test.afterEach(async () => {

@@ -1,4 +1,4 @@
-import { test, chromium } from '@playwright/test';
+import { test, chromium, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { BaseController } from '../../../controller/base-controller';
 import { StringUtils } from '../../../helper/string-utils';
@@ -60,7 +60,7 @@ test.describe('@Smoke @Local @Flag', () => {
         await app1.chatController.naviagteToMessageHub();
 
         // Verify the flag
-        await app1.waitForFlag();
+        await expect(app1.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
     });
 
     test.afterEach(async () => {
