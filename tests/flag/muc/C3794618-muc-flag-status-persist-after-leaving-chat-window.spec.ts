@@ -24,7 +24,7 @@ test.describe('@Smoke @MUC @Flag', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real @Smoke C3794618  MUC flag status should persist after leaving chat window', async () => {
+    test('@Real @Smoke C3794618  MUC flag status should persist after leaving chat window-Invitation', async () => {
         // user1 login
         context1 = await browser.newContext();
         context2 = await browser.newContext();

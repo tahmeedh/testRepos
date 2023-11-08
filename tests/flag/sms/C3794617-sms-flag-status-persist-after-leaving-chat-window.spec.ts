@@ -2,7 +2,7 @@ import { test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { BaseController } from '../../../controller/base-controller';
 
-test.describe('@SMS @Draft', () => {
+test.describe('@SMS @FLag', () => {
     let browser = null;
     let context1 = null;
     let app: BaseController;
