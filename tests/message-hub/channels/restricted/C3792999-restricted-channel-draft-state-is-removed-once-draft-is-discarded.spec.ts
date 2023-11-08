@@ -5,7 +5,7 @@ import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { BaseController } from '../../../../controller/base-controller';
 
-const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
+const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
 let app = null;
@@ -33,7 +33,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    // user create channel
+    Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartChannel();
     const title = StringUtils.generateString(3, 5);
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');

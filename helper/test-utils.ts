@@ -13,9 +13,9 @@ export class TestUtils {
         const tags = filePath.replace(/[/]/g, ' @');
         const splitTags = tags.split(' @');
         if (splitTags[2] === 'channels') {
-            return `${splitTags[3].toUpperCase()} ${splitTags[2].toUpperCase()}`;
+            return `${splitTags[3]} ${splitTags[2]}`;
         }
-        return splitTags[2].toUpperCase();
+        return splitTags[2];
     }
 
     static convertPathToTags(fullFilePath: string) {

@@ -39,7 +39,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    Log.info(`START ${testChatType} CHAT`);
+    Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartSMS();
     const randonNumber = await app.createChatController.CreateSMS();
     await app.chatController.skipRecipientInfo();

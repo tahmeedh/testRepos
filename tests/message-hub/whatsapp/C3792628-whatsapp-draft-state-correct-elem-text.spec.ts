@@ -5,7 +5,7 @@ import { Log } from 'Apis/api-helpers/log-utils';
 import { BaseController } from '../../../controller/base-controller';
 import { StringUtils } from '../../../helper/string-utils';
 
-const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
+const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
 let app: BaseController;
@@ -34,13 +34,11 @@ test(`${testName} ${testTags}`, async () => {
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
-
     await app.goToLoginPage();
-    // user login
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    // user start 1-1
+    Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartWhatsapp();
     app.createChatController.CreateWhatsapp();
     await app.chatController.skipRecipientInfo();

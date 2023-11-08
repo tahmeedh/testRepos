@@ -33,7 +33,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    Log.info(`Start ${testChatType} chat`);
+    Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartChannel();
     const title = StringUtils.generateString(3, 5);
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
@@ -48,11 +48,11 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.sendContent();
     await app.chatController.typeContent(draftText);
     Log.success(
-        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}'
-         and random text string in draft state ${draftText} '`
+        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
-    await app.messageHubController.clickSideBarChatsButton();
 
+    Log.info(`${testChatType} chat has ${draftText} string in draft state `);
+    await app.messageHubController.clickSideBarChatsButton();
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveText(draftText);
 });
