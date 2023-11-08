@@ -2,8 +2,8 @@ import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../../controller/base-controller';
-import { StringUtils } from '../../../../helper/string-utils';
+import { BaseController } from '../../../controller/base-controller';
+import { StringUtils } from '../../../helper/string-utils';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -40,18 +40,21 @@ test(`${testName} ${testTags}`, async () => {
     await app.startChatButtonController.ClickOnStartMUC();
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
-    await app.createChatController.createMUC([user2fullName, user3fullName]);
+    const subject = await app.createChatController.createMUC([user2fullName, user3fullName]);
     const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
     Log.success(
         `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
 
-    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state to be removed `);
     await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
+    await app.messageHubController.clickMessageHubRow(subject);
+    await app.chatController.removeContent();
+    await app.messageHubController.clickSideBarChatsButton();
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
-    await expect(secondaryLine).toHaveText(draftText);
+    await expect(secondaryLine).toHaveCount(0);
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
