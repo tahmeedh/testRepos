@@ -32,19 +32,16 @@ test(`${testName} ${testTags}`, async () => {
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
-    await app.goToLoginPage();
-    // user login
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartOneToOne();
     await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    // user start conversation with user 2
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
 
-    // user 2 login
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await browser.newContext();
     const page2 = await context2.newPage();
     app1 = new BaseController(page2);
@@ -52,17 +49,17 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
 
-    // user 2 accept invitation with user 1
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
     await app1.startChatButtonController.ClickOnStartOneToOne();
     await app1.createChatController.CreateSUC(`${user1.userInfo.firstName} ${user1.userInfo.lastName}`);
     await app1.inviteController.acceptInvite('SUC');
 
-    // user send image in conversation
+    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends image`);
     const PNG = './asset/download.png';
     await app.chatController.waitForHeader();
     await app.attachmentController.sendAttachment(PNG);
 
-    // user 2 download image
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} downloads image`);
     await app1.chatController.waitForHeader();
     await app1.chatController.downloadLastMedia();
     await page2.waitForEvent('download');

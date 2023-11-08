@@ -37,7 +37,6 @@ test(`${testName} ${testTags}`, async () => {
     const page1 = await context1.newPage();
     app = new BaseController(page1);
     await app.goToLoginPage();
-    // user login
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
@@ -52,35 +51,33 @@ test(`${testName} ${testTags}`, async () => {
         title
     );
 
-    // user send audio in MUC
+    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends audio file`);
     const audio = './asset/audio.mp3';
     await app.attachmentController.sendAttachment(audio);
     await page1.waitForTimeout(5000);
 
-    // user 2 login
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} logging in `);
     context2 = await browser.newContext();
     const page2 = await context2.newPage();
     app1 = new BaseController(page2);
     await app1.goToLoginPage();
-    // user2 login
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
 
-    // accept invite
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
     await app1.open(title);
     await app1.inviteController.acceptInvite('MUC');
 
-    // assert system message
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
     await app1.chatController.waitForHeader();
     const systemEvent = app1.Pom.CHATIFRAME.getByText('You joined');
     await expect(systemEvent).toHaveText('You joined');
 
-    // assert audio
     await app1.chatController.waitForHeader();
     await app1.chatController.downloadLastMedia('MUC');
     await page2.waitForEvent('download');
 
-    // user 3 login
+    Log.info(`login with ${user3.userInfo.firstName} ${user3.userInfo.lastName}`);
     context3 = await browser.newContext();
     const page3 = await context3.newPage();
     app2 = new BaseController(page3);
@@ -88,7 +85,7 @@ test(`${testName} ${testTags}`, async () => {
     await app2.loginController.loginToPortal(user3.userInfo.email, user3.userInfo.password);
     await app2.closeTooltips();
 
-    // decline invite
+    Log.info(`${user3.userInfo.firstName} ${user3.userInfo.lastName} declines invite`);
     await app2.open(title);
     await app2.inviteController.declineInvite('MUC');
 });

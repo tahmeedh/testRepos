@@ -51,12 +51,10 @@ test(`${testName} ${testTags}`, async () => {
         [`${user3.userInfo.firstName} ${user3.userInfo.lastName}`]
     );
     await app.createChatController.CreateChannel();
-
-    // send content in channel
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
 
-    // user2 login
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await browser.newContext();
     const page2 = await context2.newPage();
     app1 = new BaseController(page2);
@@ -64,7 +62,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
 
-    // user 2 open and accept channel invite
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     await app1.open(title);
     await app1.inviteController.acceptInvite('Channel');
 
@@ -72,7 +70,7 @@ test(`${testName} ${testTags}`, async () => {
     const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
     await expect(messageReceived).toHaveText(randomContent);
 
-    // usere login
+    Log.info(`login with ${user3.userInfo.firstName} ${user3.userInfo.lastName}`);
     context3 = await browser.newContext();
     const page3 = await context3.newPage();
     app2 = new BaseController(page3);
@@ -80,7 +78,7 @@ test(`${testName} ${testTags}`, async () => {
     await app2.loginController.loginToPortal(user3.userInfo.email, user3.userInfo.password);
     await app2.closeTooltips();
 
-    // user 3 open and decline channel invite
+    Log.info(`${user3.userInfo.firstName} ${user3.userInfo.lastName} declines invite`);
     await app2.open(title);
     await app2.inviteController.declineInvite('Channel');
 });

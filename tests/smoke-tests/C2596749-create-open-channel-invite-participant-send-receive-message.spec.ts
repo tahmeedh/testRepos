@@ -57,7 +57,8 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
 
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+
     await app1.open(title);
     await app1.inviteController.acceptInvite('Channel');
 

@@ -46,11 +46,12 @@ test(`${testName} ${testTags}`, async () => {
     );
     await app.createChatController.CreateChannel();
 
+    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends video file`);
     const video = './asset/video.mp4';
     await app.chatController.waitForHeader();
     await app.attachmentController.sendAttachment(video);
 
-    // user2 login
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await browser.newContext();
     const page2 = await context2.newPage();
     app1 = new BaseController(page2);
@@ -58,7 +59,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
 
-    // user 2 open channel
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
     await app1.open(title);
     await app1.inviteController.acceptInvite('Channel');
 
