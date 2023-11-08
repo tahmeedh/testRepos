@@ -54,6 +54,7 @@ test(`${testName} ${testTags}`, async () => {
 
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveText(draftText);
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

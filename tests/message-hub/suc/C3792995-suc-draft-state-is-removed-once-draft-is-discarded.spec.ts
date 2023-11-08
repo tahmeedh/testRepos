@@ -43,15 +43,17 @@ test(`${testName} ${testTags}`, async () => {
         `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
 
-    await app.chatController.typeContent(draftState);
+    const draftText = await app.chatController.typeContent(draftState);
     await app.messageHubController.clickSideBarChatsButton();
     await app.messageHubController.clickMessageHubRow(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state to be removed `);
     await app.chatController.removeContent();
     await app.messageHubController.clickSideBarChatsButton();
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftState);
     await expect(secondaryLine).toHaveCount(0);
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

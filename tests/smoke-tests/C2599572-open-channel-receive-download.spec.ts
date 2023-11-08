@@ -67,6 +67,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.chatController.waitForHeader();
     await app1.chatController.downloadLastMedia();
     await page2.waitForEvent('download');
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

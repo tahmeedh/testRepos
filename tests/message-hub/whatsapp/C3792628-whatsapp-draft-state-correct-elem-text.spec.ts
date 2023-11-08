@@ -48,11 +48,12 @@ test(`${testName} ${testTags}`, async () => {
         `SUCCESS: ${testChatType} conversation was created with '${randonNumber}' and random text string was '`
     );
 
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
     await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
-
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveText(draftText);
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

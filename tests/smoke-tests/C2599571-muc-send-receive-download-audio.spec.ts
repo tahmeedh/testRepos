@@ -88,6 +88,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${user3.userInfo.firstName} ${user3.userInfo.lastName} declines invite`);
     await app2.open(title);
     await app2.inviteController.declineInvite('MUC');
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

@@ -64,6 +64,7 @@ test(`${testName} ${testTags}`, async () => {
 
     const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
     await expect(messageReceived).toHaveText(randomContent);
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

@@ -45,6 +45,6 @@ export class Log {
     }
 
     static async starDivider(message: string) {
-        console.info(consoleColor.FgGray, `********************* ${message} **********************`);
+        console.info(consoleColor.BgBlue, `********************* ${message} **********************`);
     }
 }

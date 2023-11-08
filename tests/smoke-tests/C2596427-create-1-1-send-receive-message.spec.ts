@@ -81,6 +81,7 @@ test(`${testName} ${testTags}`, async () => {
 
     // assert sent and read timestamp
     await app.chatController.checkLastRead();
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

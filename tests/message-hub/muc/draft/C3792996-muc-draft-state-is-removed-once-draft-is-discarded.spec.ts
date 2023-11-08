@@ -55,6 +55,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.messageHubController.clickSideBarChatsButton();
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveCount(0);
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

@@ -54,6 +54,7 @@ test('@Real C3793178: MUC draft state has file attachment icon and text for unse
     expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
     expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
     expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {
