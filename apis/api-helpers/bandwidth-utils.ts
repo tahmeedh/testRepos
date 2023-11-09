@@ -106,8 +106,9 @@ export class BandwidthUtils {
                     groupTextNumberItem[0].user.id,
                     groupTextNumber
                 );
-            } catch {
-                throw new Error(`FAILURE: Releasing phone number ${groupTextNumber} failed.`);
+            } catch (error) {
+                Log.error(`FAILURE: Failed to unassign group text number from user': `, error);
+                throw error(error);
             }
         }
 
