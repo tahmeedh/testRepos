@@ -3,7 +3,7 @@ import { Company } from 'Apis/company';
 import { BaseController } from '../../../controller/base-controller';
 import { StringUtils } from '../../../helper/string-utils';
 
-test.describe('@Smoke @MUC @Flag', () => {
+test.describe(' @MUC @Flag', () => {
     let browser = null;
     let context1 = null;
     let context2 = null;
@@ -24,7 +24,7 @@ test.describe('@Smoke @MUC @Flag', () => {
         await company.addUserToEachOthersRoster([user1, user2]);
     });
 
-    test('@Real @Smoke C3794618  MUC flag status should persist after leaving chat window-Invitation', async () => {
+    test('C3794618  MUC flag status should persist after leaving chat window-Invitation', async () => {
         // user1 login
         context1 = await browser.newContext();
         context2 = await browser.newContext();

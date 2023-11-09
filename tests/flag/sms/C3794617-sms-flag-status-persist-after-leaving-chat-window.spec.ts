@@ -23,7 +23,7 @@ test.describe('@SMS @FLag', () => {
         await user1.requestAndAssignTwilioNumber();
     });
 
-    test('@Real C3794617: SMS Flag status persist after leaving chat chat-window', async () => {
+    test('C3794617: SMS Flag status persist after leaving chat chat-window', async () => {
         // user1 login
         context1 = await browser.newContext();
         const page1 = await context1.newPage();

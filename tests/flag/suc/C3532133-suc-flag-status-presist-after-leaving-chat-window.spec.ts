@@ -3,7 +3,7 @@ import { Company } from 'Apis/company';
 import { BaseController } from '../../../controller/base-controller';
 import { StringUtils } from '../../../helper/string-utils';
 
-test.describe('@Smoke @Local @Flag', () => {
+test.describe('@SUC @Flag', () => {
     let browser = null;
     let context1 = null;
     let context2 = null;
