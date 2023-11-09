@@ -3,27 +3,29 @@ import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { BaseController } from '../../../../controller/base-controller';
-import { StringUtils } from '../../../../helper/string-utils';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
-let context2 = null;
 let app: BaseController;
-let app1: BaseController;
 
 let company: Company;
 let user1 = null;
 let user2 = null;
-let user3 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
-    user3 = await company.createUser();
     await company.addUserToEachOthersRoster([user1, user2]);
+
+    await Promise.all([
+        user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
+        user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
+    ]);
+
+    await user1.requestAndAssignTwilioNumber();
 });
 
 test(`${testName} ${testTags}`, async () => {
@@ -39,30 +41,17 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartMUC();
-    const title = StringUtils.generateString(3, 5);
-    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
-    const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
-    await app.createChatController.createMUC([user2fullName, user3fullName], title);
+    await app.startChatButtonController.ClickOnStartSMS();
+    const randonNumber = await app.createChatController.CreateSMS();
+    await app.chatController.skipRecipientInfo();
     await app.chatController.sendContent();
     Log.success(
-        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
+        `SUCCESS: ${testChatType} conversation was created with '${randonNumber}' and random text string was '`
     );
 
-    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    context2 = await browser.newContext();
-    const page2 = await context2.newPage();
-    app1 = new BaseController(page2);
-    await app1.goToLoginPage();
-    await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.closeTooltips();
-
-    Log.info(
-        `${user2.userInfo.firstName} ${user2.userInfo.lastName} goes to invite screen and back to message hub`
-    );
-    await app1.open(title);
-    await app1.chatController.backButton();
-    await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
+    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} presses back button`);
+    await app.chatController.backButton();
+    await expect(app.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

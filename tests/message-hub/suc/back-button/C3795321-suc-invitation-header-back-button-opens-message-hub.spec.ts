@@ -2,12 +2,14 @@ import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../controller/base-controller';
+import { BaseController } from '../../../../controller/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
+let context2 = null;
 let app: BaseController;
+let app1: BaseController;
 
 let company: Company;
 let user1 = null;
@@ -41,15 +43,21 @@ test(`${testName} ${testTags}`, async () => {
         `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
 
-    Log.info(`${testChatType} chat expects file attachment icon and string in draft state `);
-    const PNG = './asset/download.png';
-    await app.chatController.waitForHeader();
-    await app.attachmentController.attachFile(PNG);
-    await app.messageHubController.clickSideBarChatsButton();
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    context2 = await browser.newContext();
+    const page2 = await context2.newPage();
+    app1 = new BaseController(page2);
+    await app1.goToLoginPage();
+    await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
+    await app1.closeTooltips();
 
-    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+    Log.info(
+        `${user2.userInfo.firstName} ${user2.userInfo.lastName} goes to invite screen and back to message hub`
+    );
+    await app1.startChatButtonController.ClickOnStartOneToOne();
+    await app1.createChatController.CreateSUC(user1.userInfo.lastName);
+    await app1.chatController.backButton();
+    await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

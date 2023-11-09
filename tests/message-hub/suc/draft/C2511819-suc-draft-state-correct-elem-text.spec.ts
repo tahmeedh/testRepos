@@ -8,21 +8,17 @@ import { StringUtils } from '../../../../helper/string-utils';
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
-let context2 = null;
 let app: BaseController;
-let app1: BaseController;
 
 let company: Company;
 let user1 = null;
 let user2 = null;
-let user3 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
-    user3 = await company.createUser();
     await company.addUserToEachOthersRoster([user1, user2]);
 });
 
@@ -39,30 +35,19 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartMUC();
-    const title = StringUtils.generateString(3, 5);
-    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
-    const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
-    await app.createChatController.createMUC([user2fullName, user3fullName], title);
+    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     await app.chatController.sendContent();
+    const draftText = StringUtils.generateString();
     Log.success(
         `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
 
-    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    context2 = await browser.newContext();
-    const page2 = await context2.newPage();
-    app1 = new BaseController(page2);
-    await app1.goToLoginPage();
-    await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.closeTooltips();
-
-    Log.info(
-        `${user2.userInfo.firstName} ${user2.userInfo.lastName} goes to invite screen and back to message hub`
-    );
-    await app1.open(title);
-    await app1.chatController.backButton();
-    await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
+    await app.chatController.typeContent(draftText);
+    await app.messageHubController.clickSideBarChatsButton();
+    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
+    await expect(secondaryLine).toHaveText(draftText);
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

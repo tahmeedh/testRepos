@@ -2,8 +2,7 @@ import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../controller/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
+import { BaseController } from '../../../../controller/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -37,22 +36,20 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartOneToOne();
     await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    const draftState = StringUtils.generateString();
     await app.chatController.sendContent();
     Log.success(
         `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
 
-    const draftText = await app.chatController.typeContent(draftState);
+    Log.info(`${testChatType} chat expects file attachment icon and string in draft state `);
+    const PNG = './asset/download.png';
+    await app.chatController.waitForHeader();
+    await app.attachmentController.attachFile(PNG);
     await app.messageHubController.clickSideBarChatsButton();
-    await app.messageHubController.clickMessageHubRow(
-        `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
-    );
-    Log.info(`${testChatType} chat expects ${draftText} string in draft state to be removed `);
-    await app.chatController.removeContent();
-    await app.messageHubController.clickSideBarChatsButton();
-    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftState);
-    await expect(secondaryLine).toHaveCount(0);
+
+    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
+    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
+    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

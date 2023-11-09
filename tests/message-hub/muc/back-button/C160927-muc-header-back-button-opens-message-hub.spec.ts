@@ -2,8 +2,7 @@ import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../controller/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
+import { BaseController } from '../../../../controller/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -13,12 +12,14 @@ let app: BaseController;
 let company: Company;
 let user1 = null;
 let user2 = null;
+let user3 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
+    user3 = await company.createUser();
     await company.addUserToEachOthersRoster([user1, user2]);
 });
 
@@ -35,19 +36,18 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartOneToOne();
-    await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    await app.startChatButtonController.ClickOnStartMUC();
+    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
+    const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
+    await app.createChatController.createMUC([user2fullName, user3fullName]);
     await app.chatController.sendContent();
-    const draftText = StringUtils.generateString();
     Log.success(
         `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
 
-    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
-    await app.chatController.typeContent(draftText);
-    await app.messageHubController.clickSideBarChatsButton();
-    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
-    await expect(secondaryLine).toHaveText(draftText);
+    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} presses back button`);
+    await app.chatController.backButton();
+    await expect(app.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
