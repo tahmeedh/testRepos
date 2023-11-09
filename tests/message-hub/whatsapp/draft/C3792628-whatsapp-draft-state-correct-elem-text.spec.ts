@@ -2,7 +2,8 @@ import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../controller/base-controller';
+import { BaseController } from '../../../../controller/base-controller';
+import { StringUtils } from '../../../../helper/string-utils';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -41,20 +42,17 @@ test(`${testName} ${testTags}`, async () => {
     await app.startChatButtonController.ClickOnStartWhatsapp();
     const randonNumber = app.createChatController.CreateWhatsapp();
     await app.chatController.skipRecipientInfo();
+    const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
     Log.success(
         `SUCCESS: ${testChatType} conversation was created with '${randonNumber}' and random text string was '`
     );
 
-    Log.info(`${testChatType} chat expects file attachment icon and string in draft state `);
-    const PNG = './asset/download.png';
-    await app.chatController.waitForHeader();
-    await app.attachmentController.attachFile(PNG);
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
+    await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
-
-    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
+    await expect(secondaryLine).toHaveText(draftText);
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
