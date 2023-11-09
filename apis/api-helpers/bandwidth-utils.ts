@@ -84,10 +84,14 @@ export class BandwidthUtils {
         );
 
         if (groupTextNumberItem[0].user) {
-            await bandwidthController.unassignBandwidthNumberFromUser(
-                groupTextNumberItem[0].user.id,
-                groupTextNumber
-            );
+            try {
+                await bandwidthController.unassignBandwidthNumberFromUser(
+                    groupTextNumberItem[0].user.id,
+                    groupTextNumber
+                );
+            } catch {
+                throw new Error(`FAILURE: Releasing phone number ${groupTextNumber} failed.`);
+            }
         }
 
         Log.highlight(`Tearing down: Detected ${filteredTwilioNumbers.length} Twilio number.`);
