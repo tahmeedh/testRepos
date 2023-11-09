@@ -81,4 +81,10 @@ export class ChatController {
             await this.Pom.RECIPIENT_INFO_SKIP_BUTTON.click();
         });
     }
+
+    async backButton() {
+        await test.step('Chat Controller: Naviagate back to Message Hub', async () => {
+            await this.Pom.CHAT_BACK_BUTTON.click();
+        });
+    }
 }
