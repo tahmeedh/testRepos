@@ -12,10 +12,27 @@ import { Log } from './log-utils';
 import { EnvUtils } from './env-utils';
 
 export class BandwidthUtils {
-    static async assignBandwidthNumber(userId: number) {
+    groupTextPhoneNumber: string;
+    companyId: number;
+    admin_email: string;
+    admin_password: string;
+
+    constructor(
+        groupTextPhoneNumber: string,
+        companyId: number,
+        admin_email: string,
+        admin_password: string
+    ) {
+        this.groupTextPhoneNumber = groupTextPhoneNumber;
+        this.companyId = companyId;
+        this.admin_email = admin_email;
+        this.admin_password = admin_password;
+    }
+
+    async assignBandwidthNumber(userId: number) {
         const { ADMIN_VEGA_AUTOMATION } = users;
 
-        const groupTextNumber = '+17786819999';
+        const groupTextNumber = this.groupTextPhoneNumber;
         const ADMIN_USERNAME = ADMIN_VEGA_AUTOMATION.EMAIL;
         const ADMIN_PASSWORD = ADMIN_VEGA_AUTOMATION.PASSWORD;
         const { MDS_ENDPOINT, GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL } = EnvUtils.getEndPoints();
@@ -32,10 +49,10 @@ export class BandwidthUtils {
         await bandwidthController.assignBandwidthNumberToUser(userId, groupTextNumber);
     }
 
-    static async unassignBandwidthNumber(userId: number) {
+    async unassignBandwidthNumber(userId: number) {
         const { ADMIN_VEGA_AUTOMATION } = users;
 
-        const groupTextNumber = '+17786819999';
+        const groupTextNumber = this.groupTextPhoneNumber;
         const ADMIN_USERNAME = ADMIN_VEGA_AUTOMATION.EMAIL;
         const ADMIN_PASSWORD = ADMIN_VEGA_AUTOMATION.PASSWORD;
         const { MDS_ENDPOINT, GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL } = EnvUtils.getEndPoints();
@@ -52,11 +69,11 @@ export class BandwidthUtils {
         await bandwidthController.unassignBandwidthNumberFromUser(userId, groupTextNumber);
     }
 
-    static async removeNonBanwidthNumbersFromCompany() {
+    async removeNonBanwidthNumbersFromCompany() {
         const { ADMIN_VEGA_AUTOMATION } = users;
 
-        const groupTextNumber = '+17786819999';
-        const companyId = 721495;
+        const groupTextNumber = this.groupTextPhoneNumber;
+        const { companyId } = this;
         const ADMIN_USERNAME = ADMIN_VEGA_AUTOMATION.EMAIL;
         const ADMIN_PASSWORD = ADMIN_VEGA_AUTOMATION.PASSWORD;
         const { MDS_ENDPOINT, GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL } = EnvUtils.getEndPoints();
@@ -107,9 +124,9 @@ export class BandwidthUtils {
         }
     }
 
-    static async removeTestUsersFromBandwidthCompany() {
+    async removeTestUsersFromBandwidthCompany() {
         const { SM_THRIFT_HOST, SM_THRIFT_PORT } = EnvUtils.getEndPoints();
-        const companyId = 721495;
+        const { companyId } = this;
         const smClient = new SMClient(SM_THRIFT_HOST, SM_THRIFT_PORT);
         const platformController = new PlatformController(smClient);
 
