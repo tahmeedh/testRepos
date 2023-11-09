@@ -1,86 +1,89 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
+import { TestUtils } from 'helper/test-utils';
 import { BaseController } from '../../controller/base-controller';
 
-test.describe('@Smoke @SUC', () => {
-    let browser = null;
-    let context1 = null;
-    let context2 = null;
-    let app: BaseController;
-    let app1: BaseController;
+const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
+let browser = null;
+let context1 = null;
+let context2 = null;
+let app: BaseController;
+let app1: BaseController;
 
-    let company: Company;
-    let user1 = null;
-    let user2 = null;
+let company: Company;
+let user1 = null;
+let user2 = null;
 
-    test.beforeEach(async () => {
-        browser = await chromium.launch();
-        company = await Company.createCompany();
-        user1 = await company.createUser();
-        user2 = await company.createUser();
-        await company.addUserToEachOthersRoster([user1, user2]);
-    });
+test.beforeEach(async () => {
+    browser = await chromium.launch();
+    company = await Company.createCompany();
+    user1 = await company.createUser();
+    user2 = await company.createUser();
+    await company.addUserToEachOthersRoster([user1, user2]);
+});
 
-    test('@Real C2596427: Create 1-1, send and receive message', async () => {
-        // user1 login
-        context1 = await browser.newContext();
-        const page1 = await context1.newPage();
-        app = new BaseController(page1);
+test(`${testName} ${testTags}`, async () => {
+    test.info().annotations.push(testAnnotation);
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
+    );
+    context1 = await browser.newContext();
+    const page1 = await context1.newPage();
+    app = new BaseController(page1);
+    await app.goToLoginPage();
+    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+    await app.closeTooltips();
 
-        await app.goToLoginPage();
-        // user login
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.closeTooltips();
+    Log.info(`Start ${testChatType} chat and send message`);
+    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    const randomContent = StringUtils.generateString();
+    await app.chatController.sendContent(randomContent);
 
-        // user start 1-1
-        await app.startChatButtonController.ClickOnStartOneToOne();
-        await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    context2 = await browser.newContext();
+    const page2 = await context2.newPage();
+    app1 = new BaseController(page2);
+    await app1.goToLoginPage();
 
-        // user send message in conversation
-        const randomContent = StringUtils.generateString();
-        await app.chatController.sendContent(randomContent);
+    await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
+    await app1.closeTooltips();
 
-        // user 2 login
-        context2 = await browser.newContext();
-        const page2 = await context2.newPage();
-        app1 = new BaseController(page2);
-        await app1.goToLoginPage();
+    Log.info(
+        `${user2.userInfo.firstName} ${user2.userInfo.lastName} opens chat with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
+    );
+    await app1.startChatButtonController.ClickOnStartOneToOne();
+    await app1.createChatController.CreateSUC(user1.userInfo.lastName);
 
-        await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-        await app1.closeTooltips();
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
+    await app1.inviteController.acceptInvite('SUC');
 
-        // user 2 open conversation with user 1
-        await app1.startChatButtonController.ClickOnStartOneToOne();
-        await app1.createChatController.CreateSUC(user1.userInfo.lastName);
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives message`);
+    await app1.chatController.waitForHeader();
+    const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
+    await expect(messageReceived).toHaveText(randomContent);
 
-        // accept invite
-        await app1.inviteController.acceptInvite('SUC');
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
+    await app1.chatController.waitForHeader();
+    const systemEvent = app1.Pom.CHATIFRAME.getByText('You joined');
+    await expect(systemEvent).toHaveText('You joined');
 
-        // assert receive message
-        await app1.chatController.waitForHeader();
-        const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
-        await expect(messageReceived).toHaveText(randomContent);
+    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends message`);
+    const randomContent1 = StringUtils.generateString();
+    await app.chatController.sendContent(randomContent1);
 
-        // check system event
-        await app1.chatController.waitForHeader();
-        const systemEvent = app1.Pom.CHATIFRAME.getByText('You joined');
-        await expect(systemEvent).toHaveText('You joined');
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} expects message`);
+    await app1.chatController.waitForHeader();
+    const messageReceived1 = app1.Pom.CHATIFRAME.getByText(randomContent1);
+    await expect(messageReceived1).toHaveText(randomContent1);
 
-        // send message
-        const randomContent1 = StringUtils.generateString();
-        await app.chatController.sendContent(randomContent1);
+    // assert sent and read timestamp
+    await app.chatController.checkLastRead();
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
+});
 
-        // assert receive message
-        await app1.chatController.waitForHeader();
-        const messageReceived1 = app1.Pom.CHATIFRAME.getByText(randomContent1);
-        await expect(messageReceived1).toHaveText(randomContent1);
-
-        // assert sent and read timestamp
-        await app.chatController.checkLastRead();
-    });
-
-    test.afterEach(async () => {
-        await company.teardown();
-    });
+test.afterEach(async () => {
+    await company.teardown();
 });

@@ -1,51 +1,56 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
+import { TestUtils } from 'helper/test-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 import { BaseController } from '../../../controller/base-controller';
 import { StringUtils } from '../../../helper/string-utils';
 
-test.describe('@SUC @Draft', () => {
-    let browser = null;
-    let context1 = null;
-    let app: BaseController;
+const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
+let browser = null;
+let context1 = null;
+let app: BaseController;
 
-    let company: Company;
-    let user1 = null;
-    let user2 = null;
+let company: Company;
+let user1 = null;
+let user2 = null;
 
-    test.beforeEach(async () => {
-        browser = await chromium.launch();
-        company = await Company.createCompany();
-        user1 = await company.createUser();
-        user2 = await company.createUser();
-        await company.addUserToEachOthersRoster([user1, user2]);
-    });
+test.beforeEach(async () => {
+    browser = await chromium.launch();
+    company = await Company.createCompany();
+    user1 = await company.createUser();
+    user2 = await company.createUser();
+    await company.addUserToEachOthersRoster([user1, user2]);
+});
 
-    test('@Real C2511819: SUC displays correct elements of draft state for unsent message', async () => {
-        // user1 login
-        context1 = await browser.newContext();
-        const page1 = await context1.newPage();
-        app = new BaseController(page1);
+test(`${testName} ${testTags}`, async () => {
+    test.info().annotations.push(testAnnotation);
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
+    );
+    context1 = await browser.newContext();
+    const page1 = await context1.newPage();
+    app = new BaseController(page1);
+    await app.goToLoginPage();
+    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+    await app.closeTooltips();
 
-        await app.goToLoginPage();
-        // user login
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.closeTooltips();
+    Log.info(`Start ${testChatType} chat and send message`);
+    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    await app.chatController.sendContent();
+    const draftText = StringUtils.generateString();
+    Log.success(
+        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
+    );
 
-        // user start 1-1
-        await app.startChatButtonController.ClickOnStartOneToOne();
-        await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
+    await app.chatController.typeContent(draftText);
+    await app.messageHubController.clickSideBarChatsButton();
+    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
+    await expect(secondaryLine).toHaveText(draftText);
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
+});
 
-        // user send message in conversation
-        const draftText = StringUtils.generateString();
-        await app.chatController.sendContent();
-        await app.chatController.typeContent(draftText);
-        await app.messageHubController.clickSideBarChatsButton();
-
-        const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
-        await expect(secondaryLine).toHaveText(draftText);
-    });
-
-    test.afterEach(async () => {
-        await company.teardown();
-    });
+test.afterEach(async () => {
+    await company.teardown();
 });
