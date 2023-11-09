@@ -1,5 +1,3 @@
-/* eslint-disable no-await-in-loop */
-
 import { GskController } from 'Apis/gas/gsk-controller';
 import { BandwidthController } from 'Apis/mds/bandwidth-controller';
 import { CsrfController } from 'Apis/mds/csrf-controller';
@@ -112,17 +110,19 @@ export class BandwidthUtils {
             }
         }
 
-        Log.highlight(`Tearing down: Detected ${filteredTwilioNumbers.length} Twilio number.`);
+        Log.highlight(`Tearing down: Detected ${twilioNumbers.length} Twilio number.`);
+        const listOfPromises = [];
         for (const numberObj of filteredTwilioNumbers) {
             const { number } = numberObj;
-            await twilioController.releaseTwilioNumberFromCompany(companyId, number);
+            listOfPromises.push(twilioController.releaseTwilioNumberFromCompany(companyId, number));
         }
 
         Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp number.`);
         for (const numberObj of whatsAppProviders) {
             const { accountId } = numberObj;
-            await whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
+            listOfPromises.push(whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId));
         }
+        await Promise.all(listOfPromises);
     }
 
     async removeTestUsersFromBandwidthCompany() {
@@ -132,9 +132,13 @@ export class BandwidthUtils {
         const platformController = new PlatformController(smClient);
 
         const listOfUsersToBeRemoved = await platformController.searchForUserInCompany(companyId, 'auto');
+
+        const listOfPromises = [];
+
         Log.highlight(`Tearing down: Detected ${listOfUsersToBeRemoved.length} users.`);
         for (const user of listOfUsersToBeRemoved) {
-            await platformController.deleteUser(user.userId);
+            listOfPromises.push(platformController.deleteUser(user.userId));
         }
+        await Promise.all(listOfPromises);
     }
 }
