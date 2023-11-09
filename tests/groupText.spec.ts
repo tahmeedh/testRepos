@@ -4,7 +4,7 @@ import { Company } from 'Apis/company';
 import { BandwidthUtils } from 'Apis/api-helpers/bandwidth-utils';
 import { BaseController } from 'controller/base-controller';
 
-test.describe.configure({ mode: 'serial' });
+test.describe.configure({ mode: 'default' });
 
 test.beforeEach(async () => {
     await BandwidthUtils.removeNonBanwidthNumbersFromCompany();

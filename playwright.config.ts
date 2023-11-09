@@ -73,7 +73,7 @@ export default defineConfig({
         // },
         {
             name: 'Google Chrome',
-            use: { ...devices['Desktop Chrome'], channel: 'chrome', viewport: { width: 1280, height: 900 } }
+            use: { ...devices['Desktop Chrome'], channel: 'chrome', viewport: { width: 1280, height: 1024 } }
         },
         /* This is to prevent the scripts from accidentally being ran. Please read apis/scripts/README.md for instructions */
         process.env.SCRIPT
