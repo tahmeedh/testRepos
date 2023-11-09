@@ -150,6 +150,41 @@ export class PlatformController {
         }
     }
 
+    async getCompanyProfile(companyId: number) {
+        try {
+            Log.info(`...Sending request to get company with company id '${companyId}'`);
+            const company = await this.client.platform.getCompanyProfile(companyId);
+            Log.success(`SUCCESS: Company obtained`);
+            return company;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to retrive company with id ${companyId}`, error.description);
+            throw error;
+        }
+    }
+
+    async searchForUserInCompany(companyId: number, searchTerm: string) {
+        try {
+            Log.info(`...Sending request to get companies with name that contain string '${searchTerm}'`);
+            const listOfUsers = await this.client.platform.userAutoComplete(companyId, searchTerm);
+            Log.success(`SUCCESS: Companies obtained`);
+            return listOfUsers;
+        } catch (error) {
+            Log.error(`FAILURE: Unable to retrive companies`, error.description);
+            throw error;
+        }
+    }
+
+    async deleteUser(userId: number) {
+        try {
+            Log.info(`...Sending request to delete user with ${userId}'`);
+            await this.client.platform.deleteUser(userId);
+            Log.success(`SUCCESS: User ${userId} has been deleted`);
+        } catch (error) {
+            Log.error(`FAILURE: Unable to retrive companies`, error.description);
+            throw error;
+        }
+    }
+
     async createRole(roleName: string, companyId: number, applicationName: number) {
         try {
             Log.info(`...Sending request to create role with name '${roleName}'`);
