@@ -6,14 +6,15 @@ import { BaseController } from 'controller/base-controller';
 import { users } from 'Constants/users';
 
 test.describe.configure({ mode: 'default' });
-const bandwidthUtils = new BandwidthUtils(
-    '+17786819999',
-    721495,
-    users.ADMIN_VEGA_AUTOMATION.EMAIL,
-    users.ADMIN_VEGA_AUTOMATION.PASSWORD
-);
+let bandwidthUtils: BandwidthUtils;
 
 test.beforeEach(async () => {
+    bandwidthUtils = new BandwidthUtils(
+        '+17786819999',
+        721495,
+        users.ADMIN_VEGA_AUTOMATION.EMAIL,
+        users.ADMIN_VEGA_AUTOMATION.PASSWORD
+    );
     await bandwidthUtils.removeNonBanwidthNumbersFromCompany();
     await bandwidthUtils.removeTestUsersFromBandwidthCompany();
 });
