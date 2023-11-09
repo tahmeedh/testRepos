@@ -94,14 +94,14 @@ export class BandwidthUtils {
         const filteredTwilioNumbers = await twilioNumbers.filter(
             (numberObj) => numberObj.number !== groupTextNumber
         );
-        const groupTextNumberItem = await twilioNumbers.filter(
+        const filteredgroupTextNumber = await twilioNumbers.filter(
             (numberObj) => numberObj.number === groupTextNumber
         );
 
-        if (groupTextNumberItem[0].user) {
+        if (filteredgroupTextNumber[0].user) {
             try {
                 await bandwidthController.unassignBandwidthNumberFromUser(
-                    groupTextNumberItem[0].user.id,
+                    filteredgroupTextNumber[0].user.id,
                     groupTextNumber
                 );
             } catch (error) {
