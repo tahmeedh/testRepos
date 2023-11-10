@@ -51,6 +51,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`click ${user2.userInfo.firstName} ${user2.userInfo.lastName} avatar and expect v-card`);
     await app.clickAvatar('1');
     await expect(app.vCardController.Pom.VCARD_CONTAINER).toBeVisible();
+    await app.messageHubController.clickSideBarChatsButton();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
