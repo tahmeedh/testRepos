@@ -8,7 +8,7 @@ export class VCardPage extends BasePage {
 
     constructor(page: Page) {
         super(page);
-        this.VCARD_CONTAINER = this.page.locator('.sms-chat-intro-container');
+        this.VCARD_CONTAINER = this.page.locator('.profile-outer-container .m-auto-vcard-container');
         this.CONTACTCARD_CONTAINER = this.page.locator('.ContactCard_contact--container__BTJGG');
         this.TEXT_ICON = this.page.locator('.m-auto-text-button');
     }

@@ -1,10 +1,11 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../controller/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
+import { BaseController } from '../../../../controller/base-controller';
+import { StringUtils } from '../../../../helper/string-utils';
 
-const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
+const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
 let app: BaseController;
@@ -27,31 +28,33 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    // user1 login
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
+    );
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
-
     await app.goToLoginPage();
-    // user login
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    // user start 1-1
+    Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartSMS();
     const randonNumber = await app.createChatController.CreateSMS();
     await app.chatController.skipRecipientInfo();
-    // user send message in conversation
-
-    // user send message in conversation
     const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
+    Log.success(
+        `SUCCESS: ${testChatType} conversation was created with '${randonNumber}' and random text string was '`
+    );
+
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
     await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
 
-    await app.messageHubController.clickMessageHubRow(randonNumber);
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveText(draftText);
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {
