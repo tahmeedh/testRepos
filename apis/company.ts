@@ -67,6 +67,46 @@ export class Company {
         return company;
     }
 
+    static async importCompany(companyId: number) {
+        const END_POINTS = EnvUtils.getEndPoints();
+        const { SM_THRIFT_HOST, SM_THRIFT_PORT } = END_POINTS;
+        const smClient = new SMClient(SM_THRIFT_HOST, SM_THRIFT_PORT);
+        const platformController = new PlatformController(smClient);
+        const directoryController = new DirectoryController(smClient);
+        const messsageController = new MessageController(smClient);
+
+        const companyDomains = await platformController.getCompanyDomains(companyId);
+        const companyProfile = await platformController.getCompanyProfile(companyId);
+
+        if (companyDomains.length === 0) {
+            throw new Error(
+                'Domain is empty. Please add domain to company before importing a company. Aborting.'
+            );
+        }
+
+        const companyDomain = companyDomains[0].name;
+        const { companyName } = companyProfile;
+
+        await platformController.enableAllServices(companyId);
+        await Promise.all([
+            platformController.enableGrMessage(companyId),
+            directoryController.updateDirectorySettings(companyId, COMPANY_DEFAULT_SETTINGS.DIRCTORY_SETTINGS)
+        ]);
+
+        const company: Company = new Company({
+            smClient,
+            platformController,
+            directoryController,
+            messageController: messsageController,
+            companyName,
+            companyDomain,
+            companyId,
+            endpoints: END_POINTS
+        });
+
+        return company;
+    }
+
     async deleteCompany() {
         const { companyId } = this.companyInfo;
         await this.companyInfo.platformController.deleteCompany(companyId);
