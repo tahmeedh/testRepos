@@ -2,7 +2,8 @@ import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../controller/base-controller';
+import { BaseController } from '../../../../../controller/base-controller';
+import { StringUtils } from '../../../../../helper/string-utils';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -34,22 +35,22 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartOneToOne();
-    await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    await app.chatController.sendContent();
-    Log.success(
-        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
+    await app.startChatButtonController.ClickOnStartChannel();
+    const title = StringUtils.generateString(3, 5);
+    await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'description');
+    await app.createChatController.fillOutWhoCanPostForm();
+    await app.createChatController.fillOutWhoCanJoinForm(
+        'restricted',
+        [],
+        [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
     );
+    await app.createChatController.CreateChannel();
+    const randomContent = StringUtils.generateString();
+    await app.chatController.sendContent(randomContent);
 
-    Log.info(`${testChatType} chat expects file attachment icon and string in draft state `);
-    const PNG = './asset/download.png';
-    await app.chatController.waitForHeader();
-    await app.attachmentController.attachFile(PNG);
-    await app.messageHubController.clickSideBarChatsButton();
-
-    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} presses back button`);
+    await app.chatController.backButton();
+    await expect(app.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

@@ -1,16 +1,16 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { StringUtils } from 'helper/string-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from 'controller/base-controller';
+import { Log } from 'Apis/api-helpers/log-utils';
+import { BaseController } from '../../../../controller/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
-let app = null;
 let context2 = null;
-let app1 = null;
+let app: BaseController;
+let app1: BaseController;
+
 let company: Company;
 let user1 = null;
 let user2 = null;
@@ -36,18 +36,12 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartChannel();
-    const title = StringUtils.generateString(3, 5);
-    await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'description');
-    await app.createChatController.fillOutWhoCanPostForm();
-    await app.createChatController.fillOutWhoCanJoinForm(
-        'open',
-        [],
-        [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
+    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    await app.chatController.sendContent();
+    Log.success(
+        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
-    await app.createChatController.CreateChannel();
-    const randomContent = StringUtils.generateString();
-    await app.chatController.sendContent(randomContent);
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await browser.newContext();
@@ -57,13 +51,13 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
 
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-
-    await app1.open(title);
-    await app1.inviteController.acceptInvite('Channel');
-
-    const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
-    await expect(messageReceived).toHaveText(randomContent);
+    Log.info(
+        `${user2.userInfo.firstName} ${user2.userInfo.lastName} goes to invite screen and back to message hub`
+    );
+    await app1.startChatButtonController.ClickOnStartOneToOne();
+    await app1.createChatController.CreateSUC(user1.userInfo.lastName);
+    await app1.chatController.backButton();
+    await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

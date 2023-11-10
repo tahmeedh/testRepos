@@ -1,14 +1,16 @@
-import { expect, test, chromium } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
-import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../../controller/base-controller';
+import { TestUtils } from 'helper/test-utils';
+import { BaseController } from 'controller/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
 let app = null;
+let context2 = null;
+let app1 = null;
 let company: Company;
 let user1 = null;
 let user2 = null;
@@ -36,28 +38,30 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartChannel();
     const title = StringUtils.generateString(3, 5);
-    await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
+    await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'description');
     await app.createChatController.fillOutWhoCanPostForm();
     await app.createChatController.fillOutWhoCanJoinForm(
-        'Restricted',
+        'open',
         [],
         [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
     );
     await app.createChatController.CreateChannel();
-    await app.chatController.sendContent();
-    Log.success(
-        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
-    );
+    const randomContent = StringUtils.generateString();
+    await app.chatController.sendContent(randomContent);
 
-    Log.info(`${testChatType} chat expects file attachment icon and string in draft state `);
-    const PNG = './asset/download.png';
-    await app.chatController.waitForHeader();
-    await app.attachmentController.attachFile(PNG);
-    await app.messageHubController.clickSideBarChatsButton();
+    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    context2 = await browser.newContext();
+    const page2 = await context2.newPage();
+    app1 = new BaseController(page2);
+    await app1.goToLoginPage();
+    await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
+    await app1.closeTooltips();
 
-    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
+
+    await app1.open(title);
+    await app1.chatController.backButton();
+    await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

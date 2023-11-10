@@ -2,8 +2,8 @@ import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../controller/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
+import { BaseController } from '../../../../controller/base-controller';
+import { StringUtils } from '../../../../helper/string-utils';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -40,7 +40,7 @@ test(`${testName} ${testTags}`, async () => {
 
     Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartWhatsapp();
-    const randonNumber = await app.createChatController.CreateWhatsapp();
+    const randonNumber = app.createChatController.CreateWhatsapp();
     await app.chatController.skipRecipientInfo();
     const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
@@ -48,14 +48,11 @@ test(`${testName} ${testTags}`, async () => {
         `SUCCESS: ${testChatType} conversation was created with '${randonNumber}' and random text string was '`
     );
 
-    Log.info(`${testChatType} chat expects ${draftText} string in draft state to be removed `);
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
     await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
-    await app.messageHubController.clickMessageHubRow(randonNumber);
-    await app.chatController.removeContent();
-    await app.messageHubController.clickSideBarChatsButton();
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
-    await expect(secondaryLine).toHaveCount(0);
+    await expect(secondaryLine).toHaveText(draftText);
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

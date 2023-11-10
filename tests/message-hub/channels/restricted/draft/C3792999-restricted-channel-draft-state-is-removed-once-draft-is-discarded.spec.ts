@@ -3,7 +3,7 @@ import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../../controller/base-controller';
+import { BaseController } from '../../../../../controller/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -39,25 +39,25 @@ test(`${testName} ${testTags}`, async () => {
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
     await app.createChatController.fillOutWhoCanPostForm();
     await app.createChatController.fillOutWhoCanJoinForm(
-        'open',
+        'restricted',
         [],
         [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
     );
     await app.createChatController.CreateChannel();
+    const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
     Log.success(
         `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
-
-    Log.info(`${testChatType} chat expects file attachment icon and string in draft state `);
-    const PNG = './asset/download.png';
-    await app.chatController.waitForHeader();
-    await app.attachmentController.attachFile(PNG);
+    await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
 
-    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state to be removed `);
+    await app.messageHubController.clickMessageHubRow(title);
+    await app.chatController.removeContent();
+    await app.messageHubController.clickSideBarChatsButton();
+    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
+    await expect(secondaryLine).toHaveCount(0);
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

@@ -1,29 +1,24 @@
-import { test, expect, chromium } from '@playwright/test';
+import { expect, test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
+import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../controller/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
+import { BaseController } from '../../../../../controller/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
-let app: BaseController;
-
+let app = null;
 let company: Company;
 let user1 = null;
+let user2 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
-
-    await Promise.all([
-        user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
-        user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
-    ]);
-
-    await user1.requestAndAssignWhatsAppNumber();
+    user2 = await company.createUser();
+    await company.addUserToEachOthersRoster([user1, user2]);
 });
 
 test(`${testName} ${testTags}`, async () => {
@@ -39,20 +34,31 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartWhatsapp();
-    const randonNumber = app.createChatController.CreateWhatsapp();
-    await app.chatController.skipRecipientInfo();
+    await app.startChatButtonController.ClickOnStartChannel();
+    const title = StringUtils.generateString(3, 5);
+    await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
+    await app.createChatController.fillOutWhoCanPostForm();
+    await app.createChatController.fillOutWhoCanJoinForm(
+        'open',
+        [],
+        [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
+    );
+
+    await app.createChatController.CreateChannel();
     const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
     Log.success(
-        `SUCCESS: ${testChatType} conversation was created with '${randonNumber}' and random text string was '`
+        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
-
-    Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
     await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
+
+    Log.info(`${testChatType} chat expects ${draftText} string in draft state to be removed `);
+    await app.messageHubController.clickMessageHubRow(title);
+    await app.chatController.removeContent();
+    await app.messageHubController.clickSideBarChatsButton();
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
-    await expect(secondaryLine).toHaveText(draftText);
+    await expect(secondaryLine).toHaveCount(0);
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

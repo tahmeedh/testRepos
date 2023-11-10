@@ -1,9 +1,9 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { StringUtils } from 'helper/string-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from 'controller/base-controller';
+import { Log } from 'Apis/api-helpers/log-utils';
+import { BaseController } from '../../../../../controller/base-controller';
+import { StringUtils } from '../../../../../helper/string-utils';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -41,7 +41,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'description');
     await app.createChatController.fillOutWhoCanPostForm();
     await app.createChatController.fillOutWhoCanJoinForm(
-        'open',
+        'restricted',
         [],
         [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
     );
@@ -57,13 +57,12 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
 
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-
+    Log.info(
+        `${user2.userInfo.firstName} ${user2.userInfo.lastName} goes to invite screen and back to message hub`
+    );
     await app1.open(title);
-    await app1.inviteController.acceptInvite('Channel');
-
-    const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
-    await expect(messageReceived).toHaveText(randomContent);
+    await app1.chatController.backButton();
+    await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

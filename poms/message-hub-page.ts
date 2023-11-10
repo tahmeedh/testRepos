@@ -3,6 +3,7 @@ import { BasePage } from './base-page';
 
 export class MessageHubPage extends BasePage {
     readonly page: Page;
+    readonly HUB_CONTAINER: Locator;
     readonly CHATS_BUTTON: Locator;
     readonly CONTACTS_BUTTON: Locator;
 
@@ -14,6 +15,7 @@ export class MessageHubPage extends BasePage {
     constructor(page: Page) {
         super(page);
 
+        this.HUB_CONTAINER = this.MESSAGEIFRAME.locator('.hub-container');
         //sidebar
         this.CHATS_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-chats-button');
         this.CONTACTS_BUTTON = this.CHATIFRAME.locator('.m-auto-contacts-button');
