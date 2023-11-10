@@ -38,7 +38,7 @@ export const API_ENDPOINTS = {
         'cpqa2-va1': 'https://cpqa2login.dev-globalrelay.net/main/json/v1',
         'cpqa2-ca1': 'https://cpqa2login.dev-globalrelay.net/main/json/v1',
         'cpqa2-sq1': 'https://cpqa2login.dev-globalrelay.net/main/json/v1',
-        cpqa1: 'https://cpqa1portal.dev-globalrelay.net/main/json/v1'
+        cpqa1: 'https://cpqa1login.dev-globalrelay.net/main/json/v1'
     },
     GAS_SERVICE_URL: {
         local: 'https://portal.dev-globalrelay.net/portal/login',

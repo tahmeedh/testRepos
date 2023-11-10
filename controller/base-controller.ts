@@ -13,6 +13,7 @@ import { PreviewAttachmentController } from './preview-attachment-controller';
 
 import { InviteController } from './invite-controller';
 import { MessageHubController } from './message-hub-controller';
+import 'dotenv/config';
 
 export class BaseController {
     readonly page: Page;

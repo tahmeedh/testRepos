@@ -8,12 +8,9 @@ import { User } from './user';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { Log } from './api-helpers/log-utils';
 import { MessageController } from './sm/message/message-controller';
-import { GskController } from './gas/gsk-controller';
-import { CsrfController } from './mds/csrf-controller';
-import { TwilioController } from './mds/twilio-controller';
-import { WhatsAppController } from './mds/whatsApp-controller';
 import 'dotenv/config';
 import { EndpointsType, EnvUtils } from './api-helpers/env-utils';
+import { CleanUpUtils } from './api-helpers/cleanUp-utils';
 
 export interface CompanyType {
     smClient: SMClient;
@@ -111,65 +108,9 @@ export class Company {
 
     async teardown() {
         Log.info(`===================== START: Tearing down company =====================`);
-        await Promise.all([
-            this._unassignAndReleaseAllTwilioNumbers(),
-            this._unassignAndRemoveAllWhatsAppAccount()
-        ]);
+        const { companyId } = this.companyInfo;
+        await CleanUpUtils.releaseAllPhoneNumbersFromCompany(companyId);
         await this.deleteCompany();
         Log.info('===================== END: Tear down completed =====================');
-    }
-
-    async _unassignAndReleaseAllTwilioNumbers() {
-        const { endpoints, companyId } = this.companyInfo;
-        const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
-        const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
-
-        const gskToken = await GskController.getGskToken(
-            ADMIN_USERNAME,
-            ADMIN_PASSWORD,
-            GAS_LOGIN_ENDPOINT,
-            GAS_SERVICE_URL
-        );
-        const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
-
-        const twilioController = new TwilioController(gskToken, csrfToken, MDS_ENDPOINT);
-        const twilioNumbers = await twilioController.getAllTwilioNumbersFromCompany(companyId);
-
-        Log.highlight(`Tearing down: Detected ${twilioNumbers.length} Twilio number.`);
-        for (const numberObj of twilioNumbers) {
-            const { number } = numberObj;
-            if (numberObj.user) {
-                const { id } = numberObj.user;
-                await twilioController.unassignTwilioNumberFromUser(id, number);
-            }
-            await twilioController.releaseTwilioNumberFromCompany(companyId, number);
-        }
-    }
-
-    async _unassignAndRemoveAllWhatsAppAccount() {
-        const { endpoints, companyId } = this.companyInfo;
-        const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
-        const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
-
-        const gskToken = await GskController.getGskToken(
-            ADMIN_USERNAME,
-            ADMIN_PASSWORD,
-            GAS_LOGIN_ENDPOINT,
-            GAS_SERVICE_URL
-        );
-        const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
-
-        const whatsAppController = new WhatsAppController(gskToken, csrfToken, MDS_ENDPOINT);
-        const whatsAppProviders = await whatsAppController.getAllWhatsAppAccountFromCompany(companyId);
-
-        Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp number.`);
-        for (const numberObj of whatsAppProviders) {
-            const { accountId } = numberObj;
-            if (numberObj.user) {
-                const { id } = numberObj.user;
-                await whatsAppController.unassignWhatsAppAccountFromUser(id, accountId);
-            }
-            await whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
-        }
     }
 }
