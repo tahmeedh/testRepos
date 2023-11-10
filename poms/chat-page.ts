@@ -23,6 +23,8 @@ export class ChatPage extends BasePage {
 
     constructor(page: Page) {
         super(page);
+
+        this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
         this.CHAT_INPUT_WRAPPER = this.CHATIFRAME.locator('.public-DraftEditor-content');
         this.CHAT_INPUT_SMS_WRAPPER = this.CHATIFRAME.locator('.chat-input-wrapper-sms');
         this.CHAT_INPUT = this.CHATIFRAME.getByRole('textbox', { name: 'input-label' });

@@ -6,6 +6,18 @@ export class TestUtils {
         return fileName;
     }
 
+    static getTestChatType(fullFilePath: string) {
+        const indexOfFilePathStartPosition = fullFilePath.indexOf('tests/') + 5;
+        const indexOfFilePathEndPosition = fullFilePath.lastIndexOf('/');
+        const filePath = fullFilePath.substring(indexOfFilePathStartPosition, indexOfFilePathEndPosition);
+        const tags = filePath.replace(/[/]/g, ' @');
+        const splitTags = tags.split(' @');
+        if (splitTags[2] === 'channels') {
+            return `${splitTags[3]} ${splitTags[2]}`;
+        }
+        return splitTags[2];
+    }
+
     static convertPathToTags(fullFilePath: string) {
         const indexOfFilePathStartPosition = fullFilePath.indexOf('tests/') + 5;
         const indexOfFilePathEndPosition = fullFilePath.lastIndexOf('/');
@@ -27,7 +39,8 @@ export class TestUtils {
             testName: this.getFileName(fullFilePath),
             testTags: this.convertPathToTags(fullFilePath),
             testID: this.getTestID(fullFilePath),
-            testAnnotation: this.getAnnotation(fullFilePath)
+            testAnnotation: this.getAnnotation(fullFilePath),
+            testChatType: this.getTestChatType(fullFilePath)
         };
     }
 
