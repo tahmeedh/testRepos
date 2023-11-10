@@ -1,3 +1,4 @@
+import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import axios from 'axios';
 
@@ -13,6 +14,8 @@ export class BandwidthController {
     }
 
     async assignBandwidthNumberToUser(userId: number, phoneNumber: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'post',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -33,15 +36,18 @@ export class BandwidthController {
                 `SUCCESS: Bandwidth Phone number '${phoneNumber}' has been assigned to user '${userId}'`
             );
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to assign Bandwidth phone number '${phoneNumber}' to '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async unassignBandwidthNumberFromUser(userId: number, phoneNumber: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+
         const config = {
             method: 'delete',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -62,11 +68,11 @@ export class BandwidthController {
                 `SUCCESS: Bandwidth Phone number '${phoneNumber}' has been unassigned from user '${userId}'`
             );
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to unassign Bandwidth phone number '${phoneNumber}' from '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 }

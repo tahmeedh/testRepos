@@ -1,3 +1,4 @@
+import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import axios from 'axios';
 
@@ -13,6 +14,8 @@ export class TwilioController {
     }
 
     async requestTwilioNumberToCompany(companyId: number, countryCode: string, prefix: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'post',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -34,15 +37,17 @@ export class TwilioController {
             Log.success(`SUCCESS: New phone number '${phoneNumber}' requested for company '${companyId}'`);
             return phoneNumber;
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to request new phone number for company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async releaseTwilioNumberFromCompany(companyId: number, phoneNumber: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'delete',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}`,
@@ -64,15 +69,17 @@ export class TwilioController {
                 `SUCCESS: Phone number '${phoneNumber}' has been released from company '${companyId}'`
             );
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to release Phone number '${phoneNumber}' from company '${companyId}: '`,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async setTwilioNumberFeatures(companyId: number, phoneNumber: number, features: object) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'put',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}/configuration`,
@@ -94,15 +101,17 @@ export class TwilioController {
                 `SUCCESS: Twilio Phone number '${phoneNumber}' features has been set for company '${companyId}'`
             );
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to release set Twilio phone number '${phoneNumber}' feature for company '${companyId}: '`,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async assignTwilioNumberToUser(userId: number, phoneNumber: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'post',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -123,15 +132,17 @@ export class TwilioController {
                 `SUCCESS: Twilio Phone number '${phoneNumber}' has been assigned to user '${userId}'`
             );
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to assign Twilio phone number '${phoneNumber}' to '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async unassignTwilioNumberFromUser(userId: number, phoneNumber: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'delete',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -152,15 +163,17 @@ export class TwilioController {
                 `SUCCESS: Twilio Phone number '${phoneNumber}' has been unassigned from user '${userId}'`
             );
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to unassign Twilio phone number '${phoneNumber}' from '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async getAllTwilioNumbersFromCompany(companyId: number) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -178,11 +191,11 @@ export class TwilioController {
             Log.success(`SUCCESS: Twilio numbers belong to company '${companyId}' obtained `);
             return result.data.numbers;
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable get Twilio numbers belong to company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 }

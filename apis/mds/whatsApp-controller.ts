@@ -1,3 +1,4 @@
+import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import axios from 'axios';
 
@@ -13,6 +14,8 @@ export class WhatsAppController {
     }
 
     async addWhatsAppProviderToCompany(companyId: number, accountId: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'post',
             url: `${this.endpoint}/company/${companyId}/providers/WHATSAPP/accounts`,
@@ -35,15 +38,17 @@ export class WhatsAppController {
             Log.success(`SUCCESS: WhatsApp Provider '${accountId}' added to company '${companyId}'`);
             return result;
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to add WhatsApp Provider '${accountId}' to company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async removeWhatsAppProviderFromCompany(companyId: number, accountId: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'DELETE',
             url: `${this.endpoint}/company/${companyId}/providers/WHATSAPP/accounts/${accountId}`,
@@ -65,15 +70,17 @@ export class WhatsAppController {
             );
             return result;
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to remove WhatsApp Provider '${accountId}' from company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async setWhatsAppAccountToActive(companyId: number, accountId: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'patch',
             url: `${this.endpoint}/company/${companyId}/providers/WHATSAPP/accounts/${accountId}`,
@@ -98,15 +105,17 @@ export class WhatsAppController {
             );
             return result;
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to set WhatsApp Account '${accountId}' to ACTIVE on company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async assignWhatsAppAccountToUser(userId: number, accountId: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'post',
             url: `${this.endpoint}/users/sm:${userId}/providers/WHATSAPP/accounts/${accountId}`,
@@ -126,15 +135,17 @@ export class WhatsAppController {
             Log.success(`SUCCESS: WhatsApp Account '${accountId}' is assigned to user '${userId}'`);
             return result;
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to assign WhatsApp Account '${accountId}' from user '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async unassignWhatsAppAccountFromUser(userId: number, accountId: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'delete',
             url: `${this.endpoint}/users/sm:${userId}/providers/WHATSAPP/accounts/${accountId}`,
@@ -154,15 +165,17 @@ export class WhatsAppController {
             Log.success(`SUCCESS: WhatsApp Account '${accountId}' is unassign to user '${userId}'`);
             return result;
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to unassign WhatsApp Account '${accountId}' from user '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async getAllWhatsAppAccountFromCompany(companyId: number) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/providers/WHATSAPP/accounts`,
@@ -180,11 +193,11 @@ export class WhatsAppController {
             Log.success(`SUCCESS: A list of WhatsApp Account for '${companyId}' is obtained`);
             return result.data.accounts;
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to obtain list of WhatsApp Account from company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 }

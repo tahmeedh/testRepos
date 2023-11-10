@@ -24,16 +24,20 @@ export class Log {
         console.info(message);
     }
 
-    static async success(message: string) {
-        console.info(consoleColor.FgGreen, message);
+    static async request(service: string, action: string) {
+        console.info(`...Sending request to ${service} to ${action}`);
     }
 
-    static async error(message: string, error) {
-        console.error(consoleColor.FgRed, message, error);
+    static async success(message: string) {
+        console.info(consoleColor.FgGreen, `SUSCESS: ${message}`);
+    }
+
+    static async error(message: string) {
+        console.error(consoleColor.FgRed, `ERROR: ${message}`);
     }
 
     static async warn(message: string) {
-        console.warn(consoleColor.FgYellow, message);
+        console.warn(consoleColor.FgYellow, `WARNING: ${message}`);
     }
 
     static async highlight(message: string) {

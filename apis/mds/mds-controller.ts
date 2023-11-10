@@ -1,3 +1,4 @@
+import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import axios from 'axios';
 
@@ -13,6 +14,8 @@ export class MdsController {
     }
 
     async getUsersFromCompany(companyId: number) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/users`,
@@ -30,15 +33,17 @@ export class MdsController {
             Log.success(`SUCCESS: List of users from compnay '${companyId}' obtained`);
             return listOfUsers;
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to obtain list of users from company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 
     async getUserFromCompanyByEmail(companyId: number, email: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/users?query=${email}`,
@@ -58,11 +63,11 @@ export class MdsController {
             Log.success(`SUCCESS: User with email '${email}' from compnay '${companyId}' obtained`);
             return user[0];
         } catch (error) {
-            Log.error(
-                `FAILURE: Unable to get users with email '${email}' from company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 }

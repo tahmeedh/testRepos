@@ -1,8 +1,11 @@
+import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import axios from 'axios';
 
 export class CsrfController {
     static async getCsrfToken(gsk: string, mdsEndpoint: string) {
+        const functionName = AxiosUtils.getFunctionInfo().functionName
+        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
         const config = {
             method: 'get',
             url: `${mdsEndpoint}/csrf`,
@@ -20,8 +23,11 @@ export class CsrfController {
             Log.success(`SUCCESS: CSRF token obtained: '${csrfToken}`);
             return csrfToken;
         } catch (error) {
-            Log.error('FAILURE: Unable to get CSRF token from MDS: ', error.response.data);
-            throw error.response.data;
+            await AxiosUtils.handleAxiosError(
+                functionName,
+                functionLocation,
+                error
+            )
         }
     }
 }
