@@ -64,6 +64,24 @@ export class CreateChatController {
         });
     }
 
+    async SearchMucUser(username: string = StringUtils.generatePhoneNumber()) {
+        return test.step('Create Chat Controller : create SMS', async () => {
+            Log.info(`Search for ${username}`);
+            await this.Pom.MUC_SEARCH_INPUT.click();
+            await this.Pom.MUC_SEARCH_INPUT.fill(username);
+            return username;
+        });
+    }
+
+    async SearchSucUser(username: string = StringUtils.generatePhoneNumber()) {
+        return test.step('Create Chat Controller : create SMS', async () => {
+            Log.info(`Search for ${username}`);
+            await this.Pom.SUC_SEARCH_INPUT.click();
+            await this.Pom.SUC_SEARCH_INPUT.fill(username);
+            return username;
+        });
+    }
+
     async CreateWhatsapp(phoneNumber: string = StringUtils.generatePhoneNumber()) {
         return test.step('Create Chat Controller : create SUC', async () => {
             // Search for user
