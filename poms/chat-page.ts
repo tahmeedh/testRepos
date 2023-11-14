@@ -9,6 +9,7 @@ export class ChatPage extends BasePage {
     readonly SEND_BUTTON: Locator;
     readonly ACCEPT_BUTTON: Locator;
     readonly CHAT_HEADER_MENU: Locator;
+    readonly CHAT_BACK_BUTTON: Locator;
 
     readonly ALL_CONTENT: Locator;
     readonly TIMESTAMP_CONTAINER: Locator;
@@ -18,7 +19,7 @@ export class ChatPage extends BasePage {
     readonly FILESHARING_OPTION_DROPDOWN_BTN: Locator;
     readonly FILESHARING_DOWNLOAD_BTN: Locator;
     readonly RECIPIENT_INFO_SKIP_BUTTON: Locator;
-    readonly CHAT_BACK_BUTTON: Locator;
+    readonly CHAT_FLAG_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -36,6 +37,9 @@ export class ChatPage extends BasePage {
         this.ALL_CONTENT = this.CHATIFRAME.locator(
             '.m-auto-chat-container .chat-area .m-auto-message-content'
         );
+
+        this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
+        this.CHAT_FLAG_BUTTON = this.CHATIFRAME.locator('.m-auto-flag-icon');
 
         this.INCOMING_PARTIAL = this.CHATIFRAME.locator('.m-auto-chat-bubble-incoming');
         this.INCOMING_PARTIAL_MUC = this.CHATIFRAME.locator('.m-auto-muc-chat-bubble-incoming');
