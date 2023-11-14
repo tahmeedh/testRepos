@@ -61,14 +61,14 @@ test(`${testName} ${testTags}`, async () => {
     await app1.messageHubController.clickSideBarChatsButton();
 
     // verify that chat is flagged
-    await expect(app1.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
+    await expect(app1.messageHubController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
     // again open the chat again
     await app1.open(title);
 
     // unflag chat
     await app1.chatController.clickChatFlagButton();
     await app1.messageHubController.clickSideBarChatsButton();
-    await expect(app1.Pom.CHAT_FLAG_INDICATOR).toBeHidden();
+    await expect(app1.messageHubController.Pom.CHAT_FLAG_INDICATOR).toBeHidden();
 });
 
 test.afterEach(async () => {

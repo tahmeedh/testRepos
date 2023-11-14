@@ -14,7 +14,6 @@ export class BasePage {
 
     readonly SETTINGS_BAR_BUTTON: Locator;
     readonly LOG_OUT_BUTTON: Locator;
-    readonly CHAT_FLAG_INDICATOR: Locator;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -32,7 +31,6 @@ export class BasePage {
         // this.ENABLE_NOTIFICATION_BUTTON = this.MESSAGEIFRAME.locator('.NewsAlert_visibility-on__E-B1n');
         this.ENABLE_NOTIFICATION_BUTTON = this.page.getByRole('button', { name: 'Enable' });
         this.CLOSE_NOTIFICATION_BUTTON = this.page.locator('span').first();
-        this.CHAT_FLAG_INDICATOR = this.MESSAGEIFRAME.locator('.grid-item__flag');
 
         this.SETTINGS_BAR_BUTTON = this.page.locator('.m-auto-header-main-menu-image');
         this.LOG_OUT_BUTTON = this.page.locator('.m-auto-header-main-menu-logout');
