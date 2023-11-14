@@ -11,6 +11,7 @@ export class MessageHubPage extends BasePage {
     readonly DRAFT_TEXT_LINE: Locator;
     readonly ATTACHMENT_ICON: Locator;
     readonly ATTACHMENT_TEXT_LINE: Locator;
+    readonly CHAT_FLAG_INDICATOR: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -25,5 +26,6 @@ export class MessageHubPage extends BasePage {
         this.DRAFT_TEXT_LINE = this.MESSAGEIFRAME.locator('.list-item-text-draft');
         this.ATTACHMENT_ICON = this.MESSAGEIFRAME.locator('.list-item-text-icon');
         this.ATTACHMENT_TEXT_LINE = this.MESSAGEIFRAME.getByText('Attachment');
+        this.CHAT_FLAG_INDICATOR = this.MESSAGEIFRAME.locator('.grid-item__flag');
     }
 }
