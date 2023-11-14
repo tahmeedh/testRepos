@@ -43,7 +43,7 @@ export class ChatController {
         });
     }
 
-    async naviagteToMessageHub() {
+    async clickOnBackButton() {
         await test.step('Chat Controller: Naviagate back to Message Hub', async () => {
             await this.Pom.CHAT_BACK_BUTTON.click();
         });

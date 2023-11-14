@@ -1,7 +1,7 @@
 import { test, chromium, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../controller/base-controller';
+import { BaseController } from '../../../../controller/base-controller';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -47,7 +47,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.clickChatFlagButton();
 
     // to verify that flag icon shows up in the message hub
-    await app.chatController.naviagteToMessageHub();
+    await app.chatController.clickOnBackButton();
 
     // Verify the flag
     await expect(app.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
