@@ -12,8 +12,6 @@ export class BandwidthController {
     }
 
     async assignBandwidthNumberToUser(userId: number, phoneNumber: string) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'post',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -27,17 +25,11 @@ export class BandwidthController {
 
         await AxiosUtils.axiosRequest(
             config,
-            2,
-            `request to MDS to assign Bandwidth phone number '${phoneNumber}' to user '${userId}'`,
-            functionName,
-            functionLocation
+            `request to MDS to assign Bandwidth phone number '${phoneNumber}' to user '${userId}'`
         );
     }
 
     async unassignBandwidthNumberFromUser(userId: number, phoneNumber: string) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
-
         const config = {
             method: 'delete',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -51,10 +43,7 @@ export class BandwidthController {
 
         await AxiosUtils.axiosRequest(
             config,
-            2,
-            `...request to MDS to unassign Bandwidth phone number '${phoneNumber}' from user '${userId}'`,
-            functionName,
-            functionLocation
+            `...request to MDS to unassign Bandwidth phone number '${phoneNumber}' from user '${userId}'`
         );
     }
 }

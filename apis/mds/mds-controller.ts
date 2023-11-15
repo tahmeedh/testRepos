@@ -12,8 +12,6 @@ export class MdsController {
     }
 
     async getUsersFromCompany(companyId: number) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/users`,
@@ -27,18 +25,13 @@ export class MdsController {
 
         const response = await AxiosUtils.axiosRequest(
             config,
-            2,
-            `request to MDS to request list of users from company  '${companyId}'`,
-            functionName,
-            functionLocation
+            `request to MDS to request list of users from company  '${companyId}'`
         );
         const listOfUsers = response.data.users;
         return listOfUsers;
     }
 
     async getUserFromCompanyByEmail(companyId: number, email: string) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/users?query=${email}`,
@@ -52,10 +45,7 @@ export class MdsController {
 
         const response = await AxiosUtils.axiosRequest(
             config,
-            2,
-            `request to MDS to retrieve user with email '${email}' from company '${companyId}''${companyId}'`,
-            functionName,
-            functionLocation
+            `request to MDS to retrieve user with email '${email}' from company '${companyId}''${companyId}'`
         );
         const user = response.data.users;
         return user[0];
