@@ -2,6 +2,7 @@ import type { Page } from '@playwright/test';
 import { test } from '@playwright/test';
 import { StringUtils } from 'helper/string-utils';
 import { CreateChatPage } from '../poms/create-chat-page';
+import { Log } from '../apis/api-helpers/log-utils';
 /* eslint-disable no-await-in-loop */
 
 export class CreateChatController {
@@ -15,7 +16,7 @@ export class CreateChatController {
 
     async CreateSUC(username: string) {
         await test.step('Create Chat Controller : create SUC', async () => {
-            // Search for user
+            Log.info(`Search for ${username}`);
             await this.Pom.SUC_SEARCH_INPUT.click();
             await this.Pom.SUC_SEARCH_INPUT.fill(username);
             // click on user
@@ -26,6 +27,7 @@ export class CreateChatController {
     async createMUC(users: string[], subject: string = StringUtils.generateString()) {
         return test.step('Create Chat Controller : Select User', async () => {
             for (const username of users) {
+                Log.info(`Search for ${username}`);
                 await this.Pom.MUC_SEARCH_INPUT.click();
                 await this.Pom.MUC_SEARCH_INPUT.fill(username);
                 await this.Pom.CHATIFRAME.getByText(username).click();
@@ -41,10 +43,10 @@ export class CreateChatController {
 
     async CreateSMS(phoneNumber: string = StringUtils.generatePhoneNumber()) {
         return test.step('Create Chat Controller : create SMS', async () => {
-            // Search for user
+            Log.info(`Search for ${phoneNumber}`);
             const formatted = StringUtils.formatPhoneNumber(phoneNumber);
-            await this.Pom.NUMBER_SEARCH_INPUT.click();
-            await this.Pom.NUMBER_SEARCH_INPUT.fill(formatted);
+            await this.Pom.EXTERNAL_SEARCH_INPUT.click();
+            await this.Pom.EXTERNAL_SEARCH_INPUT.fill(formatted);
             // click on user
             await this.Pom.CHATIFRAME.getByText(formatted).click();
             await this.Pom.NEXT_BUTTON.click();
@@ -52,12 +54,40 @@ export class CreateChatController {
             return formatted;
         });
     }
+
+    async SearchSMSUser(username: string = StringUtils.generatePhoneNumber()) {
+        return test.step('Create Chat Controller : create SMS', async () => {
+            Log.info(`Search for ${username}`);
+            await this.Pom.EXTERNAL_SEARCH_INPUT.click();
+            await this.Pom.EXTERNAL_SEARCH_INPUT.fill(username);
+            return username;
+        });
+    }
+
+    async SearchMucUser(username: string = StringUtils.generatePhoneNumber()) {
+        return test.step('Create Chat Controller : create SMS', async () => {
+            Log.info(`Search for ${username}`);
+            await this.Pom.MUC_SEARCH_INPUT.click();
+            await this.Pom.MUC_SEARCH_INPUT.fill(username);
+            return username;
+        });
+    }
+
+    async SearchSucUser(username: string = StringUtils.generatePhoneNumber()) {
+        return test.step('Create Chat Controller : create SMS', async () => {
+            Log.info(`Search for ${username}`);
+            await this.Pom.SUC_SEARCH_INPUT.click();
+            await this.Pom.SUC_SEARCH_INPUT.fill(username);
+            return username;
+        });
+    }
+
     async CreateWhatsapp(phoneNumber: string = StringUtils.generatePhoneNumber()) {
         return test.step('Create Chat Controller : create SUC', async () => {
             // Search for user
             const formatted = StringUtils.formatPhoneNumber(phoneNumber);
-            await this.Pom.NUMBER_SEARCH_INPUT.click();
-            await this.Pom.NUMBER_SEARCH_INPUT.fill(formatted);
+            await this.Pom.EXTERNAL_SEARCH_INPUT.click();
+            await this.Pom.EXTERNAL_SEARCH_INPUT.fill(formatted);
             // click on user
             await this.Pom.CHATIFRAME.getByText(formatted).click();
             await this.Pom.NEXT_BUTTON.click();

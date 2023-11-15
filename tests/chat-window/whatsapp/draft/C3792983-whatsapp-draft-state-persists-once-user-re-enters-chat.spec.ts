@@ -1,8 +1,8 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../controller/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
+import { BaseController } from '../../../../controller/base-controller';
+import { StringUtils } from '../../../../helper/string-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -22,7 +22,7 @@ test.beforeEach(async () => {
         user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
     ]);
 
-    await user1.requestAndAssignTwilioNumber();
+    await user1.requestAndAssignWhatsAppNumber();
 });
 
 test(`${testName} ${testTags}`, async () => {
@@ -38,8 +38,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     // user start 1-1
-    await app.startChatButtonController.ClickOnStartSMS();
-    const randonNumber = await app.createChatController.CreateSMS();
+    await app.startChatButtonController.ClickOnStartWhatsapp();
+    const randonNumber = await app.createChatController.CreateWhatsapp();
     await app.chatController.skipRecipientInfo();
     // user send message in conversation
 

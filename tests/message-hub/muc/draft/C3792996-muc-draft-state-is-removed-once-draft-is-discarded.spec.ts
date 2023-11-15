@@ -2,8 +2,8 @@ import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../controller/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
+import { BaseController } from '../../../../controller/base-controller';
+import { StringUtils } from '../../../../helper/string-utils';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -12,18 +12,16 @@ let app: BaseController;
 
 let company: Company;
 let user1 = null;
+let user2 = null;
+let user3 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
-
-    await Promise.all([
-        user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
-        user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
-    ]);
-
-    await user1.requestAndAssignTwilioNumber();
+    user2 = await company.createUser();
+    user3 = await company.createUser();
+    await company.addUserToEachOthersRoster([user1, user2]);
 });
 
 test(`${testName} ${testTags}`, async () => {
@@ -34,26 +32,25 @@ test(`${testName} ${testTags}`, async () => {
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
-
     await app.goToLoginPage();
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartSMS();
-    const randonNumber = await app.createChatController.CreateSMS();
-    await app.chatController.skipRecipientInfo();
-    // user send message in conversation
+    await app.startChatButtonController.ClickOnStartMUC();
+    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
+    const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
+    const subject = await app.createChatController.createMUC([user2fullName, user3fullName]);
     const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
     Log.success(
-        `SUCCESS: ${testChatType} conversation was created with '${randonNumber}' and random text string was '`
+        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
-    await app.chatController.typeContent(draftText);
-    await app.messageHubController.clickSideBarChatsButton();
 
     Log.info(`${testChatType} chat expects ${draftText} string in draft state to be removed `);
-    await app.messageHubController.clickMessageHubRow(randonNumber);
+    await app.chatController.typeContent(draftText);
+    await app.messageHubController.clickSideBarChatsButton();
+    await app.messageHubController.clickMessageHubRow(subject);
     await app.chatController.removeContent();
     await app.messageHubController.clickSideBarChatsButton();
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);

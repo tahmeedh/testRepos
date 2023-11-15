@@ -14,6 +14,7 @@ export class BasePage {
 
     readonly SETTINGS_BAR_BUTTON: Locator;
     readonly LOG_OUT_BUTTON: Locator;
+    readonly AVATAR: Locator;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -34,5 +35,6 @@ export class BasePage {
 
         this.SETTINGS_BAR_BUTTON = this.page.locator('.m-auto-header-main-menu-image');
         this.LOG_OUT_BUTTON = this.page.locator('.m-auto-header-main-menu-logout');
+        this.AVATAR = this.CHATIFRAME.locator('.m-auto-avatar-container');
     }
 }

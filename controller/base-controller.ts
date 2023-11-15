@@ -13,6 +13,7 @@ import { PreviewAttachmentController } from './preview-attachment-controller';
 
 import { InviteController } from './invite-controller';
 import { MessageHubController } from './message-hub-controller';
+import { VCardController } from './v-card-controller';
 import 'dotenv/config';
 
 export class BaseController {
@@ -25,6 +26,7 @@ export class BaseController {
     readonly attachmentController: PreviewAttachmentController;
     readonly inviteController: InviteController;
     readonly messageHubController: MessageHubController;
+    readonly vCardController: VCardController;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -39,6 +41,7 @@ export class BaseController {
         this.attachmentController = new PreviewAttachmentController(this.page);
         this.inviteController = new InviteController(this.page);
         this.messageHubController = new MessageHubController(this.page);
+        this.vCardController = new VCardController(this.page);
     }
 
     async closeTooltips() {
@@ -86,6 +89,12 @@ export class BaseController {
         await test.step('Base Controller : Open MUC or Channel', async () => {
             const chat = this.Pom.MESSAGEIFRAME.getByText(title);
             await chat.click();
+        });
+    }
+
+    async clickAvatar(nth: string) {
+        await test.step('Click avatar in enter v-card', async () => {
+            await this.Pom.AVATAR.nth(parseFloat(nth)).click();
         });
     }
 
