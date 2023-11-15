@@ -73,3 +73,17 @@ test(`${testName} ${testTags} @Mini-vCard @Mini-vCard-sanity`, async ({ page }) 
 })
 
 ```
+
+### Implimented features
+| Feature | Create | Update | Delete |
+| --- | --- | --- | --- |
+| Company | ✅ | ❌ | ✅ |
+| Company directory settings | N/A | ✅ | N/A |
+| Roles | ✅ | ✅  | ✅ |
+| Groups | ❌ | ❌ | ❌ |
+| User | ✅ | ✅  | ✅ |
+| User Entitlements | ✅ | ✅  | ✅ |
+| Add user to Roster | ✅(add to roster) | ✅(modify roster) | ✅(remove from roster) |
+| Twilio Number | ✅ | ✅  | ✅ |
+| Bandwidth Number | ❌ | ❌ | ❌ |
+| WhatsApp Number | ✅ | ✅  | ✅ |
