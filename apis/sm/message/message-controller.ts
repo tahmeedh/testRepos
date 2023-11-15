@@ -26,7 +26,7 @@ export class MessageController {
             });
             Log.info(`Sending request to modify roster for user '${userId}'`);
             await this.client.message.updateRoster(userId, [deltaStruct]);
-            Log.success(`SUCCESS: Roster has been modified for user '${userId}'`);
+            Log.success(`Roster has been modified for user '${userId}'`);
         } catch (error) {
             Log.error(`FAILURE: Unable to modify roster of '${userId}'`, error.description);
             throw error;
@@ -38,7 +38,7 @@ export class MessageController {
             const entryOperation = RosterEntryOperation.ADD;
             Log.info(`...Sending request to add '${targetGrcpAlias}' to the roster of '${userId}'`);
             await this._modifyRoster(userId, targetGrcpAlias, entryOperation);
-            Log.success(`SUCCESS: User '${targetGrcpAlias}' has been added to the roster of '${userId}'`);
+            Log.success(`User '${targetGrcpAlias}' has been added to the roster of '${userId}'`);
         } catch (error) {
             Log.error(
                 `FAILURE: Unable to add ${targetGrcpAlias} to roster of '${userId}'`,
@@ -53,7 +53,7 @@ export class MessageController {
             const entryOperation = RosterEntryOperation.DELETE;
             Log.info(`...Sending request to add '${targetGrcpAlias}' to the roster of '${userId}'`);
             await this._modifyRoster(userId, targetGrcpAlias, entryOperation);
-            Log.success(`SUCCESS: User '${targetGrcpAlias}' has been added to the roster of '${userId}'`);
+            Log.success(`User '${targetGrcpAlias}' has been added to the roster of '${userId}'`);
         } catch (error) {
             Log.error(
                 `FAILURE: Unable to remove ${targetGrcpAlias} to roster of '${userId}'`,

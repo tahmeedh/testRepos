@@ -42,7 +42,7 @@ test('C888', async () => {
         const accountId = getUserWhatsAppAccountId(user);
         await whatsAppController.unassignWhatsAppAccountFromUser(userId, accountId);
         await whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId);
-        Log.success(`SUCCESS: WhatsApp entitlement has been suscessfully removed from user '${userEmail}'`);
+        Log.success(`SUCCESS: WhatsApp entitlement has been successfully removed from user '${userEmail}'`);
     } catch (error) {
         Log.error(`FAILURE: An error occured when removing WhatsApp from user`, error);
         test.fail();

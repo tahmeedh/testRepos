@@ -1,5 +1,4 @@
-import { Log } from 'Apis/api-helpers/log-utils';
-import axios from 'axios';
+import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
 
 export class BandwidthController {
     endpoint: string;
@@ -24,21 +23,10 @@ export class BandwidthController {
             }
         };
 
-        try {
-            Log.info(
-                `...Sending request to MDS to assign Bandwidth phone number '${phoneNumber}' to user '${userId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Bandwidth Phone number '${phoneNumber}' has been assigned to user '${userId}'`
-            );
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to assign Bandwidth phone number '${phoneNumber}' to '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to assign Bandwidth phone number '${phoneNumber}' to user '${userId}'`
+        );
     }
 
     async unassignBandwidthNumberFromUser(userId: number, phoneNumber: string) {
@@ -53,20 +41,9 @@ export class BandwidthController {
             }
         };
 
-        try {
-            Log.info(
-                `...Sending request to MDS to unassign Bandwidth phone number '${phoneNumber}' from user '${userId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Bandwidth Phone number '${phoneNumber}' has been unassigned from user '${userId}'`
-            );
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to unassign Bandwidth phone number '${phoneNumber}' from '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            `...request to MDS to unassign Bandwidth phone number '${phoneNumber}' from user '${userId}'`
+        );
     }
 }

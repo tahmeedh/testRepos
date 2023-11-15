@@ -1,5 +1,4 @@
-import { Log } from 'Apis/api-helpers/log-utils';
-import axios from 'axios';
+import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
 
 export class WhatsAppController {
     endpoint: string;
@@ -28,19 +27,11 @@ export class WhatsAppController {
                 type: 'FEDERATED'
             }
         };
-
-        try {
-            Log.info(`...Sending request to MDS to add WhatsApp Provider to company '${companyId}'`);
-            const result = await axios.request(config);
-            Log.success(`SUCCESS: WhatsApp Provider '${accountId}' added to company '${companyId}'`);
-            return result;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to add WhatsApp Provider '${accountId}' to company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to add WhatsApp Provider to company '${companyId}'`
+        );
+        return response;
     }
 
     async removeWhatsAppProviderFromCompany(companyId: number, accountId: string) {
@@ -54,23 +45,11 @@ export class WhatsAppController {
                 Cookie: this.gsk
             }
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to remove WhatsApp Provider '${accountId}' from company '${companyId}'`
-            );
-            const result = await axios.request(config);
-            Log.success(
-                `SUCCESS: WhatsApp Provider '${accountId}' has been removed from company '${companyId}'`
-            );
-            return result;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to remove WhatsApp Provider '${accountId}' from company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to remove WhatsApp Provider '${accountId}' from company '${companyId}'`
+        );
+        return response;
     }
 
     async setWhatsAppAccountToActive(companyId: number, accountId: string) {
@@ -87,23 +66,11 @@ export class WhatsAppController {
                 status: 'ACTIVE'
             }
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to set WhatsApp Account '${accountId}' to ACTIVE on company '${companyId}'`
-            );
-            const result = await axios.request(config);
-            Log.success(
-                `SUCCESS: WhatsApp Provider '${accountId}' is now set to ACTIVE on company '${companyId}'`
-            );
-            return result;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to set WhatsApp Account '${accountId}' to ACTIVE on company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to set WhatsApp Account '${accountId}' to ACTIVE on company '${companyId}'`
+        );
+        return response;
     }
 
     async assignWhatsAppAccountToUser(userId: number, accountId: string) {
@@ -117,21 +84,11 @@ export class WhatsAppController {
                 Cookie: this.gsk
             }
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to assign WhatsApp Account '${accountId}' to user '${userId}'`
-            );
-            const result = await axios.request(config);
-            Log.success(`SUCCESS: WhatsApp Account '${accountId}' is assigned to user '${userId}'`);
-            return result;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to assign WhatsApp Account '${accountId}' from user '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to assign WhatsApp Account '${accountId}' to user '${userId}'`
+        );
+        return response;
     }
 
     async unassignWhatsAppAccountFromUser(userId: number, accountId: string) {
@@ -145,21 +102,11 @@ export class WhatsAppController {
                 Cookie: this.gsk
             }
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to unassign WhatsApp Account '${accountId}' to user '${userId}'`
-            );
-            const result = await axios.request(config);
-            Log.success(`SUCCESS: WhatsApp Account '${accountId}' is unassign to user '${userId}'`);
-            return result;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to unassign WhatsApp Account '${accountId}' from user '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to unassign WhatsApp Account '${accountId}' to user '${userId}'`
+        );
+        return response;
     }
 
     async getAllWhatsAppAccountFromCompany(companyId: number) {
@@ -174,17 +121,10 @@ export class WhatsAppController {
             }
         };
 
-        try {
-            Log.info(`...Sending request to MDS to get a list of WhatsApp Account from '${companyId}'`);
-            const result = await axios.request(config);
-            Log.success(`SUCCESS: A list of WhatsApp Account for '${companyId}' is obtained`);
-            return result.data.accounts;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to obtain list of WhatsApp Account from company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to get a list of WhatsApp Account from '${companyId}'`
+        );
+        return response.data.accounts;
     }
 }

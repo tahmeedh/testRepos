@@ -25,15 +25,15 @@ export class Log {
     }
 
     static async success(message: string) {
-        console.info(consoleColor.FgGreen, message);
+        console.info(consoleColor.FgGreen, `SUCCESS: ${message}`);
     }
 
     static async error(message: string, error) {
-        console.error(consoleColor.FgRed, message, error);
+        console.error(consoleColor.FgRed, `ERROR: ${message} - ${error}`);
     }
 
     static async warn(message: string) {
-        console.warn(consoleColor.FgYellow, message);
+        console.warn(consoleColor.FgYellow, `WARNING: ${message}`);
     }
 
     static async highlight(message: string) {

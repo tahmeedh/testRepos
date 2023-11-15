@@ -1,5 +1,4 @@
-import { Log } from 'Apis/api-helpers/log-utils';
-import axios from 'axios';
+import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
 
 export class TwilioController {
     endpoint: string;
@@ -27,19 +26,12 @@ export class TwilioController {
                 prefix
             }
         };
-        try {
-            Log.info(`...Sending request to MDS to request phone number for company  '${companyId}'`);
-            const response = await axios.request(config);
-            const phoneNumber = response.data.number;
-            Log.success(`SUCCESS: New phone number '${phoneNumber}' requested for company '${companyId}'`);
-            return phoneNumber;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to request new phone number for company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to request phone number for company  '${companyId}'`
+        );
+        const phoneNumber = response.data.number;
+        return phoneNumber;
     }
 
     async releaseTwilioNumberFromCompany(companyId: number, phoneNumber: string) {
@@ -54,22 +46,10 @@ export class TwilioController {
             },
             response: false
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Phone number '${phoneNumber}' has been released from company '${companyId}'`
-            );
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to release Phone number '${phoneNumber}' from company '${companyId}: '`,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`
+        );
     }
 
     async setTwilioNumberFeatures(companyId: number, phoneNumber: number, features: object) {
@@ -84,22 +64,10 @@ export class TwilioController {
             },
             data: features
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to set Twilio phone number '${phoneNumber}' features for company '${companyId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Twilio Phone number '${phoneNumber}' features has been set for company '${companyId}'`
-            );
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to release set Twilio phone number '${phoneNumber}' feature for company '${companyId}: '`,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`
+        );
     }
 
     async assignTwilioNumberToUser(userId: number, phoneNumber: string) {
@@ -113,22 +81,10 @@ export class TwilioController {
                 Cookie: this.gsk
             }
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to assign Twilio phone number '${phoneNumber}' to user '${userId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Twilio Phone number '${phoneNumber}' has been assigned to user '${userId}'`
-            );
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to assign Twilio phone number '${phoneNumber}' to '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to assign Twilio phone number '${phoneNumber}' to user '${userId}'`
+        );
     }
 
     async unassignTwilioNumberFromUser(userId: number, phoneNumber: string) {
@@ -142,22 +98,10 @@ export class TwilioController {
                 Cookie: this.gsk
             }
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to unassign Twilio phone number '${phoneNumber}' from user '${userId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Twilio Phone number '${phoneNumber}' has been unassigned from user '${userId}'`
-            );
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable to unassign Twilio phone number '${phoneNumber}' from '${userId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to unassign Twilio phone number '${phoneNumber}' from user '${userId}'`
+        );
     }
 
     async getAllTwilioNumbersFromCompany(companyId: number) {
@@ -171,18 +115,10 @@ export class TwilioController {
                 Cookie: this.gsk
             }
         };
-
-        try {
-            Log.info(`...Sending request to MDS to get all Twilio numbers belong to company '${companyId}'`);
-            const result = await axios.request(config);
-            Log.success(`SUCCESS: Twilio numbers belong to company '${companyId}' obtained `);
-            return result.data.numbers;
-        } catch (error) {
-            Log.error(
-                `FAILURE: Unable get Twilio numbers belong to company '${companyId}': `,
-                error.response.data
-            );
-            throw error.response.data;
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to get all Twilio numbers belong to company '${companyId}'`
+        );
+        return response.data.numbers;
     }
 }
