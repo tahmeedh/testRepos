@@ -52,7 +52,7 @@ test('C777', async () => {
             await whatsAppController.assignWhatsAppAccountToUser(userId, accountId);
         }
 
-        Log.success(`SUCCESS: WhatsApp entitlement has been suscessfully assigned to user ${userEmail}`);
+        Log.success(`SUCCESS: WhatsApp entitlement has been successfully assigned to user ${userEmail}`);
     } catch (error) {
         Log.error(`FAILURE: An error occured when assigning WhatsApp entitlements`, error);
         test.fail();
