@@ -1,6 +1,4 @@
 import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
-import axios from 'axios';
 
 export class TwilioController {
     endpoint: string;
@@ -14,8 +12,8 @@ export class TwilioController {
     }
 
     async requestTwilioNumberToCompany(companyId: number, countryCode: string, prefix: string) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'post',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -30,24 +28,20 @@ export class TwilioController {
                 prefix
             }
         };
-        try {
-            Log.info(`...Sending request to MDS to request phone number for company  '${companyId}'`);
-            const response = await axios.request(config);
-            const phoneNumber = response.data.number;
-            Log.success(`SUCCESS: New phone number '${phoneNumber}' requested for company '${companyId}'`);
-            return phoneNumber;
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `request to MDS to request phone number for company  '${companyId}'`,
+            functionName,
+            functionLocation
+        );
+        const phoneNumber = response.data.number;
+        return phoneNumber;
     }
 
     async releaseTwilioNumberFromCompany(companyId: number, phoneNumber: string) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'delete',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}`,
@@ -59,27 +53,18 @@ export class TwilioController {
             },
             response: false
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Phone number '${phoneNumber}' has been released from company '${companyId}'`
-            );
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`,
+            functionName,
+            functionLocation
+        );
     }
 
     async setTwilioNumberFeatures(companyId: number, phoneNumber: number, features: object) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'put',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}/configuration`,
@@ -91,27 +76,18 @@ export class TwilioController {
             },
             data: features
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to set Twilio phone number '${phoneNumber}' features for company '${companyId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Twilio Phone number '${phoneNumber}' features has been set for company '${companyId}'`
-            );
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`,
+            functionName,
+            functionLocation
+        );
     }
 
     async assignTwilioNumberToUser(userId: number, phoneNumber: string) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'post',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -122,27 +98,18 @@ export class TwilioController {
                 Cookie: this.gsk
             }
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to assign Twilio phone number '${phoneNumber}' to user '${userId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Twilio Phone number '${phoneNumber}' has been assigned to user '${userId}'`
-            );
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `request to MDS to assign Twilio phone number '${phoneNumber}' to user '${userId}'`,
+            functionName,
+            functionLocation
+        );
     }
 
     async unassignTwilioNumberFromUser(userId: number, phoneNumber: string) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'delete',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -153,27 +120,18 @@ export class TwilioController {
                 Cookie: this.gsk
             }
         };
-
-        try {
-            Log.info(
-                `...Sending request to MDS to unassign Twilio phone number '${phoneNumber}' from user '${userId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Twilio Phone number '${phoneNumber}' has been unassigned from user '${userId}'`
-            );
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `request to MDS to unassign Twilio phone number '${phoneNumber}' from user '${userId}'`,
+            functionName,
+            functionLocation
+        );
     }
 
     async getAllTwilioNumbersFromCompany(companyId: number) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -184,18 +142,13 @@ export class TwilioController {
                 Cookie: this.gsk
             }
         };
-
-        try {
-            Log.info(`...Sending request to MDS to get all Twilio numbers belong to company '${companyId}'`);
-            const result = await axios.request(config);
-            Log.success(`SUCCESS: Twilio numbers belong to company '${companyId}' obtained `);
-            return result.data.numbers;
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `request to MDS to get all Twilio numbers belong to company '${companyId}'`,
+            functionName,
+            functionLocation
+        );
+        return response.data.numbers;
     }
 }

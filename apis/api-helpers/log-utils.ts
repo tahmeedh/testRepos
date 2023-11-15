@@ -24,16 +24,12 @@ export class Log {
         console.info(message);
     }
 
-    static async request(service: string, action: string) {
-        console.info(`...Sending request to ${service} to ${action}`);
-    }
-
     static async success(message: string) {
-        console.info(consoleColor.FgGreen, `SUSCESS: ${message}`);
+        console.info(consoleColor.FgGreen, `SUCCESS: ${message}`);
     }
 
-    static async error(message: string) {
-        console.error(consoleColor.FgRed, `ERROR: ${message}`);
+    static async error(message: string, error) {
+        console.error(consoleColor.FgRed, `ERROR: ${message} - ${error}`);
     }
 
     static async warn(message: string) {

@@ -1,6 +1,4 @@
 import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
-import axios from 'axios';
 
 export class MdsController {
     endpoint: string;
@@ -14,8 +12,8 @@ export class MdsController {
     }
 
     async getUsersFromCompany(companyId: number) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/users`,
@@ -26,24 +24,21 @@ export class MdsController {
                 Cookie: this.gsk
             }
         };
-        try {
-            Log.info(`...Sending request to MDS to request list of users from company  '${companyId}'`);
-            const response = await axios.request(config);
-            const listOfUsers = response.data.users;
-            Log.success(`SUCCESS: List of users from compnay '${companyId}' obtained`);
-            return listOfUsers;
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `request to MDS to request list of users from company  '${companyId}'`,
+            functionName,
+            functionLocation
+        );
+        const listOfUsers = response.data.users;
+        return listOfUsers;
     }
 
     async getUserFromCompanyByEmail(companyId: number, email: string) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/users?query=${email}`,
@@ -54,20 +49,15 @@ export class MdsController {
                 Cookie: this.gsk
             }
         };
-        try {
-            Log.info(
-                `...Sending request to MDS to retrieve user with email '${email}' from company  '${companyId}'`
-            );
-            const response = await axios.request(config);
-            const user = response.data.users;
-            Log.success(`SUCCESS: User with email '${email}' from compnay '${companyId}' obtained`);
-            return user[0];
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `request to MDS to retrieve user with email '${email}' from company '${companyId}''${companyId}'`,
+            functionName,
+            functionLocation
+        );
+        const user = response.data.users;
+        return user[0];
     }
 }

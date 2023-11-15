@@ -1,6 +1,4 @@
 import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
-import axios from 'axios';
 
 export class BandwidthController {
     endpoint: string;
@@ -14,8 +12,8 @@ export class BandwidthController {
     }
 
     async assignBandwidthNumberToUser(userId: number, phoneNumber: string) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'post',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -27,26 +25,18 @@ export class BandwidthController {
             }
         };
 
-        try {
-            Log.info(
-                `...Sending request to MDS to assign Bandwidth phone number '${phoneNumber}' to user '${userId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Bandwidth Phone number '${phoneNumber}' has been assigned to user '${userId}'`
-            );
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `request to MDS to assign Bandwidth phone number '${phoneNumber}' to user '${userId}'`,
+            functionName,
+            functionLocation
+        );
     }
 
     async unassignBandwidthNumberFromUser(userId: number, phoneNumber: string) {
-        const functionName = AxiosUtils.getFunctionInfo().functionName
-        const functionLocation = AxiosUtils.getFunctionInfo().functionLocation
+        const { functionName } = AxiosUtils.getFunctionInfo();
+        const { functionLocation } = AxiosUtils.getFunctionInfo();
 
         const config = {
             method: 'delete',
@@ -59,20 +49,12 @@ export class BandwidthController {
             }
         };
 
-        try {
-            Log.info(
-                `...Sending request to MDS to unassign Bandwidth phone number '${phoneNumber}' from user '${userId}'`
-            );
-            await axios.request(config);
-            Log.success(
-                `SUCCESS: Bandwidth Phone number '${phoneNumber}' has been unassigned from user '${userId}'`
-            );
-        } catch (error) {
-            await AxiosUtils.handleAxiosError(
-                functionName,
-                functionLocation,
-                error
-            )
-        }
+        await AxiosUtils.axiosRequest(
+            config,
+            2,
+            `...request to MDS to unassign Bandwidth phone number '${phoneNumber}' from user '${userId}'`,
+            functionName,
+            functionLocation
+        );
     }
 }
