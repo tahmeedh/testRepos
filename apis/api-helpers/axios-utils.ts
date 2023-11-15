@@ -32,16 +32,16 @@ export class AxiosUtils {
                 return result;
             } catch (error) {
                 Log.warn(`...${error} - attempt ${retryCount} failed`);
+                const errorObject = {
+                    message: `Action ${functionName} failed`,
+                    location: functionName,
+                    path: functionLocation,
+                    status: error.response.status,
+                    statusText: error.response.statusText,
+                    data: error.response.data
+                };
+                Log.error(`An error occured`, `${JSON.stringify(errorObject, null, 4)}`);
                 if (retryCount === maxRetries) {
-                    const errorObject = {
-                        message: `Action ${functionName} failed`,
-                        location: functionName,
-                        path: functionLocation,
-                        status: error.response.status,
-                        statusText: error.response.statusText,
-                        data: error.response.data
-                    };
-                    Log.error(`An error occured`, `${JSON.stringify(errorObject, null, 4)}`);
                     throw error;
                 }
             }
