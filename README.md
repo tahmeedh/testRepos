@@ -74,7 +74,7 @@ test(`${testName} ${testTags} @Mini-vCard @Mini-vCard-sanity`, async ({ page }) 
 
 ```
 
-### Implimented features
+### Implemented features
 | Feature | Create | Update | Delete |
 | --- | --- | --- | --- |
 | Company | ✅ | ❌ | ✅ |
