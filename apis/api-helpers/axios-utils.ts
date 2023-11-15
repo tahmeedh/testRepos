@@ -6,7 +6,7 @@ import { Log } from './log-utils';
 export class AxiosUtils {
     static getFunctionInfo() {
         const { stack } = new Error();
-        const functionNameAndLocation = stack.split('\n')[2].trim();
+        const functionNameAndLocation = stack.split('\n')[3].trim();
         const functionName = functionNameAndLocation.split(' ')[1];
         const functionLocation = functionNameAndLocation.split(' ')[2];
         const result = {
@@ -18,12 +18,12 @@ export class AxiosUtils {
 
     static async axiosRequest(
         config,
-        maxRetries: number,
         description: string,
-        functionName: string,
-        functionLocation: string
+        maxRetries: number = AXIOS_DEFAULT_SETTINGS.retryCount
     ) {
         const timeout = AXIOS_DEFAULT_SETTINGS.retryTimeOut;
+        const { functionName, functionLocation } = this.getFunctionInfo();
+
         for (let retryCount = 1; retryCount < maxRetries + 1; retryCount++) {
             try {
                 Log.info(`...${description} - attempt ${retryCount}`);
@@ -36,9 +36,9 @@ export class AxiosUtils {
                     message: `Action ${functionName} failed`,
                     location: functionName,
                     path: functionLocation,
-                    status: error.response.status,
-                    statusText: error.response.statusText,
-                    data: error.response.data
+                    status: error.response ? error.response.status : undefined,
+                    statusText: error.response ? error.response.statusText : undefined,
+                    data: error.response ? error.response.data : undefined
                 };
                 Log.error(`An error occured`, `${JSON.stringify(errorObject, null, 4)}`);
                 if (retryCount === maxRetries) {

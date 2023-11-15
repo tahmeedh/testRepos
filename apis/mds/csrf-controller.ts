@@ -2,8 +2,6 @@ import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
 
 export class CsrfController {
     static async getCsrfToken(gsk: string, mdsEndpoint: string) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'get',
             url: `${mdsEndpoint}/csrf`,
@@ -14,13 +12,7 @@ export class CsrfController {
             }
         };
 
-        const response = await AxiosUtils.axiosRequest(
-            config,
-            2,
-            'request to MDS for CSRF cookie',
-            functionName,
-            functionLocation
-        );
+        const response = await AxiosUtils.axiosRequest(config, 'request to MDS for CSRF cookie');
         const csrfToken = response.data.token;
         return csrfToken;
     }

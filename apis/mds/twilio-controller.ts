@@ -12,8 +12,6 @@ export class TwilioController {
     }
 
     async requestTwilioNumberToCompany(companyId: number, countryCode: string, prefix: string) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'post',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -30,18 +28,13 @@ export class TwilioController {
         };
         const response = await AxiosUtils.axiosRequest(
             config,
-            2,
-            `request to MDS to request phone number for company  '${companyId}'`,
-            functionName,
-            functionLocation
+            `request to MDS to request phone number for company  '${companyId}'`
         );
         const phoneNumber = response.data.number;
         return phoneNumber;
     }
 
     async releaseTwilioNumberFromCompany(companyId: number, phoneNumber: string) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'delete',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}`,
@@ -55,16 +48,11 @@ export class TwilioController {
         };
         await AxiosUtils.axiosRequest(
             config,
-            2,
-            `request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`,
-            functionName,
-            functionLocation
+            `request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`
         );
     }
 
     async setTwilioNumberFeatures(companyId: number, phoneNumber: number, features: object) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'put',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}/configuration`,
@@ -78,16 +66,11 @@ export class TwilioController {
         };
         await AxiosUtils.axiosRequest(
             config,
-            2,
-            `request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`,
-            functionName,
-            functionLocation
+            `request to MDS to release phone number '${phoneNumber}' from company '${companyId}'`
         );
     }
 
     async assignTwilioNumberToUser(userId: number, phoneNumber: string) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'post',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -100,16 +83,11 @@ export class TwilioController {
         };
         await AxiosUtils.axiosRequest(
             config,
-            2,
-            `request to MDS to assign Twilio phone number '${phoneNumber}' to user '${userId}'`,
-            functionName,
-            functionLocation
+            `request to MDS to assign Twilio phone number '${phoneNumber}' to user '${userId}'`
         );
     }
 
     async unassignTwilioNumberFromUser(userId: number, phoneNumber: string) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'delete',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -122,16 +100,11 @@ export class TwilioController {
         };
         await AxiosUtils.axiosRequest(
             config,
-            2,
-            `request to MDS to unassign Twilio phone number '${phoneNumber}' from user '${userId}'`,
-            functionName,
-            functionLocation
+            `request to MDS to unassign Twilio phone number '${phoneNumber}' from user '${userId}'`
         );
     }
 
     async getAllTwilioNumbersFromCompany(companyId: number) {
-        const { functionName } = AxiosUtils.getFunctionInfo();
-        const { functionLocation } = AxiosUtils.getFunctionInfo();
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -144,10 +117,7 @@ export class TwilioController {
         };
         const response = await AxiosUtils.axiosRequest(
             config,
-            2,
-            `request to MDS to get all Twilio numbers belong to company '${companyId}'`,
-            functionName,
-            functionLocation
+            `request to MDS to get all Twilio numbers belong to company '${companyId}'`
         );
         return response.data.numbers;
     }
