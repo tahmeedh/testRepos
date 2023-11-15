@@ -76,7 +76,7 @@ test(`${testName} ${testTags} @Mini-vCard @Mini-vCard-sanity`, async ({ page }) 
 
 ### Implemented features
 | Feature | Create | Read | Update | Delete |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | Company | ✅ | ✅ | ❌ | ✅ |
 | Company directory settings | N/A | ✅ | ✅ | N/A |
 | Roles | ✅ | ✅ | ✅ | ✅ |
