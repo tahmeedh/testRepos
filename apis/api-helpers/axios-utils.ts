@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import axios from 'axios';
+import { AXIOS_DEFAULT_SETTINGS } from 'Apis/axios.config';
 import { Log } from './log-utils';
 
 export class AxiosUtils {
@@ -22,13 +23,13 @@ export class AxiosUtils {
         functionName: string,
         functionLocation: string
     ) {
-        const timeout = 3000;
-        let result;
+        const timeout = AXIOS_DEFAULT_SETTINGS.retryTimeOut;
         for (let retryCount = 1; retryCount < maxRetries + 1; retryCount++) {
             try {
                 Log.info(`...${description} - attempt ${retryCount}`);
-                result = await axios.request(config);
+                const result = await axios.request(config);
                 Log.success(`${description} was successful`);
+                return result;
             } catch (error) {
                 Log.warn(`...${error} - attempt ${retryCount} failed`);
                 if (retryCount === maxRetries) {
@@ -49,6 +50,6 @@ export class AxiosUtils {
                 setTimeout(resolve, timeout);
             });
         }
-        return result;
+        return null;
     }
 }
