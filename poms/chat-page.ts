@@ -25,7 +25,7 @@ export class ChatPage extends BasePage {
     constructor(page: Page) {
         super(page);
 
-        this.CHAT_WINDOW = this.CHATIFRAME.locator('.m-auto-chat-container');
+        this.CHAT_WINDOW = this.CHATIFRAME.locator('.chat-area');
         this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
         this.CHAT_INPUT_WRAPPER = this.CHATIFRAME.locator('.public-DraftEditor-content');
         this.CHAT_INPUT_SMS_WRAPPER = this.CHATIFRAME.locator('.chat-input-wrapper-sms');
