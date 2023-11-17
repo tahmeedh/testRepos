@@ -1,16 +1,13 @@
 import { expect, test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from '../../../../../controller/base-controller';
 
-const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
+const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
 let app = null;
-let context2 = null;
-let app1 = null;
 let company: Company;
 let user1 = null;
 let user2 = null;
@@ -22,11 +19,10 @@ test.beforeEach(async () => {
     user2 = await company.createUser();
     await company.addUserToEachOthersRoster([user1, user2]);
 });
+
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    Log.starDivider(
-        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
-    );
+    // user1 login
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
@@ -34,36 +30,26 @@ test(`${testName} ${testTags}`, async () => {
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    Log.info(`Start ${testChatType} chat and send message`);
+    // user create channel
     await app.startChatButtonController.ClickOnStartChannel();
     const title = StringUtils.generateString(3, 5);
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
     await app.createChatController.fillOutWhoCanPostForm();
     await app.createChatController.fillOutWhoCanJoinForm(
-        'open',
+        'restricted',
         [],
         [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
     );
     await app.createChatController.CreateChannel();
 
-    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends video file`);
-    const video = './asset/video.mp4';
-    await app.chatController.waitForHeader();
-    await app.attachmentController.sendAttachment(video);
+    const draftText = StringUtils.generateString();
+    await app.chatController.sendContent();
+    await app.chatController.typeContent(draftText);
+    await app.messageHubController.clickSideBarChatsButton();
 
-    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    context2 = await browser.newContext();
-    const page2 = await context2.newPage();
-    app1 = new BaseController(page2);
-    await app1.goToLoginPage();
-    await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.closeTooltips();
-
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.open(title);
-    await app1.inviteController.acceptInvite('Channel');
-
-    await expect(app1.ChatController.Pom.CHAT_WINDOW).toBeVisible();
+    await app.messageHubController.clickMessageHubRow.getByText(title);
+    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
+    await expect(secondaryLine).toHaveText(draftText);
 });
 
 test.afterEach(async () => {
