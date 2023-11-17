@@ -20,10 +20,12 @@ export class ChatPage extends BasePage {
     readonly FILESHARING_DOWNLOAD_BTN: Locator;
     readonly RECIPIENT_INFO_SKIP_BUTTON: Locator;
     readonly CHAT_FLAG_BUTTON: Locator;
+    readonly CHAT_WINDOW: Locator;
 
     constructor(page: Page) {
         super(page);
 
+        this.CHAT_WINDOW = this.CHATIFRAME.locator('.m-auto-chat-container');
         this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
         this.CHAT_INPUT_WRAPPER = this.CHATIFRAME.locator('.public-DraftEditor-content');
         this.CHAT_INPUT_SMS_WRAPPER = this.CHATIFRAME.locator('.chat-input-wrapper-sms');
