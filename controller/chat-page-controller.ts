@@ -99,4 +99,17 @@ export class ChatController {
             await this.Pom.CHAT_BACK_BUTTON.click();
         });
     }
+
+    async clickChatHeaderMenu() {
+        await test.step('Chat Controller: Naviagate back to Message Hub', async () => {
+            await this.Pom.CHAT_HEADER_MENU.click();
+        });
+    }
+
+    async leaveChat() {
+        await test.step('Chat Controller: Leave Chat and Naviagate back to Message Hub', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_LEAVE.click();
+        });
+    }
 }

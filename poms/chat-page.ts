@@ -21,10 +21,12 @@ export class ChatPage extends BasePage {
     readonly RECIPIENT_INFO_SKIP_BUTTON: Locator;
     readonly CHAT_FLAG_BUTTON: Locator;
     readonly CHAT_WINDOW: Locator;
+    readonly DROP_DOWN_LEAVE: Locator;
 
     constructor(page: Page) {
         super(page);
 
+        this.DROP_DOWN_LEAVE = this.CHATIFRAME.locator('.m-auto-leaveBtn');
         this.CHAT_WINDOW = this.CHATIFRAME.locator('.chat-area');
         this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
         this.CHAT_INPUT_WRAPPER = this.CHATIFRAME.locator('.public-DraftEditor-content');
