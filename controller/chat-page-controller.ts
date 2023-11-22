@@ -112,4 +112,10 @@ export class ChatController {
             await this.Pom.DROP_DOWN_LEAVE.click();
         });
     }
+    async clickInviteParicipants() {
+        await test.step('Chat Controller: Leave Chat and Naviagate Search Module', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_INVITE_PARTICIPANTS.click();
+        });
+    }
 }
