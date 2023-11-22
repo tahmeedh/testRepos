@@ -105,4 +105,11 @@ export class ChatController {
             await this.Pom.CHAT_BACK_BUTTON.click();
         });
     }
+
+    async leaveChat() {
+        await test.step('Chat Controller: Leave Chat', async () => {
+            await this.Pom.CHAT_HEADER_MENU.click();
+            await this.Pom.LEAVE_CHAT_BUTTON.click();
+        });
+    }
 }

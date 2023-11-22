@@ -58,8 +58,8 @@ test(`${testName} ${testTags}`, async () => {
     // user 2 add chat to favourite list
     await app1.chatController.clickChatFavouriteButton();
 
-    // to verify that flag icon shows up in the message hub
-    await app1.chatController.clickOnBackButton();
+    // user 2 leaves the chat
+    await app1.chatController.leaveChat();
 
     // Verify the Favourite star
     await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();

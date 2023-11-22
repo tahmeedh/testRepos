@@ -21,6 +21,7 @@ export class ChatPage extends BasePage {
     readonly RECIPIENT_INFO_SKIP_BUTTON: Locator;
     readonly CHAT_FLAG_BUTTON: Locator;
     readonly CHAT_FAVOURITE_BUTTON: Locator;
+    readonly LEAVE_CHAT_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -48,5 +49,6 @@ export class ChatPage extends BasePage {
         this.FILESHARING_OPTION_DROPDOWN_BTN = this.CHATIFRAME.locator('.m-auto-file-menu-icon');
         this.FILESHARING_DOWNLOAD_BTN = this.CHATIFRAME.getByRole('menuitem', { name: 'Download' });
         this.RECIPIENT_INFO_SKIP_BUTTON = this.CHATIFRAME.getByText('Skip');
+        this.LEAVE_CHAT_BUTTON = this.CHATIFRAME.locator('.m-auto-leaveBtn');
     }
 }
