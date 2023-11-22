@@ -56,7 +56,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.chatController.clickChatFavouriteButton();
     await app1.messageHubController.clickSideBarChatsButton();
 
-    // Verify the flag
+    // Verify the favourite star
     await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
 });
 

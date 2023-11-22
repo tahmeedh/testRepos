@@ -54,8 +54,6 @@ test(`${testName} ${testTags}`, async () => {
     await app1.startChatButtonController.ClickOnStartOneToOne();
     await app1.createChatController.CreateSUC(`${user1.userInfo.firstName} ${user1.userInfo.lastName}`);
     await app1.inviteController.acceptInvite('SUC');
-
-    // user 2 flag chat
     await app1.chatController.clickChatFavouriteButton();
 
     // to verify that flag icon shows up in the message hub

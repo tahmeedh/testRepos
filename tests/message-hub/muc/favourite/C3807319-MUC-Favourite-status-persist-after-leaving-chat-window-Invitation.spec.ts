@@ -61,12 +61,11 @@ test(`${testName} ${testTags}`, async () => {
     await app1.chatController.clickChatFavouriteButton();
     await app1.messageHubController.clickSideBarChatsButton();
 
-    // verify that chat is flagged
     await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
     // again open the chat again
     await app1.open(title);
 
-    // unflag chat
+    // Unfavourite chat
     await app1.chatController.clickChatFavouriteButton();
     await app1.messageHubController.clickSideBarChatsButton();
     await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeHidden();

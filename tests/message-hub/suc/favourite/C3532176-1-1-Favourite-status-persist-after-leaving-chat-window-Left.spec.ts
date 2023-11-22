@@ -55,13 +55,13 @@ test(`${testName} ${testTags}`, async () => {
     await app1.createChatController.CreateSUC(`${user1.userInfo.firstName} ${user1.userInfo.lastName}`);
     await app1.inviteController.acceptInvite('SUC');
 
-    // user 2 flag chat
+    // user 2 add chat to favourite list
     await app1.chatController.clickChatFavouriteButton();
 
     // to verify that flag icon shows up in the message hub
     await app1.chatController.clickOnBackButton();
 
-    // Verify the flag
+    // Verify the Favourite star
     await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
 });
 
