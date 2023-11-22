@@ -20,6 +20,7 @@ export class ChatPage extends BasePage {
     readonly FILESHARING_DOWNLOAD_BTN: Locator;
     readonly RECIPIENT_INFO_SKIP_BUTTON: Locator;
     readonly CHAT_FLAG_BUTTON: Locator;
+    readonly CHAT_FAVOURITE_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -40,6 +41,7 @@ export class ChatPage extends BasePage {
 
         this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
         this.CHAT_FLAG_BUTTON = this.CHATIFRAME.locator('.m-auto-flag-icon');
+        this.CHAT_FAVOURITE_BUTTON = this.CHATIFRAME.locator('.m-auto-favourite-icon');
 
         this.INCOMING_PARTIAL = this.CHATIFRAME.locator('.m-auto-chat-bubble-incoming');
         this.INCOMING_PARTIAL_MUC = this.CHATIFRAME.locator('.m-auto-muc-chat-bubble-incoming');
