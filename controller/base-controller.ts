@@ -112,4 +112,9 @@ export class BaseController {
             await this.page.goto(LOGIN_ENDPOINTS[env]);
         });
     }
+
+    async inviteParticipants(users) {
+        await this.chatController.clickInviteParicipants();
+        await this.createChatController.inviteMUC(users);
+    }
 }
