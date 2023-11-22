@@ -9,6 +9,7 @@ export class InvitePage extends BasePage {
     // MUC
     readonly ACCEPT_BUTTON_MUC: Locator;
     readonly DECLINE_BUTTON_MUC: Locator;
+    readonly;
 
     constructor(page: Page) {
         super(page);
