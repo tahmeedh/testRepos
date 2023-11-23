@@ -46,7 +46,7 @@ export class CreateChatPage extends BasePage {
         this.DECLINE_BUTTON = this.CHATIFRAME.getByRole('button', { name: 'Decline' });
 
         //MUC
-        this.MUC_SEARCH_INPUT = this.CHATIFRAME.getByRole('textbox');
+        this.MUC_SEARCH_INPUT = this.CHATIFRAME.getByPlaceholder('Search to select participants');
         this.NEXT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-next');
         this.INPUT_SUBJECT = this.CHATIFRAME.getByLabel('input-label');
         this.ACCEPT_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-accept');

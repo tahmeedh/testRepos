@@ -158,8 +158,8 @@ export class CreateChatController {
         return test.step('Create Chat Controller : Select User', async () => {
             for (const username of users) {
                 Log.info(`Search for ${username}`);
-                const user = await this.SearchMucUser(username);
-                await this.Pom.CHATIFRAME.getByText(user).click();
+                await this.SearchMucUser(username);
+                await this.Pom.CHATIFRAME.getByTestId('contact-list-user-row').getByText(username).click();
             }
             await this.Pom.INVITE_BUTTON.click();
         });
