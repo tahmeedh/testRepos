@@ -40,10 +40,8 @@ test(`${testName} ${testTags}`, async () => {
 
     Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartMUC();
-    const title = StringUtils.generateString(3, 5);
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
-    const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
-    await app.createChatController.createMUC([user2fullName, user3fullName], title);
+    const title = await app.createChatController.createMUC([user2fullName]);
 
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
@@ -67,6 +65,8 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
     const systemEvent = app1.Pom.CHATIFRAME.getByText('You joined');
     await expect(systemEvent).toHaveText('You joined');
+
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

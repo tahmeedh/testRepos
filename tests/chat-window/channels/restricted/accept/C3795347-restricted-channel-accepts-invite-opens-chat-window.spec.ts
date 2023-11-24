@@ -62,6 +62,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.inviteController.acceptInvite('Channel');
 
     await expect(app1.chatController.Pom.CHAT_WINDOW).toBeVisible();
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

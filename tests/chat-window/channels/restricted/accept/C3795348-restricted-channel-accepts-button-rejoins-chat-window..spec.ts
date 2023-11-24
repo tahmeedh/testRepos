@@ -77,6 +77,8 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} sees their previous message`);
     const previousMessage = app1.Pom.CHATIFRAME.getByText(user2Message);
     await expect(previousMessage).toHaveText(user2Message);
+
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

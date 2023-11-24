@@ -66,6 +66,8 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
     const systemEvent = app1.Pom.CHATIFRAME.getByText('You joined');
     await expect(systemEvent).toHaveText('You joined');
+
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

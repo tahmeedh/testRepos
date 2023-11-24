@@ -69,7 +69,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.inviteController.clickJoin();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} sees their previous message`);
-    const previousMessage = app1.Pom.CHATIFRAME.getByText(user2Message);
+    const previousMessage = app1.Pom.CHATIFRAME.getByText(user2Message).first();
     await expect(previousMessage).toHaveText(user2Message);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
@@ -79,6 +79,8 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
     const systemEvent2 = app1.Pom.CHATIFRAME.getByText('You joined').nth(1);
     await expect(systemEvent2).toHaveText('You joined');
+
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {
