@@ -1,9 +1,9 @@
-import { test, expect, chromium } from '@playwright/test';
+import { expect, test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../../controller/base-controller';
+import { BaseController } from '../../../../../controller/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -11,21 +11,17 @@ let context1 = null;
 let app = null;
 let context2 = null;
 let app1 = null;
-
 let company: Company;
 let user1 = null;
 let user2 = null;
-let user3 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
-    user3 = await company.createUser();
-    await company.addUserToEachOthersRoster([user1, user2, user3]);
+    await company.addUserToEachOthersRoster([user1, user2]);
 });
-
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
     Log.starDivider(
@@ -39,12 +35,19 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartOneToOne();
-    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
-    await app.createChatController.CreateSUC(user2fullName);
+    await app.startChatButtonController.ClickOnStartChannel();
+    const title = StringUtils.generateString(3, 5);
+    await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
+    await app.createChatController.fillOutWhoCanPostForm();
+    await app.createChatController.fillOutWhoCanJoinForm(
+        'open',
+        [],
+        [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
+    );
+    await app.createChatController.CreateChannel();
 
-    const randomContent = StringUtils.generateString();
-    await app.chatController.sendContent(randomContent);
+    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends message`);
+    await app.chatController.sendContent();
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await browser.newContext();
@@ -55,15 +58,25 @@ test(`${testName} ${testTags}`, async () => {
     await app1.closeTooltips();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.startChatButtonController.ClickOnStartOneToOne();
-    await app1.createChatController.CreateSUC(user1.userInfo.lastName);
-    await app1.inviteController.acceptInvite('SUC');
+    await app1.open(title);
+    await app1.inviteController.acceptInvite('Channel');
 
-    // const user2Message = await app1.chatController.sendContent(randomContent);
+    const user2Message = await app1.chatController.sendContent();
+    await app1.chatController.leaveChat();
 
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
-    const systemEvent = app1.Pom.CHATIFRAME.getByText('You joined');
-    await expect(systemEvent).toHaveText('You joined');
+    Log.info(`Re-invite ${user2.userInfo.firstName} ${user2.userInfo.lastName} to ${testChatType}`);
+    await app.inviteParticipants([`${user2.userInfo.firstName} ${user2.userInfo.lastName}`], 'channel');
+
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} rejoins channel`);
+    await app1.open(title);
+    await app1.inviteController.acceptInvite('Channel');
+
+    Log.info('Chat Window is visible');
+    await expect(app1.chatController.Pom.CHAT_WINDOW).toBeVisible();
+
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} sees their previous message`);
+    const previousMessage = app1.Pom.CHATIFRAME.getByText(user2Message);
+    await expect(previousMessage).toHaveText(user2Message);
 });
 
 test.afterEach(async () => {
