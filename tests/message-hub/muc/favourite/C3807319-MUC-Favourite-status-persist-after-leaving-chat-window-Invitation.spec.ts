@@ -1,8 +1,9 @@
 import { test, chromium, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../../controller/base-controller';
-import { StringUtils } from '../../../../helper/string-utils';
+import { BaseController } from 'controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -27,7 +28,9 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    // user1 login
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
+    );
     context1 = await browser.newContext();
     context2 = await browser.newContext();
     const page1 = await context1.newPage();
@@ -38,7 +41,6 @@ test(`${testName} ${testTags}`, async () => {
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    // user create MUC
     await app.startChatButtonController.ClickOnStartMUC();
     const title = StringUtils.generateString(3, 5);
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
@@ -69,6 +71,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.chatController.clickChatFavouriteButton();
     await app1.messageHubController.clickSideBarChatsButton();
     await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeHidden();
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

@@ -1,8 +1,9 @@
 import { test, chromium, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../../controller/base-controller';
-import { StringUtils } from '../../../../helper/string-utils';
+import { BaseController } from 'controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -14,31 +15,40 @@ let app1: BaseController;
 let company: Company;
 let user1 = null;
 let user2 = null;
+let user3 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
+    user3 = await company.createUser();
     await company.addUserToEachOthersRoster([user1, user2]);
 });
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    // user1 login
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
+    );
     context1 = await browser.newContext();
+    context2 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
     await app.goToLoginPage();
+
     // user login
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    // user start 1-1
-    await app.startChatButtonController.ClickOnStartOneToOne();
-    await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
+    // user create MUC
+    await app.startChatButtonController.ClickOnStartMUC();
+    const title = StringUtils.generateString(3, 5);
+    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
+    const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
+    await app.createChatController.createMUC([user2fullName, user3fullName], title);
 
-    // user start conversation with user 2
+    // user send message in MUC
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
 
@@ -49,18 +59,13 @@ test(`${testName} ${testTags}`, async () => {
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.closeTooltips();
+    await app1.open(title);
 
-    // user 2 accept invitation with user 1
-    await app1.startChatButtonController.ClickOnStartOneToOne();
-    await app1.createChatController.CreateSUC(`${user1.userInfo.firstName} ${user1.userInfo.lastName}`);
-    await app1.inviteController.acceptInvite('SUC');
     await app1.chatController.clickChatFavouriteButton();
+    await app1.messageHubController.clickSideBarChatsButton();
 
-    // to verify that flag icon shows up in the message hub
-    await app1.chatController.clickOnBackButton();
-
-    // Verify the flag
     await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

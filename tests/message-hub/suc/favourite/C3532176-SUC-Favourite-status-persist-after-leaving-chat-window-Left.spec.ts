@@ -1,8 +1,9 @@
 import { test, chromium, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../../controller/base-controller';
-import { StringUtils } from '../../../../helper/string-utils';
+import { BaseController } from 'controller/base-controller';
+import { StringUtils } from 'helper/string-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -25,7 +26,9 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    // user1 login
+    Log.starDivider(
+        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
+    );
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
@@ -63,6 +66,7 @@ test(`${testName} ${testTags}`, async () => {
 
     // Verify the Favourite star
     await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {
