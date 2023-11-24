@@ -164,4 +164,21 @@ export class CreateChatController {
             await this.Pom.INVITE_BUTTON.click();
         });
     }
+
+    async inviteChannels(participants) {
+        return test.step('Create Chat Controller : Select Participants in channels', async () => {
+            if (participants.length !== 0) {
+                await this.Pom.SELECT_PARTICIPANTS_BUTTON.click();
+                for (const participant of participants) {
+                    Log.info(`Search for ${participant}`);
+                    await this.Pom.SELECT_PARTICIPANTS_INPUT.click();
+                    await this.Pom.SELECT_PARTICIPANTS_INPUT.fill(participant);
+                    await this.Pom.CHATIFRAME.getByTestId('contact-list-user-row')
+                        .getByText(participant)
+                        .click();
+                }
+                await this.Pom.SELECT_BUTTON.click();
+            }
+        });
+    }
 }

@@ -21,6 +21,8 @@ export class ChatController {
             await this.Pom.CHAT_INPUT.fill(message);
             await this.Pom.SEND_BUTTON.click();
         });
+
+        return message;
     }
 
     async typeContent(message: string = StringUtils.generateString()) {
@@ -116,6 +118,13 @@ export class ChatController {
         await test.step('Chat Controller: Leave Chat and Naviagate Search Module', async () => {
             await this.clickChatHeaderMenu();
             await this.Pom.DROP_DOWN_INVITE_PARTICIPANTS.click();
+        });
+    }
+
+    async clickInviteParicipantsChannels() {
+        await test.step('Chat Controller: Leave Chat and Naviagate Channel Details then invite particpants', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_VIEW_DETAILS.click();
         });
     }
 }
