@@ -14,6 +14,7 @@ import { PreviewAttachmentController } from './preview-attachment-controller';
 import { InviteController } from './invite-controller';
 import { MessageHubController } from './message-hub-controller';
 import { VCardController } from './v-card-controller';
+import { DetailsController } from './details-controller';
 import 'dotenv/config';
 
 export class BaseController {
@@ -27,6 +28,7 @@ export class BaseController {
     readonly inviteController: InviteController;
     readonly messageHubController: MessageHubController;
     readonly vCardController: VCardController;
+    readonly detailsController: DetailsController;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -42,6 +44,7 @@ export class BaseController {
         this.inviteController = new InviteController(this.page);
         this.messageHubController = new MessageHubController(this.page);
         this.vCardController = new VCardController(this.page);
+        this.detailsController = new DetailsController(this.page);
     }
 
     async closeTooltips() {
@@ -113,8 +116,14 @@ export class BaseController {
         });
     }
 
-    async inviteParticipants(users) {
-        await this.chatController.clickInviteParicipants();
-        await this.createChatController.inviteMUC(users);
+    async inviteParticipants(users, type = 'muc') {
+        if (type === 'channel') {
+            await this.chatController.clickInviteParicipantsChannels();
+            await this.detailsController.clickMemberRolesButton();
+            await this.createChatController.inviteChannels(users);
+        } else {
+            await this.chatController.clickInviteParicipants();
+            await this.createChatController.inviteMUC(users);
+        }
     }
 }
