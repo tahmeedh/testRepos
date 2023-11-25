@@ -55,6 +55,12 @@ export class ChatController {
         });
     }
 
+    async clickChatFavouriteButton() {
+        await test.step('Chat Controller: Favourite Chat', async () => {
+            await this.Pom.CHAT_FAVOURITE_BUTTON.click();
+        });
+    }
+
     async downloadLastMedia(type?: string) {
         await test.step('Chat Controller : Download Media Content', async () => {
             await this.page.waitForTimeout(1000);
@@ -97,6 +103,13 @@ export class ChatController {
     async backButton() {
         await test.step('Chat Controller: Naviagate back to Message Hub', async () => {
             await this.Pom.CHAT_BACK_BUTTON.click();
+        });
+    }
+
+    async leaveChat() {
+        await test.step('Chat Controller: Leave Chat', async () => {
+            await this.Pom.CHAT_HEADER_MENU.click();
+            await this.Pom.LEAVE_CHAT_BUTTON.click();
         });
     }
 }
