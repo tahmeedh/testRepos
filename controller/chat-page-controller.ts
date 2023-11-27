@@ -57,6 +57,12 @@ export class ChatController {
         });
     }
 
+    async clickChatFavouriteButton() {
+        await test.step('Chat Controller: Favourite Chat', async () => {
+            await this.Pom.CHAT_FAVOURITE_BUTTON.click();
+        });
+    }
+
     async downloadLastMedia(type?: string) {
         await test.step('Chat Controller : Download Media Content', async () => {
             await this.page.waitForTimeout(1000);

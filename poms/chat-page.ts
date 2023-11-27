@@ -25,6 +25,8 @@ export class ChatPage extends BasePage {
     readonly DROP_DOWN_INVITE_PARTICIPANTS: Locator;
     readonly DROP_DOWN_VIEW_DETAILS: Locator;
     readonly CHAT_HEADER_MENU_DROP_DOWN: Locator;
+    readonly CHAT_FAVOURITE_BUTTON: Locator;
+    readonly LEAVE_CHAT_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -50,11 +52,13 @@ export class ChatPage extends BasePage {
 
         this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
         this.CHAT_FLAG_BUTTON = this.CHATIFRAME.locator('.m-auto-flag-icon');
+        this.CHAT_FAVOURITE_BUTTON = this.CHATIFRAME.locator('.m-auto-favourite-icon');
 
         this.INCOMING_PARTIAL = this.CHATIFRAME.locator('.m-auto-chat-bubble-incoming');
         this.INCOMING_PARTIAL_MUC = this.CHATIFRAME.locator('.m-auto-muc-chat-bubble-incoming');
         this.FILESHARING_OPTION_DROPDOWN_BTN = this.CHATIFRAME.locator('.m-auto-file-menu-icon');
         this.FILESHARING_DOWNLOAD_BTN = this.CHATIFRAME.getByRole('menuitem', { name: 'Download' });
         this.RECIPIENT_INFO_SKIP_BUTTON = this.CHATIFRAME.getByText('Skip');
+        this.LEAVE_CHAT_BUTTON = this.CHATIFRAME.locator('.m-auto-leaveBtn');
     }
 }
