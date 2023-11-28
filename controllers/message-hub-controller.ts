@@ -1,4 +1,5 @@
 import { test, type Page } from '@playwright/test';
+import { Log } from 'Apis/api-helpers/log-utils';
 import { MessageHubPage } from 'Poms/message-hub-page';
 
 export class MessageHubController {
@@ -28,6 +29,7 @@ export class MessageHubController {
 
     async clickOnConversationAvatar(chatName: string) {
         await test.step(`Message Hub Controller: clicking on avatar of row ${chatName}`, async () => {
+            Log.info(`Message Hub Controller: clicking on avatar of row ${chatName}`);
             await this.Pom.CONVERSATION_ROW.getByTestId('test-avatar-main')
                 .locator('../..')
                 .locator('.m-auto-avatar-container')
