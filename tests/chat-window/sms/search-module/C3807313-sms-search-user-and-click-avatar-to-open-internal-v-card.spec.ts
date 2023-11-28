@@ -9,7 +9,6 @@ let browser = null;
 let context1 = null;
 let app: BaseController;
 
-test.describe.configure({ mode: 'serial' });
 let company: Company;
 let user1 = null;
 let user2 = null;
