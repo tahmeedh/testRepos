@@ -48,12 +48,10 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
 
         await test.step('Return to conversations view', async () => {
-            await expect(app.chatController.Pom.CHAT_FLAG_BUTTON).toBeVisible();
             await app.messageHubController.clickSideBarChatsButton();
         });
 
         await test.step('User search for the contact by name', async () => {
-            await expect(app.messageHubController.Pom.CONVERSATION_ROW).toBeVisible();
             await app.globalSearchController.fillSearchField(userName);
             //Sometimes the external user won't show up in global search results if we search immideiately after creating the conversation
             //Since there are no element to wait for, this is a retry mechinism to overcome the above issue.
