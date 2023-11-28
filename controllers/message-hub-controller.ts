@@ -1,5 +1,5 @@
-import type { Page } from '@playwright/test';
-import { MessageHubPage } from '../poms/message-hub-page';
+import { test, type Page } from '@playwright/test';
+import { MessageHubPage } from 'Poms/message-hub-page';
 
 export class MessageHubController {
     readonly page: Page;
@@ -24,5 +24,14 @@ export class MessageHubController {
     async clickMessageHubRow(chatName) {
         const ClickName = this.Pom.CHAT_NAME.getByText(chatName).click();
         return ClickName;
+    }
+
+    async clickOnConversationAvatar(chatName: string) {
+        await test.step(`Message Hub Controller: clicking on avatar of row ${chatName}`, async () => {
+            await this.Pom.CONVERSATION_ROW.getByTestId('test-avatar-main')
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .click();
+        });
     }
 }

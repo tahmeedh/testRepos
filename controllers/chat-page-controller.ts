@@ -102,6 +102,16 @@ export class ChatController {
         });
     }
 
+    async fillRecipientInfoModal(firstName: string, lastName: string) {
+        await test.step('Chat Controller : Fill first name and last name in Recipient Information modal', async () => {
+            await this.Pom.RECIPIENT_INFO_FIRST_NAME_FIELD.fill(firstName);
+            await this.Pom.RECIPIENT_INFO_LAST_NAME_FIELD.fill(lastName);
+        });
+        await test.step(`Chat Controller : Clicks on 'Save' button in Recipient Information modal`, async () => {
+            await this.Pom.RECIPIENT_INFO_SAVE_BUTTON.click();
+        });
+    }
+
     async backButton() {
         await test.step('Chat Controller: Naviagate back to Message Hub', async () => {
             await this.Pom.CHAT_BACK_BUTTON.click();

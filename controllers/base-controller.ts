@@ -15,7 +15,10 @@ import { InviteController } from './invite-controller';
 import { MessageHubController } from './message-hub-controller';
 import { VCardController } from './v-card-controller';
 import { DetailsController } from './details-controller';
+import { VCardEditController } from './v-card-edit-controller';
 import 'dotenv/config';
+import { ContactListController } from './message-hub/contact-list-controller';
+import { GlobalSearchController } from './message-hub/global-search-controller';
 
 export class BaseController {
     readonly page: Page;
@@ -29,6 +32,9 @@ export class BaseController {
     readonly messageHubController: MessageHubController;
     readonly vCardController: VCardController;
     readonly detailsController: DetailsController;
+    readonly vCardEditController: VCardEditController;
+    readonly contactListController: ContactListController;
+    readonly globalSearchController: GlobalSearchController;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -45,6 +51,9 @@ export class BaseController {
         this.messageHubController = new MessageHubController(this.page);
         this.vCardController = new VCardController(this.page);
         this.detailsController = new DetailsController(this.page);
+        this.vCardEditController = new VCardEditController(this.page);
+        this.contactListController = new ContactListController(this.page);
+        this.globalSearchController = new GlobalSearchController(this.page);
     }
 
     async closeTooltips() {
