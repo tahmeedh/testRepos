@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { BaseController } from 'controller/base-controller';
+import { BaseController } from 'Controllers/base-controller';
 
 test('C666', async ({ page }) => {
     let company1: Company;

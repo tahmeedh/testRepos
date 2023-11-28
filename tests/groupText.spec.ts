@@ -2,7 +2,7 @@ import test from '@playwright/test';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { Company } from 'Apis/company';
 import { BandwidthUtils } from 'Apis/api-helpers/bandwidth-utils';
-import { BaseController } from 'controller/base-controller';
+import { BaseController } from 'Controllers/base-controller';
 import { users } from 'Constants/users';
 
 test.describe.configure({ mode: 'default' });
