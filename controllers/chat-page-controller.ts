@@ -21,6 +21,8 @@ export class ChatController {
             await this.Pom.CHAT_INPUT.fill(message);
             await this.Pom.SEND_BUTTON.click();
         });
+
+        return message;
     }
 
     async typeContent(message: string = StringUtils.generateString()) {
@@ -106,10 +108,29 @@ export class ChatController {
         });
     }
 
-    async leaveChat() {
-        await test.step('Chat Controller: Leave Chat', async () => {
+    async clickChatHeaderMenu() {
+        await test.step('Chat Controller: Naviagate back to Message Hub', async () => {
             await this.Pom.CHAT_HEADER_MENU.click();
-            await this.Pom.LEAVE_CHAT_BUTTON.click();
+        });
+    }
+
+    async leaveChat() {
+        await test.step('Chat Controller: Leave Chat and Naviagate back to Message Hub', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_LEAVE.click();
+        });
+    }
+    async clickInviteParicipants() {
+        await test.step('Chat Controller: Leave Chat and Naviagate Search Module', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_INVITE_PARTICIPANTS.click();
+        });
+    }
+
+    async clickInviteParicipantsChannels() {
+        await test.step('Chat Controller: Leave Chat and Naviagate Channel Details then invite particpants', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_VIEW_DETAILS.click();
         });
     }
 }

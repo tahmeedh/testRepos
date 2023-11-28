@@ -1,7 +1,7 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../../controller/base-controller';
+import { BaseController } from '../../../../controllers/base-controller';
 import { StringUtils } from '../../../../helper/string-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);

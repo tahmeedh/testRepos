@@ -2,9 +2,10 @@ import { expect, test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../../controller/base-controller';
+import { BaseController } from 'Controllers/base-controller';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
+
 let browser = null;
 let context1 = null;
 let app = null;
@@ -36,18 +37,17 @@ test(`${testName} ${testTags}`, async () => {
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
     await app.createChatController.fillOutWhoCanPostForm();
     await app.createChatController.fillOutWhoCanJoinForm(
-        'restricted',
+        'open',
         [],
         [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
     );
     await app.createChatController.CreateChannel();
-
     const draftText = StringUtils.generateString();
     await app.chatController.sendContent();
     await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
 
-    await app.messageHubController.clickMessageHubRow.getByText(title);
+    await app.messageHubController.clickMessageHubRow(title);
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveText(draftText);
 });

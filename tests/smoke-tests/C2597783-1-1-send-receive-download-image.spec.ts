@@ -3,7 +3,7 @@ import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../controller/base-controller';
+import { BaseController } from '../../controllers/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;

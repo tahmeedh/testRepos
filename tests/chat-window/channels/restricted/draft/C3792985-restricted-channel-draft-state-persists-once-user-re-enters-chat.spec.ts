@@ -2,10 +2,9 @@ import { expect, test, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
 import { BaseController } from 'Controllers/base-controller';
 
-const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
+const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
 let app = null;
@@ -23,9 +22,7 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    Log.starDivider(
-        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
-    );
+    // user1 login
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
@@ -33,32 +30,26 @@ test(`${testName} ${testTags}`, async () => {
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
-    Log.info(`Start ${testChatType} chat and send message`);
+    // user create channel
     await app.startChatButtonController.ClickOnStartChannel();
     const title = StringUtils.generateString(3, 5);
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
     await app.createChatController.fillOutWhoCanPostForm();
     await app.createChatController.fillOutWhoCanJoinForm(
-        'Restricted',
+        'restricted',
         [],
         [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
     );
     await app.createChatController.CreateChannel();
-    await app.chatController.sendContent();
-    Log.success(
-        `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
-    );
 
-    Log.info(`${testChatType} chat expects file attachment icon and string in draft state `);
-    const PNG = './asset/download.png';
-    await app.chatController.waitForHeader();
-    await app.attachmentController.attachFile(PNG);
+    const draftText = StringUtils.generateString();
+    await app.chatController.sendContent();
+    await app.chatController.typeContent(draftText);
     await app.messageHubController.clickSideBarChatsButton();
 
-    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
-    Log.starDivider(`END TEST: Test Execution Commpleted`);
+    await app.messageHubController.clickMessageHubRow.getByText(title);
+    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
+    await expect(secondaryLine).toHaveText(draftText);
 });
 
 test.afterEach(async () => {

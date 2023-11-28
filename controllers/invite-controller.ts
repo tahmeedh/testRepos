@@ -30,4 +30,10 @@ export class InviteController {
             }
         });
     }
+
+    async clickJoin() {
+        await test.step('Re-join SUC Chat : Click Join', async () => {
+            await this.Pom.JOIN_BUTTON.click();
+        });
+    }
 }

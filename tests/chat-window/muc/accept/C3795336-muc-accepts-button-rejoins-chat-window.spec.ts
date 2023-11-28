@@ -1,9 +1,8 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { StringUtils } from 'helper/string-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from 'Controllers/base-controller';
+import { BaseController } from '../../../../controllers/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -11,16 +10,19 @@ let context1 = null;
 let app = null;
 let context2 = null;
 let app1 = null;
+
 let company: Company;
 let user1 = null;
 let user2 = null;
+let user3 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
-    await company.addUserToEachOthersRoster([user1, user2]);
+    user3 = await company.createUser();
+    await company.addUserToEachOthersRoster([user1, user2, user3]);
 });
 
 test(`${testName} ${testTags}`, async () => {
@@ -36,18 +38,12 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartChannel();
-    const title = StringUtils.generateString(3, 5);
-    await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'description');
-    await app.createChatController.fillOutWhoCanPostForm();
-    await app.createChatController.fillOutWhoCanJoinForm(
-        'open',
-        [],
-        [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
-    );
-    await app.createChatController.CreateChannel();
-    const randomContent = StringUtils.generateString();
-    await app.chatController.sendContent(randomContent);
+    await app.startChatButtonController.ClickOnStartMUC();
+    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
+    const title = await app.createChatController.createMUC([user2fullName]);
+
+    await app.chatController.sendContent();
+    await app.inviteParticipants([`${user3.userInfo.firstName} ${user3.userInfo.lastName}`]);
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await browser.newContext();
@@ -58,12 +54,31 @@ test(`${testName} ${testTags}`, async () => {
     await app1.closeTooltips();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-
     await app1.open(title);
-    await app1.inviteController.acceptInvite('Channel');
+    await app1.inviteController.acceptInvite('MUC');
 
-    const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
-    await expect(messageReceived).toHaveText(randomContent);
+    const user2Message = await app1.chatController.sendContent();
+    await app1.chatController.leaveChat();
+
+    Log.info(`Re-invite ${user2.userInfo.firstName} ${user2.userInfo.lastName} to ${testChatType}`);
+    await app.inviteParticipants([`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]);
+
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} rejoins ${testChatType}`);
+    await app1.open(title);
+    await app1.Pom.CHATIFRAME.getByRole('button', { name: 'Accept' }).nth(0).click();
+
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} sees their previous message`);
+    const previousMessage = app1.Pom.CHATIFRAME.getByText(user2Message);
+    await expect(previousMessage).toHaveText(user2Message);
+
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
+    const systemEvent1 = app1.Pom.CHATIFRAME.getByText('You left');
+    await expect(systemEvent1).toHaveText('You left');
+
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
+    const systemEvent2 = app1.Pom.CHATIFRAME.getByText('You joined').nth(1);
+    await expect(systemEvent2).toHaveText('You joined');
+
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

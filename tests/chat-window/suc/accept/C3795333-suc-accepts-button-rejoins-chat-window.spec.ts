@@ -3,7 +3,7 @@ import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from 'Controllers/base-controller';
+import { BaseController } from '../../../../controllers/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -11,6 +11,7 @@ let context1 = null;
 let app = null;
 let context2 = null;
 let app1 = null;
+
 let company: Company;
 let user1 = null;
 let user2 = null;
@@ -36,16 +37,10 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartChannel();
-    const title = StringUtils.generateString(3, 5);
-    await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'description');
-    await app.createChatController.fillOutWhoCanPostForm();
-    await app.createChatController.fillOutWhoCanJoinForm(
-        'open',
-        [],
-        [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
-    );
-    await app.createChatController.CreateChannel();
+    await app.startChatButtonController.ClickOnStartOneToOne();
+    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
+    await app.createChatController.CreateSUC(user2fullName);
+
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
 
@@ -58,12 +53,31 @@ test(`${testName} ${testTags}`, async () => {
     await app1.closeTooltips();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
+    await app1.startChatButtonController.ClickOnStartOneToOne();
+    await app1.createChatController.CreateSUC(user1.userInfo.lastName);
+    await app1.inviteController.acceptInvite('SUC');
 
-    await app1.open(title);
-    await app1.inviteController.acceptInvite('Channel');
+    const user2Message = await app1.chatController.sendContent(randomContent);
+    await app1.chatController.leaveChat();
 
-    const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
-    await expect(messageReceived).toHaveText(randomContent);
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} rejoins ${testChatType}`);
+    await app1.startChatButtonController.ClickOnStartOneToOne();
+    const user1fullName = `${user1.userInfo.firstName} ${user1.userInfo.lastName}`;
+    await app1.createChatController.CreateSUC(user1fullName);
+    await app1.inviteController.clickJoin();
+
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} sees their previous message`);
+    const previousMessage = app1.Pom.CHATIFRAME.getByText(user2Message).first();
+    await expect(previousMessage).toHaveText(user2Message);
+
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
+    const systemEvent1 = app1.Pom.CHATIFRAME.getByText('You left');
+    await expect(systemEvent1).toHaveText('You left');
+
+    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
+    const systemEvent2 = app1.Pom.CHATIFRAME.getByText('You joined').nth(1);
+    await expect(systemEvent2).toHaveText('You joined');
+
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 

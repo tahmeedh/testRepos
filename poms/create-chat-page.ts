@@ -15,6 +15,7 @@ export class CreateChatPage extends BasePage {
     readonly INPUT_SUBJECT: Locator;
     readonly ACCEPT_BUTTON_MUC: Locator;
     readonly DECLINE_BUTTON_MUC: Locator;
+    readonly INVITE_BUTTON: Locator;
 
     //SMS
     readonly EXTERNAL_SEARCH_INPUT: Locator;
@@ -31,9 +32,12 @@ export class CreateChatPage extends BasePage {
     readonly SELECT_MODERATORS_INPUT: Locator;
     readonly SELECT_PARTICIPANTS_BUTTON: Locator;
     readonly SELECT_PARTICIPANTS_INPUT: Locator;
+    readonly JOIN_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
+
+        this.JOIN_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-join');
         this.SUC_SEARCH_INPUT = this.CHATIFRAME.getByPlaceholder('Search by name');
         this.NAME = this.CHATIFRAME.locator('.m-auto-contact-list-item-username');
         this.SELECT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-add');
@@ -42,11 +46,12 @@ export class CreateChatPage extends BasePage {
         this.DECLINE_BUTTON = this.CHATIFRAME.getByRole('button', { name: 'Decline' });
 
         //MUC
-        this.MUC_SEARCH_INPUT = this.CHATIFRAME.getByRole('textbox');
+        this.MUC_SEARCH_INPUT = this.CHATIFRAME.getByPlaceholder('Search to select participants');
         this.NEXT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-next');
         this.INPUT_SUBJECT = this.CHATIFRAME.getByLabel('input-label');
         this.ACCEPT_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-accept');
         this.DECLINE_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-decline');
+        this.INVITE_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-invite');
 
         //SMS
         this.EXTERNAL_SEARCH_INPUT = this.CHATIFRAME.getByPlaceholder('Search for contact or number');
