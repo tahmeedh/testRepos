@@ -154,8 +154,8 @@ export class CreateChatController {
         });
     }
 
-    async inviteMUC(users) {
-        return test.step('Create Chat Controller : Select User', async () => {
+    async inviteMUC(users: string[]) {
+        test.step('Create Chat Controller : Select User', async () => {
             for (const username of users) {
                 Log.info(`Search for ${username}`);
                 await this.SearchMucUser(username);
@@ -165,8 +165,8 @@ export class CreateChatController {
         });
     }
 
-    async inviteChannels(participants) {
-        return test.step('Create Chat Controller : Select Participants in channels', async () => {
+    async inviteChannels(participants: string[]) {
+        test.step('Create Chat Controller : Select Participants in channels', async () => {
             if (participants.length !== 0) {
                 await this.Pom.SELECT_PARTICIPANTS_BUTTON.click();
                 for (const participant of participants) {
