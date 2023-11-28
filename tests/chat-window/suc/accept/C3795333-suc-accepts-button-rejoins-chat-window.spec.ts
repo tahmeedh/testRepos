@@ -15,15 +15,13 @@ let app1 = null;
 let company: Company;
 let user1 = null;
 let user2 = null;
-let user3 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
-    user3 = await company.createUser();
-    await company.addUserToEachOthersRoster([user1, user2, user3]);
+    await company.addUserToEachOthersRoster([user1, user2]);
 });
 
 test(`${testName} ${testTags}`, async () => {
