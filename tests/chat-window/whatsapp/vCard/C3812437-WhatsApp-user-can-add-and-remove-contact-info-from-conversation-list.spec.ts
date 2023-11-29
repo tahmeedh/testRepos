@@ -2,12 +2,13 @@ import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
+import { User } from 'Apis/user';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
 
 let company: Company;
-let user1 = null;
+let user1: User = null;
 
 test.beforeAll(async () => {
     company = await Company.createCompany();
@@ -18,7 +19,7 @@ test.beforeAll(async () => {
         user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
     ]);
 
-    await user1.requestAndAssignTwilioNumber();
+    await user1.requestAndAssignWhatsAppNumber();
 });
 
 test(`${testName} ${testTags}`, async ({ page }) => {
@@ -26,7 +27,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
 
     app = new BaseController(page);
     let phoneNumber: string;
-    await test.step('GIVEN - User has an existing SMS conversation', async () => {
+    await test.step('GIVEN - User has an existing WhatsApp conversation', async () => {
         await test.step('Go to login page', async () => {
             await app.goToLoginPage();
         });
@@ -36,9 +37,9 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await app.closeTooltips();
         });
 
-        await test.step('Starts a SMS conversation', async () => {
-            await app.startChatButtonController.ClickOnStartSMS();
-            phoneNumber = await app.createChatController.CreateSMS();
+        await test.step('Starts a WhatsApp conversation', async () => {
+            await app.startChatButtonController.ClickOnStartWhatsapp();
+            phoneNumber = await app.createChatController.CreateWhatsapp();
             await app.chatController.fillRecipientInfoModal('firstname', 'lastname');
         });
 

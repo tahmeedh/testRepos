@@ -30,6 +30,5 @@ export class MessageHubPage extends BasePage {
         this.ATTACHMENT_TEXT_LINE = this.MESSAGEIFRAME.getByText('Attachment');
         this.CHAT_FLAG_INDICATOR = this.MESSAGEIFRAME.locator('.grid-item__flag');
         this.CHAT_FAVOURITE_INDICATOR = this.MESSAGEIFRAME.locator('.gr-icon-star_filled');
-        this.CONVERSATION_ROW = this.MESSAGEIFRAME.locator('.m-auto-list-item-row');
     }
 }
