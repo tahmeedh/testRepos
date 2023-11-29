@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 import { StringUtils } from 'helper/string-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 import { ChatPage } from '../poms/chat-page';
 
 export class ChatController {
@@ -99,6 +100,18 @@ export class ChatController {
     async skipRecipientInfo() {
         await test.step('Chat Controller : Skip Adding Recipient Information', async () => {
             await this.Pom.RECIPIENT_INFO_SKIP_BUTTON.click();
+        });
+    }
+
+    async fillRecipientInfoModal(firstName: string, lastName: string) {
+        await test.step('Chat Controller : Fill first name and last name in Recipient Information modal', async () => {
+            Log.info('Chat Controller : Fill first name and last name in Recipient Information modal');
+            await this.Pom.RECIPIENT_INFO_FIRST_NAME_FIELD.fill(firstName);
+            await this.Pom.RECIPIENT_INFO_LAST_NAME_FIELD.fill(lastName);
+        });
+        await test.step(`Chat Controller : Clicks on 'Save' button in Recipient Information modal`, async () => {
+            Log.info(`Chat Controller : Clicks on 'Save' button in Recipient Information modal`);
+            await this.Pom.RECIPIENT_INFO_SAVE_BUTTON.click();
         });
     }
 

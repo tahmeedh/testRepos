@@ -13,6 +13,7 @@ export class MessageHubPage extends BasePage {
     readonly ATTACHMENT_TEXT_LINE: Locator;
     readonly CHAT_FLAG_INDICATOR: Locator;
     readonly CHAT_FAVOURITE_INDICATOR: Locator;
+    readonly CONVERSATION_ROW: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -20,7 +21,7 @@ export class MessageHubPage extends BasePage {
         this.HUB_CONTAINER = this.MESSAGEIFRAME.locator('.hub-container');
         //sidebar
         this.CHATS_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-chats-button');
-        this.CONTACTS_BUTTON = this.CHATIFRAME.locator('.m-auto-contacts-button');
+        this.CONTACTS_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-contacts-button');
 
         // Row Information
         this.CHAT_NAME = this.MESSAGEIFRAME.locator('.twemoji-wrapper');

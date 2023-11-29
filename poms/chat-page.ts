@@ -27,6 +27,9 @@ export class ChatPage extends BasePage {
     readonly CHAT_HEADER_MENU_DROP_DOWN: Locator;
     readonly CHAT_FAVOURITE_BUTTON: Locator;
     readonly LEAVE_CHAT_BUTTON: Locator;
+    readonly RECIPIENT_INFO_FIRST_NAME_FIELD: Locator;
+    readonly RECIPIENT_INFO_LAST_NAME_FIELD: Locator;
+    readonly RECIPIENT_INFO_SAVE_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -60,5 +63,13 @@ export class ChatPage extends BasePage {
         this.FILESHARING_DOWNLOAD_BTN = this.CHATIFRAME.getByRole('menuitem', { name: 'Download' });
         this.RECIPIENT_INFO_SKIP_BUTTON = this.CHATIFRAME.getByText('Skip');
         this.LEAVE_CHAT_BUTTON = this.CHATIFRAME.locator('.m-auto-leaveBtn');
+
+        this.RECIPIENT_INFO_FIRST_NAME_FIELD = this.CHATIFRAME.locator(
+            '.m-auto-first-name-input .public-DraftEditor-content'
+        );
+        this.RECIPIENT_INFO_LAST_NAME_FIELD = this.CHATIFRAME.locator(
+            '.m-auto-last-name-input .public-DraftEditor-content'
+        );
+        this.RECIPIENT_INFO_SAVE_BUTTON = this.CHATIFRAME.getByText('Save');
     }
 }
