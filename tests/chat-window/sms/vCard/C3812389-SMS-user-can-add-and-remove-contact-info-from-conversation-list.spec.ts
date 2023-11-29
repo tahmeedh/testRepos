@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
+import { Log } from 'Apis/api-helpers/log-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
@@ -23,6 +24,7 @@ test.beforeAll(async () => {
 
 test(`${testName} ${testTags}`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
+    Log.starDivider(`START TEST`);
 
     app = new BaseController(page);
     let phoneNumber: string;
@@ -126,6 +128,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await expect(app.vCardController.Pom.JOB_TITLE).toBeHidden();
         });
     });
+    Log.starDivider(`END TEST`);
 });
 
 test.afterAll(async () => {

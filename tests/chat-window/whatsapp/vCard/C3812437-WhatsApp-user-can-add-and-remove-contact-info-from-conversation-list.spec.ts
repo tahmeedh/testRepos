@@ -3,6 +3,7 @@ import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { User } from 'Apis/user';
+import { Log } from 'Apis/api-helpers/log-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
@@ -13,17 +14,13 @@ let user1: User = null;
 test.beforeAll(async () => {
     company = await Company.createCompany();
     user1 = await company.createUser();
-
-    await Promise.all([
-        user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
-        user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
-    ]);
-
+    user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR');
     await user1.requestAndAssignWhatsAppNumber();
 });
 
 test(`${testName} ${testTags}`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
+    Log.starDivider(`START TEST`);
 
     app = new BaseController(page);
     let phoneNumber: string;
@@ -127,6 +124,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await expect(app.vCardController.Pom.JOB_TITLE).toBeHidden();
         });
     });
+    Log.starDivider(`END TEST`);
 });
 
 test.afterAll(async () => {
