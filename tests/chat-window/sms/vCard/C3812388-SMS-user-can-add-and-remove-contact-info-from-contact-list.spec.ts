@@ -49,11 +49,8 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     });
     await test.step('Step 1 - User can add info to vCard', async () => {
         await test.step('User clicks on avatar on contact list', async () => {
-            await app.page.pause();
-
             await app.contactListController.clickOnContactAvatar(`firstname lastname`);
         });
-        // await app.page.pause()
 
         await test.step('vCard is displayed', async () => {
             await expect(app.vCardController.Pom.FIRST_LAST_NAME).toHaveText(`firstname lastname`);
