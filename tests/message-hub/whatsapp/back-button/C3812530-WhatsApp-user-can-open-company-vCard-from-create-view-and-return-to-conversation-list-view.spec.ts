@@ -16,12 +16,8 @@ test.beforeAll(async () => {
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
-    await Promise.all([
-        user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
-        user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
-    ]);
-
-    await user1.requestAndAssignTwilioNumber();
+    await user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR');
+    await user1.requestAndAssignWhatsAppNumber();
 });
 
 test(`${testName} ${testTags}`, async ({ page }) => {
@@ -40,9 +36,9 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
     });
 
-    await test.step('User can navigate to company vCard in SMS create', async () => {
-        await test.step(`User clicks on 'start-new-chat' button`, async () => {
-            await app.startChatButtonController.ClickOnStartSMS();
+    await test.step('User can navigate to company vCard in WhatsApp create', async () => {
+        await test.step(`User clicks on 'start-new-chat' button and select`, async () => {
+            await app.startChatButtonController.ClickOnStartWhatsapp();
         });
 
         await test.step(`User 1 searches for user 2`, async () => {
@@ -68,7 +64,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
     });
 
-    await test.step('User can navigate to back to conversation list from company vCard', async () => {
+    await test.step('User can navigate to back to message hub from company vCard', async () => {
         await test.step('User vCard is displayed when user clicks on back button', async () => {
             await app.companyVCardController.clickOnBackButton();
             await expect(app.vCardController.Pom.COMPANY_NAME_INTERNAL).toHaveText(
