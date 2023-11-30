@@ -77,7 +77,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await expect(app.createChatController.Pom.EXTERNAL_SEARCH_INPUT).toBeVisible();
         });
 
-        await test.step('Conversation view displayed when user clicks on cancel button', async () => {
+        await test.step('Message hub displayed when user clicks on cancel button', async () => {
             await app.createChatController.clickOnCancelButton();
             await expect(app.startChatButtonController.Pom.START_CHAT).toBeVisible();
         });
