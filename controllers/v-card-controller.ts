@@ -17,4 +17,11 @@ export class VCardController {
             await this.Pom.EDIT_BUTTON.click();
         });
     }
+
+    async clickOnBackButton() {
+        await test.step(`VCard Controller: Click on back button`, async () => {
+            Log.info(`VCard Controller: Click on back button`);
+            await this.Pom.BACK_BUTTON.click();
+        });
+    }
 }

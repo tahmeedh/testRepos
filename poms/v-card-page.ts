@@ -7,7 +7,9 @@ export class VCardPage extends BasePage {
     readonly TEXT_ICON: Locator;
     readonly CALL_ICON: Locator;
     readonly FIRST_LAST_NAME: Locator;
+    readonly COMPANY_NAME_INTERNAL: Locator;
     readonly EDIT_BUTTON: Locator;
+    readonly BACK_BUTTON: Locator;
     readonly PHONE_NUMBER: Locator;
     readonly JOB_TITLE: Locator;
     readonly COMPANY: Locator;
@@ -19,9 +21,11 @@ export class VCardPage extends BasePage {
         this.VCARD_CONTAINER = this.CHATIFRAME.locator('.m-auto-vcard-container');
         this.CONTACTCARD_CONTAINER = this.CHATIFRAME.locator('.ContactCard_contact--container__BTJGG');
         this.TEXT_ICON = this.CHATIFRAME.locator('.m-auto-text-button');
-        this.CALL_ICON = this.CHATIFRAME.locator('.m-auto-text-button');
+        this.CALL_ICON = this.CHATIFRAME.locator('.m-auto-call-button');
         this.FIRST_LAST_NAME = this.CHATIFRAME.locator('.m-auto-sms-contact-first-and-last-name');
+        this.COMPANY_NAME_INTERNAL = this.CHATIFRAME.locator('.m-auto-company-name');
         this.EDIT_BUTTON = this.CHATIFRAME.locator('.m-auto-external-vcard-edit-button');
+        this.BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-vcard-container .m-auto-chat-header-back-button');
         this.PHONE_NUMBER = this.CHATIFRAME.locator('.m-auto-phone-number-primary');
         this.CHAT_HEADER_MENU = this.CHATIFRAME.locator('.m-auto-menu-button');
         this.JOB_TITLE = this.CHATIFRAME.locator('.m-auto-job-title');
