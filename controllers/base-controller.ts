@@ -20,6 +20,7 @@ import 'dotenv/config';
 import { ContactListController } from './message-hub/contact-list-controller';
 import { GlobalSearchController } from './message-hub/global-search-controller';
 import { ConversationListController } from './message-hub/conversation-list-controller';
+import { CompanyVCardController } from './company-v-card-controller';
 
 export class BaseController {
     readonly page: Page;
@@ -37,6 +38,7 @@ export class BaseController {
     readonly contactListController: ContactListController;
     readonly globalSearchController: GlobalSearchController;
     readonly conversationListController: ConversationListController;
+    readonly companyVCardController: CompanyVCardController;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -57,6 +59,7 @@ export class BaseController {
         this.contactListController = new ContactListController(this.page);
         this.globalSearchController = new GlobalSearchController(this.page);
         this.conversationListController = new ConversationListController(this.page);
+        this.companyVCardController = new CompanyVCardController(this.page);
     }
 
     async closeTooltips() {

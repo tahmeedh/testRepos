@@ -56,8 +56,8 @@ export class CreateChatController {
     }
 
     async SearchSMSUser(username: string = StringUtils.generatePhoneNumber()) {
-        return test.step('Create Chat Controller : create SMS', async () => {
-            Log.info(`Search for ${username}`);
+        return test.step(`Create Chat Controller : Search for user '${username}' in create SMS view`, async () => {
+            Log.info(`Create Chat Controller : Search for user '${username}' in create SMS view`);
             await this.Pom.EXTERNAL_SEARCH_INPUT.click();
             await this.Pom.EXTERNAL_SEARCH_INPUT.fill(username);
             return username;
@@ -179,6 +179,24 @@ export class CreateChatController {
                 }
                 await this.Pom.SELECT_BUTTON.click();
             }
+        });
+    }
+
+    async clickOnSearchComponentRowAvatar(userName: string) {
+        await test.step(`Create Chat Controller: Click on the first row with name'${userName}'`, async () => {
+            Log.info(`Create Chat Controller: Click on first row with name '${userName}'`);
+            await this.Pom.SEARCH_COMPONENT_CONTACT_ROW.getByText(userName)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .click();
+        });
+    }
+
+    async clickOnCancelButton() {
+        await test.step(`Create Chat Controller: Click on 'Cancel' button`, async () => {
+            Log.info(`Create Chat Controller: Click on 'Cancel' button`);
+            await this.Pom.CANCEL_BUTTON.click();
         });
     }
 }

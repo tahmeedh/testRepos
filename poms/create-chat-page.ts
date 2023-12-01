@@ -20,6 +20,7 @@ export class CreateChatPage extends BasePage {
     //SMS
     readonly EXTERNAL_SEARCH_INPUT: Locator;
     readonly ADD_EXTERNAL_NUMBER: Locator;
+    readonly SEARCH_COMPONENT_CONTACT_ROW: Locator;
 
     // Channel
     readonly CHANNEL_NAME_BUTTON: Locator;
@@ -33,6 +34,7 @@ export class CreateChatPage extends BasePage {
     readonly SELECT_PARTICIPANTS_BUTTON: Locator;
     readonly SELECT_PARTICIPANTS_INPUT: Locator;
     readonly JOIN_BUTTON: Locator;
+    readonly CANCEL_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -56,6 +58,8 @@ export class CreateChatPage extends BasePage {
         //SMS
         this.EXTERNAL_SEARCH_INPUT = this.CHATIFRAME.getByPlaceholder('Search for contact or number');
         this.ADD_EXTERNAL_NUMBER = this.CHATIFRAME.locator('.m-auto-add-number-section');
+        this.SEARCH_COMPONENT_CONTACT_ROW = this.CHATIFRAME.getByTestId('m-auto-contact');
+        this.CANCEL_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-cancel');
 
         // Channel
         this.CHANNEL_NAME_BUTTON = this.CHATIFRAME.locator('.m-auto-create-channel-name-region').getByLabel(
