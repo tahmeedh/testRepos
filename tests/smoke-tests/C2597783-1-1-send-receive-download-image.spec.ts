@@ -32,6 +32,7 @@ test(`${testName} ${testTags}`, async () => {
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
+    await app.goToLoginPage();
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.closeTooltips();
 
