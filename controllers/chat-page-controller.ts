@@ -127,6 +127,21 @@ export class ChatController {
         });
     }
 
+    async openChatDetails() {
+        await test.step('Chat Controller: Open Chat Detail', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_VIEW_DETAILS.click();
+        });
+    }
+
+    async renameMultiUserChat(subjectName: string) {
+        await test.step('Chat Controller: Rename MUC Chat', async () => {
+            await this.Pom.CHAT_DETAIL_EDIT_BUTTON.click();
+            await this.Pom.CHAT_SUBJECT_EDIT_FIELD.fill(subjectName);
+            await this.Pom.CHAT_SUBJECT_SAVE_BUTTON.click();
+        });
+    }
+
     async leaveChat() {
         await test.step('Chat Controller: Leave Chat and Naviagate back to Message Hub', async () => {
             await this.clickChatHeaderMenu();
