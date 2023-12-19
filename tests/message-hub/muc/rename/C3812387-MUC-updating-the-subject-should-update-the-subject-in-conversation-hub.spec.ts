@@ -1,4 +1,4 @@
-import { test, chromium } from '@playwright/test';
+import { test, chromium, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
@@ -47,21 +47,14 @@ test(`${testName} ${testTags}`, async () => {
         `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
 
-    await app.page.pause();
-
     await app.chatController.openChatDetails();
-    await app.chatController.renameMultiUserChat(subjectText);
+    await app.chatController.renameChat(subjectText);
 
-    await app.page.pause();
-
-    //
-
-    // Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
-    // await app.chatController.typeContent(draftText);
-    // await app.messageHubController.clickSideBarChatsButton();
-    // const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
-    // await expect(secondaryLine).toHaveText(draftText);
-    // Log.starDivider(`END TEST: Test Execution Commpleted`);
+    Log.info(`${testChatType} chat expects ${subjectText} string in Chat title state `);
+    await app.messageHubController.clickSideBarChatsButton();
+    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(subjectText);
+    await expect(secondaryLine).toHaveText(subjectText);
+    Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
 
 test.afterEach(async () => {

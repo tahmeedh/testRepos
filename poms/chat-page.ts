@@ -48,8 +48,10 @@ export class ChatPage extends BasePage {
         this.CHAT_INPUT = this.CHATIFRAME.getByRole('textbox', { name: 'input-label' });
         this.SEND_BUTTON = this.CHATIFRAME.locator('.m-auto-send-btn');
         this.ACCEPT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-accept');
-        this.CHAT_DETAIL_EDIT_BUTTON = this.CHATIFRAME.locator('.m-auto-edit-subject-btn"');
-        this.CHAT_SUBJECT_EDIT_FIELD = this.CHATIFRAME.locator('.m-auto-subject-edit-field');
+        this.CHAT_DETAIL_EDIT_BUTTON = this.CHATIFRAME.locator('.m-auto-edit-subject-btn');
+        this.CHAT_SUBJECT_EDIT_FIELD = this.CHATIFRAME.locator(
+            'xpath=//*[@id="root"]/div[2]/div[2]/div/div[1]/div/div[2]/div[1]/div/div/div/div/div/div/div'
+        );
         this.CHAT_SUBJECT_SAVE_BUTTON = this.CHATIFRAME.locator('.m-auto-saveEditBtn');
 
         this.CHAT_HEADER_MENU = this.CHATIFRAME.locator('.chat-header-menu-button');

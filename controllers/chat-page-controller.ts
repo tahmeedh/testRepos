@@ -134,8 +134,8 @@ export class ChatController {
         });
     }
 
-    async renameMultiUserChat(subjectName: string) {
-        await test.step('Chat Controller: Rename MUC Chat', async () => {
+    async renameChat(subjectName: string) {
+        await test.step('Chat Controller: Rename Chat', async () => {
             await this.Pom.CHAT_DETAIL_EDIT_BUTTON.click();
             await this.Pom.CHAT_SUBJECT_EDIT_FIELD.fill(subjectName);
             await this.Pom.CHAT_SUBJECT_SAVE_BUTTON.click();
