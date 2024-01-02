@@ -25,9 +25,6 @@ export class ChatPage extends BasePage {
     readonly DROP_DOWN_INVITE_PARTICIPANTS: Locator;
     readonly DROP_DOWN_VIEW_DETAILS: Locator;
     readonly CHAT_HEADER_MENU_DROP_DOWN: Locator;
-    readonly CHAT_DETAIL_EDIT_BUTTON: Locator;
-    readonly CHAT_SUBJECT_EDIT_FIELD: Locator;
-    readonly CHAT_SUBJECT_SAVE_BUTTON: Locator;
     readonly CHAT_FAVOURITE_BUTTON: Locator;
     readonly LEAVE_CHAT_BUTTON: Locator;
     readonly RECIPIENT_INFO_FIRST_NAME_FIELD: Locator;
@@ -48,12 +45,6 @@ export class ChatPage extends BasePage {
         this.CHAT_INPUT = this.CHATIFRAME.getByRole('textbox', { name: 'input-label' });
         this.SEND_BUTTON = this.CHATIFRAME.locator('.m-auto-send-btn');
         this.ACCEPT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-accept');
-        this.CHAT_DETAIL_EDIT_BUTTON = this.CHATIFRAME.locator('.m-auto-edit-subject-btn');
-        this.CHAT_SUBJECT_EDIT_FIELD = this.CHATIFRAME.locator(
-            'xpath=//*[@id="root"]/div[2]/div[2]/div/div[1]/div/div[2]/div[1]/div/div/div/div/div/div/div'
-        );
-        this.CHAT_SUBJECT_SAVE_BUTTON = this.CHATIFRAME.locator('.m-auto-saveEditBtn');
-
         this.CHAT_HEADER_MENU = this.CHATIFRAME.locator('.chat-header-menu-button');
 
         this.TIMESTAMP_CONTAINER = this.CHATIFRAME.locator('.m-auto-timestamp-region');

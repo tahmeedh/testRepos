@@ -134,14 +134,6 @@ export class ChatController {
         });
     }
 
-    async renameChat(subjectName: string) {
-        await test.step('Chat Controller: Rename Chat', async () => {
-            await this.Pom.CHAT_DETAIL_EDIT_BUTTON.click();
-            await this.Pom.CHAT_SUBJECT_EDIT_FIELD.fill(subjectName);
-            await this.Pom.CHAT_SUBJECT_SAVE_BUTTON.click();
-        });
-    }
-
     async leaveChat() {
         await test.step('Chat Controller: Leave Chat and Naviagate back to Message Hub', async () => {
             await this.clickChatHeaderMenu();

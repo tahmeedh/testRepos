@@ -48,7 +48,7 @@ test(`${testName} ${testTags}`, async () => {
     );
 
     await app.chatController.openChatDetails();
-    await app.chatController.renameChat(subjectText);
+    await app.detailsController.renameChat(subjectText);
 
     Log.info(`${testChatType} chat expects ${subjectText} string in Chat title state `);
     await app.messageHubController.clickSideBarChatsButton();
