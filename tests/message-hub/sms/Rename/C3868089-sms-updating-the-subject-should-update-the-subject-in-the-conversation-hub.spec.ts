@@ -5,7 +5,7 @@ import { Log } from 'Apis/api-helpers/log-utils';
 import { StringUtils } from 'helper/string-utils';
 import { BandwidthUtils } from 'Apis/api-helpers/bandwidth-utils';
 import { users } from 'Constants/users';
-import { BaseController } from '../../../../controllers/base-controller';
+import { BaseController } from 'controllers/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -15,7 +15,6 @@ let bandwidthUtils: BandwidthUtils;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
-    //let bandwidthUtils: BandwidthUtils;
     bandwidthUtils = new BandwidthUtils(
         '+17786819999',
         721495,
@@ -48,19 +47,17 @@ test(`${testName} ${testTags}`, async () => {
     await app.startChatButtonController.ClickOnStartSMS();
 
     const randonNumbers = [StringUtils.generatePhoneNumber(), StringUtils.generatePhoneNumber()];
-    //const randonNumber = await app.createChatController.CreateSMS();
 
     await app.createChatController.CreateGroupSMS(randonNumbers);
     await app.chatController.sendContent();
     Log.success(
-        `SUCCESS: ${testChatType} conversation was created with '${randonNumbers}' and random text string was '`
+        `SUCCESS: ${testChatType} conversation was created with '${randonNumbers}' and random text string was sent '`
     );
 
-    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} presses back button`);
     const subjectText = StringUtils.generateString();
     await app.chatController.openChatDetails();
-
     await app.detailsController.renameSMSChat(subjectText);
+
     Log.info(`${testChatType} chat expects ${subjectText} string in Group SMS Chat title state`);
     await app.messageHubController.clickSideBarChatsButton();
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(subjectText);

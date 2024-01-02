@@ -15,10 +15,10 @@ export class DetailsPage extends BasePage {
         this.MEMBER_ROLES_BUTTON = this.CHATIFRAME.locator('.m-auto-members-roles-button');
         this.CHAT_DETAIL_EDIT_BUTTON = this.CHATIFRAME.locator('.m-auto-edit-subject-btn');
         this.CHAT_SUBJECT_EDIT_FIELD = this.CHATIFRAME.locator(
-            'xpath=//*[@id="root"]/div[2]/div[2]/div/div[1]/div/div[2]/div[1]/div/div/div/div/div/div/div'
+            '.m-auto-subject-edit-field .public-DraftEditor-content'
         );
         this.SUBJECT_EDIT_FIELD = this.CHATIFRAME.locator(
-            'xpath=//*[@id="root"]/div[2]/div/div/div[1]/div/div[2]/div[1]/div/div/div[2]/div'
+            '.m-auto-group-text-subject-edit-field .public-DraftEditor-content'
         );
         this.GROUP_TEXT_DETAIL_EDIT_BUTTON = this.CHATIFRAME.locator('.m-auto-edit-group-text-subject-btn');
         this.CHAT_SUBJECT_SAVE_BUTTON = this.CHATIFRAME.locator('.m-auto-saveEditBtn');
