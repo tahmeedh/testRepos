@@ -127,6 +127,13 @@ export class ChatController {
         });
     }
 
+    async openChatDetails() {
+        await test.step('Chat Controller: Open Chat Detail', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_VIEW_DETAILS.click();
+        });
+    }
+
     async leaveChat() {
         await test.step('Chat Controller: Leave Chat and Naviagate back to Message Hub', async () => {
             await this.clickChatHeaderMenu();
