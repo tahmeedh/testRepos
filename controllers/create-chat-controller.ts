@@ -55,7 +55,7 @@ export class CreateChatController {
         });
     }
 
-    async CreateGroupSMS(phoneNumbers: string[]) {
+    async CreateGroupText(phoneNumbers: string[]) {
         return test.step('Create Chat Controller : Select User', async () => {
             for (const phoneNumber of phoneNumbers) {
                 const formatted = StringUtils.formatPhoneNumber(phoneNumber);
