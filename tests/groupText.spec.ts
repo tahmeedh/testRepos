@@ -86,7 +86,7 @@ test(`C3868089-sms-updating-the-subject-should-update-the-subject-in-the-convers
 
         const randonNumbers = [StringUtils.generatePhoneNumber(), StringUtils.generatePhoneNumber()];
 
-        await app.createChatController.CreateGroupSMS(randonNumbers);
+        await app.createChatController.CreateGroupText(randonNumbers);
         await app.chatController.sendContent();
         Log.success(
             `SUCCESS: ${testChatType} conversation was created with '${randonNumbers}' and random text string was sent '`
@@ -94,7 +94,7 @@ test(`C3868089-sms-updating-the-subject-should-update-the-subject-in-the-convers
 
         const subjectText = StringUtils.generateString();
         await app.chatController.openChatDetails();
-        await app.detailsController.renameSMSChat(subjectText);
+        await app.detailsController.renameGroupChat(subjectText);
 
         Log.info(`${testChatType} chat expects ${subjectText} string in Group SMS Chat title state`);
         await app.messageHubController.clickSideBarChatsButton();

@@ -48,7 +48,7 @@ test(`${testName} ${testTags}`, async () => {
     );
 
     await app.chatController.openChatDetails();
-    await app.detailsController.renameChat(subjectText);
+    await app.detailsController.renameMucChat(subjectText);
 
     Log.info(`${testChatType} chat expects ${subjectText} string in Chat title state `);
     await app.messageHubController.clickSideBarChatsButton();

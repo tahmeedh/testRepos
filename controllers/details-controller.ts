@@ -18,7 +18,7 @@ export class DetailsController {
         this.Pom.MEMBER_ROLES_BUTTON.click();
     }
 
-    async renameChat(subjectName: string) {
+    async renameMucChat(subjectName: string) {
         await test.step('Detail Controller: Rename Chat', async () => {
             await this.Pom.CHAT_DETAIL_EDIT_BUTTON.click();
             await this.Pom.CHAT_SUBJECT_EDIT_FIELD.fill(subjectName);
@@ -26,7 +26,7 @@ export class DetailsController {
         });
     }
 
-    async renameSMSChat(subjectName: string) {
+    async renameGroupChat(subjectName: string) {
         await test.step('Detail Controller: Rename Chat', async () => {
             await this.Pom.GROUP_TEXT_DETAIL_EDIT_BUTTON.click();
             await this.Pom.SUBJECT_EDIT_FIELD.fill(subjectName);
