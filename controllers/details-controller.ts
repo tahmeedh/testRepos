@@ -18,10 +18,10 @@ export class DetailsController {
         this.Pom.MEMBER_ROLES_BUTTON.click();
     }
 
-    async renameMucChat(subjectName: string) {
+    async renameMUC(subjectName: string) {
         await test.step('Detail Controller: Rename Chat', async () => {
-            await this.Pom.CHAT_DETAIL_EDIT_BUTTON.click();
-            await this.Pom.CHAT_SUBJECT_EDIT_FIELD.fill(subjectName);
+            await this.Pom.MUC_DETAIL_EDIT_BUTTON.click();
+            await this.Pom.MUC_SUBJECT_EDIT_FIELD.fill(subjectName);
             await this.Pom.CHAT_SUBJECT_SAVE_BUTTON.click();
         });
     }
@@ -29,7 +29,7 @@ export class DetailsController {
     async renameGroupChat(subjectName: string) {
         await test.step('Detail Controller: Rename Chat', async () => {
             await this.Pom.GROUP_TEXT_DETAIL_EDIT_BUTTON.click();
-            await this.Pom.SUBJECT_EDIT_FIELD.fill(subjectName);
+            await this.Pom.GROUP_TEXT_SUBJECT_EDIT_FIELD.fill(subjectName);
             await this.Pom.CHAT_SUBJECT_SAVE_BUTTON.click();
         });
     }
