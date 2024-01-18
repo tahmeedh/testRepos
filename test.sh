@@ -33,12 +33,11 @@ source ~/.bashrc
 cd /opt/jsat-e2e-chat-window/
 nvm install 16.16.0
 npm use 16.16.0
-npm install
-cd ./sm-api
-npm install
-cd ..
+npm ci
+echo "Done with npm ci command, start npx playwright install"
+pwd
 npx playwright install
-SERVER=$ENV_NAME npm run test
+SERVER=$ENV_NAME npx playwright test
 test_result=$?
 if [ "$test_result" -ne 0 ]; then
     echo 'jsat-e2e-chat-window tests returns non-zero code, indicating tests failed, exit right away with code 1'
