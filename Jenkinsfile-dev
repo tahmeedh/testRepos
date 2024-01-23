@@ -88,10 +88,8 @@ pipeline {
                     reportName: 'jsat-e2e-chat-window Test Report'
                 ]
                 currentBuild.displayName = "#${buildNumber} Target Env.: ${params.targetEnvParam}"
-                if (fileExists('chat-window-version.txt')) {
-                  def chatWindowVer = readFile(file: 'chat-window-version.txt').trim()
-                  currentBuild.description = "Chat-window version: [${chat-window-version}]"
-                }
+                archiveArtifacts artifacts: '**/chat-window-version.txt'
+                   allowEmptyArchive: true
             }
         }
 
