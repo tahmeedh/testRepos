@@ -88,8 +88,6 @@ pipeline {
                     reportName: 'jsat-e2e-chat-window Test Report'
                 ]
                 currentBuild.displayName = "#${buildNumber} Target Env.: ${params.targetEnvParam}"
-                archiveArtifacts artifacts: '**/chat-window-version.txt'
-                   allowEmptyArchive: true
             }
         }
 
