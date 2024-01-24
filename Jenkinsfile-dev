@@ -76,21 +76,6 @@ pipeline {
     }
 
     post {
-        always {
-            script {
-                echo "Publish test result report"
-                publishHTML target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: true,
-                    reportDir: './jsat-e2e-chat-window/playwright-report',
-                    reportFiles: 'index.html',
-                    reportName: 'jsat-e2e-chat-window Test Report'
-                ]
-                currentBuild.displayName = "#${buildNumber} Target Env.: ${params.targetEnvParam}"
-            }
-        }
-
         failure {
             script {
                 echo "Sending notification email to $email_recipients"
