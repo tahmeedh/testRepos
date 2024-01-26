@@ -65,7 +65,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.chatController.leaveChat();
 
     Log.info(`Re-invite ${user2.userInfo.firstName} ${user2.userInfo.lastName} to ${testChatType}`);
-    await app.inviteParticipants([`${user2.userInfo.firstName} ${user2.userInfo.lastName}`], 'Open');
+    await app.inviteParticipants([`${user2.userInfo.firstName} ${user2.userInfo.lastName}`], 'channel');
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} rejoins channel`);
     await app1.open(title);
