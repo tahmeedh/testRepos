@@ -30,7 +30,6 @@ test('C444', async ({ page }) => {
         const app = new BaseController(page);
         await app.goToLoginPage();
         await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.page.pause();
     } catch (error) {
         Log.error(`FAILURE: An error occured`, error);
         test.fail();
@@ -49,7 +48,6 @@ test('C555', async ({ page }) => {
         const app = new BaseController(page);
         await app.goToLoginPage();
         await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.page.pause();
     } catch (error) {
         Log.error(`FAILURE: An error occured`, error);
         test.fail();
