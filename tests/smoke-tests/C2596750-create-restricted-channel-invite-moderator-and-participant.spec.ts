@@ -41,7 +41,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.closeTooltips();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartChannel();
+    // await app.startChatButtonController.ClickOnStartChannel();
     const title = StringUtils.generateString(3, 5);
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
     await app.createChatController.fillOutWhoCanPostForm();

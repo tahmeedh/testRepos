@@ -14,8 +14,7 @@ let user1 = null;
 let user2 = null;
 let user3 = null;
 
-test(`${testName} ${testTags}`, async () => {
-    test.info().annotations.push(testAnnotation);
+test.beforeAll(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
@@ -24,7 +23,8 @@ test(`${testName} ${testTags}`, async () => {
     await company.addUserToEachOthersRoster([user1, user2]);
 });
 
-test('@Real C3793178: MUC draft state has file attachment icon and text for unsent files', async () => {
+test(`${testName} ${testTags}`, async () => {
+    test.info().annotations.push(testAnnotation);
     Log.starDivider(
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
