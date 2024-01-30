@@ -61,7 +61,7 @@ export class TwilioWireMockController {
         //     body
         // };
 
-        // console.log('config', config)
+        console.log('body', body);
         // await AxiosUtils.axiosRequest(
         //     config,
         //     `request to SMS Gateway to send mock twilio message '${message}' from '${fromPhoneNumber}' to '${toPhoneNumber}'`
