@@ -31,13 +31,17 @@ export class TwilioWireMockController {
         const accountSid = await TwilioWireMockController.getAccountSid(companyId);
         const messageSid = randomUUID();
         const SMS_GATEWAY_TWILIO_AUTH_TOKEN = '_MOCK_AUTH_TOKEN_VALUE_32_CHARS_';
+        const body = {
+            AccountSid: accountSid,
+            Body: message,
+            MessageSid: messageSid,
+            From: fromPhoneNumber,
+            To: toPhoneNumber,
+            NumMedia: 0
+        };
         const signature = TwilioSignatureUtil.generateTwilioSignature(
             SMS_GATEWAY,
-            accountSid,
-            message,
-            messageSid,
-            fromPhoneNumber,
-            toPhoneNumber,
+            body,
             SMS_GATEWAY_TWILIO_AUTH_TOKEN
         );
 
@@ -48,14 +52,7 @@ export class TwilioWireMockController {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-Twilio-Signature': signature
             },
-            body: {
-                AccountSid: accountSid,
-                Body: message,
-                MessageSid: messageSid,
-                From: fromPhoneNumber,
-                To: toPhoneNumber,
-                NumMedia: 0
-            }
+            body
         };
 
         // console.log('config', config)

@@ -1,23 +1,28 @@
-/* eslint-disable max-params */
-
 import { createHmac } from 'crypto';
 
+interface BodyValue {
+    AccountSid: string;
+    Body: string;
+    MessageSid: string;
+    From: string;
+    To: string;
+    NumMedia: number;
+    MediaContentType0?: string;
+    MediaUrl0?: string;
+}
 export class TwilioSignatureUtil {
-    static generateTwilioSignature(
-        url: string,
-        accountSid: string,
-        message: string,
-        messageSid: string,
-        fromPhoneNumber: string,
-        toPhoneNumber: string,
-        auth_token: string
-    ) {
+    static generateTwilioSignature(url: string, body: BodyValue, auth_token: string) {
         let fullUrl = url;
-        fullUrl += `AccountSid${accountSid}`;
-        fullUrl += `Body${message}`;
-        fullUrl += `From${fromPhoneNumber}`;
-        fullUrl += `MessageSid${messageSid}`;
-        fullUrl += `To${toPhoneNumber}`;
+        fullUrl += `AccountSid${body.AccountSid}`;
+        fullUrl += `Body${body.Body}`;
+        fullUrl += `From${body.From}`;
+        if (body.MediaContentType0 && body.MediaUrl0) {
+            fullUrl += `MediaContentType0${body.MediaContentType0}`;
+            fullUrl += `MediaURL0${body.MediaUrl0}`;
+        }
+        fullUrl += `MessageSid${body.MessageSid}`;
+        fullUrl += `NumMedia${body.MessageSid}`;
+        fullUrl += `To${body.To}`;
 
         // console.log('fullUrl = ', fullUrl)
 
