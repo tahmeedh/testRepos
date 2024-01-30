@@ -68,7 +68,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
     });
 
-    await test.step('User can navigate to back to conversation list from company vCard', async () => {
+    await test.step('User can navigate to back to message hub from company vCard', async () => {
         await test.step('User vCard is displayed when user clicks on back button', async () => {
             await app.companyVCardController.clickOnBackButton();
             await expect(app.vCardController.Pom.COMPANY_NAME_INTERNAL).toHaveText(
@@ -81,7 +81,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await expect(app.createChatController.Pom.EXTERNAL_SEARCH_INPUT).toBeVisible();
         });
 
-        await test.step('Conversation view displayed when user clicks on cancel button', async () => {
+        await test.step('Message hub displayed when user clicks on cancel button', async () => {
             await app.createChatController.clickOnCancelButton();
             await expect(app.startChatButtonController.Pom.START_CHAT).toBeVisible();
         });

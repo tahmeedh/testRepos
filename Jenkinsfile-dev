@@ -3,7 +3,7 @@ def nodeVersion = 'v16.16.0'
 def buildsToKeep = 20
 def timeOutTime = 40
 def buildNumber = env.BUILD_NUMBER.toInteger()
-def buildImageVersion = '0.0.2-beta'
+def buildImageVersion = '0.0.4-beta'
 def buildImage = "docker-repo.globalrelay.net/test-automation/va-test-image:${buildImageVersion}"
 def buildNode = 'linux'
 def targetEnv = ["cpqa2-va1", "cpqa2-pd1", "cpqa2-pd2", "cpqa2-ca1", "cpqa2-sq1", "cpqa2", "cpqa1"]
@@ -46,18 +46,6 @@ pipeline {
                             fi
                         """
                     }
-
-                    nvm(nvmInstallURL: 'https://raw.githubusercontent.com/creationix/nvm/v0.37.2/install.sh',
-                        nvmInstallDir: '~/.nvm',
-                        nvmIoJsOrgMirror: 'https://nodejs.org/dist',
-                        nvmNodeJsOrgMirror: 'https://nodejs.org/dist',
-                        version: "${nodeVersion}") {
-                        sh '''
-                            cd jsat-e2e-chat-window
-                            git submodule init
-                            git submodule update
-                        '''
-                    }
                 }
             }
         }
@@ -65,6 +53,14 @@ pipeline {
         stage('Test') {
             steps {
                 script {
+                  with_ss_token(){
+                      with_ss_credentials([[secret_id: 110646, field: 'Username', variable: 'LOGIN_NAME'],[secret_id: 110646, field: 'Password', variable: 'PASSWORD']]){
+                          sh """
+                              echo "ADMIN_USERNAME='${LOGIN_NAME}'" > jsat-e2e-chat-window/.env
+                              echo "ADMIN_PASSWORD='${PASSWORD}'" >> jsat-e2e-chat-window/.env
+                          """
+                      }
+                  }
                   echo "Target environment selected is [${params.targetEnvParam}]"
                   returnCode = sh (
                     script: "docker run --rm -v ${WORKSPACE}/jsat-e2e-chat-window:/opt/jsat-e2e-chat-window -w /opt/jsat-e2e-chat-window ${buildImage} bash -c '/opt/jsat-e2e-chat-window/test.sh -en ${params.targetEnvParam} > va-e2e-test.log 2>&1'",
@@ -80,7 +76,7 @@ pipeline {
     }
 
     post {
-        always {
+       always {
             script {
                 echo "Publish test result report"
                 publishHTML target: [
@@ -92,10 +88,8 @@ pipeline {
                     reportName: 'jsat-e2e-chat-window Test Report'
                 ]
                 currentBuild.displayName = "#${buildNumber} Target Env.: ${params.targetEnvParam}"
-                if (fileExists('chat-window-version.txt')) {
-                  def chatWindowVer = readFile(file: 'chat-window-version.txt').trim()
-                  currentBuild.description = "Chat-window version: [${chat-window-version}]"
-                }
+                archiveArtifacts artifacts: '**/chat-window-version.txt','**/va-e2e-test.log'
+                   allowEmptyArchive: true
             }
         }
 

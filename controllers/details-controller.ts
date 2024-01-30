@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { Log } from 'Apis/api-helpers/log-utils';
+import { test } from '@playwright/test';
 import { DetailsPage } from '../poms/details-page';
 /* eslint-disable no-await-in-loop */
 
@@ -27,4 +28,21 @@ export class DetailsController {
             await this.Pom.DROP_DOWN_REMOVE.click();
         }
     }
+
+    async renameMUC(subjectName: string) {
+        await test.step('Detail Controller: Rename Chat', async () => {
+            await this.Pom.MUC_DETAIL_EDIT_BUTTON.click();
+            await this.Pom.MUC_SUBJECT_EDIT_FIELD.fill(subjectName);
+            await this.Pom.CHAT_SUBJECT_SAVE_BUTTON.click();
+        });
+    }
+
+    async renameGroupChat(subjectName: string) {
+        await test.step('Detail Controller: Rename Chat', async () => {
+            await this.Pom.GROUP_TEXT_DETAIL_EDIT_BUTTON.click();
+            await this.Pom.GROUP_TEXT_SUBJECT_EDIT_FIELD.fill(subjectName);
+            await this.Pom.CHAT_SUBJECT_SAVE_BUTTON.click();
+        });
+    }
+    Chat;
 }

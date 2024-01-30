@@ -45,7 +45,6 @@ export class ChatPage extends BasePage {
         this.CHAT_INPUT = this.CHATIFRAME.getByRole('textbox', { name: 'input-label' });
         this.SEND_BUTTON = this.CHATIFRAME.locator('.m-auto-send-btn');
         this.ACCEPT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-accept');
-
         this.CHAT_HEADER_MENU = this.CHATIFRAME.locator('.chat-header-menu-button');
 
         this.TIMESTAMP_CONTAINER = this.CHATIFRAME.locator('.m-auto-timestamp-region');

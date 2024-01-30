@@ -55,6 +55,20 @@ export class CreateChatController {
         });
     }
 
+    async CreateGroupText(phoneNumbers: string[]) {
+        return test.step('Create Chat Controller : Select User', async () => {
+            for (const phoneNumber of phoneNumbers) {
+                const formatted = StringUtils.formatPhoneNumber(phoneNumber);
+                Log.info(`Search for ${formatted}`);
+                await this.Pom.SMS_SEARCH_INPUT.click();
+                await this.Pom.SMS_SEARCH_INPUT.fill(formatted);
+                // click on user
+                await this.Pom.CHATIFRAME.getByText(formatted).click();
+            }
+            await this.Pom.NEXT_BUTTON.click();
+        });
+    }
+
     async SearchSMSUser(username: string = StringUtils.generatePhoneNumber()) {
         return test.step(`Create Chat Controller : Search for user '${username}' in create SMS view`, async () => {
             Log.info(`Create Chat Controller : Search for user '${username}' in create SMS view`);
