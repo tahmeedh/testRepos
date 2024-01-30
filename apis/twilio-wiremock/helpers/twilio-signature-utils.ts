@@ -1,4 +1,4 @@
-import { createHmac } from 'crypto';
+import { createHmac, createSecretKey } from 'crypto';
 
 interface BodyValue {
     AccountSid: string;
@@ -33,5 +33,21 @@ export class TwilioSignatureUtil {
         // console.log('signature = ', signature)
 
         return signature;
+    }
+
+    static async _buildSignatureHeader(url, body) {
+        const SMS_GATEWAY_TWILIO_AUTH_TOKEN = '_MOCK_AUTH_TOKEN_VALUE_32_CHARS_';
+        const ALGORITHM = 'sha1';
+        const textEncoder = new TextEncoder();
+        const secret = createSecretKey(textEncoder.encode(SMS_GATEWAY_TWILIO_AUTH_TOKEN));
+        const signingKey = createHmac(ALGORITHM, secret);
+        let data = `${url}AccountSid${body.AccountSid}Body${body.Body}From${body.From}`;
+        if (body.MediaContentType0 && body.MediaURL0) {
+            data = `${data}MediaContentType0${body.MediaContentType0}MediaURL0${body.MediaURL0}`;
+        }
+        data = `${data}MessageSid${body.MessageSid}NumMedia${body.NumMedia}To${body.To}`;
+
+        const signatureHeader = signingKey.update(textEncoder.encode(data)).digest('base64');
+        return signatureHeader;
     }
 }
