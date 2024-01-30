@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import axios from 'axios';
 import { AXIOS_DEFAULT_SETTINGS } from 'Apis/axios.config';
+import test from '@playwright/test';
 import { Log } from './log-utils';
 
 export class AxiosUtils {
@@ -42,7 +43,11 @@ export class AxiosUtils {
                 };
                 Log.error(`An error occured`, `${JSON.stringify(errorObject, null, 4)}`);
                 if (retryCount === maxRetries) {
-                    throw error;
+                    test.info().annotations.push({
+                        type: 'MDS RETRY FAILURE',
+                        description: 'User was unable to connect to MDS '
+                    });
+                    throw error.stack;
                 }
             }
             Log.info(`...Waiting for ${timeout}ms before retrying`);

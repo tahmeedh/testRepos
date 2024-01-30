@@ -30,7 +30,7 @@ export class CreateChatController {
                 Log.info(`Search for ${username}`);
                 await this.Pom.MUC_SEARCH_INPUT.click();
                 await this.Pom.MUC_SEARCH_INPUT.fill(username);
-                await this.Pom.CHATIFRAME.getByText(username).click();
+                await this.Pom.CHATIFRAME.getByText(username).first().click();
             }
             await this.Pom.NEXT_BUTTON.click();
             // add subject name to MUC
@@ -137,7 +137,7 @@ export class CreateChatController {
     async fillOutWhoCanJoinForm(type: string, moderators: string[], participants: string[]) {
         await test.step('Create Chat Controller : Fill Out Who Can Join', async () => {
             if (type === 'open') {
-                await this.Pom.INPUT_RADIO_OPEN_CHANNEL.click();
+                await this.Pom.INPUT_RADIO_OPEN_CHANNEL.check();
             }
             if (moderators.length !== 0) {
                 await this.Pom.SELECT_MODERATORS_BUTTON.click();

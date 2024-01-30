@@ -41,7 +41,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'description');
     await app.createChatController.fillOutWhoCanPostForm();
     await app.createChatController.fillOutWhoCanJoinForm(
-        'open',
+        'restricted',
         [],
         [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
     );
