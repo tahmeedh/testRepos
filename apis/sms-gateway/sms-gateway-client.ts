@@ -16,7 +16,7 @@ export class SmsGatewayClient {
                 rejectUnauthorized: false
             }
         });
-        await this.client.connect((err) => {
+        this.client.connect((err) => {
             if (err) {
                 Log.error('Connection Error:', err);
             }
