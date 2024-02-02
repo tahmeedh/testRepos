@@ -1,5 +1,5 @@
 def email_recipients = 'jeff.jiang@globalrelay.net'
-def nodeVersion = 'v16.16.0'
+def nodeVersion = 'v18.17.0'
 def buildsToKeep = 20
 def timeOutTime = 40
 def buildNumber = env.BUILD_NUMBER.toInteger()
