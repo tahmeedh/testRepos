@@ -45,9 +45,28 @@ export class MdsController {
 
         const response = await AxiosUtils.axiosRequest(
             config,
-            `request to MDS to retrieve user with email '${email}' from company '${companyId}''${companyId}'`
+            `request to MDS to retrieve user with email '${email}' from company '${companyId}'`
         );
         const user = response.data.users;
         return user[0];
+    }
+
+    async getUserByGrId(grId: number) {
+        const config = {
+            method: 'get',
+            url: `${this.endpoint}/users/gr:${grId}`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'gr-csrf': this.csrf,
+                Cookie: this.gsk
+            }
+        };
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to retrieve user with GrId '${grId}'`
+        );
+        const user = response.data;
+        return user;
     }
 }

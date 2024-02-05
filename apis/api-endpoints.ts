@@ -1,5 +1,15 @@
 // We are not supposed to use THRIFT and MDS against stg1 and prod.
 export const API_ENDPOINTS = {
+    CORE_ENDPOINT: {
+        local: 'https://lb-msg-cpqa2-nvan.dev-globalrelay.net:9443/core/v1',
+        cpqa2: 'https://lb-msg-cpqa2-nvan.dev-globalrelay.net:9443/core/v1',
+        'cpqa2-pd1': 'https://lb-msg-cpqa2-nvan.dev-globalrelay.net:9443/core/v1',
+        'cpqa2-pd2': 'https://lb-msg-cpqa2-nvan.dev-globalrelay.net:9443/core/v1',
+        'cpqa2-va1': 'https://lb-msg-cpqa2-nvan.dev-globalrelay.net:9443/core/v1',
+        'cpqa2-ca1': 'https://lb-msg-cpqa2-nvan.dev-globalrelay.net:9443/core/v1',
+        'cpqa2-sq1': 'https://lb-msg-cpqa2-nvan.dev-globalrelay.net:9443/core/v1',
+        cpqa1: 'https://lb-msg-cpqa1-nvan.dev-globalrelay.net:9443/core/v1'
+    },
     MDS_ENDPOINT: {
         local: 'https://lb-msg-mds-qa.apps.ocp-dev-nvan.dev-globalrelay.net/admin/v2',
         cpqa2: 'https://lb-msg-mds-qa.apps.ocp-dev-nvan.dev-globalrelay.net/admin/v2',

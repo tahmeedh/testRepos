@@ -87,3 +87,6 @@ test(`${testName} ${testTags} @Mini-vCard @Mini-vCard-sanity`, async ({ page }) 
 | Twilio Number | ✅ | ✅ | ✅  | ✅ |
 | Bandwidth Number | ❌ | ✅ | ❌ | ❌ |
 | WhatsApp Number | ✅ | ✅ | ✅  | ✅ |
+
+### Mocking inbound Twilio and WhatsApp messages
+Please see [READ-ME](./apis/scripts/README.md)
