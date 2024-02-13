@@ -7,4 +7,5 @@
 | `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C888` | Remove WhatsApp Entitlement from user. |
 | `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C333` | Receive mock twilio sms messages/attachments. |
 | `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C222` | Receive mock whatsApp sms messages/attachments. |
+| `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C111` | Receive mock Bandwidth(Grouptext) messages/attachments. |
 ```
