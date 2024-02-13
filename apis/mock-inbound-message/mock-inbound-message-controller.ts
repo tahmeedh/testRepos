@@ -46,7 +46,6 @@ export class MockInboundMessageController {
 
         const receipient = await mdsController.getUserByGrId(receipientGrId);
         const receipientEndPoints = receipient.endpoints;
-        // console.log('receipientEndPoints = ', receipientEndPoints)
 
         let addressType = '';
         if (type === 'BANDWIDTH') {

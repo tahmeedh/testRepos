@@ -9,7 +9,6 @@ export interface EndpointsType {
     GAS_LOGIN_ENDPOINT: string;
     GAS_SERVICE_URL: string;
     CORE_ENDPOINT: string;
-    MFS_ENDPOINT: string;
 }
 
 export class EnvUtils {
@@ -21,8 +20,7 @@ export class EnvUtils {
             SM_THRIFT_PORT: API_ENDPOINTS.SM_THRIFT_PORT[process.env.SERVER],
             GAS_LOGIN_ENDPOINT: API_ENDPOINTS.GAS_LOGIN_ENDPOINT[process.env.SERVER],
             GAS_SERVICE_URL: API_ENDPOINTS.GAS_SERVICE_URL[process.env.SERVER],
-            CORE_ENDPOINT: API_ENDPOINTS.CORE_ENDPOINT[process.env.SERVER],
-            MFS_ENDPOINT: API_ENDPOINTS.MFS_ENDPOINT[process.env.SERVER]
+            CORE_ENDPOINT: API_ENDPOINTS.CORE_ENDPOINT[process.env.SERVER]
         };
 
         switch (process.env.SERVER) {
