@@ -61,15 +61,5 @@ export const API_ENDPOINTS = {
         cpqa1: 'https://cpqa1portal.dev-globalrelay.net/portal/login',
         prod: 'https://portal.globalrelay.com/portal/login',
         stg1: 'https://portalstg1.globalrelay.com/portal/login'
-    },
-    MFS_ENDPOINT: {
-        local: 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
-        cpqa2: 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
-        'cpqa2-pd1': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
-        'cpqa2-pd2': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
-        'cpqa2-va1': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
-        'cpqa2-ca1': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
-        'cpqa2-sq1': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
-        cpqa1: 'https://mfs-mfs-stable.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1'
     }
 };
