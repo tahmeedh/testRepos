@@ -63,7 +63,6 @@ export const API_ENDPOINTS = {
         stg1: 'https://portalstg1.globalrelay.com/portal/login'
     },
     SMS_GATEWAY: {
-        //currently not in use
         local: 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
         cpqa2: 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
         'cpqa2-pd1': 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
@@ -74,7 +73,6 @@ export const API_ENDPOINTS = {
         cpqa1: 'https://msgsms-stable.apps.ocp-dev-nvan.dev-globalrelay.net'
     },
     SMS_GATEWAY_WIREMOCK: {
-        //currently not in use
         local: 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
         cpqa2: 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
         'cpqa2-pd1': 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
@@ -85,7 +83,6 @@ export const API_ENDPOINTS = {
         cpqa1: 'https://wiremockhost-sms-gateway-stable.apps.ocp-dev-nvan.dev-globalrelay.net'
     },
     CASSANDRA_CONTACT_POINTS: {
-        //currently not in use
         local: 'cass1-msg-int-nvan.dev-globalrelay.net',
         cpqa2: 'cass1-msg-int-nvan.dev-globalrelay.net',
         'cpqa2-pd1': 'cass1-msg-int-nvan.dev-globalrelay.net',
@@ -96,7 +93,6 @@ export const API_ENDPOINTS = {
         cpqa1: 'cass1-msg-cpqa1-nvan.dev-globalrelay.net'
     },
     CASSANDRA_KEYSPACE: {
-        //currently not in use
         local: 'sms_gateway_cpqa2',
         cpqa2: 'sms_gateway_cpqa2',
         'cpqa2-pd1': 'sms_gateway_cpqa2',
@@ -107,7 +103,6 @@ export const API_ENDPOINTS = {
         cpqa1: 'sms_gateway_cpqa1'
     },
     CASSANDRA_LOCAL_DATACENTER: {
-        //currently not in use
         local: 'datacenter1',
         cpqa2: 'datacenter1',
         'cpqa2-pd1': 'datacenter1',
