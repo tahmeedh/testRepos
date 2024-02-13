@@ -6,12 +6,12 @@ import {
 import { StringUtils } from 'helper/string-utils';
 
 test('C333', async () => {
-    const mockWhatsAppMessage: MockInboundMessageType = {
+    const mockTwilioMessage: MockInboundMessageType = {
         senderPhoneNumber: StringUtils.generatePhoneNumber(),
-        receipientGrId: 785549,
+        receipientGrId: 785551,
         message: 'hello test message',
-        type: 'SMS_SERVICE',
-        attachmentId: 'a46f930c-97ef-4553-b721-75619f287c3e'
+        type: 'TWILIO',
+        attachmentId: '5263eb4a-bbdd-4172-9bf2-c8de58770ff2'
     };
-    await MockInboundMessageController.sendInboundMessage(mockWhatsAppMessage);
+    await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
 });

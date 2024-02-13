@@ -62,54 +62,14 @@ export const API_ENDPOINTS = {
         prod: 'https://portal.globalrelay.com/portal/login',
         stg1: 'https://portalstg1.globalrelay.com/portal/login'
     },
-    SMS_GATEWAY: {
-        local: 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        cpqa2: 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-pd1': 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-pd2': 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-va1': 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-ca1': 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-sq1': 'https://msgsms-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        cpqa1: 'https://msgsms-stable.apps.ocp-dev-nvan.dev-globalrelay.net'
-    },
-    SMS_GATEWAY_WIREMOCK: {
-        local: 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        cpqa2: 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-pd1': 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-pd2': 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-va1': 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-ca1': 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        'cpqa2-sq1': 'https://wiremockhost-sms-gateway-qa.apps.ocp-dev-nvan.dev-globalrelay.net',
-        cpqa1: 'https://wiremockhost-sms-gateway-stable.apps.ocp-dev-nvan.dev-globalrelay.net'
-    },
-    CASSANDRA_CONTACT_POINTS: {
-        local: 'cass1-msg-int-nvan.dev-globalrelay.net',
-        cpqa2: 'cass1-msg-int-nvan.dev-globalrelay.net',
-        'cpqa2-pd1': 'cass1-msg-int-nvan.dev-globalrelay.net',
-        'cpqa2-pd2': 'cass1-msg-int-nvan.dev-globalrelay.net',
-        'cpqa2-va1': 'cass1-msg-int-nvan.dev-globalrelay.net',
-        'cpqa2-ca1': 'cass1-msg-int-nvan.dev-globalrelay.net',
-        'cpqa2-sq1': 'cass1-msg-int-nvan.dev-globalrelay.net',
-        cpqa1: 'cass1-msg-cpqa1-nvan.dev-globalrelay.net'
-    },
-    CASSANDRA_KEYSPACE: {
-        local: 'sms_gateway_cpqa2',
-        cpqa2: 'sms_gateway_cpqa2',
-        'cpqa2-pd1': 'sms_gateway_cpqa2',
-        'cpqa2-pd2': 'sms_gateway_cpqa2',
-        'cpqa2-va1': 'sms_gateway_cpqa2',
-        'cpqa2-ca1': 'sms_gateway_cpqa2',
-        'cpqa2-sq1': 'sms_gateway_cpqa2',
-        cpqa1: 'sms_gateway_cpqa1'
-    },
-    CASSANDRA_LOCAL_DATACENTER: {
-        local: 'datacenter1',
-        cpqa2: 'datacenter1',
-        'cpqa2-pd1': 'datacenter1',
-        'cpqa2-pd2': 'datacenter1',
-        'cpqa2-va1': 'datacenter1',
-        'cpqa2-ca1': 'datacenter1',
-        'cpqa2-sq1': 'datacenter1',
-        cpqa1: 'datacenter1'
+    MFS_ENDPOINT: {
+        local: 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
+        cpqa2: 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
+        'cpqa2-pd1': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
+        'cpqa2-pd2': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
+        'cpqa2-va1': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
+        'cpqa2-ca1': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
+        'cpqa2-sq1': 'https://mfs-mfs-qa.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1',
+        cpqa1: 'https://mfs-mfs-stable.apps.ocp-dev-nvan.dev-globalrelay.net/mfsapi/v1'
     }
 };

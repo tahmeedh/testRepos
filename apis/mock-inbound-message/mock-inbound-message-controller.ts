@@ -9,13 +9,21 @@ export interface MockInboundMessageType {
     senderPhoneNumber: string;
     receipientGrId: number;
     message: string;
-    type: 'WHATSAPP' | 'SMS_SERVICE';
+    type: 'WHATSAPP' | 'TWILIO';
     attachmentId?: string;
 }
-
+export interface MockInboundMessageBandWidthType {
+    senderPhoneNumber: string;
+    receipientGrId: number;
+    message: string;
+    type: 'BANDWIDTH';
+    attachmentId?: string;
+    additionalParticipants: string[];
+}
 export class MockInboundMessageController {
-    static async sendInboundMessage(input: MockInboundMessageType) {
+    static async sendInboundMessage(input: MockInboundMessageType | MockInboundMessageBandWidthType) {
         const { senderPhoneNumber, receipientGrId, message, type, attachmentId } = input;
+        const additionalParticipants = input.type === 'BANDWIDTH' ? input.additionalParticipants : null;
         const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
         const { MDS_ENDPOINT, GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, CORE_ENDPOINT } = EnvUtils.getEndPoints();
 
@@ -38,7 +46,24 @@ export class MockInboundMessageController {
 
         const receipient = await mdsController.getUserByGrId(receipientGrId);
         const receipientEndPoints = receipient.endpoints;
-        const receipientExternalEndpoint = receipientEndPoints.find((endpoint) => endpoint.type === type);
+        // console.log('receipientEndPoints = ', receipientEndPoints)
+
+        let addressType = '';
+        if (type === 'BANDWIDTH') {
+            addressType = 'SMS_SERVICE';
+        }
+
+        if (type === 'TWILIO') {
+            addressType = 'SMS_SERVICE';
+        }
+
+        if (type === 'WHATSAPP') {
+            addressType = 'WHATSAPP';
+        }
+
+        const receipientExternalEndpoint = receipientEndPoints.find(
+            (endpoint) => endpoint.type === addressType
+        );
         if (!receipientExternalEndpoint.address) {
             const error = new Error();
             Log.error(`Mock inbound message controller: Unable to find user's ${type} address`, error);
@@ -46,7 +71,6 @@ export class MockInboundMessageController {
         }
         const recipientAddress = receipientExternalEndpoint.address;
         const recipientEndpointId = receipientExternalEndpoint.id;
-
         const mockData: MockExternalMessageDataType = {
             senderContactId: sender.contactId,
             senderAddress: senderPhoneNumber,
@@ -56,7 +80,8 @@ export class MockInboundMessageController {
             recipientEndpointId,
             message,
             type,
-            attachmentId
+            attachmentId,
+            additionalParticipants
         };
 
         await CoreController.sendInboundExternalMessageRequest(mockData, CORE_ENDPOINT);
