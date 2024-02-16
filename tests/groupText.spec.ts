@@ -22,42 +22,6 @@ test.beforeEach(async () => {
     await bandwidthUtils.removeTestUsersFromBandwidthCompany();
 });
 
-test('C444', async ({ page }) => {
-    Log.info(`===================== START: Running C555 =====================`);
-    try {
-        const company = await Company.importCompany(721495);
-        const user1 = await company.createUser();
-        await user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
-        await bandwidthUtils.assignBandwidthNumber(user1.userInfo.userId);
-
-        const app = new BaseController(page);
-        await app.goToLoginPage();
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    } catch (error) {
-        Log.error(`FAILURE: An error occured`, error);
-        test.fail();
-    }
-    Log.info(`===================== END: C555 ENDED =====================`);
-});
-
-test('C555', async ({ page }) => {
-    Log.info(`===================== START: Running C555 =====================`);
-    try {
-        const company = await Company.importCompany(721495);
-        const user1 = await company.createUser();
-        await user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD');
-        await bandwidthUtils.assignBandwidthNumber(user1.userInfo.userId);
-
-        const app = new BaseController(page);
-        await app.goToLoginPage();
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    } catch (error) {
-        Log.error(`FAILURE: An error occured`, error);
-        test.fail();
-    }
-    Log.info(`===================== END: C555 ENDED =====================`);
-});
-
 test(`C3868089-sms-updating-the-subject-should-update-the-subject-in-the-conversation-hub @GroupText @rename`, async () => {
     Log.info(`===================== START: Running C3868089 =====================`);
     try {
