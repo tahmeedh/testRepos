@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 import { StringUtils } from 'helper/string-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { ChatPage } from '../poms/chat-page';
+import { ChatPage } from '../../poms/chat-window/chat-page';
 
 export class ChatController {
     readonly page: Page;

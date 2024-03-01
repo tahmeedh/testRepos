@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 import { test } from '@playwright/test';
-import { PreviewAttachmentPage } from '../poms/preview-attachment-page';
+import { PreviewAttachmentPage } from '../../poms/chat-window/preview-attachment-page';
 
 export class PreviewAttachmentController {
     readonly page: Page;

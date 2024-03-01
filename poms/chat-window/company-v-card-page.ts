@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
-import { BasePage } from './base-page';
+import { BasePage } from '../base-page';
 
 export class CompanyVCardPage extends BasePage {
     readonly BACK_BUTTON: Locator;

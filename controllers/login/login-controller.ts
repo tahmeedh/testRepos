@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { LoginPage } from '../poms/login-page';
+import { LoginPage } from '../../poms/login/login-page';
 
 export class LoginController {
     readonly page: Page;

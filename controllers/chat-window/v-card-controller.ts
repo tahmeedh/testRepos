@@ -1,6 +1,6 @@
 import { test, type Page } from '@playwright/test';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { VCardPage } from 'Poms/v-card-page';
+import { VCardPage } from 'Poms/chat-window/v-card-page';
 
 export class VCardController {
     readonly page: Page;

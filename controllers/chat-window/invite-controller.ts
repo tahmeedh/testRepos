@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 import { test } from '@playwright/test';
-import { CreateChatPage } from '../poms/create-chat-page';
+import { CreateChatPage } from '../../poms/chat-window/create-chat-page';
 
 export class InviteController {
     readonly page: Page;

@@ -5,22 +5,22 @@ import { LOGIN_ENDPOINTS } from 'Constants/login-endpoints';
 import { LoginEndpointUtils } from 'helper/login-endpoint-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { BasePage } from '../poms/base-page';
-import { LoginController } from './login-controller';
-import { StartChatButtonController } from './start-chat-button-controller';
-import { CreateChatController } from './create-chat-controller';
-import { ChatController } from './chat-page-controller';
-import { PreviewAttachmentController } from './preview-attachment-controller';
+import { LoginController } from './login/login-controller';
+import { StartChatButtonController } from './message-hub/start-chat-button-controller';
+import { CreateChatController } from './chat-window/create-chat-controller';
+import { ChatController } from './chat-window/chat-page-controller';
+import { PreviewAttachmentController } from './chat-window/preview-attachment-controller';
 
-import { InviteController } from './invite-controller';
-import { MessageHubController } from './message-hub-controller';
-import { VCardController } from './v-card-controller';
-import { DetailsController } from './details-controller';
-import { VCardEditController } from './v-card-edit-controller';
+import { InviteController } from './chat-window/invite-controller';
+import { MessageHubController } from './message-hub/message-hub-controller';
+import { VCardController } from './chat-window/v-card-controller';
+import { DetailsController } from './chat-window/details-controller';
+import { VCardEditController } from './chat-window/v-card-edit-controller';
 import 'dotenv/config';
 import { ContactListController } from './message-hub/contact-list-controller';
 import { GlobalSearchController } from './message-hub/global-search-controller';
 import { ConversationListController } from './message-hub/conversation-list-controller';
-import { CompanyVCardController } from './company-v-card-controller';
+import { CompanyVCardController } from './chat-window/company-v-card-controller';
 
 export class BaseController {
     readonly page: Page;

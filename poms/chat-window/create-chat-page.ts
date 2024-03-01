@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
-import { BasePage } from './base-page';
+import { BasePage } from '../base-page';
 
 export class CreateChatPage extends BasePage {
     readonly SUC_SEARCH_INPUT: Locator;
