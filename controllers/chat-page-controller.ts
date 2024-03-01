@@ -153,4 +153,10 @@ export class ChatController {
             await this.Pom.DROP_DOWN_VIEW_DETAILS.click();
         });
     }
+
+    async clickVoiceNotePlayButton() {
+        await test.step('Chat Controller: Click voice note play button', async () => {
+            await this.Pom.VOICE_NOTE_PLAY_BUTTON.click();
+        });
+    }
 }

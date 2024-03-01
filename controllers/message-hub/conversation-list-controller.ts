@@ -23,4 +23,10 @@ export class ConversationListController {
                 .click();
         });
     }
+
+    async clickOnConversationName(conversationName: string) {
+        await test.step('Conversation List Controller : Click on conversation', async () => {
+            await this.Pom.CONVERSATION_NAME.getByText(conversationName).click();
+        });
+    }
 }
