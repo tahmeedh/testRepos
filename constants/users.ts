@@ -8,5 +8,9 @@ export const users = {
         EMAIL: 'admin01@vegaautomation.com',
         NAME: 'admin 01',
         PASSWORD: 'Password2@2@2@'
+    },
+    OGG_PLYAER: {
+        EMAIL: 'ogg.player@vegastatic.com',
+        PASSWORD: 'Password2@'
     }
 };

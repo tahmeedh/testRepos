@@ -30,6 +30,8 @@ export class ChatPage extends BasePage {
     readonly RECIPIENT_INFO_FIRST_NAME_FIELD: Locator;
     readonly RECIPIENT_INFO_LAST_NAME_FIELD: Locator;
     readonly RECIPIENT_INFO_SAVE_BUTTON: Locator;
+    readonly VOICE_NOTE_PLAY_BUTTON: Locator;
+    readonly VOICE_NOTE_TIMESTAMP: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -70,5 +72,7 @@ export class ChatPage extends BasePage {
             '.m-auto-last-name-input .public-DraftEditor-content'
         );
         this.RECIPIENT_INFO_SAVE_BUTTON = this.CHATIFRAME.getByText('Save');
+        this.VOICE_NOTE_PLAY_BUTTON = this.CHATIFRAME.locator('.m-auto-voice-player .m-auto-play-icon');
+        this.VOICE_NOTE_TIMESTAMP = this.CHATIFRAME.locator('.m-auto-voice-player .m-auto-audio-timestamp');
     }
 }
