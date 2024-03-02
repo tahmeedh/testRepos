@@ -31,11 +31,19 @@ export class PortalController {
         });
     }
 
-    async logout() {
-        await test.step('Portal Controller : Log Out', async () => {
-            Log.info(`Portal Controller: Log Out`);
-            await this.Pom.SETTINGS_BAR_BUTTON.click();
-            await this.Pom.LOG_OUT_BUTTON.click();
+    async clickHeaderMainMenu() {
+        await test.step('Portal Controller : Click on header main menu', async () => {
+            Log.info(`Portal Controller: Click on header main menu`);
+            await this.Pom.HEADER_MAIN_MENU_BUTTON.click();
+        });
+    }
+
+    async selectHeaderMainMenuOption(
+        option: 'Profile' | 'Settings' | 'About' | 'Privacy Policy' | 'Log out'
+    ) {
+        await test.step(`Portal Controller : Selecting '${option}' option from header main menu`, async () => {
+            Log.info(`Portal Controller : Selecting '${option}' option from header main menu`);
+            await this.Pom.HEADER_MAIN_MENU_CONTAINER.getByText(option).click();
         });
     }
 }
