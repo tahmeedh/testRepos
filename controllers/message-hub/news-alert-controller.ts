@@ -1,4 +1,5 @@
 import { test, type Page } from '@playwright/test';
+import { Log } from 'Apis/api-helpers/log-utils';
 import { NewsAlertPage } from 'Poms/message-hub/news-alert-page';
 
 export class NewsAlertController {
@@ -14,13 +15,20 @@ export class NewsAlertController {
     }
 
     async clickNextSMSEnabledNotification() {
-        await test.step(`Notification Controller: Close 'Text messaging is enabled for your account' notification`, async () => {
+        await test.step(`News Alert Controller: Close 'Text messaging is enabled for your account' notification`, async () => {
+            Log.info(
+                `News Alert Controller: Close 'Text messaging is enabled for your account' notification`
+            );
+
             await this.Pom.NEWS_ALERT_NEXT_BUTTON.click();
         });
     }
 
     async closeSmsAndWhatsAppEnabledNotification() {
-        await test.step(`Notification Controller: Close 'WhatsApp and Text messaging is enabled for your account' notification`, async () => {
+        await test.step(`News Alert Controller: Close 'WhatsApp and Text messaging is enabled for your account' notification`, async () => {
+            Log.info(
+                `News Alert Controller: Close 'WhatsApp and Text messaging is enabled for your account' notification`
+            );
             await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
         });
     }
