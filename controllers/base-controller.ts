@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 
 import { LOGIN_ENDPOINTS } from 'Constants/login-endpoints';
 import { LoginEndpointUtils } from 'helper/login-endpoint-utils';
@@ -21,6 +21,8 @@ import { ContactListController } from './message-hub/contact-list-controller';
 import { GlobalSearchController } from './message-hub/global-search-controller';
 import { ConversationListController } from './message-hub/conversation-list-controller';
 import { CompanyVCardController } from './chat-window/company-v-card-controller';
+import { PortalController } from './portal/portal-controller';
+import { NewsAlertController } from './message-hub/news-alert-controller';
 
 export class BaseController {
     readonly page: Page;
@@ -39,6 +41,8 @@ export class BaseController {
     readonly globalSearchController: GlobalSearchController;
     readonly conversationListController: ConversationListController;
     readonly companyVCardController: CompanyVCardController;
+    readonly portalController: PortalController;
+    readonly newsAlertcontroller: NewsAlertController;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -60,44 +64,8 @@ export class BaseController {
         this.globalSearchController = new GlobalSearchController(this.page);
         this.conversationListController = new ConversationListController(this.page);
         this.companyVCardController = new CompanyVCardController(this.page);
-    }
-
-    async closeTooltips() {
-        await test.step('Base Controller : Close SMS Tooltips', async () => {
-            try {
-                await expect(this.Pom.TOOLTIP_NEXT_BUTTON).toBeVisible({ timeout: 5000 });
-            } catch (e) {
-                try {
-                    await expect(this.Pom.TOOLTIP_CLOSE_BUTTONA).toBeVisible();
-                } catch (err) {
-                    try {
-                        await expect(this.Pom.TOOLTIP_CLOSE_BUTTON).toBeVisible();
-                    } catch (error) {
-                        return;
-                    }
-                }
-            }
-
-            const nextButtonVisible = await this.Pom.TOOLTIP_NEXT_BUTTON.isVisible();
-            const closeButtonVisible = await this.Pom.TOOLTIP_CLOSE_BUTTON.isVisible();
-            const closeButtonAVisible = await this.Pom.TOOLTIP_CLOSE_BUTTONA.isVisible();
-
-            if (nextButtonVisible) {
-                await this.Pom.TOOLTIP_NEXT_BUTTON.click();
-                await this.Pom.TOOLTIP_CLOSE_BUTTON.click();
-            } else if (closeButtonVisible) {
-                await this.Pom.TOOLTIP_CLOSE_BUTTON.click();
-            } else if (closeButtonAVisible) {
-                await this.Pom.TOOLTIP_CLOSE_BUTTONA.click();
-            }
-        });
-    }
-
-    async logout() {
-        await test.step('Base Controller : Log Out', async () => {
-            await this.Pom.SETTINGS_BAR_BUTTON.click();
-            await this.Pom.LOG_OUT_BUTTON.click();
-        });
+        this.portalController = new PortalController(this.page);
+        this.newsAlertcontroller = new NewsAlertController(this.page);
     }
 
     /**
