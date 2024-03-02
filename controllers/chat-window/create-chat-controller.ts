@@ -1,10 +1,9 @@
 import type { Page } from '@playwright/test';
 import { test } from '@playwright/test';
+import { Log } from 'Apis/api-helpers/log-utils';
+import { CreateChatPage } from 'Poms/chat-window/create-chat-page';
 import { StringUtils } from 'helper/string-utils';
-import { CreateChatPage } from '../../poms/chat-window/create-chat-page';
-import { Log } from '../../apis/api-helpers/log-utils';
 /* eslint-disable no-await-in-loop */
-
 export class CreateChatController {
     readonly page: Page;
     readonly Pom: CreateChatPage;
