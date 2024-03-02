@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
-import { BasePage } from '../base-page';
+import { BasePage } from 'Poms/base-page';
 
 export class PortalPage extends BasePage {
     readonly ENABLE_DESKTOP_NOTIFICATION_CLOSE_BUTTON: Locator;

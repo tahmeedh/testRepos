@@ -1,6 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { test } from '@playwright/test';
-import { StartChatButtonPage } from '../../poms/message-hub/start-chat-button-page';
+import { StartChatButtonPage } from 'Poms/message-hub/start-chat-button-page';
 
 export class StartChatButtonController {
     readonly page: Page;
