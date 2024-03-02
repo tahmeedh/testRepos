@@ -4,13 +4,12 @@ import { test } from '@playwright/test';
 import { LOGIN_ENDPOINTS } from 'Constants/login-endpoints';
 import { LoginEndpointUtils } from 'helper/login-endpoint-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BasePage } from '../poms/base-page';
+import { BasePage } from 'Poms/base-page';
 import { LoginController } from './login/login-controller';
 import { StartChatButtonController } from './message-hub/start-chat-button-controller';
 import { CreateChatController } from './chat-window/create-chat-controller';
 import { ChatController } from './chat-window/chat-page-controller';
 import { PreviewAttachmentController } from './chat-window/preview-attachment-controller';
-
 import { InviteController } from './chat-window/invite-controller';
 import { MessageHubController } from './message-hub/message-hub-controller';
 import { VCardController } from './chat-window/v-card-controller';
