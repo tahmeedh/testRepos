@@ -22,6 +22,9 @@ import { ConversationListController } from './message-hub/conversation-list-cont
 import { CompanyVCardController } from './chat-window/company-v-card-controller';
 import { PortalController } from './portal/portal-controller';
 import { NewsAlertController } from './message-hub/news-alert-controller';
+import { HubHeaderController } from './message-hub/hub-header-controller';
+import { NavigationController } from './message-hub/navigation-controller';
+import { SearchResultController } from './message-hub/search-result-controller';
 
 export class BaseController {
     readonly page: Page;
@@ -41,7 +44,10 @@ export class BaseController {
     readonly conversationListController: ConversationListController;
     readonly companyVCardController: CompanyVCardController;
     readonly portalController: PortalController;
-    readonly newsAlertcontroller: NewsAlertController;
+    readonly newsAlertController: NewsAlertController;
+    readonly hubHeaderController: HubHeaderController;
+    readonly navigationController: NavigationController;
+    readonly searchResultController: SearchResultController;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -64,7 +70,10 @@ export class BaseController {
         this.conversationListController = new ConversationListController(this.page);
         this.companyVCardController = new CompanyVCardController(this.page);
         this.portalController = new PortalController(this.page);
-        this.newsAlertcontroller = new NewsAlertController(this.page);
+        this.newsAlertController = new NewsAlertController(this.page);
+        this.hubHeaderController = new HubHeaderController(this.page);
+        this.navigationController = new NavigationController(this.page);
+        this.searchResultController = new SearchResultController(this.page);
     }
 
     /**
