@@ -1,9 +1,8 @@
 import type { Page } from '@playwright/test';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { test } from '@playwright/test';
-import { DetailsPage } from '../poms/details-page';
+import { DetailsPage } from 'Poms/chat-window/details-page';
 /* eslint-disable no-await-in-loop */
-
 export class DetailsController {
     readonly page: Page;
     readonly Pom: DetailsPage;

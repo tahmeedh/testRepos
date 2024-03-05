@@ -1,5 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
-import { BasePage } from './base-page';
+import { BasePage } from 'Poms/base-page';
 
 export class ChatPage extends BasePage {
     readonly page: Page;
