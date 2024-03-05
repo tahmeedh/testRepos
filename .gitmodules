@@ -1,3 +1,0 @@
-[submodule "sm-api"]
-	path = sm-api
-	url = ssh://git@stash.globalrelay.net:7999/portal/sm-api.git
