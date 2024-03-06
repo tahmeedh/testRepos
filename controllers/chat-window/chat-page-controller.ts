@@ -159,4 +159,32 @@ export class ChatController {
             await this.Pom.VOICE_NOTE_PLAY_BUTTON.click();
         });
     }
+
+    async hoverOverMessageRow(content: string) {
+        await test.step(`Chat Controller: Hover over message row with content '${content}'`, async () => {
+            Log.info(`Chat Controller: Hover over message row with content '${content}'`);
+            await this.Pom.MESSAGE_ROW_CONTAINER.getByText(content).click();
+        });
+    }
+
+    async clickOnChatBubbleMenu() {
+        await test.step(`Chat Controller: Click on chat bubble menu`, async () => {
+            Log.info(`Chat Controller: Click on chat bubble menu`);
+            await this.Pom.MENU_ICON.click();
+        });
+    }
+
+    async selectFromChatBubbleMenu(option: 'Reply' | 'Copy to Share' | 'Download') {
+        await test.step(`Chat Controller: Select ${option} from chat bubble menu`, async () => {
+            Log.info(`Chat Controller: Select ${option} from chat bubble menu`);
+            await this.Pom.CHAT_BUBBLE_MENU_DROPDOWN.getByText(option).click();
+        });
+    }
+
+    async clickChatInput() {
+        await test.step(`Chat Controller: Click chat input`, async () => {
+            Log.info(`Chat Controller: Click chat input`);
+            await this.Pom.CHAT_INPUT.click();
+        });
+    }
 }
