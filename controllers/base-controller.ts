@@ -33,7 +33,7 @@ export class BaseController {
     readonly startChatButtonController: StartChatButtonController;
     readonly createChatController: CreateChatController;
     readonly chatController: ChatController;
-    readonly attachmentController: PreviewAttachmentController;
+    readonly previewAttachmentController: PreviewAttachmentController;
     readonly inviteController: InviteController;
     readonly messageHubController: MessageHubController;
     readonly vCardController: VCardController;
@@ -59,7 +59,7 @@ export class BaseController {
         this.startChatButtonController = new StartChatButtonController(this.page);
         this.createChatController = new CreateChatController(this.page);
         this.chatController = new ChatController(this.page);
-        this.attachmentController = new PreviewAttachmentController(this.page);
+        this.previewAttachmentController = new PreviewAttachmentController(this.page);
         this.inviteController = new InviteController(this.page);
         this.messageHubController = new MessageHubController(this.page);
         this.vCardController = new VCardController(this.page);
@@ -116,5 +116,12 @@ export class BaseController {
             await this.chatController.clickInviteParicipants();
             await this.createChatController.inviteMUC(users);
         }
+    }
+
+    async pressKey(keys: string) {
+        await test.step(`Base Controller: Press keys ${keys}`, async () => {
+            Log.info(`Base Controller: Press keys ${keys}`);
+            await this.page.keyboard.press(keys);
+        });
     }
 }
