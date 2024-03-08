@@ -8,7 +8,7 @@ import { StringUtils } from 'helper/string-utils';
 test('C222', async () => {
     const mockWhatsAppMessage: MockInboundMessageType = {
         senderPhoneNumber: StringUtils.generatePhoneNumber(),
-        receipientGrId: 785549,
+        receipientGrId: 785551,
         message: 'hello test message',
         type: 'WHATSAPP',
         attachmentId: 'a46f930c-97ef-4553-b721-75619f287c3e?'
