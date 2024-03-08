@@ -12,5 +12,13 @@ export const users = {
     OGG_PLYAER: {
         EMAIL: 'ogg.player@vegastatic.com',
         PASSWORD: 'Password2@'
+    },
+    INTERNAL_ONLY1: {
+        EMAIL: 'internal.only1@vegastatic.com',
+        PASSWORD: 'Password2@'
+    },
+    INTERNAL_ONLY2: {
+        EMAIL: 'internal.only2@vegastatic.com',
+        PASSWORD: 'Password2@'
     }
 };
