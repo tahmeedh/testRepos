@@ -7,7 +7,6 @@
 | `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C777` | Assign WhatsApp Entitlement to user. |
 | `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C666` | Remove Twilio number from user. |
 | `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C555` | Assign Twilio number to user. |
-
 | `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C333` | Receive mock twilio sms messages/attachments. |
 | `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C222` | Receive mock whatsApp sms messages/attachments. |
 | `SCRIPT=TRUE SERVER=cpqa2-va1 npx playwright test -g C111` | Receive mock Bandwidth(Grouptext) messages/attachments. |
