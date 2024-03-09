@@ -28,14 +28,14 @@ export class CleanUpUtils {
 
         // MDS will unassign number from user automatically when we release/remove Twilio/WhatsApp number from a company.
         // Hence, no need to unassign number from user before releasing.
-        Log.highlight(`Tearing down: Detected ${twilioNumbers.length} Twilio number.`);
+        Log.highlight(`Tearing down: Detected ${twilioNumbers.length} Twilio numbers.`);
         const listOfPromises = [];
         for (const numberObj of twilioNumbers) {
             const { number } = numberObj;
             listOfPromises.push(twilioController.releaseTwilioNumberFromCompany(companyId, number));
         }
 
-        Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp number.`);
+        Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp numbers.`);
         for (const numberObj of whatsAppProviders) {
             const { accountId } = numberObj;
             listOfPromises.push(whatsAppController.removeWhatsAppProviderFromCompany(companyId, accountId));
@@ -43,7 +43,7 @@ export class CleanUpUtils {
 
         await Promise.all(listOfPromises);
         Log.info(
-            `===================== END: All phone number has been released from company =====================`
+            `===================== END: All phone numbers have been released from company =====================`
         );
     }
 }
