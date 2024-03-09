@@ -37,33 +37,15 @@ test('C999', async () => {
             return element.companyId;
         });
 
-        // slice array into chunks
-        const chunkSize = 5;
-        const chunksOfCompanies = [];
-        for (let i = 0; i < listOfCompanyIds.length; i += chunkSize) {
-            const chunk = listOfCompanyIds.slice(i, i + chunkSize);
-            chunksOfCompanies.push(chunk);
-        }
-
         // delete all companies in list
         Log.highlight(`Deleteing the following companies: ${listOfCompanyIds}`);
-
-        const releaseNumbersAndDeleteCompany = async (companyId) => {
+        for (const companyId of listOfCompanyIds) {
             try {
                 await CleanUpUtils.releaseAllPhoneNumbersFromCompany(companyId);
                 await platformController.deleteCompany(companyId);
             } catch (e) {
                 Log.error(`Failed to delete ${companyId}. Ignoring this company.`, e);
             }
-        };
-
-        const listOfPromises = [];
-        for (const companies of chunksOfCompanies) {
-            for (const companyId of companies) {
-                listOfPromises.push(releaseNumbersAndDeleteCompany(companyId));
-            }
-            // delete this batch of companies
-            await Promise.allSettled(listOfPromises);
         }
         Log.success(` ${listOfCompanies.length} companies have been deleted`);
     } catch (error) {
