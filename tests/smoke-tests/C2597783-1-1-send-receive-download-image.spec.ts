@@ -34,7 +34,7 @@ test(`${testName} ${testTags}`, async () => {
     app = new BaseController(page1);
     await app.goToLoginPage();
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.closeTooltips();
+    await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartOneToOne();
@@ -48,7 +48,7 @@ test(`${testName} ${testTags}`, async () => {
     app1 = new BaseController(page2);
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.closeTooltips();
+    await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
     await app1.startChatButtonController.ClickOnStartOneToOne();
@@ -58,7 +58,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends image`);
     const PNG = './asset/download.png';
     await app.chatController.waitForHeader();
-    await app.attachmentController.sendAttachment(PNG);
+    await app.previewAttachmentController.sendAttachment(PNG);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} downloads image`);
     await app1.chatController.waitForHeader();

@@ -41,7 +41,7 @@ test(`C3868089-sms-updating-the-subject-should-update-the-subject-in-the-convers
         const app = new BaseController(page1);
         await app.goToLoginPage();
         await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.closeTooltips();
+        await app.portalController.closeEnableDesktopNotification();
 
         Log.info(`Start ${testChatType} chat and send message`);
         await app.startChatButtonController.ClickOnStartSMS();

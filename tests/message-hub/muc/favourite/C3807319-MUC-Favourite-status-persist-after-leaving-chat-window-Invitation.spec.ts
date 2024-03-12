@@ -39,7 +39,7 @@ test(`${testName} ${testTags}`, async () => {
 
     // user login
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.closeTooltips();
+    await app.portalController.closeEnableDesktopNotification();
 
     await app.startChatButtonController.ClickOnStartMUC();
     const title = StringUtils.generateString(3, 5);
@@ -57,7 +57,7 @@ test(`${testName} ${testTags}`, async () => {
     app1 = new BaseController(page2);
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.closeTooltips();
+    await app1.portalController.closeEnableDesktopNotification();
     await app1.open(title);
 
     await app1.chatController.clickChatFavouriteButton();

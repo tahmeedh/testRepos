@@ -38,7 +38,7 @@ test(`${testName} ${testTags}`, async () => {
     app = new BaseController(page1);
     await app.goToLoginPage();
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.closeTooltips();
+    await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartMUC();
@@ -53,7 +53,7 @@ test(`${testName} ${testTags}`, async () => {
 
     Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends audio file`);
     const audio = './asset/audio.mp3';
-    await app.attachmentController.sendAttachment(audio);
+    await app.previewAttachmentController.sendAttachment(audio);
     await page1.waitForTimeout(5000);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} logging in `);
@@ -62,7 +62,7 @@ test(`${testName} ${testTags}`, async () => {
     app1 = new BaseController(page2);
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.closeTooltips();
+    await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
     await app1.open(title);
@@ -83,7 +83,7 @@ test(`${testName} ${testTags}`, async () => {
     app2 = new BaseController(page3);
     await app2.goToLoginPage();
     await app2.loginController.loginToPortal(user3.userInfo.email, user3.userInfo.password);
-    await app2.closeTooltips();
+    await app2.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user3.userInfo.firstName} ${user3.userInfo.lastName} declines invite`);
     await app2.open(title);
