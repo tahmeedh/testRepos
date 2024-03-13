@@ -29,8 +29,6 @@ export default defineConfig({
     reporter: [['html', { open: 'never' }], ['list']],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
-        // Timout for each action e.g. clicks and hover
-        actionTimeout: 10000,
         /* Base URL to use in actions like `await page.goto('/')`. */
         // baseURL: 'http://127.0.0.1:3000',
 
