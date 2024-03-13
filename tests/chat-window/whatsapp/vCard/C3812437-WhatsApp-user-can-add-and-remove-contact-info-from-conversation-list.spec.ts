@@ -31,7 +31,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
 
         await test.step('Login', async () => {
             await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-            await app.closeTooltips();
+            await app.portalController.closeEnableDesktopNotification();
         });
 
         await test.step('Starts a WhatsApp conversation', async () => {

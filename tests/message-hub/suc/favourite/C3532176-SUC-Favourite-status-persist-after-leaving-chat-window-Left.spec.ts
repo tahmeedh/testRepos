@@ -35,7 +35,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.goToLoginPage();
     // user login
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.closeTooltips();
+    await app.portalController.closeEnableDesktopNotification();
 
     // user start 1-1
     await app.startChatButtonController.ClickOnStartOneToOne();
@@ -51,7 +51,7 @@ test(`${testName} ${testTags}`, async () => {
     app1 = new BaseController(page2);
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.closeTooltips();
+    await app1.portalController.closeEnableDesktopNotification();
 
     // user 2 accept invitation with user 1
     await app1.startChatButtonController.ClickOnStartOneToOne();

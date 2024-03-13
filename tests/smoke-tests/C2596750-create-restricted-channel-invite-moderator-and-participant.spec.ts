@@ -38,10 +38,10 @@ test(`${testName} ${testTags}`, async () => {
     app = new BaseController(page1);
     await app.goToLoginPage();
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.closeTooltips();
+    await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    // await app.startChatButtonController.ClickOnStartChannel();
+    await app.startChatButtonController.ClickOnStartChannel();
     const title = StringUtils.generateString(3, 5);
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
     await app.createChatController.fillOutWhoCanPostForm();
@@ -60,7 +60,7 @@ test(`${testName} ${testTags}`, async () => {
     app1 = new BaseController(page2);
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.closeTooltips();
+    await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     await app1.open(title);
@@ -76,7 +76,7 @@ test(`${testName} ${testTags}`, async () => {
     app2 = new BaseController(page3);
     await app2.goToLoginPage();
     await app2.loginController.loginToPortal(user3.userInfo.email, user3.userInfo.password);
-    await app2.closeTooltips();
+    await app2.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user3.userInfo.firstName} ${user3.userInfo.lastName} declines invite`);
     await app2.open(title);

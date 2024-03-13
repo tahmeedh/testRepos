@@ -37,7 +37,7 @@ test(`${testName} ${testTags}`, async () => {
 
     await app.goToLoginPage();
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.closeTooltips();
+    await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
     await app.startChatButtonController.ClickOnStartSMS();
