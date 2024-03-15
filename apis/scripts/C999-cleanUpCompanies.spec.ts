@@ -39,15 +39,20 @@ test('C999', async () => {
 
         // delete all companies in list
         Log.highlight(`Deleteing the following companies: ${listOfCompanyIds}`);
+        const deletedCompanies = [];
+        const ignoredCompanies = [];
         for (const companyId of listOfCompanyIds) {
             try {
                 await CleanUpUtils.releaseAllPhoneNumbersFromCompany(companyId);
                 await platformController.deleteCompany(companyId);
+                deletedCompanies.push(companyId);
             } catch (e) {
                 Log.error(`Failed to delete ${companyId}. Ignoring this company.`, e);
+                ignoredCompanies.push(companyId);
             }
         }
-        Log.success(` ${listOfCompanies.length} companies have been deleted`);
+        Log.success(` ${deletedCompanies.length} companies have been deleted. ${deletedCompanies}`);
+        Log.success(` ${ignoredCompanies.length} companies have been skipped. ${ignoredCompanies}`);
     } catch (error) {
         Log.error(`FAILURE: An error occured when deleting companies`, error);
         test.fail();
