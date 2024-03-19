@@ -13,12 +13,32 @@ export const users = {
         EMAIL: 'ogg.player@vegastatic.com',
         PASSWORD: 'Password2@'
     },
-    INTERNAL_ONLY1: {
-        EMAIL: 'internal.only1@vegastatic.com',
+    INTERNAL_1ONLY: {
+        EMAIL: 'internal.1only@vegastatic.com',
         PASSWORD: 'Password2@'
     },
-    INTERNAL_ONLY2: {
-        EMAIL: 'internal.only2@vegastatic.com',
+    INTERNAL_2ONLY: {
+        EMAIL: 'internal.2only@vegastatic.com',
+        PASSWORD: 'Password2@'
+    },
+    INTERNAL_3ONLY: {
+        EMAIL: 'internal.3only@vegastatic.com',
+        PASSWORD: 'Password2@'
+    },
+    INTERNAL_4ONLY: {
+        EMAIL: 'internal.4only@vegastatic.com',
+        PASSWORD: 'Password2@'
+    },
+    INTERNAL_5ONLY: {
+        EMAIL: 'internal.5only@vegastatic.com',
+        PASSWORD: 'Password2@'
+    },
+    INTERNAL_6ONLY: {
+        EMAIL: 'internal.6only@vegastatic.com',
+        PASSWORD: 'Password2@'
+    },
+    INTERNAL_7ONLY: {
+        EMAIL: 'internal.7only@vegastatic.com',
         PASSWORD: 'Password2@'
     }
 };

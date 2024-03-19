@@ -4,8 +4,8 @@ import { BaseController } from 'Controllers/base-controller';
 import { users } from 'Constants/users';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
-const user1 = users.INTERNAL_ONLY1;
-const user2 = users.INTERNAL_ONLY2;
+const user1 = users.INTERNAL_1ONLY;
+const user2 = users.INTERNAL_2ONLY;
 
 test(`${testName} ${testTags} @static`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
