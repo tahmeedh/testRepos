@@ -61,7 +61,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
 
         await test.step(`Users Login`, async () => {
-            return Promise.all([
+            await Promise.all([
                 test.step(`User1 is logged in`, async () => {
                     await expect(async () => {
                         await browser1.clearCookies();
@@ -149,13 +149,13 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
         await test.step(`User 1-7 has isTyping MUC open`, async () => {
             return Promise.all([
-                await app1.conversationListController.clickOnConversationName('isTyping MUC'),
-                await app2.conversationListController.clickOnConversationName('isTyping MUC'),
-                await app3.conversationListController.clickOnConversationName('isTyping MUC'),
-                await app4.conversationListController.clickOnConversationName('isTyping MUC'),
-                await app5.conversationListController.clickOnConversationName('isTyping MUC'),
-                await app6.conversationListController.clickOnConversationName('isTyping MUC'),
-                await app7.conversationListController.clickOnConversationName('isTyping MUC')
+                app1.conversationListController.clickOnConversationName('isTyping MUC'),
+                app2.conversationListController.clickOnConversationName('isTyping MUC'),
+                app3.conversationListController.clickOnConversationName('isTyping MUC'),
+                app4.conversationListController.clickOnConversationName('isTyping MUC'),
+                app5.conversationListController.clickOnConversationName('isTyping MUC'),
+                app6.conversationListController.clickOnConversationName('isTyping MUC'),
+                app7.conversationListController.clickOnConversationName('isTyping MUC')
             ]);
         });
 

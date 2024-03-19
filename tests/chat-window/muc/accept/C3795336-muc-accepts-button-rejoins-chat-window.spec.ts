@@ -65,7 +65,7 @@ test(`${testName} ${testTags}`, async () => {
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} rejoins ${testChatType}`);
     await app1.open(title);
-    await app1.Pom.CHATIFRAME.getByRole('button', { name: 'Accept' }).nth(0).click();
+    await app1.Pom.CHATIFRAME.getByRole('button', { name: 'Accept' }).click();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} sees their previous message`);
     const previousMessage = app1.Pom.CHATIFRAME.getByText(user2Message);

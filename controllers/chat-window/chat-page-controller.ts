@@ -26,6 +26,12 @@ export class ChatController {
         return message;
     }
 
+    async clickSendButton() {
+        await test.step('Chat Controller : Click send button', async () => {
+            await this.Pom.SEND_BUTTON.click();
+        });
+    }
+
     async typeContent(message: string = StringUtils.generateString()) {
         await test.step('Chat Controller : Send Content', async () => {
             await this.Pom.CHAT_INPUT_WRAPPER.click();
