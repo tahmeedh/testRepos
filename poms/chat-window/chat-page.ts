@@ -36,6 +36,10 @@ export class ChatPage extends BasePage {
     readonly MENU_ICON: Locator;
     readonly CHAT_BUBBLE_MENU_DROPDOWN: Locator;
     readonly IS_TYPING_INDICATOR: Locator;
+    readonly IS_TYPING_AVATARS_CONTAINER: Locator;
+    readonly IS_TYPING_AVATAR: Locator;
+    readonly IS_TYPING_AVATAR_TEXT: Locator;
+    readonly IS_TYPING_AVATAR_OVERFLOW: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -82,5 +86,11 @@ export class ChatPage extends BasePage {
         this.MENU_ICON = this.CHATIFRAME.locator('.m-auto-file-menu-icon:visible');
         this.CHAT_BUBBLE_MENU_DROPDOWN = this.CHATIFRAME.locator('.m-auto-chat-bubble-menu:visible');
         this.IS_TYPING_INDICATOR = this.CHATIFRAME.getByTestId('is-typing');
+        this.IS_TYPING_AVATAR =
+            this.CHATIFRAME.getByTestId('is-typing-avatars').getByTestId('test-avatar-main');
+        this.IS_TYPING_AVATAR_TEXT =
+            this.CHATIFRAME.getByTestId('is-typing-avatars').getByTestId('avatar-text-content');
+        this.IS_TYPING_AVATAR_OVERFLOW =
+            this.CHATIFRAME.getByTestId('is-typing-avatars').getByTestId('is-typing-overflow');
     }
 }
