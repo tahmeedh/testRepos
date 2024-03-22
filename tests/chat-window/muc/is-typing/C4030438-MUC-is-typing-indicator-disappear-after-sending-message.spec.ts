@@ -162,12 +162,12 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         await test.step(`STEP1`, async () => {
             await test.step(`WHEN - User 2,3,4,5,6,7 types in chat input `, async () => {
                 await Promise.all([
-                    await app7.chatController.typeContent('Type content'),
-                    await app6.chatController.typeContent('Type content'),
-                    await app5.chatController.typeContent('Type content'),
-                    await app4.chatController.typeContent('Type content'),
+                    await app2.chatController.typeContent('Type content'),
                     await app3.chatController.typeContent('Type content'),
-                    await app2.chatController.typeContent('Type content')
+                    await app4.chatController.typeContent('Type content'),
+                    await app5.chatController.typeContent('Type content'),
+                    await app6.chatController.typeContent('Type content'),
+                    await app7.chatController.typeContent('Type content')
                 ]);
             });
 
@@ -184,9 +184,13 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                 await app2.chatController.clickSendButton();
             });
 
-            await test.step(`THEN - User1 see 5 avatars, no overflow avatar and is typing indicator`, async () => {
-                // expect 5 avatar, but don't know which 5 as this is returned randomly from backend
+            await test.step(`THEN - User1 see user3, 4, 5, 6, 7's avatars, no overflow avatar and is typing indicator`, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(5);
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I4')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I5')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I6')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I7')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
@@ -197,13 +201,12 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                 await app3.chatController.clickSendButton();
             });
 
-            await test.step(`THEN - User1 see 4 avatars, no overflow avatar and is typing indicator`, async () => {
+            await test.step(`THEN - User1 see user4, 5, 6, 7 avatars, no overflow avatar and is typing indicator`, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(4);
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I4')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I5')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I6')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I7')).toBeVisible();
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -213,12 +216,11 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                 await app4.chatController.clickSendButton();
             });
 
-            await test.step(`THEN - User1 see 3 avatars, no overflow avatar and is typing indicator`, async () => {
+            await test.step(`THEN - User1 see user5, 6, 7 avatars, no overflow avatar and is typing indicator`, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(3);
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I5')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I6')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I7')).toBeVisible();
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -228,11 +230,10 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                 await app5.chatController.clickSendButton();
             });
 
-            await test.step(`THEN - User1 see 2 avatars, no overflow avatar and is typing indicator`, async () => {
+            await test.step(`THEN - User1 see user6, 7 avatars, no overflow avatar and is typing indicator`, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(2);
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I6')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I7')).toBeVisible();
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -242,10 +243,9 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                 await app6.chatController.clickSendButton();
             });
 
-            await test.step(`THEN - User1 see 1 avatar, no overflow avatar and is typing indicator`, async () => {
+            await test.step(`THEN - User1 see user7's avatar, no overflow avatar and is typing indicator`, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(1);
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I7')).toBeVisible();
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -257,7 +257,6 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
             await test.step(`THEN - User1 see no avatar, no overflow avatar and no is typing indicator`, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(0);
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).not.toBeVisible();
             });
         });

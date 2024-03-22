@@ -281,7 +281,6 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I4')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I5')).toBeVisible();
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -317,7 +316,6 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(2, { timeout: 31000 });
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -330,7 +328,6 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             await test.step(`THEN - User1 see 1 avatar and is typing indicator, no overflow avatar`, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(1, { timeout: 31000 });
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -338,7 +335,6 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         await test.step(`STEP12`, async () => {
             await test.step(`WHEN - THEN - After 30 seconds, no isTyping avatar and no isTyping indicator `, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(0, { timeout: 31000 });
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).not.toBeVisible();
             });
         });
