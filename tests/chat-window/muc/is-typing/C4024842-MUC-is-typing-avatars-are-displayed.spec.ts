@@ -136,7 +136,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
 
         await test.step(`Close desktop notification`, async () => {
-            return Promise.all([
+            await Promise.all([
                 app1.portalController.closeEnableDesktopNotification(),
                 app2.portalController.closeEnableDesktopNotification(),
                 app3.portalController.closeEnableDesktopNotification(),
@@ -148,7 +148,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
 
         await test.step(`User 1-7 has isTyping MUC open`, async () => {
-            return Promise.all([
+            await Promise.all([
                 app1.conversationListController.clickOnConversationName('isTyping Timeout'),
                 app2.conversationListController.clickOnConversationName('isTyping Timeout'),
                 app3.conversationListController.clickOnConversationName('isTyping Timeout'),

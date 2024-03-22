@@ -136,7 +136,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
 
         await test.step(`Close desktop notification`, async () => {
-            return Promise.all([
+            await Promise.all([
                 app1.portalController.closeEnableDesktopNotification(),
                 app2.portalController.closeEnableDesktopNotification(),
                 app3.portalController.closeEnableDesktopNotification(),
@@ -148,7 +148,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
 
         await test.step(`User 1-7 has isTyping MUC open`, async () => {
-            return Promise.all([
+            await Promise.all([
                 app1.conversationListController.clickOnConversationName('isTyping Send'),
                 app2.conversationListController.clickOnConversationName('isTyping Send'),
                 app3.conversationListController.clickOnConversationName('isTyping Send'),
@@ -161,7 +161,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
         await test.step(`STEP1`, async () => {
             await test.step(`WHEN - User 2,3,4,5,6,7 types in chat input `, async () => {
-                return Promise.all([
+                await Promise.all([
                     await app7.chatController.typeContent('Type content'),
                     await app6.chatController.typeContent('Type content'),
                     await app5.chatController.typeContent('Type content'),
