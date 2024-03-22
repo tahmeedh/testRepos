@@ -149,13 +149,13 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
         await test.step(`User 1-7 has isTyping MUC open`, async () => {
             return Promise.all([
-                app1.conversationListController.clickOnConversationName('isTyping MUC'),
-                app2.conversationListController.clickOnConversationName('isTyping MUC'),
-                app3.conversationListController.clickOnConversationName('isTyping MUC'),
-                app4.conversationListController.clickOnConversationName('isTyping MUC'),
-                app5.conversationListController.clickOnConversationName('isTyping MUC'),
-                app6.conversationListController.clickOnConversationName('isTyping MUC'),
-                app7.conversationListController.clickOnConversationName('isTyping MUC')
+                app1.conversationListController.clickOnConversationName('isTyping Timeout'),
+                app2.conversationListController.clickOnConversationName('isTyping Timeout'),
+                app3.conversationListController.clickOnConversationName('isTyping Timeout'),
+                app4.conversationListController.clickOnConversationName('isTyping Timeout'),
+                app5.conversationListController.clickOnConversationName('isTyping Timeout'),
+                app6.conversationListController.clickOnConversationName('isTyping Timeout'),
+                app7.conversationListController.clickOnConversationName('isTyping Timeout')
             ]);
         });
 
@@ -166,6 +166,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
             await test.step(`THEN - User1 see 1 and is typing indicator `, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(1);
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -177,6 +178,8 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
             await test.step(`THEN - User1 see 2 avatar and is typing indicator `, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(2);
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -188,6 +191,9 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
             await test.step(`THEN - User1 see 3 avatar and is typing indicator `, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(3);
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I4')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -199,6 +205,10 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
             await test.step(`THEN - User1 see 4 avatar and is typing indicator `, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(4);
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I4')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I5')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -210,6 +220,11 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
             await test.step(`THEN - User1 see 5 avatar and is typing indicator `, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(5);
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I4')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I5')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I6')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
@@ -221,21 +236,110 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
             await test.step(`THEN - User1 see overflow avatar, 5 avatar and is typing indicator `, async () => {
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(5);
+                // expect 5 avatar, but don't know which 5 as this is returned randomly from backend
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
         });
 
         await test.step(`STEP7`, async () => {
+            await test.step(`WHEN - After 15seconds, User 2,3,4,5,6 types in chat input `, async () => {
+                await app2.page.waitForTimeout(15000);
+                await Promise.all([
+                    app2.chatController.typeContent('Type content again'),
+                    app3.chatController.typeContent('Type content again'),
+                    app4.chatController.typeContent('Type content again'),
+                    app5.chatController.typeContent('Type content again'),
+                    app6.chatController.typeContent('Type content again')
+                ]);
+            });
+            await test.step(`THEN - User1 see 5 avatar and is typing indicator, no overflow avatar`, async () => {
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(5, { timeout: 31000 });
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I4')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I5')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I6')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
+            });
+        });
+
+        await test.step(`STEP8`, async () => {
+            await test.step(`WHEN - After 15seconds, User 2,3,4,5 types in chat input `, async () => {
+                await app2.page.waitForTimeout(15000);
+                await Promise.all([
+                    app2.chatController.typeContent('Type content'),
+                    app3.chatController.typeContent('Type content'),
+                    app4.chatController.typeContent('Type content'),
+                    app5.chatController.typeContent('Type content')
+                ]);
+            });
+            await test.step(`THEN - User1 see 4 avatar and is typing indicator, no overflow avatar`, async () => {
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(4, { timeout: 31000 });
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I4')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I5')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
+            });
+        });
+
+        await test.step(`STEP9`, async () => {
+            await test.step(`WHEN - After 15seconds, User 2,3,4 types in chat input `, async () => {
+                await app2.page.waitForTimeout(15000);
+                await Promise.all([
+                    app2.chatController.typeContent('Type'),
+                    app3.chatController.typeContent('Type'),
+                    app4.chatController.typeContent('Type')
+                ]);
+            });
+            await test.step(`THEN - User1 see 3 avatar and is typing indicator, no overflow avatar`, async () => {
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(3, { timeout: 31000 });
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I4')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
+            });
+        });
+
+        await test.step(`STEP10`, async () => {
+            await test.step(`WHEN - After 15seconds, User 2,3 types in chat input `, async () => {
+                await app2.page.waitForTimeout(15000);
+                await Promise.all([
+                    app2.chatController.typeContent('Type content'),
+                    app3.chatController.typeContent('Type content')
+                ]);
+            });
+            await test.step(`THEN - User1 see 2 avatar and is typing indicator, no overflow avatar`, async () => {
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(2, { timeout: 31000 });
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I3')).toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
+            });
+        });
+
+        await test.step(`STEP11`, async () => {
             await test.step(`WHEN - After 15seconds, User 2 types in chat input `, async () => {
                 await app2.page.waitForTimeout(15000);
                 await app2.chatController.typeContent('Type content again');
             });
-
-            await test.step(`THEN - User1 see 1 avatar and is typing indicator `, async () => {
-                await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(1, { timeout: 30000 });
+            await test.step(`THEN - User1 see 1 avatar and is typing indicator, no overflow avatar`, async () => {
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(1, { timeout: 31000 });
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR.getByText('I2')).toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
                 await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
+            });
+        });
+
+        await test.step(`STEP12`, async () => {
+            await test.step(`WHEN - THEN - After 30 seconds, no isTyping avatar and no isTyping indicator `, async () => {
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR).toHaveCount(0, { timeout: 31000 });
+                await expect(app1.chatController.Pom.IS_TYPING_AVATAR_OVERFLOW).not.toBeVisible();
+                await expect(app1.chatController.Pom.IS_TYPING_INDICATOR).not.toBeVisible();
             });
         });
     });
