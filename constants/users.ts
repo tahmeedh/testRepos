@@ -64,5 +64,15 @@ export const users = {
         EMAIL: 'isTyping3@vegastatic.com',
         PASSWORD: 'Password2@',
         NOTES: 'DO NOT USE. EXCLUSIVE FOR C4030438.'
+    },
+    ACCEPT_1INVITE: {
+        EMAIL: 'accept1Invite@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'DO NOT USE. EXCLUSIVE FOR C4030438.'
+    },
+    ACCEPT_2INVITE: {
+        EMAIL: 'accept2Invite@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'DO NOT USE. EXCLUSIVE FOR C4030438.'
     }
 };
