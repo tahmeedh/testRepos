@@ -124,4 +124,8 @@ export class BaseController {
             await this.page.keyboard.press(keys);
         });
     }
+
+    async scrollVertically(numberOfPixel: number) {
+        await this.page.mouse.wheel(0, numberOfPixel);
+    }
 }

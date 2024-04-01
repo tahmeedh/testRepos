@@ -26,7 +26,7 @@ export class ConversationListController {
 
     async clickOnConversationName(conversationName: string) {
         await test.step('Conversation List Controller : Click on conversation', async () => {
-            await this.Pom.CONVERSATION_NAME.getByText(conversationName).click();
+            await this.Pom.CONVERSATION_NAME.getByText(conversationName).nth(0).click();
         });
     }
 }

@@ -40,6 +40,7 @@ export class ChatPage extends BasePage {
     readonly IS_TYPING_AVATAR: Locator;
     readonly IS_TYPING_AVATAR_TEXT: Locator;
     readonly IS_TYPING_AVATAR_OVERFLOW: Locator;
+    readonly CHAT_BUBBLE_ROW: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -85,6 +86,8 @@ export class ChatPage extends BasePage {
         this.MESSAGE_ROW_CONTAINER = this.CHATIFRAME.locator('.m-auto-message-row-container');
         this.MENU_ICON = this.CHATIFRAME.locator('.m-auto-file-menu-icon:visible');
         this.CHAT_BUBBLE_MENU_DROPDOWN = this.CHATIFRAME.locator('.m-auto-chat-bubble-menu:visible');
+        this.CHAT_BUBBLE_ROW = this.CHATIFRAME.locator('.m-auto-message-row-container');
+
         this.IS_TYPING_INDICATOR = this.CHATIFRAME.getByTestId('is-typing');
         this.IS_TYPING_AVATAR =
             this.CHATIFRAME.getByTestId('is-typing-avatars').getByTestId('test-avatar-main');
