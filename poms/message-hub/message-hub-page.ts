@@ -14,11 +14,13 @@ export class MessageHubPage extends BasePage {
     readonly CHAT_FLAG_INDICATOR: Locator;
     readonly CHAT_FAVOURITE_INDICATOR: Locator;
     readonly CONVERSATION_ROW: Locator;
+    readonly WELCOME_TEXT: Locator;
 
     constructor(page: Page) {
         super(page);
 
         this.HUB_CONTAINER = this.MESSAGEIFRAME.locator('.hub-container');
+        this.WELCOME_TEXT = this.MESSAGEIFRAME.locator('.m-auto-welcome-container-text');
         //sidebar
         this.CHATS_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-chats-button');
         this.CONTACTS_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-contacts-button');
