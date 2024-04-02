@@ -21,30 +21,30 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     Log.starDivider(
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
-
     app = new BaseController(page);
     await app.goToLoginPage();
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-
     await app.portalController.closeEnableDesktopNotification();
 
-    // Collapse the Message Hub
+    Log.starDivider(`Collapse the Message Hub`);
     await app.navigationController.hideMessageHub();
 
     Log.starDivider(`Navigate to GR Directory`);
     await app.portalController.selectGrDirectoryButton();
-    await expect(app.globalSearchController.Pom.SEARCH_FIELD).not.toBeVisible();
-    await expect(app.startChatButtonController.Pom.START_CHAT).not.toBeVisible();
+
+    await test.step('Verify that Message Hub is in collapsed state', async () => {
+        await expect(app.globalSearchController.Pom.SEARCH_FIELD).not.toBeVisible();
+        await expect(app.startChatButtonController.Pom.START_CHAT).not.toBeVisible();
+    });
 
     Log.starDivider(`Navigate to GR Workspace`);
     await app.portalController.selectGrWorkspaceButton();
 
-    // Verify that Message Hub has expanded
-    await expect(app.globalSearchController.Pom.SEARCH_FIELD).toBeVisible();
-    await expect(app.startChatButtonController.Pom.START_CHAT).toBeVisible();
-
-    // Verify Welcome text is shown
-    await expect(app.messageHubController.Pom.WELCOME_TEXT).toBeVisible();
+    test.step('Verify that Message Hub is expanded and welcome text is shown', async () => {
+        await expect(app.globalSearchController.Pom.SEARCH_FIELD).toBeVisible();
+        await expect(app.startChatButtonController.Pom.START_CHAT).toBeVisible();
+        await expect(app.messageHubController.Pom.WELCOME_TEXT).toBeVisible();
+    });
 
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
