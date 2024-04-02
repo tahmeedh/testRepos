@@ -26,9 +26,14 @@ export class ChatController {
         return message;
     }
 
+    async clickSendButton() {
+        await test.step('Chat Controller : Click send button', async () => {
+            await this.Pom.SEND_BUTTON.click();
+        });
+    }
+
     async typeContent(message: string = StringUtils.generateString()) {
         await test.step('Chat Controller : Send Content', async () => {
-            await this.Pom.CHAT_INPUT_WRAPPER.click();
             await this.Pom.CHAT_INPUT.fill(message);
         });
     }
@@ -185,6 +190,13 @@ export class ChatController {
         await test.step(`Chat Controller: Click chat input`, async () => {
             Log.info(`Chat Controller: Click chat input`);
             await this.Pom.CHAT_INPUT.click();
+        });
+    }
+
+    async hoverOverChatArea() {
+        await test.step(`Chat Controller: Hover over chat area`, async () => {
+            Log.info(`Chat Controller: Hover over chat area`);
+            await this.Pom.CHAT_WINDOW.hover();
         });
     }
 }

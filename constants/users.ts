@@ -7,18 +7,72 @@ export const users = {
     ADMIN_VEGA_AUTOMATION: {
         EMAIL: 'admin01@vegaautomation.com',
         NAME: 'admin 01',
-        PASSWORD: 'Password2@2@2@'
+        PASSWORD: 'Password2@2@2@',
+        NOTES: ''
     },
     OGG_PLYAER: {
         EMAIL: 'ogg.player@vegastatic.com',
-        PASSWORD: 'Password2@'
+        PASSWORD: 'Password2@',
+        NOTES: 'READ_ONLY'
     },
-    INTERNAL_ONLY1: {
-        EMAIL: 'internal.only1@vegastatic.com',
-        PASSWORD: 'Password2@'
+    INTERNAL_1ONLY: {
+        EMAIL: 'internal.1only@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ_ONLY'
     },
-    INTERNAL_ONLY2: {
-        EMAIL: 'internal.only2@vegastatic.com',
-        PASSWORD: 'Password2@'
+    INTERNAL_2ONLY: {
+        EMAIL: 'internal.2only@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ_ONLY'
+    },
+    INTERNAL_3ONLY: {
+        EMAIL: 'internal.3only@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ_ONLY'
+    },
+    INTERNAL_4ONLY: {
+        EMAIL: 'internal.4only@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ_ONLY'
+    },
+    INTERNAL_5ONLY: {
+        EMAIL: 'internal.5only@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ_ONLY'
+    },
+    INTERNAL_6ONLY: {
+        EMAIL: 'internal.6only@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ_ONLY'
+    },
+    INTERNAL_7ONLY: {
+        EMAIL: 'internal.7only@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ_ONLY'
+    },
+    ISTYPING_1: {
+        EMAIL: 'isTyping1@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'DO NOT USE. EXCLUSIVE FOR C4030438.'
+    },
+    ISTYPING_2: {
+        EMAIL: 'isTyping2@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'DO NOT USE. EXCLUSIVE FOR C4030438.'
+    },
+    ISTYPING_3: {
+        EMAIL: 'isTyping3@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'DO NOT USE. EXCLUSIVE FOR C4030438.'
+    },
+    ACCEPT_1INVITE: {
+        EMAIL: 'accept1Invite@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'DO NOT USE. EXCLUSIVE FOR C4030438.'
+    },
+    ACCEPT_2INVITE: {
+        EMAIL: 'accept2Invite@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'DO NOT USE. EXCLUSIVE FOR C4030438.'
     }
 };

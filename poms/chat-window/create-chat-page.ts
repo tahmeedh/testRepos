@@ -12,6 +12,7 @@ export class CreateChatPage extends BasePage {
     // MUC
     readonly MUC_SEARCH_INPUT: Locator;
     readonly NEXT_BUTTON: Locator;
+    readonly BUTTON: Locator;
     readonly INPUT_SUBJECT: Locator;
     readonly ACCEPT_BUTTON_MUC: Locator;
     readonly DECLINE_BUTTON_MUC: Locator;
@@ -50,6 +51,7 @@ export class CreateChatPage extends BasePage {
 
         //MUC
         this.MUC_SEARCH_INPUT = this.CHATIFRAME.locator('.m-auto-invite-input');
+        this.BUTTON = this.CHATIFRAME.getByRole('button');
         this.NEXT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-next');
         this.INPUT_SUBJECT = this.CHATIFRAME.getByLabel('input-label');
         this.ACCEPT_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-accept');

@@ -6,6 +6,8 @@ export class PortalPage extends BasePage {
     readonly NEW_FEATURE_TOOLTIP_CLOSE_BUTTON: Locator;
     readonly HEADER_MAIN_MENU_BUTTON: Locator;
     readonly HEADER_MAIN_MENU_CONTAINER: Locator;
+    readonly GR_BUTTON: Locator;
+    readonly GR_DIRECTORY_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -13,5 +15,7 @@ export class PortalPage extends BasePage {
         this.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON = this.page.locator('.m-auto-new-feature-tooltip-close');
         this.HEADER_MAIN_MENU_BUTTON = this.page.locator('.m-auto-header-main-menu-image');
         this.HEADER_MAIN_MENU_CONTAINER = this.page.locator('.m-auto-header-main-menu');
+        this.GR_BUTTON = this.page.getByTestId('message-workspace-btn');
+        this.GR_DIRECTORY_BUTTON = this.page.getByTestId('directory-workspace-btn');
     }
 }

@@ -206,6 +206,20 @@ export class CreateChatController {
         });
     }
 
+    async clickUserRowInternal(userName: string) {
+        await test.step(`Create Chat Controller: Click on the row with user name'${userName}'`, async () => {
+            Log.info(`Create Chat Controller: Click on the row with user name'${userName}'`);
+            await this.Pom.NAME.getByText(userName).click();
+        });
+    }
+
+    async clickFooterButton(buttonText: 'Next' | 'Cancel') {
+        await test.step(`Create Chat Controller: Click on '${buttonText}' button`, async () => {
+            Log.info(`Create Chat Controller: Click on '${buttonText}' button`);
+            await this.Pom.BUTTON.getByText(buttonText).click();
+        });
+    }
+
     async clickOnCancelButton() {
         await test.step(`Create Chat Controller: Click on 'Cancel' button`, async () => {
             Log.info(`Create Chat Controller: Click on 'Cancel' button`);

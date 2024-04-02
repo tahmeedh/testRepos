@@ -46,4 +46,18 @@ export class PortalController {
             await this.Pom.HEADER_MAIN_MENU_CONTAINER.getByText(option).click();
         });
     }
+
+    async selectGrWorkspaceButton() {
+        await test.step('Select GR Workspace Button', async () => {
+            Log.info(`Portal Controller: Select Global Relay Workspace Button`);
+            await this.Pom.GR_BUTTON.click();
+        });
+    }
+
+    async selectGrDirectoryButton() {
+        await test.step('Select GR Workspace Button', async () => {
+            Log.info(`Portal Controller: Select Global Relay Directory Button`);
+            await this.Pom.GR_DIRECTORY_BUTTON.click();
+        });
+    }
 }
