@@ -23,4 +23,9 @@ export class NavigationController {
         Log.info(`Navigation Controller: Click on side bar contacts button'`);
         await this.Pom.CONTACTS_BUTTON.click();
     }
+
+    async toggleHideMessageHubButton() {
+        Log.info(`Portal Controller: Toggle Message Hub`);
+        await this.Pom.MESSAGE_HUB_HIDE_BUTTON.click();
+    }
 }
