@@ -56,7 +56,7 @@ export class PortalController {
 
     async selectGrDirectoryButton() {
         await test.step('Select GR Workspace Button', async () => {
-            Log.info(`Portal Controller: Select Global Relay Workspace Button`);
+            Log.info(`Portal Controller: Select Global Relay Directory Button`);
             await this.Pom.GR_DIRECTORY_BUTTON.click();
         });
     }
