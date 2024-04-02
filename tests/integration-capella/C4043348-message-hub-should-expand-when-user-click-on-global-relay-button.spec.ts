@@ -27,7 +27,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.starDivider(`Collapse the Message Hub`);
-    await app.navigationController.hideMessageHub();
+    await app.navigationController.toggleHideMessageHubButton();
 
     Log.starDivider(`Navigate to GR Directory`);
     await app.portalController.selectGrDirectoryButton();
