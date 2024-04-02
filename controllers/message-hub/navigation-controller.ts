@@ -25,7 +25,7 @@ export class NavigationController {
     }
 
     async toggleHideMessageHubButton() {
-        Log.info(`Portal Controller: Hide Message Hub`);
+        Log.info(`Portal Controller: Toggle Message Hub`);
         await this.Pom.MESSAGE_HUB_HIDE_BUTTON.click();
     }
 }
