@@ -54,6 +54,14 @@ export class CreateChatController {
         });
     }
 
+    async createInternalSMS(username) {
+        await this.Pom.EXTERNAL_SEARCH_INPUT.click();
+        await this.Pom.EXTERNAL_SEARCH_INPUT.fill(username);
+        // click on user
+        await this.Pom.CHATIFRAME.getByText(username).first().click();
+        await this.Pom.NEXT_BUTTON.click();
+    }
+
     async CreateGroupText(phoneNumbers: string[]) {
         return test.step('Create Chat Controller : Select User', async () => {
             for (const phoneNumber of phoneNumbers) {

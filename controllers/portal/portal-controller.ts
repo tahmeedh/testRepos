@@ -21,6 +21,13 @@ export class PortalController {
         });
     }
 
+    async clickCloseSMSEnabledNotification() {
+        await test.step('Portal Controller : Click on Close text enabled notification', async () => {
+            Log.info(`Portal Controller: Click on Close text enabled notification`);
+            await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
+        });
+    }
+
     async closeGRPhoneNumberNotification() {
         // eslint-disable-next-line max-len
         await test.step(`Portal Controller: Close 'View your Global Relay number and set up call-forwarding in your profile.' notification`, async () => {
