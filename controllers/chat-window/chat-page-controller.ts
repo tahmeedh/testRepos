@@ -147,7 +147,7 @@ export class ChatController {
     }
 
     async muteConversation() {
-        await test.step('Chat Controller: Mute Chat', async () => {
+        await test.step('Chat Controller: Mute Conversation', async () => {
             await this.clickChatHeaderMenu();
             await this.Pom.DROP_DOWN_MUTE.click();
         });
