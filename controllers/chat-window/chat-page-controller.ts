@@ -146,10 +146,17 @@ export class ChatController {
         });
     }
 
-    async muteChat() {
+    async muteConversation() {
         await test.step('Chat Controller: Mute Chat', async () => {
             await this.clickChatHeaderMenu();
             await this.Pom.DROP_DOWN_MUTE.click();
+        });
+    }
+
+    async unMuteConversation() {
+        await test.step('Chat Controller: Mute Conversation', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_UNMUTE.click();
         });
     }
 

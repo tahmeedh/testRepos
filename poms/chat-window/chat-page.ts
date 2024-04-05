@@ -25,6 +25,7 @@ export class ChatPage extends BasePage {
     readonly DROP_DOWN_INVITE_PARTICIPANTS: Locator;
     readonly DROP_DOWN_VIEW_DETAILS: Locator;
     readonly DROP_DOWN_MUTE: Locator;
+    readonly DROP_DOWN_UNMUTE: Locator;
     readonly CHAT_HEADER_MENU_DROP_DOWN: Locator;
     readonly CHAT_FAVOURITE_BUTTON: Locator;
     readonly LEAVE_CHAT_BUTTON: Locator;
@@ -51,6 +52,7 @@ export class ChatPage extends BasePage {
         this.DROP_DOWN_INVITE_PARTICIPANTS = this.CHATIFRAME.locator('.m-auto-inviteToConversationBtn');
         this.DROP_DOWN_LEAVE = this.CHATIFRAME.locator('.m-auto-leaveBtn');
         this.DROP_DOWN_MUTE = this.CHATIFRAME.locator('.m-auto-dropdown-mute');
+        this.DROP_DOWN_UNMUTE = this.CHATIFRAME.locator('.m-auto-dropdown-unmute');
         this.CHAT_WINDOW = this.CHATIFRAME.locator('.chat-area');
         this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
         this.CHAT_INPUT_WRAPPER = this.CHATIFRAME.locator('.public-DraftEditor-content');

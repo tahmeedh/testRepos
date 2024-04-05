@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
@@ -35,36 +35,14 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     await app.startChatButtonController.ClickOnStartOneToOne();
     await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
 
-    // user start conversation with user 2
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
-    app.chatController.muteChat();
+    await app.chatController.muteChat();
+    await app.messageHubController.clickSideBarChatsButton();
 
-    await app.page.pause();
+    test.step('Verify that Mute icon is shown for muted chat', async () => {
+        await expect(app.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();
+    });
 
-    // // user 2 login
-    // context2 = await browser.newContext();
-    // const page2 = await context2.newPage();
-    // app1 = new BaseController(page2);
-    // await app1.goToLoginPage();
-    // await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    // await app1.portalController.closeEnableDesktopNotification();
-
-    // // user 2 accept invitation with user 1
-    // await app1.startChatButtonController.ClickOnStartOneToOne();
-    // await app1.createChatController.CreateSUC(`${user1.userInfo.firstName} ${user1.userInfo.lastName}`);
-    // await app1.inviteController.acceptInvite('SUC');
-
-    // await app1.page.pause()
-
-    // // to verify that flag icon shows up in the message hub
-    // await app1.chatController.clickOnBackButton();
-
-    // // Verify the flag
-    // await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
-});
-
-test.afterEach(async () => {
-    await company.teardown();
 });
