@@ -90,3 +90,12 @@ test(`${testName} ${testTags} @Mini-vCard @Mini-vCard-sanity`, async ({ page }) 
 
 ### Mocking inbound Twilio and WhatsApp messages
 Please see [READ-ME](./apis/scripts/README.md)
+
+### API Docs
+| API Name | URL |
+| --- | --- |
+| Message Core API | https://swaggerhub.globalrelay.net/apis/Internal-APIs/UC-core-api |
+| MFS API | https://swaggerhub.globalrelay.net/apis/Internal-APIs/uc-message_fileshare_service-api |
+| MDS API | https://swaggerhub.globalrelay.net/apis/Internal-APIs/UC-MDS-Admin-API/2.8 |
+| Thrift APIs(SM) | https://stash.globalrelay.net/projects/THRIFT |
+| GRCP | https://web1-msg-msgci1-nvan.dev-globalrelay.net/chirp-api/ |
