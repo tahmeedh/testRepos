@@ -15,7 +15,7 @@ export class MessageHubPage extends BasePage {
     readonly CHAT_FAVOURITE_INDICATOR: Locator;
     readonly CONVERSATION_ROW: Locator;
     readonly WELCOME_TEXT: Locator;
-    readonly MESSAGE_RED_BADGE: Locator;
+    readonly NEW_MESSAGE_RED_BADGE: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -25,7 +25,7 @@ export class MessageHubPage extends BasePage {
         //sidebar
         this.CHATS_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-chats-button');
         this.CONTACTS_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-contacts-button');
-        this.MESSAGE_RED_BADGE = this.MESSAGEIFRAME.locator('.m-auto-red-badge');
+        this.NEW_MESSAGE_RED_BADGE = this.MESSAGEIFRAME.locator('.m-auto-red-badge');
 
         // Row Information
         this.CHAT_NAME = this.MESSAGEIFRAME.locator('.twemoji-wrapper');

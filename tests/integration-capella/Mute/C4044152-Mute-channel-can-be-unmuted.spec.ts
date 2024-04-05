@@ -86,8 +86,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     test.step('Verify that new message should update badge counter on the channel list and Side Bar', async () => {
-        await expect(app.messageHubController.Pom.MESSAGE_RED_BADGE).toBeVisible();
-        await expect(app.conversationListController.Pom.NEW_MESSAGE_BADGE).toBeVisible();
+        await expect(app.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
+        await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toBeVisible();
     });
 
     Log.starDivider(`END TEST: Test Execution Commpleted`);

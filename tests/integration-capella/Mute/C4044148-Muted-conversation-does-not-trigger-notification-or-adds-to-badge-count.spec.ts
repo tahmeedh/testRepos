@@ -73,8 +73,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     test.step('Verify that new message should not update badge counter on channel list and Side Bar', async () => {
-        await expect(app.messageHubController.Pom.MESSAGE_RED_BADGE).not.toBeVisible();
-        await expect(app.conversationListController.Pom.NEW_MESSAGE_BADGE).not.toBeVisible();
+        await expect(app.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
+        await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).not.toBeVisible();
     });
 
     Log.starDivider(`END TEST: Test Execution Commpleted`);
