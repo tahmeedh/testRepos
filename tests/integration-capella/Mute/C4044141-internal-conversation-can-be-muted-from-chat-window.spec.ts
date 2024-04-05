@@ -27,17 +27,16 @@ test(`${testName} ${testTags}`, async ({ page }) => {
 
     app = new BaseController(page);
     await app.goToLoginPage();
-    // user login
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.portalController.closeEnableDesktopNotification();
 
-    // user start 1-1
+    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} starts a SUC`);
     await app.startChatButtonController.ClickOnStartOneToOne();
     await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
 
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
-    await app.chatController.muteChat();
+    await app.chatController.muteConversation();
     await app.messageHubController.clickSideBarChatsButton();
 
     test.step('Verify that Mute icon is shown for muted chat', async () => {
