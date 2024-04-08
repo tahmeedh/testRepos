@@ -145,6 +145,21 @@ export class ChatController {
             await this.Pom.DROP_DOWN_LEAVE.click();
         });
     }
+
+    async muteConversation() {
+        await test.step('Chat Controller: Mute Conversation', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_MUTE.click();
+        });
+    }
+
+    async unMuteConversation() {
+        await test.step('Chat Controller: Mute Conversation', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_UNMUTE.click();
+        });
+    }
+
     async clickInviteParicipants() {
         await test.step('Chat Controller: Leave Chat and Naviagate Search Module', async () => {
             await this.clickChatHeaderMenu();
