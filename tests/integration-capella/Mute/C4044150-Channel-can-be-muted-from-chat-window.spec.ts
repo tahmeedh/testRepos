@@ -4,14 +4,15 @@ import { StringUtils } from 'helper/string-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
+import { User } from 'Apis/user';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
-let app = null;
+let app: BaseController;
 let company: Company;
-let user1 = null;
-let user2 = null;
+let user1: User;
+let user2: User;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
