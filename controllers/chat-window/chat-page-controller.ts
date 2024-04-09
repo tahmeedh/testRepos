@@ -145,6 +145,21 @@ export class ChatController {
             await this.Pom.DROP_DOWN_LEAVE.click();
         });
     }
+
+    async muteConversation() {
+        await test.step('Chat Controller: Mute Conversation', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_MUTE.click();
+        });
+    }
+
+    async unMuteConversation() {
+        await test.step('Chat Controller: Mute Conversation', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_UNMUTE.click();
+        });
+    }
+
     async clickInviteParicipants() {
         await test.step('Chat Controller: Leave Chat and Naviagate Search Module', async () => {
             await this.clickChatHeaderMenu();
@@ -197,6 +212,22 @@ export class ChatController {
         await test.step(`Chat Controller: Hover over chat area`, async () => {
             Log.info(`Chat Controller: Hover over chat area`);
             await this.Pom.CHAT_WINDOW.hover();
+        });
+    }
+
+    async selectFromChatHeaderMenu(
+        selection:
+            | 'View Details'
+            | 'Print Conversation'
+            | 'Select Messages'
+            | 'Leave'
+            | 'Hide'
+            | 'Mute'
+            | 'Unmute'
+    ) {
+        await test.step(`Chat Controller - Selecting ${selection} on Chat Header Menu`, async () => {
+            Log.info(`Chat Controller - Selecting ${selection} on Chat Header Menu`);
+            await this.Pom.CHAT_HEADER_MENU_DROP_DOWN.getByText(selection, { exact: true }).click();
         });
     }
 }

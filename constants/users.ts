@@ -74,5 +74,10 @@ export const users = {
         EMAIL: 'accept2Invite@vegastatic.com',
         PASSWORD: 'Password2@',
         NOTES: 'DO NOT USE. EXCLUSIVE FOR C4030438.'
+    },
+    MUTE_1CONCURRENT: {
+        EMAIL: 'mute.1concurrent@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
     }
 };

@@ -25,8 +25,29 @@ export class ConversationListController {
     }
 
     async clickOnConversationName(conversationName: string) {
-        await test.step('Conversation List Controller : Click on conversation', async () => {
+        await test.step(`Conversation List Controller : Click on conversation with name '${conversationName}'`, async () => {
+            Log.info(`Conversation List Controller : Click on conversation with name '${conversationName}'`);
             await this.Pom.CONVERSATION_NAME.getByText(conversationName).nth(0).click();
+        });
+    }
+
+    async getConversationId(conversationName: string): Promise<string> {
+        return test.step(`Conversation List Controller : Get conversation Id from conversation name '${conversationName}'`, async () => {
+            Log.info(
+                `Conversation List Controller : Get conversation Id from conversation name '${conversationName}'`
+            );
+            const child = this.Pom.CONVERSATION_NAME.getByText(conversationName);
+            const conversationRow = this.Pom.CONVERSATION_ROW.filter({ has: child });
+            const classes = await conversationRow.getAttribute('class');
+            const classesAry = classes.split(' ');
+            let longestClass = '';
+            classesAry.forEach((element) => {
+                if (element.length > longestClass.length) {
+                    longestClass = element;
+                }
+            });
+            const conversationIdremovedMAuto = longestClass.replace('m-auto-', '');
+            return conversationIdremovedMAuto;
         });
     }
 }
