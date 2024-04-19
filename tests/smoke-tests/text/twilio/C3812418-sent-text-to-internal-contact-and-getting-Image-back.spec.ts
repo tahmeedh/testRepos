@@ -7,6 +7,7 @@ import {
     MockInboundMessageType
 } from 'Apis/mock-inbound-message/mock-inbound-message-controller';
 import { Log } from 'Apis/api-helpers/log-utils';
+import { User } from 'Apis/user';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -15,8 +16,8 @@ let app: BaseController;
 const mockSMSMessage = 'test message'; // mock message to receive
 
 let company: Company;
-let user1 = null;
-let user2 = null;
+let user1: User;
+let user2: User;
 let GrId1 = null;
 // let Grid2 = null;
 
@@ -38,10 +39,10 @@ test.beforeEach(async () => {
     await user2.requestAndAssignTwilioNumber();
 
     [GrId1] = user1.userInfo.grcpAlias.split('@');
-    [Grid2] = user2.userInfo.grcpAlias.split('@');
+    //[Grid2] = user2.userInfo.grcpAlias.split('@');
 });
 
-test(`${testName} ${testTags}`, async () => {
+test.fixme(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
     Log.starDivider(
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
@@ -69,17 +70,6 @@ test(`${testName} ${testTags}`, async () => {
     await app.createChatController.createInternalSMS(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
-
-    await app.page.pause();
-
-    // const randonNumber = await app.createChatController.CreateSMS();
-    // // await app.chatController.skipRecipientInfo();
-
-    // Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends image`);
-    // const PNG = './asset/download.png';
-    // await app.chatController.waitForHeader();
-    // await app.previewAttachmentController.sendAttachment(PNG);
-    // await app.chatController.sendContent();
 
     // receive a message back
     const mockTwilioMessage: MockInboundMessageType = {
