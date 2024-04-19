@@ -64,9 +64,6 @@ test.fixme(`${testName} ${testTags}`, async () => {
     await app.portalController.clickCloseSMSEnabledNotification();
     // user start text message with an internal contact
     await app.startChatButtonController.ClickOnStartSMS();
-
-    await app.page.pause();
-
     await app.createChatController.createInternalSMS(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
