@@ -59,7 +59,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.muteConversation();
     await app.messageHubController.clickSideBarChatsButton();
 
-    test.step('Verify that Mute icon is shown for muted channel', async () => {
+    await test.step('Verify that Mute icon is shown for muted channel', async () => {
         await expect(app.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();
     });
 

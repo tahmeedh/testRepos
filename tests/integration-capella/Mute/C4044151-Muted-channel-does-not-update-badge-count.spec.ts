@@ -72,16 +72,16 @@ test(`${testName} ${testTags}`, async () => {
     await app2.open(title);
     await app2.inviteController.acceptInvite('Channel');
 
-    test.step('Reply to the channel by the participant', async () => {
+    await test.step('Reply to the channel by the participant', async () => {
         await app2.chatController.sendContent();
     });
 
-    test.step('Verify that mute icon is shown alongside new message dot', async () => {
+    await test.step('Verify that mute icon is shown alongside new message dot', async () => {
         await expect(app1.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();
         await expect(app1.conversationListController.Pom.NEW_MESSAGE_BLUE_DOT).toBeVisible();
     });
 
-    test.step('Verify that new message should not update badge counter on channel list and Side Bar', async () => {
+    await test.step('Verify that new message should not update badge counter on channel list and Side Bar', async () => {
         await expect(app1.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
         await expect(app1.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).not.toBeVisible();
     });

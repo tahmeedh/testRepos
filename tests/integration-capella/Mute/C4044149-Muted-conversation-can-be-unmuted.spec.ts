@@ -86,11 +86,11 @@ test(`${testName} ${testTags}`, async () => {
     );
     await app1.chatController.sendContent();
 
-    test.step('Verify that Mute icon is not shown for SUC chat', async () => {
+    await test.step('Verify that Mute icon is not shown for SUC chat', async () => {
         await expect(app.conversationListController.Pom.MUTE_CHAT_ICON).not.toBeVisible();
     });
 
-    test.step('Verify that new message should update badge counter on the conversation list and Side Bar', async () => {
+    await test.step('Verify that new message should update badge counter on the conversation list and Side Bar', async () => {
         await expect(app.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
         await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toBeVisible();
     });
