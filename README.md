@@ -74,6 +74,22 @@ test(`${testName} ${testTags} @Mini-vCard @Mini-vCard-sanity`, async ({ page }) 
 
 ```
 
+### To run tests only if the test environment has the feature flag enabled
+If adding tests for a new feature that is behind a feature flag that may not be enabled in all the test environments right away, please add a skip test condition in the test file. The ConfigUtils helper class contains the helper functions that check if the enviornment under test has the given feature flag enabled. In the test file's .beforeAll or .beforeEach, add a test.skip condition that skips the tests if the required flag is not on. 
+
+Note: The feature flag configurations are different for message-hub and chat-window, please make sure the right helper function is used.
+
+Example:
+
+```
+test.beforeAll(async ({ browser }) => {
+    test.skip(
+        await ConfigUtils.isMessageHubFeatureFlagOff(browser, 'muteEnabled: 1'),
+        'Mute feature is enabled by feature flag: muteEnabled.'
+    );
+});
+```
+
 ### Implemented features
 | Feature | Create | Read | Update | Delete |
 | --- | --- | --- | --- | --- |

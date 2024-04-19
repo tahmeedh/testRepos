@@ -4,12 +4,20 @@ import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
+import { ConfigUtils } from 'helper/config-utils';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
 
 let company: Company;
 let user1: User;
+
+test.beforeAll(async ({ browser }) => {
+    test.skip(
+        await ConfigUtils.isMessageHubFeatureFlagOff(browser, 'muteEnabled: 1'),
+        'Mute feature is enabled by feature flag: muteEnabled.'
+    );
+});
 
 test.beforeEach(async () => {
     company = await Company.createCompany();
@@ -46,7 +54,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     await app.chatController.muteConversation();
     await app.messageHubController.clickSideBarChatsButton();
 
-    test.step('Verify that Mute icon is shown for muted chat', async () => {
+    await test.step('Verify that Mute icon is shown for muted chat', async () => {
         await expect(app.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();
     });
 

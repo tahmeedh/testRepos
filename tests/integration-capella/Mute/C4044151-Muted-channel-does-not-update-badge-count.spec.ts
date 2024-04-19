@@ -5,9 +5,10 @@ import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { User } from 'Apis/user';
+import { ConfigUtils } from 'helper/config-utils';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
-let browser = null;
+let newBrowser = null;
 let context1 = null;
 let app1: BaseController;
 let context2 = null;
@@ -16,8 +17,15 @@ let company: Company;
 let user1: User;
 let user2: User;
 
+test.beforeAll(async ({ browser }) => {
+    test.skip(
+        await ConfigUtils.isMessageHubFeatureFlagOff(browser, 'muteEnabled: 1'),
+        'Mute feature is enabled by feature flag: muteEnabled.'
+    );
+});
+
 test.beforeEach(async () => {
-    browser = await chromium.launch();
+    newBrowser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
@@ -28,7 +36,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.starDivider(
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
-    context1 = await browser.newContext();
+    context1 = await newBrowser.newContext();
     const page1 = await context1.newPage();
     app1 = new BaseController(page1);
     await app1.goToLoginPage();
@@ -53,7 +61,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.messageHubController.clickSideBarChatsButton();
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    context2 = await browser.newContext();
+    context2 = await newBrowser.newContext();
     const page2 = await context2.newPage();
     app2 = new BaseController(page2);
     await app2.goToLoginPage();
@@ -64,16 +72,16 @@ test(`${testName} ${testTags}`, async () => {
     await app2.open(title);
     await app2.inviteController.acceptInvite('Channel');
 
-    test.step('Reply to the channel by the participant', async () => {
+    await test.step('Reply to the channel by the participant', async () => {
         await app2.chatController.sendContent();
     });
 
-    test.step('Verify that mute icon is shown alongside new message dot', async () => {
+    await test.step('Verify that mute icon is shown alongside new message dot', async () => {
         await expect(app1.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();
         await expect(app1.conversationListController.Pom.NEW_MESSAGE_BLUE_DOT).toBeVisible();
     });
 
-    test.step('Verify that new message should not update badge counter on channel list and Side Bar', async () => {
+    await test.step('Verify that new message should not update badge counter on channel list and Side Bar', async () => {
         await expect(app1.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
         await expect(app1.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).not.toBeVisible();
     });
