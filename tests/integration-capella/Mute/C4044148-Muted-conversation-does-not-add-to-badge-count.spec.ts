@@ -5,11 +5,12 @@ import { BaseController } from 'Controllers/base-controller';
 import { StringUtils } from 'helper/string-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
+import { ConfigUtils } from 'helper/config-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
 let app1: BaseController;
-let browser = null;
+let newBrowser = null;
 let context1 = null;
 let context2 = null;
 
@@ -17,8 +18,15 @@ let company: Company;
 let user1: User;
 let user2: User;
 
+test.beforeAll(async ({ browser }) => {
+    test.skip(
+        await ConfigUtils.isMessageHubFeatureFlagOff(browser, 'muteEnabled: 1'),
+        'Mute feature is enabled by feature flag: muteEnabled.'
+    );
+});
+
 test.beforeEach(async () => {
-    browser = await chromium.launch();
+    newBrowser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
@@ -30,7 +38,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.starDivider(
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
-    context1 = await browser.newContext();
+    context1 = await newBrowser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
     await app.goToLoginPage();
@@ -51,7 +59,7 @@ test(`${testName} ${testTags}`, async () => {
 
     // User 2
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    context2 = await browser.newContext();
+    context2 = await newBrowser.newContext();
     const page2 = await context2.newPage();
     app1 = new BaseController(page2);
     await app1.goToLoginPage();

@@ -5,6 +5,7 @@ import { BaseController } from 'Controllers/base-controller';
 import { StringUtils } from 'helper/string-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
+import { ConfigUtils } from 'helper/config-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
@@ -12,6 +13,13 @@ let app: BaseController;
 let company: Company;
 let user1: User;
 let user2: User;
+
+test.beforeAll(async ({ browser }) => {
+    test.skip(
+        await ConfigUtils.isMessageHubFeatureFlagOff(browser, 'muteEnabled: 1'),
+        'Mute feature is enabled by feature flag: muteEnabled.'
+    );
+});
 
 test.beforeEach(async () => {
     company = await Company.createCompany();
