@@ -9,9 +9,13 @@ export class StartChatButtonPage extends BasePage {
     readonly START_SMS: Locator;
     readonly START_WHATSAPP: Locator;
     readonly START_CHANNEL: Locator;
+    readonly TEXT_NOTIFICATION_FEATURE_NEXT_BUTTON: Locator;
+    readonly TEXT_NOTIFICATION_FEATURE_CLOSE_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
+        this.TEXT_NOTIFICATION_FEATURE_NEXT_BUTTON = this.page.locator('.m-auto-news-alert-next-link');
+        this.TEXT_NOTIFICATION_FEATURE_CLOSE_BUTTON = this.page.locator('.m-auto-new-feature-tooltip-close');
         this.START_CHAT = this.MESSAGEIFRAME.locator('.m-auto-start-new-chat');
         this.START_CHAT_DROPDOWN = this.MESSAGEIFRAME.locator('.m-auto-start-chat-menu-dropdown');
         this.START_ONE_ON_ONE = this.MESSAGEIFRAME.locator('.m-auto-start-one-to-one-chat');
