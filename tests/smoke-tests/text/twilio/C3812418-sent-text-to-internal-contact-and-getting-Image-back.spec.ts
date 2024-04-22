@@ -54,28 +54,32 @@ test.fixme(`${testName} ${testTags}`, async () => {
 
     await app.goToLoginPage();
     // user login
-    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
 
-    await app.newsAlertController.clickNextSMSEnabledNotification();
+    await test.step('User Login', async () => {
+        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+        await app.portalController.closeEnableDesktopNotification();
+        await app.newsAlertController.clickNextSMSEnabledNotification();
+        await expect(app.portalController.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON).toBeVisible();
+        await app.portalController.clickCloseSMSEnabledNotification();
+    });
 
-    await expect(app.portalController.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON).toBeVisible();
-    await app.portalController.clickCloseSMSEnabledNotification();
-    // user start text message with an internal contact
-    await app.startChatButtonController.ClickOnStartSMS();
-    await app.createChatController.createInternalSMS(
-        `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
-    );
+    await test.step('User start text message with an internal contact', async () => {
+        await app.startChatButtonController.ClickOnStartSMS();
+        await app.createChatController.createInternalSMS(
+            `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
+        );
+    });
 
-    // receive a message back
-    const mockTwilioMessage: MockInboundMessageType = {
-        senderPhoneNumber: user2.userInfo.twilioNumber,
-        receipientGrId: GrId1,
-        message: mockSMSMessage,
-        type: 'TWILIO',
-        attachmentId: '5263eb4a-bbdd-4172-9bf2-c8de58770ff2'
-    };
-    await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
+    await test.step('Receive a message back', async () => {
+        const mockTwilioMessage: MockInboundMessageType = {
+            senderPhoneNumber: user2.userInfo.twilioNumber,
+            receipientGrId: GrId1,
+            message: mockSMSMessage,
+            type: 'TWILIO',
+            attachmentId: '5263eb4a-bbdd-4172-9bf2-c8de58770ff2'
+        };
+        await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
+    });
 
     await app.chatController.downloadLastMedia();
     await page1.waitForEvent('download');

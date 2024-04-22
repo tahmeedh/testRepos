@@ -17,6 +17,7 @@ const mockSMSMessage = 'test message'; // mock message to receive
 let company: Company;
 let user1 = null;
 let GrId = null;
+let randomNumber = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
@@ -34,36 +35,39 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
-    Log.starDivider(
-        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
-    );
 
-    // user1 login
-    context1 = await browser.newContext();
-    const page1 = await context1.newPage();
-    app = new BaseController(page1);
+    await test.step(`START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`, async () => {
+        context1 = await browser.newContext();
+        const page1 = await context1.newPage();
+        app = new BaseController(page1);
+        await app.goToLoginPage();
+    });
 
-    await app.goToLoginPage();
-    // user login
-    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
+    await test.step('User login', async () => {
+        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+        await app.portalController.closeEnableDesktopNotification();
+    });
 
-    // user start 1-1
-    await app.startChatButtonController.ClickOnStartSMS();
-    const randonNumber = await app.createChatController.CreateSMS();
-    await app.chatController.skipRecipientInfo();
-    await app.chatController.sendContent();
+    await test.step('User start text message', async () => {
+        await app.startChatButtonController.ClickOnStartSMS();
+        randomNumber = await app.createChatController.CreateSMS();
+        await app.chatController.skipRecipientInfo();
+        await app.chatController.sendContent();
+    });
 
-    // receive a message back
-    const mockTwilioMessage: MockInboundMessageType = {
-        senderPhoneNumber: randonNumber,
-        receipientGrId: GrId,
-        message: mockSMSMessage,
-        type: 'TWILIO'
-    };
-    await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
+    await test.step('Receive backtext message', async () => {
+        const mockTwilioMessage: MockInboundMessageType = {
+            senderPhoneNumber: randomNumber,
+            receipientGrId: GrId,
+            message: mockSMSMessage,
+            type: 'TWILIO'
+        };
+        await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
+    });
 
-    const responseText = app.Pom.CHATIFRAME.getByText(mockSMSMessage);
-    await expect(responseText).toHaveText(mockSMSMessage);
-    Log.starDivider(`END TEST: Test Execution Commpleted`);
+    await test.step('Check for response text', async () => {
+        const responseText = app.Pom.CHATIFRAME.getByText(mockSMSMessage);
+        await expect(responseText).toHaveText(mockSMSMessage);
+        Log.starDivider(`END TEST: Test Execution Commpleted`);
+    });
 });
