@@ -65,7 +65,7 @@ test.fixme(`${testName} ${testTags}`, async () => {
 
     await test.step('User start text message with an internal contact', async () => {
         await app.startChatButtonController.ClickOnStartSMS();
-        await app.createChatController.createInternalSMS(
+        await app.createChatController.SearchAndSelectSMSUser(
             `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
         );
     });
