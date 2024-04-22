@@ -19,7 +19,6 @@ let company: Company;
 let user1: User;
 let user2: User;
 let GrId1 = null;
-// let Grid2 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
