@@ -81,9 +81,11 @@ test.fixme(`${testName} ${testTags}`, async () => {
         await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
     });
 
-    await app.chatController.downloadLastMedia();
-    await page1.waitForEvent('download');
-    Log.starDivider(`END TEST: Test Execution Commpleted`);
+    await test.step('Download Media Response', async () => {
+        await app.chatController.downloadLastMedia();
+        await page1.waitForEvent('download');
+        Log.starDivider(`END TEST: Test Execution Commpleted`);
+    });
 });
 
 test.afterEach(async () => {
