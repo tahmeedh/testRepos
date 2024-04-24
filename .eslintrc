@@ -20,6 +20,8 @@
                     "error"
                 ]
             }
-        ]
+        ],
+        "require-await": "off",
+        "@typescript-eslint/require-await": "error"    
     }
 }

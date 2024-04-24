@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import axios from 'axios';
-import { AXIOS_DEFAULT_SETTINGS } from 'Apis/axios.config';
 import test from '@playwright/test';
+import { AXIOS_DEFAULT_SETTINGS } from 'Apis/axios-config';
 import { Log } from './log-utils';
 
 export class AxiosUtils {
