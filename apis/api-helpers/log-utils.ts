@@ -20,31 +20,31 @@ const consoleColor = {
 };
 
 export class Log {
-    static async info(message: string) {
+    static info(message: string) {
         console.info(message);
     }
 
-    static async success(message: string) {
+    static success(message: string) {
         console.info(consoleColor.FgGreen, `SUCCESS: ${message}`);
     }
 
-    static async error(message: string, error) {
+    static error(message: string, error) {
         console.error(consoleColor.FgRed, `ERROR: ${message} - ${error}`);
     }
 
-    static async warn(message: string) {
+    static warn(message: string) {
         console.warn(consoleColor.FgYellow, `WARNING: ${message}`);
     }
 
-    static async highlight(message: string) {
+    static highlight(message: string) {
         console.info(consoleColor.BgGray, message);
     }
 
-    static async equalsDivider(message: string) {
+    static equalsDivider(message: string) {
         console.info(consoleColor.FgGray, `===================== ${message} =====================`);
     }
 
-    static async starDivider(message: string) {
+    static starDivider(message: string) {
         console.info(consoleColor.BgBlue, `********************* ${message} **********************`);
     }
 }

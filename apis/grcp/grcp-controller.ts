@@ -9,6 +9,6 @@ export class GrcpController {
             clientRequestId: randomUUID(),
             msgType: 'conversation.ServerUnmuteConversationMsg'
         };
-        GrcpBaseController.getRequest(page, data);
+        await GrcpBaseController.getRequest(page, data);
     }
 }
