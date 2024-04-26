@@ -5,8 +5,8 @@ import {
     MockInboundMessageController,
     MockInboundMessageType
 } from 'Apis/mock-inbound-message/mock-inbound-message-controller';
-import { BaseController } from Controllers/base-controller';
-import { StringUtils } from '../../../helper/string-utils';
+import { BaseController } from 'controllers/base-controller';
+import { StringUtils } from 'helper/string-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
