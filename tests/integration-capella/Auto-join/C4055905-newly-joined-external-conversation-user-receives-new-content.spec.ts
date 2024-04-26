@@ -7,6 +7,7 @@ import {
 } from 'Apis/mock-inbound-message/mock-inbound-message-controller';
 import { BaseController } from 'controllers/base-controller';
 import { StringUtils } from 'helper/string-utils';
+import { User } from 'Apis/user';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -14,7 +15,7 @@ let context1 = null;
 let app: BaseController;
 
 let company: Company;
-let user1:User;
+let user1: User;
 let GrId = null;
 const ResponseText = 'Auto Join sample test';
 
