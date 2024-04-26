@@ -1,4 +1,4 @@
-import { test, chromium, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import {
@@ -10,17 +10,13 @@ import { StringUtils } from 'helper/string-utils';
 import { User } from 'Apis/user';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
-let browser = null;
-let context1 = null;
 let app: BaseController;
-
 let company: Company;
 let user1: User;
-let GrId = null;
+let GrId: any;
 const ResponseText = 'Auto Join sample test';
 
 test.beforeEach(async () => {
-    browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
 
@@ -32,13 +28,11 @@ test.beforeEach(async () => {
     [GrId] = user1.userInfo.grcpAlias.split('@');
 });
 
-test(`${testName} ${testTags}`, async () => {
+test(`${testName} ${testTags}`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
 
     await test.step('User login', async () => {
-        context1 = await browser.newContext();
-        const page1 = await context1.newPage();
-        app = new BaseController(page1);
+        app = new BaseController(page);
         await app.goToLoginPage();
         await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
         await app.portalController.closeEnableDesktopNotification();
