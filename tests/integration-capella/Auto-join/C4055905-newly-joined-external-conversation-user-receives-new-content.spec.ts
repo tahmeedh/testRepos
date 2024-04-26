@@ -14,7 +14,7 @@ let context1 = null;
 let app: BaseController;
 
 let company: Company;
-let user1 = null;
+let user1:User;
 let GrId = null;
 const ResponseText = 'Auto Join sample test';
 
