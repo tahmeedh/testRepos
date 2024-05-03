@@ -13,11 +13,13 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
     const app = new BaseController(page);
 
     await test.step(`GIVEN`, async () => {
-        await test.step(`User is logged in`, async () => {
+        await test.step(`Block MFS file requests to keep spinner permanently`, async () => {
             await page.route('**/mfsapi/v1/files?', async (route) => {
                 await route.abort();
             });
+        });
 
+        await test.step(`User is logged in`, async () => {
             await app.goToLoginPage();
             await app.loginController.loginToPortal(user1.EMAIL, user1.PASSWORD);
             await app.portalController.closeEnableDesktopNotification();
