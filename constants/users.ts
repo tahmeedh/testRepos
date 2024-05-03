@@ -79,5 +79,10 @@ export const users = {
         EMAIL: 'mute.1concurrent@vegastatic.com',
         PASSWORD: 'Password2@',
         NOTES: 'READ ONLY'
+    },
+    SENDFILE_1: {
+        EMAIL: 'sendfile1@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
     }
 };
