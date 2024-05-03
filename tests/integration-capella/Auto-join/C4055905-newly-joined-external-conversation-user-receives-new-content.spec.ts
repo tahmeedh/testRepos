@@ -38,6 +38,11 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await app.portalController.closeEnableDesktopNotification();
     });
 
+    await test.step('Check no new message badge are present', async () => {
+        await expect(app.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
+        await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).not.toBeVisible();
+    });
+
     await test.step('Get an external chat message', async () => {
         const mockTwilioMessage: MockInboundMessageType = {
             senderPhoneNumber: StringUtils.generatePhoneNumber(),
@@ -48,7 +53,12 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
     });
 
-    await test.step('External conversation invite shows up', async () => {
+    await test.step('External conversation invite shows up without the invite badge', async () => {
+        await expect(app.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
+        await expect(app.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).toHaveText('1');
+        await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toBeVisible();
+        await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toHaveText('1');
+        await expect(app.conversationListController.Pom.NEW_INVITE_BADGE).not.toBeVisible();
         await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_DOT).toBeVisible();
         await app.conversationListController.Pom.NEW_MESSAGE_BLUE_DOT.click();
     });
