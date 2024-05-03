@@ -26,4 +26,10 @@ export class PreviewAttachmentController {
             await this.Pom.ATTACH_FILES_BUTTON.setInputFiles(filePath);
         });
     }
+
+    async clickSendButton() {
+        await test.step('Preview Attachment Controller : Click Send Button ', async () => {
+            await this.Pom.SEND_BUTTON.click();
+        });
+    }
 }
