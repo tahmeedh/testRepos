@@ -1,21 +1,24 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Route } from '@playwright/test';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { users } from 'Constants/users';
+import { StringUtils } from 'helper/string-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 const user1 = users.SENDFILE_1;
 const conversationName = 'send-file-muc';
-const file = './asset/audio.mp3';
+const file = './asset/download.png';
+const caption = StringUtils.generateString();
 
 test(`${testName} ${testTags} @static`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
+    let mfsroute: Route;
 
     await test.step(`GIVEN`, async () => {
-        await test.step(`Block MFS file requests to keep spinner permanently`, async () => {
-            await page.route('**/mfsapi/v1/files?', async (route) => {
-                await route.abort();
+        await test.step(`Prevent MFS from returning a response to keep spinner spinning`, async () => {
+            await page.route('**/mfsapi/v1/files?', (route) => {
+                mfsroute = route;
             });
         });
 
@@ -31,6 +34,7 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
 
         await test.step(`User sent a file`, async () => {
             await app.previewAttachmentController.attachFile(file);
+            await app.previewAttachmentController.fillCaption(caption);
             await app.previewAttachmentController.clickSendButton();
         });
 
@@ -48,11 +52,24 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
     await test.step(`THEN`, async () => {
         await test.step(`File is still sending and visible`, async () => {
             await expect(
-                app.chatController.Pom.MESSAGE_ROW_CONTAINER.last().locator('.m-auto-file-download-indicator')
-            ).toBeVisible();
+                app.chatController.Pom.MESSAGE_ROW_CONTAINER.last().locator('.m-auto-message-content')
+            ).toHaveText(caption);
             await expect(
-                app.chatController.Pom.MESSAGE_ROW_CONTAINER.last().locator('.m-auto-primary-text')
-            ).toHaveText('audio');
+                app.chatController.Pom.MESSAGE_ROW_CONTAINER.last().getByTestId('loading')
+            ).toBeVisible();
+        });
+
+        await test.step(`Resume MFS request`, async () => {
+            await mfsroute.continue();
+        });
+
+        await test.step(`File is sent`, async () => {
+            await expect(
+                app.chatController.Pom.MESSAGE_ROW_CONTAINER.last().locator('.m-auto-message-content')
+            ).toHaveText(caption);
+            await expect(
+                app.chatController.Pom.MESSAGE_ROW_CONTAINER.last().getByTestId('loading')
+            ).not.toBeVisible();
         });
     });
 });

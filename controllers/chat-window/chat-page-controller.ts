@@ -230,4 +230,10 @@ export class ChatController {
             await this.Pom.CHAT_HEADER_MENU_DROP_DOWN.getByText(selection, { exact: true }).click();
         });
     }
+
+    async attachfile(filePath: string) {
+        await test.step('Chat Controller: Click attachment button ', async () => {
+            await this.Pom.ATTACH_BUTTON.setInputFiles(filePath);
+        });
+    }
 }

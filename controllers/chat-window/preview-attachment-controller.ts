@@ -32,4 +32,10 @@ export class PreviewAttachmentController {
             await this.Pom.SEND_BUTTON.click();
         });
     }
+
+    async fillCaption(input: string) {
+        await test.step(`File Preview Controller - Fill ${input} in caption`, async () => {
+            await this.Pom.CAPTION_INPUT.fill(input);
+        });
+    }
 }

@@ -43,7 +43,7 @@ export class ChatPage extends BasePage {
     readonly IS_TYPING_AVATAR_TEXT: Locator;
     readonly IS_TYPING_AVATAR_OVERFLOW: Locator;
     readonly CHAT_BUBBLE_ROW: Locator;
-    readonly FILE_DOWNLOAD_INDICATOR: Locator;
+    readonly ATTACH_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -100,6 +100,6 @@ export class ChatPage extends BasePage {
             this.CHATIFRAME.getByTestId('is-typing-avatars').getByTestId('avatar-text-content');
         this.IS_TYPING_AVATAR_OVERFLOW =
             this.CHATIFRAME.getByTestId('is-typing-avatars').getByTestId('is-typing-overflow');
-        this.FILE_DOWNLOAD_INDICATOR = this.CHATIFRAME.locator('.m-auto-file-download-indicator');
+        this.ATTACH_BUTTON = this.CHATIFRAME.locator('.m-auto-attach-button');
     }
 }
