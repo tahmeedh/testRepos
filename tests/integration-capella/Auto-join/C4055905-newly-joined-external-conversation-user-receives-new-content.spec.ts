@@ -48,7 +48,10 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
     });
 
-    await test.step('External conversation invite shows up', async () => {
+    await test.step('External conversation invite shows up without the invite badge', async () => {
+        await expect(app.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
+        await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toBeVisible();
+        await expect(app.conversationListController.Pom.NEW_INVITE_BADGE).not.toBeVisible();
         await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_DOT).toBeVisible();
         await app.conversationListController.Pom.NEW_MESSAGE_BLUE_DOT.click();
     });
