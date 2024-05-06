@@ -54,7 +54,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
     });
 
     await test.step(`WHEN`, async () => {
-        await test.step(`User 1 send message to user 2`, async () => {
+        await test.step(`User 1 sends message to user 2`, async () => {
             await app1.chatController.typeContent(messageContent);
             await app1.chatController.clickSendButton();
             await expect(
@@ -64,7 +64,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
     });
 
     await test.step(`THEN`, async () => {
-        await test.step(`User 1 see read icon`, async () => {
+        await test.step(`User 1 sees read icon`, async () => {
             await expect(
                 app1.chatController.Pom.MESSAGE_ROW_CONTAINER.last().locator('.m-auto-message-content')
             ).toHaveText(messageContent);

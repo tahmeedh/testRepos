@@ -52,12 +52,12 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             await app1.conversationListController.clickOnConversationName(conversationName);
         });
 
-        await test.step(`User 1 send message to user 2`, async () => {
+        await test.step(`User 1 sends message to user 2`, async () => {
             await app1.chatController.typeContent(messageContent);
             await app1.chatController.clickSendButton();
         });
 
-        await test.step(`User 1 see delivered icon`, async () => {
+        await test.step(`User 1 sees delivered icon`, async () => {
             await expect(
                 app1.chatController.Pom.MESSAGE_ROW_CONTAINER.last().locator('.m-auto-message-content')
             ).toHaveText(messageContent);
@@ -68,13 +68,13 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
     });
 
     await test.step(`WHEN`, async () => {
-        await test.step(`User 2 focus on chat window`, async () => {
+        await test.step(`User 2 launches conversation`, async () => {
             await app2.conversationListController.clickOnConversationName(conversationName);
         });
     });
 
     await test.step(`THEN`, async () => {
-        await test.step(`User 1 see read icon`, async () => {
+        await test.step(`User 1 sees read icon`, async () => {
             await expect(
                 app1.chatController.Pom.MESSAGE_ROW_CONTAINER.last().locator('.m-auto-message-content')
             ).toHaveText(messageContent);
