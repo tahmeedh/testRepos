@@ -84,5 +84,25 @@ export const users = {
         EMAIL: 'sendfile1@vegastatic.com',
         PASSWORD: 'Password2@',
         NOTES: 'READ ONLY'
+    },
+    READRECEIPT_1: {
+        EMAIL: 'readReceipt1@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
+    },
+    READRECEIPT_2: {
+        EMAIL: 'readReceipt2@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
+    },
+    READRECEIPT_3: {
+        EMAIL: 'readReceipt3@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
+    },
+    READRECEIPT_4: {
+        EMAIL: 'readReceipt4@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
     }
 };
