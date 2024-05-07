@@ -55,7 +55,3 @@ test(`${testName} ${testTags}`, async () => {
     expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

@@ -48,7 +48,3 @@ test(`${testName} ${testTags}`, async () => {
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveText(draftText);
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

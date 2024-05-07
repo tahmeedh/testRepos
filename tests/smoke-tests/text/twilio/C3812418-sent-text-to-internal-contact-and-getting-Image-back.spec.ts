@@ -87,7 +87,3 @@ test.fixme(`${testName} ${testTags}`, async () => {
         Log.starDivider(`END TEST: Test Execution Commpleted`);
     });
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

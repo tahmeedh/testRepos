@@ -52,7 +52,3 @@ test(`${testName} ${testTags}`, async () => {
     // Verify the flag
     await expect(app.messageHubController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

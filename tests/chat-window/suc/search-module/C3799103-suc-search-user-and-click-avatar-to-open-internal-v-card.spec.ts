@@ -44,7 +44,3 @@ test(`${testName} ${testTags}`, async () => {
     await app.messageHubController.clickSideBarChatsButton();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

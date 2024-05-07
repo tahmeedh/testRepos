@@ -83,7 +83,3 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.checkLastRead();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});
