@@ -51,7 +51,3 @@ test(`${testName} ${testTags}`, async () => {
     await expect(app.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

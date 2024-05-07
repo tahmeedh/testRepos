@@ -72,7 +72,3 @@ test(`${testName} ${testTags}`, async () => {
     await app1.messageHubController.clickSideBarChatsButton();
     await expect(app1.messageHubController.Pom.CHAT_FLAG_INDICATOR).toBeHidden();
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

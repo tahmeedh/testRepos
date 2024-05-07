@@ -90,7 +90,3 @@ test(`${testName} ${testTags}`, async () => {
     await app2.inviteController.declineInvite('MUC');
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

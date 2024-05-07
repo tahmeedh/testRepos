@@ -64,7 +64,3 @@ test(`${testName} ${testTags}`, async () => {
     await expect(app1.chatController.Pom.CHAT_WINDOW).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

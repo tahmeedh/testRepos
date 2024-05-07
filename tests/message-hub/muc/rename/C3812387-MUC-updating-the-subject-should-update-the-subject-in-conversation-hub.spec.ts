@@ -56,7 +56,3 @@ test(`${testName} ${testTags}`, async () => {
     await expect(secondaryLine).toHaveText(subjectText);
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});

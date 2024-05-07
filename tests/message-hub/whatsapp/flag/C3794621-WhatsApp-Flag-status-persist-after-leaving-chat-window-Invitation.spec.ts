@@ -53,7 +53,3 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${testChatType} chat expects flag in message hub `);
     await expect(app.messageHubController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
 });
-
-test.afterEach(async () => {
-    await company.teardown();
-});
