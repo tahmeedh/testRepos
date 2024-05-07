@@ -4,20 +4,20 @@ import { GskController } from 'Apis/gas/gsk-controller';
 import { CsrfController } from 'Apis/mds/csrf-controller';
 import { EnvUtils } from 'Apis/api-helpers/env-utils';
 import { MdsController } from 'Apis/mds/mds-controller';
-import { TwilioController } from 'Apis/mds/twilio-controller';
+import { PhoneNumberController } from 'Apis/mds/phoneNumber-controller';
 
 test('C555', async () => {
-    Log.info(`===================== START: Running Twilio number assign script =====================`);
+    Log.info(`===================== START: Running phone number assign script =====================`);
     try {
-        const userGrId = 785549;
+        const userEmail = 'test.user18@vega.com';
         const companyId = 664543; // CPQA2: 664543 for vega, 665764 for Capella
 
         const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
         const { MDS_ENDPOINT, GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL } = EnvUtils.getEndPoints();
 
         // Validate grid and companyId exist
-        if (!userGrId || !companyId) {
-            throw new Error(`FAILURE: User grId and Company Id cannot be empty`);
+        if (!userEmail || !companyId) {
+            throw new Error(`FAILURE: User email and Company Id cannot be empty`);
         }
 
         // get gsk and csrf token
@@ -29,23 +29,23 @@ test('C555', async () => {
         );
         const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
 
-        // check if user already has a Twilio number
+        // check if user already has a number
         const mdsController = new MdsController(gskToken, csrfToken, MDS_ENDPOINT);
-        const userMdsProfile = await mdsController.getUserByGrId(userGrId);
+        const userMdsProfile = await mdsController.getUserFromCompanyByEmail(companyId, userEmail);
         const userMdsId = userMdsProfile.id;
 
         const userListOfEndPoints = userMdsProfile.endpoints;
         const result = userListOfEndPoints.filter((endpoint) => endpoint.type === 'SMS_SERVICE');
         if (result.length > 0 && result[0].address) {
             throw new Error(
-                `User already have a Twilio phone number '${result[0].address}' assigned. Please remove Twilio phone number and re-run this script.`
+                `User already has phone number '${result[0].address}' assigned. Please remove existing phone number and re-run this script.`
             );
         }
-        Log.info('User has no Twilio number assigned.');
+        Log.info('User has no number assigned.');
 
         // assign phone number to user
-        const twilioController = new TwilioController(gskToken, csrfToken, MDS_ENDPOINT);
-        const twilioPhoneNumber = await twilioController.requestTwilioNumberToCompany(companyId, 'CA', '604');
+        const phoneNumberController = new PhoneNumberController(gskToken, csrfToken, MDS_ENDPOINT);
+        const phoneNumber = await phoneNumberController.purchaseNumberForCompany(companyId, 'CA', '604');
 
         // setting features for the phone number
         const phoneNumerSettings = {
@@ -58,13 +58,13 @@ test('C555', async () => {
             location: 'LOCAL',
             voicemailAllowed: true
         };
-        await twilioController.setTwilioNumberFeatures(companyId, twilioPhoneNumber, phoneNumerSettings);
+        await phoneNumberController.setNumberFeatures(companyId, phoneNumber, phoneNumerSettings);
 
-        await twilioController.assignTwilioNumberToUser(userMdsId, twilioPhoneNumber);
-        Log.success(`Twilio number has been assigned to user with grid '${userGrId}'`);
+        await phoneNumberController.assignNumberToUser(userMdsId, phoneNumber);
+        Log.success(`Number '${phoneNumber}' has been assigned to user with email '${userEmail}'`);
     } catch (error) {
-        Log.error(`An error occured when assigning Twilio number to user`, error);
+        Log.error(`An error occured when assigning a phone number to user`, error);
         test.fail();
     }
-    Log.info(`===================== END: Twilio number assign script ended =====================`);
+    Log.info(`===================== END: phone number assign script ended =====================`);
 });
