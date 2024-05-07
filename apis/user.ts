@@ -4,10 +4,10 @@ import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { ServiceManagerRoles, DirectoryEntitlments, DirectoryRoles } from './sm/platform/sm-roles';
 import type { CompanyType } from './company';
 import { GskController } from './gas/gsk-controller';
-import { TwilioController } from './mds/twilio-controller';
 import { CsrfController } from './mds/csrf-controller';
 import { WhatsAppController } from './mds/whatsApp-controller';
 import { PhoneNumberUtils } from './api-helpers/phoneNumber-utils';
+import { PhoneNumberController } from './mds/phoneNumber-controller';
 
 export interface UserType {
     firstName: string;
@@ -26,7 +26,7 @@ export interface UserType {
     roleName: string;
     roleId: Int64;
     company: CompanyType;
-    twilioController?: TwilioController;
+    phoneNumberController?: PhoneNumberController;
     whatsAppController?: WhatsAppController;
 }
 
@@ -252,8 +252,8 @@ export class User {
         );
         const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
 
-        const twilioController = new TwilioController(gskToken, csrfToken, MDS_ENDPOINT);
-        const twilioPhoneNumber = await twilioController.requestTwilioNumberToCompany(companyId, 'CA', '604');
+        const phoneNumberController = new PhoneNumberController(gskToken, csrfToken, MDS_ENDPOINT);
+        const phoneNumber = await phoneNumberController.purchaseNumberForCompany(companyId, 'CA', '604');
         const phoneNumerSettings = {
             disclaimerRequired: false,
             forwardingAllowed: true,
@@ -265,19 +265,19 @@ export class User {
             voicemailAllowed: true
         };
 
-        await twilioController.setTwilioNumberFeatures(companyId, twilioPhoneNumber, phoneNumerSettings);
-        await twilioController.assignTwilioNumberToUser(userId, twilioPhoneNumber);
+        await phoneNumberController.setNumberFeatures(companyId, phoneNumber, phoneNumerSettings);
+        await phoneNumberController.assignNumberToUser(userId, phoneNumber);
 
-        this.userInfo.twilioController = twilioController;
-        this.userInfo.twilioNumber = twilioPhoneNumber;
+        this.userInfo.phoneNumberController = phoneNumberController;
+        this.userInfo.twilioNumber = phoneNumber;
     }
 
     async unassignAndReleaseTwilioNumber() {
         if (this.userInfo.twilioNumber) {
             const { companyId } = this.userInfo.company;
             const { userId, twilioNumber } = this.userInfo;
-            await this.userInfo.twilioController.unassignTwilioNumberFromUser(userId, twilioNumber);
-            await this.userInfo.twilioController.releaseTwilioNumberFromCompany(companyId, twilioNumber);
+            await this.userInfo.phoneNumberController.unassignNumberFromUser(userId, twilioNumber);
+            await this.userInfo.phoneNumberController.releaseNumberFromCompany(companyId, twilioNumber);
         } else {
             Log.error('User has no assigned Twilio phone number. No requests were sent', new Error());
         }

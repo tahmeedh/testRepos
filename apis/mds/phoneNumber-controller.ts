@@ -1,6 +1,7 @@
 import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
+/* eslint-disable no-await-in-loop */
 
-export class TwilioController {
+export class PhoneNumberController {
     endpoint: string;
     gsk: string;
     csrf: string;
@@ -11,7 +12,7 @@ export class TwilioController {
         this.csrf = csrf;
     }
 
-    async requestTwilioNumberToCompany(companyId: number, countryCode: string, prefix: string) {
+    async purchaseNumberForCompany(companyId: number, countryCode: string, prefix: string) {
         const config = {
             method: 'post',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -26,15 +27,36 @@ export class TwilioController {
                 prefix
             }
         };
+
         const response = await AxiosUtils.axiosRequest(
             config,
-            `request to MDS to request phone number for company  '${companyId}'`
+            `request to MDS to request phone number for company '${companyId}'`
         );
-        const phoneNumber = response.data.number;
+
+        let { phoneNumber } = response.data;
+
+        if (response.data.provider === 'bandwidth') {
+            const { orderId } = response.data;
+
+            // retry 3 times, or until we get a valid phone number
+            for (let retryCount = 0; retryCount < 3; retryCount++) {
+                phoneNumber = await this.getPhoneNumberByOrderId(companyId, orderId);
+
+                // end loop when phoneNumber is no longer null
+                if (phoneNumber) {
+                    break;
+                }
+
+                // wait for 3 sections before next retry
+                await new Promise((resolve) => {
+                    setTimeout(resolve, 3000);
+                });
+            }
+        }
         return phoneNumber;
     }
 
-    async releaseTwilioNumberFromCompany(companyId: number, phoneNumber: string) {
+    async releaseNumberFromCompany(companyId: number, phoneNumber: string) {
         const config = {
             method: 'delete',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}`,
@@ -52,7 +74,7 @@ export class TwilioController {
         );
     }
 
-    async setTwilioNumberFeatures(companyId: number, phoneNumber: number, features: object) {
+    async setNumberFeatures(companyId: number, phoneNumber: number, features: object) {
         const config = {
             method: 'put',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}/configuration`,
@@ -70,7 +92,7 @@ export class TwilioController {
         );
     }
 
-    async assignTwilioNumberToUser(userId: number, phoneNumber: string) {
+    async assignNumberToUser(userId: number, phoneNumber: string) {
         const config = {
             method: 'post',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -83,11 +105,11 @@ export class TwilioController {
         };
         await AxiosUtils.axiosRequest(
             config,
-            `request to MDS to assign Twilio phone number '${phoneNumber}' to user '${userId}'`
+            `request to MDS to assign phone number '${phoneNumber}' to user '${userId}'`
         );
     }
 
-    async unassignTwilioNumberFromUser(userId: number, phoneNumber: string) {
+    async unassignNumberFromUser(userId: number, phoneNumber: string) {
         const config = {
             method: 'delete',
             url: `${this.endpoint}/users/sm:${userId}/number/${phoneNumber}`,
@@ -100,11 +122,11 @@ export class TwilioController {
         };
         await AxiosUtils.axiosRequest(
             config,
-            `request to MDS to unassign Twilio phone number '${phoneNumber}' from user '${userId}'`
+            `request to MDS to unassign phone number '${phoneNumber}' from user '${userId}'`
         );
     }
 
-    async getAllTwilioNumbersFromCompany(companyId: number) {
+    async getAllNumbersFromCompany(companyId: number) {
         const config = {
             method: 'get',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -117,8 +139,29 @@ export class TwilioController {
         };
         const response = await AxiosUtils.axiosRequest(
             config,
-            `request to MDS to get all Twilio numbers belong to company '${companyId}'`
+            `request to MDS to get all numbers belong to company '${companyId}'`
         );
         return response.data.numbers;
+    }
+
+    async getPhoneNumberByOrderId(companyId: number, orderId: string) {
+        const config = {
+            method: 'get',
+            url: `${this.endpoint}/company/${companyId}/orders/${orderId}`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'gr-csrf': this.csrf,
+                Cookie: this.gsk
+            }
+        };
+
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to get order status of ${orderId} belong to company '${companyId}'`
+        );
+
+        const { phoneNumber } = response.data;
+        return phoneNumber;
     }
 }

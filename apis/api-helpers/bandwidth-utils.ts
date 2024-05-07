@@ -2,10 +2,10 @@ import { GskController } from 'Apis/gas/gsk-controller';
 import { BandwidthController } from 'Apis/mds/bandwidth-controller';
 import { CsrfController } from 'Apis/mds/csrf-controller';
 import { users } from 'Constants/users';
-import { TwilioController } from 'Apis/mds/twilio-controller';
 import { WhatsAppController } from 'Apis/mds/whatsApp-controller';
 import { SMClient } from 'Apis/sm/client';
 import { PlatformController } from 'Apis/sm/platform/platform-controller';
+import { PhoneNumberController } from 'Apis/mds/phoneNumber-controller';
 import { Log } from './log-utils';
 import { EnvUtils } from './env-utils';
 
@@ -84,11 +84,11 @@ export class BandwidthUtils {
         );
         const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
 
-        const twilioController = new TwilioController(gskToken, csrfToken, MDS_ENDPOINT);
+        const phoneNumberController = new PhoneNumberController(gskToken, csrfToken, MDS_ENDPOINT);
         const whatsAppController = new WhatsAppController(gskToken, csrfToken, MDS_ENDPOINT);
         const bandwidthController = new BandwidthController(gskToken, csrfToken, MDS_ENDPOINT);
 
-        const twilioNumbers = await twilioController.getAllTwilioNumbersFromCompany(companyId);
+        const twilioNumbers = await phoneNumberController.getAllNumbersFromCompany(companyId);
         const whatsAppProviders = await whatsAppController.getAllWhatsAppAccountFromCompany(companyId);
 
         const filteredTwilioNumbers = await twilioNumbers.filter(
@@ -114,7 +114,7 @@ export class BandwidthUtils {
         const listOfPromises = [];
         for (const numberObj of filteredTwilioNumbers) {
             const { number } = numberObj;
-            listOfPromises.push(twilioController.releaseTwilioNumberFromCompany(companyId, number));
+            listOfPromises.push(phoneNumberController.releaseNumberFromCompany(companyId, number));
         }
 
         Log.highlight(`Tearing down: Detected ${whatsAppProviders.length} WhatsApp number.`);
