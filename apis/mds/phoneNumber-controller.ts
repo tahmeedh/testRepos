@@ -46,7 +46,9 @@ export class PhoneNumberController {
 
         if (response.data.provider === 'bandwidth') {
             const { orderId } = response.data;
-
+            // All North American numbers are provided by bandwidth.
+            // For bandwidth numbers, we don't get a number immediately from MDS's response.
+            // So, getPhoneNumberByOrderId request to MDS in order to check the order status and get phonenumber when status is 'COMPLETED'.
             // retry 3 times, or until we get a valid phone number
             for (let retryCount = 1; retryCount < 4; retryCount++) {
                 phoneNumber = await this.getPhoneNumberByOrderId(companyId, orderId);
