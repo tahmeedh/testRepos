@@ -1,4 +1,5 @@
 import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 /* eslint-disable no-await-in-loop */
 
 export class PhoneNumberController {
@@ -13,6 +14,10 @@ export class PhoneNumberController {
     }
 
     async purchaseNumberForCompany(companyId: number, countryCode: string, prefix: string) {
+        // 2024 May 08: MDS informed us all North American numbers are routed to Bandwidth.
+        // All Non-North American numbers will be routed to Twilio.
+        // If you need a North American number, enter 'CA' for countryCode and '604' for prefix
+        // If you need a Twilio number, enter 'GB' for countryCode and '44' for prefix
         const config = {
             method: 'post',
             url: `${this.endpoint}/company/${companyId}/numbers`,
@@ -33,26 +38,31 @@ export class PhoneNumberController {
             `request to MDS to request phone number for company '${companyId}'`
         );
 
-        let { phoneNumber } = response.data;
+        let phoneNumber: string;
+
+        if (response.data.provider === 'twilio') {
+            phoneNumber = response.data.number;
+        }
 
         if (response.data.provider === 'bandwidth') {
             const { orderId } = response.data;
 
             // retry 3 times, or until we get a valid phone number
-            for (let retryCount = 0; retryCount < 3; retryCount++) {
+            for (let retryCount = 1; retryCount < 4; retryCount++) {
                 phoneNumber = await this.getPhoneNumberByOrderId(companyId, orderId);
 
                 // end loop when phoneNumber is no longer null
                 if (phoneNumber) {
                     break;
                 }
-
-                // wait for 3 sections before next retry
+                Log.warn(`Phone number is ${phoneNumber}. Retrying in 3 seconds. Attempt ${retryCount}.`);
+                // wait for 3 seconds before next retry
                 await new Promise((resolve) => {
                     setTimeout(resolve, 3000);
                 });
             }
         }
+
         return phoneNumber;
     }
 
@@ -74,7 +84,7 @@ export class PhoneNumberController {
         );
     }
 
-    async setNumberFeatures(companyId: number, phoneNumber: number, features: object) {
+    async setNumberFeatures(companyId: number, phoneNumber: string, features: object) {
         const config = {
             method: 'put',
             url: `${this.endpoint}/company/${companyId}/number/${phoneNumber}/configuration`,
