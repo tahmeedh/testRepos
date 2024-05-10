@@ -13,11 +13,16 @@ export class PhoneNumberController {
         this.csrf = csrf;
     }
 
-    async purchaseNumberForCompany(companyId: number, countryCode: string, prefix: string) {
-        // 2024 May 08: MDS informed us all North American numbers are routed to Bandwidth.
-        // All Non-North American numbers will be routed to Twilio.
-        // If you need a North American number, enter 'CA' for countryCode and '604' for prefix
-        // If you need a Twilio number, enter 'GB' for countryCode and '44' for prefix
+    /**
+     * 2024 May 08: MDS informed us all North American numbers are routed to Bandwidth.
+     * All Non-North American numbers will be routed to Twilio.
+     * @param companyId GR company ID
+     * @param countryCode 'CA' for Canada(bandwidth), 'GB' for UK(Twilio)
+     * @param prefix '604' for Canada(bandwidth), '020' for UK(Twilio)
+     * @returns Phone number assigned by MDS
+     */
+
+    async purchaseNumberForCompany(companyId: number, countryCode: string, prefix: string): Promise<string> {
         const config = {
             method: 'post',
             url: `${this.endpoint}/company/${companyId}/numbers`,
