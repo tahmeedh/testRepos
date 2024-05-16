@@ -29,7 +29,7 @@ export class PreviewAttachmentController {
 
     async clickSendButton() {
         await test.step('Preview Attachment Controller : Click Send Button ', async () => {
-            await this.Pom.SEND_BUTTON.click();
+            await this.Pom.PREVIEW_SEND_BUTTON.click();
         });
     }
 
