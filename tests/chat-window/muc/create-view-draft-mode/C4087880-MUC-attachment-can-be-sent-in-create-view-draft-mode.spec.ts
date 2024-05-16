@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
+import { User } from 'Apis/user';
 import { BaseController } from 'Controllers/base-controller';
 import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
@@ -9,20 +10,29 @@ const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename)
 const file = './asset/download.png';
 const caption = StringUtils.generateString();
 
-test(`${testName} ${testTags}`, async ({ page }) => {
+test(`${testName} ${testTags}`, async ({ page, context }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
+    let user1: User;
+    let user2: User;
 
     await test.step(`GIVEN`, async () => {
-        const company = await Company.createCompany();
-        const user1 = await company.createUser();
-        const user2 = await company.createUser();
-        await company.addUserToEachOthersRoster([user1, user2]);
+        await test.step(`User is created`, async () => {
+            const company = await Company.createCompany();
+            [user1, user2] = await Promise.all([company.createUser(), company.createUser()]);
+            await company.addUserToEachOthersRoster([user1, user2]);
+        });
 
         await test.step(`User is logged in`, async () => {
-            await app.goToLoginPage();
-            await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-            await app.portalController.closeEnableDesktopNotification();
+            await expect(async () => {
+                await context.clearCookies();
+                await app.goToLoginPage();
+                await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+                await expect(app.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE).toHaveText(
+                    'No channels'
+                );
+                await app.portalController.closeEnableDesktopNotification();
+            }).toPass();
         });
 
         await test.step(`User is in SUC feed view`, async () => {
