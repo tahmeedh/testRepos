@@ -18,8 +18,6 @@ export class BasePage {
             .frameLocator('iframe[title="message"]')
             .frameLocator('iframe[title="chat window"]');
         this.AVATAR = this.CHATIFRAME.locator('.m-auto-avatar-container');
-        this.LOAD_GR_APP_SPINNER = this.page.locator(
-            '.m-auto-loading-mask img[alt="Loading Global Relay App"]'
-        );
+        this.LOAD_GR_APP_SPINNER = this.page.getByAltText('Loading Global Relay App');
     }
 }

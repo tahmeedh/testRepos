@@ -159,6 +159,7 @@ export class BaseController {
                 Log.info('Load spinner found, waiting for loading to complete...');
                 await this.Pom.LOAD_GR_APP_SPINNER.waitFor({ state: 'hidden' });
                 retryCount = 0;
+                Log.info('Loading app completed.');
             } catch (error) {
                 if (error instanceof errors.TimeoutError && retryCount > 0) {
                     Log.warn('Timeout Error while waiting for app to load. Refresh page and try again.');
@@ -171,6 +172,6 @@ export class BaseController {
             }
         }
 
-        Log.info('Loading app completed.');
+        Log.info('Finished waiting for initial load.');
     }
 }
