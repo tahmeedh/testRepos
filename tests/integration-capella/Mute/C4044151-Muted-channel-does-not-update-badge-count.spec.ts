@@ -39,9 +39,7 @@ test(`${testName} ${testTags}`, async () => {
     context1 = await newBrowser.newContext();
     const page1 = await context1.newPage();
     app1 = new BaseController(page1);
-    await app1.goToLoginPage();
-    await app1.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app1.portalController.closeEnableDesktopNotification();
+    await app1.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     Log.info(`Start ${testChatType} chat and send message`);
     await app1.startChatButtonController.ClickOnStartChannel();
@@ -64,9 +62,7 @@ test(`${testName} ${testTags}`, async () => {
     context2 = await newBrowser.newContext();
     const page2 = await context2.newPage();
     app2 = new BaseController(page2);
-    await app2.goToLoginPage();
-    await app2.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app2.portalController.closeEnableDesktopNotification();
+    await app2.loginAndInitialize(user2.userInfo.email, user2.userInfo.password);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
     await app2.open(title);

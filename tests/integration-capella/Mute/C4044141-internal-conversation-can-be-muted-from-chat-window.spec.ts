@@ -35,9 +35,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     );
 
     app = new BaseController(page);
-    await app.goToLoginPage();
-    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
+    await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} starts a SUC`);
     await app.startChatButtonController.ClickOnStartOneToOne();

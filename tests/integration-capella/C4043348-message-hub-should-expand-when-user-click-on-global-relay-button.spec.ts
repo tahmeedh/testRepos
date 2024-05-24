@@ -22,9 +22,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
     app = new BaseController(page);
-    await app.goToLoginPage();
-    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
+    await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     Log.starDivider(`Collapse the Message Hub`);
     await app.navigationController.toggleHideMessageHubButton();

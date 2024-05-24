@@ -33,9 +33,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
 
     await test.step('User login', async () => {
         app = new BaseController(page);
-        await app.goToLoginPage();
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.portalController.closeEnableDesktopNotification();
+        await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
     });
 
     await test.step('Check no new message badge are present', async () => {
