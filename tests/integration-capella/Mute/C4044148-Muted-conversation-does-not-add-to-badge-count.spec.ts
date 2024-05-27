@@ -41,10 +41,8 @@ test(`${testName} ${testTags}`, async () => {
     context1 = await newBrowser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
-    await app.goToLoginPage();
     // user login
-    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
+    await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     // user start 1-1
     await app.startChatButtonController.ClickOnStartOneToOne();
@@ -62,9 +60,7 @@ test(`${testName} ${testTags}`, async () => {
     context2 = await newBrowser.newContext();
     const page2 = await context2.newPage();
     app1 = new BaseController(page2);
-    await app1.goToLoginPage();
-    await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.portalController.closeEnableDesktopNotification();
+    await app1.loginAndInitialize(user2.userInfo.email, user2.userInfo.password);
 
     Log.info(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName} opens chat with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`

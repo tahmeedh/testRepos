@@ -1,6 +1,7 @@
-import type { Page } from '@playwright/test';
-import { test } from '@playwright/test';
+/* eslint-disable no-await-in-loop */
 
+import type { Page } from '@playwright/test';
+import { errors, test } from '@playwright/test';
 import { LOGIN_ENDPOINTS } from 'Constants/login-endpoints';
 import { LoginEndpointUtils } from 'helper/login-endpoint-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
@@ -127,5 +128,50 @@ export class BaseController {
 
     async scrollVertically(numberOfPixel: number) {
         await this.page.mouse.wheel(0, numberOfPixel);
+    }
+
+    /**
+     * Performs the login and intialization flow: login, close enable desktop notification, and wait for
+     * initial loading to complete.
+     * @param username username to login with.
+     * @param password login password.
+     */
+    async loginAndInitialize(username: string, password: string) {
+        await this.goToLoginPage();
+        await this.loginController.loginToPortal(username, password);
+        await this.waitForInitialLoad();
+        await this.portalController.closeEnableDesktopNotification();
+    }
+
+    /**
+     * Wait for initial load will wait for the "Loading Global Relay App" spinner to appear and disappear.
+     * If operation timedout waiting, it will refresh the page and retry waiting up to 2 times.
+     * If app still stuck on loading after 2 tries, page reloads and exit the wait function. In which case,
+     * it will most likely fail on time out.
+     */
+    async waitForInitialLoad() {
+        let retryCount = 2; // Hardcode retry number to 2 (waitFor timeout value is 10 seconds).
+
+        while (retryCount > 0) {
+            try {
+                Log.info('Waiting for load spinner to appear...');
+                await this.Pom.LOAD_GR_APP_SPINNER.waitFor({ state: 'visible' });
+                Log.info('Load spinner found, waiting for loading to complete...');
+                await this.Pom.LOAD_GR_APP_SPINNER.waitFor({ state: 'hidden' });
+                retryCount = 0;
+                Log.info('Loading app completed.');
+            } catch (error) {
+                if (error instanceof errors.TimeoutError && retryCount > 0) {
+                    Log.warn('Timeout Error while waiting for app to load. Refresh page and try again.');
+                    await this.page.reload();
+                    retryCount--;
+                } else {
+                    retryCount = 0;
+                    throw error;
+                }
+            }
+        }
+
+        Log.info('Finished waiting for initial load.');
     }
 }

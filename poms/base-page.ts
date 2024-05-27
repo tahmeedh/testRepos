@@ -6,6 +6,7 @@ export class BasePage {
     readonly MESSAGEIFRAME: FrameLocator;
     readonly CHATIFRAME: FrameLocator;
     readonly AVATAR: Locator;
+    readonly LOAD_GR_APP_SPINNER: Locator;
 
     /**
      * @param {import('@playwright/test').Page} page
@@ -17,5 +18,6 @@ export class BasePage {
             .frameLocator('iframe[title="message"]')
             .frameLocator('iframe[title="chat window"]');
         this.AVATAR = this.CHATIFRAME.locator('.m-auto-avatar-container');
+        this.LOAD_GR_APP_SPINNER = this.page.getByAltText('Loading Global Relay App');
     }
 }
