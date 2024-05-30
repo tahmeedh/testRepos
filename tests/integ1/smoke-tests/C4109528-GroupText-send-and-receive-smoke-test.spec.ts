@@ -3,6 +3,7 @@ import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { USERS_INTEG1 } from 'Constants/users-integ1';
 import { StringUtils } from 'helper/string-utils';
+import 'dotenv/config';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 const user1 = USERS_INTEG1.USER3_CA;
@@ -11,6 +12,10 @@ const user3 = USERS_INTEG1.WAGT3;
 
 test(`${testName} ${testTags} @static`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
+    const isEnvInteg1 = process.env.SERVER === 'integ1';
+    //skip test if env is not integ1
+    test.skip(!isEnvInteg1);
+
     let browser1: BrowserContext;
     let browser2: BrowserContext;
     let app1: BaseController;
