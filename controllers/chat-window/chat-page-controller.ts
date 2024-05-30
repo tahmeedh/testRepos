@@ -244,7 +244,7 @@ export class ChatController {
     }
 
     async selectEmoji(emojiNumber: number) {
-        await test.step(`Feed View Controller - Selecting Emoji number ${emojiNumber}`, async () => {
+        await test.step(`Chat Controller - Selecting Emoji number ${emojiNumber}`, async () => {
             await this.Pom.EMOJIS.nth(emojiNumber).click();
         });
     }
