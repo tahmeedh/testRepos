@@ -236,4 +236,18 @@ export class CreateChatController {
             await this.Pom.CANCEL_BUTTON.click();
         });
     }
+
+    async fillExternalSearchField(input: string) {
+        await test.step(`Create Chat Controller: Fill External Search Field`, async () => {
+            Log.info(`Create Chat Controller: Fill External Search Field`);
+            await this.Pom.EXTERNAL_SEARCH_INPUT.fill(input);
+        });
+    }
+
+    async clickAddPhoneNumber() {
+        await test.step(`Create Chat Controller: Click Add Phone Number`, async () => {
+            Log.info(`Create Chat Controller: Click Add Phone Number`);
+            await this.Pom.ADD_EXTERNAL_NUMBER.click();
+        });
+    }
 }

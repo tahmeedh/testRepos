@@ -7,6 +7,7 @@ export const LOGIN_ENDPOINTS = {
     'cpqa2-ca1': 'https://lb9-portal-cpqa2-nvan.dev-globalrelay.net/portal/login',
     'cpqa2-sq1': 'https://lb8-portal-cpqa2-nvan.dev-globalrelay.net/portal/login',
     cpqa1: 'https://cpqa1portal.dev-globalrelay.net/portal/login',
+    integ1: 'https://portalinteg1.globalrelay.com/',
     prod: 'https://portal.globalrelay.com/portal/login',
     stg1: 'https://portalstg1.globalrelay.com/portal/login'
 };

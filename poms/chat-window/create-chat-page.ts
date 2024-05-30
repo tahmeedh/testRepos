@@ -59,7 +59,7 @@ export class CreateChatPage extends BasePage {
         this.INVITE_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-invite');
 
         //SMS
-        this.EXTERNAL_SEARCH_INPUT = this.CHATIFRAME.getByPlaceholder('Search for contact or number');
+        this.EXTERNAL_SEARCH_INPUT = this.CHATIFRAME.locator('.m-auto-invite-input');
         this.ADD_EXTERNAL_NUMBER = this.CHATIFRAME.locator('.m-auto-add-number-section');
         this.SMS_SEARCH_INPUT = this.CHATIFRAME.locator('.m-auto-invite-input');
         this.SEARCH_COMPONENT_CONTACT_ROW = this.CHATIFRAME.getByTestId('m-auto-contact');
