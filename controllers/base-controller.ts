@@ -10,7 +10,6 @@ import { LoginController } from './login/login-controller';
 import { StartChatButtonController } from './message-hub/start-chat-button-controller';
 import { CreateChatController } from './chat-window/create-chat-controller';
 import { ChatController } from './chat-window/chat-page-controller';
-import { PreviewAttachmentController } from './chat-window/preview-attachment-controller';
 import { InviteController } from './chat-window/invite-controller';
 import { MessageHubController } from './message-hub/message-hub-controller';
 import { VCardController } from './chat-window/v-card-controller';
@@ -26,6 +25,8 @@ import { NewsAlertController } from './message-hub/news-alert-controller';
 import { HubHeaderController } from './message-hub/hub-header-controller';
 import { NavigationController } from './message-hub/navigation-controller';
 import { SearchResultController } from './message-hub/search-result-controller';
+import { PreviewAttachmentController } from './chat-window/preview-attachment-controller';
+import { AttachmentViewerController } from './chat-window/attachment-viewer-controller';
 
 export class BaseController {
     readonly page: Page;
@@ -35,6 +36,7 @@ export class BaseController {
     readonly createChatController: CreateChatController;
     readonly chatController: ChatController;
     readonly previewAttachmentController: PreviewAttachmentController;
+    readonly attachmentViewerController: AttachmentViewerController;
     readonly inviteController: InviteController;
     readonly messageHubController: MessageHubController;
     readonly vCardController: VCardController;
@@ -61,6 +63,7 @@ export class BaseController {
         this.createChatController = new CreateChatController(this.page);
         this.chatController = new ChatController(this.page);
         this.previewAttachmentController = new PreviewAttachmentController(this.page);
+        this.attachmentViewerController = new AttachmentViewerController(this.page);
         this.inviteController = new InviteController(this.page);
         this.messageHubController = new MessageHubController(this.page);
         this.vCardController = new VCardController(this.page);
@@ -93,16 +96,13 @@ export class BaseController {
         });
     }
 
-    async goToLoginPage() {
+    async goToLoginPage(envOverride?: string): Promise<void> {
         await test.step('Base Controller : Go to login page', async () => {
-            const env = process.env.SERVER;
+            const env = envOverride || process.env.SERVER;
             if (!LoginEndpointUtils.isLoginEndPointValid(env)) {
-                const error = new Error();
-                Log.error(
-                    `FAILURE: Process.env.SERVER '${env}' is not valid. Unable to find login URL.`,
-                    error
+                throw new Error(
+                    `FAILURE: Process.env.SERVER '${env}' is not valid. Unable to find login URL.`
                 );
-                throw error;
             }
             await this.page.goto(LOGIN_ENDPOINTS[env]);
         });

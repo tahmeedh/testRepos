@@ -9,6 +9,7 @@ export class LoginEndpointUtils {
             case 'cpqa2-ca1':
             case 'cpqa2-sq1':
             case 'cpqa1':
+            case 'integ1':
             case 'prod':
             case 'stg1':
                 return true;

@@ -236,4 +236,16 @@ export class ChatController {
             await this.Pom.ATTACH_BUTTON.setInputFiles(filePath);
         });
     }
+
+    async clickOnEmojiIcon() {
+        await test.step(`Chat Controller: Click On Emoji Icon`, async () => {
+            await this.Pom.EMOJI_ICON.click();
+        });
+    }
+
+    async selectEmoji(emojiNumber: number) {
+        await test.step(`Feed View Controller - Selecting Emoji number ${emojiNumber}`, async () => {
+            await this.Pom.EMOJIS.nth(emojiNumber).click();
+        });
+    }
 }

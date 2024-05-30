@@ -45,6 +45,19 @@ export class ChatPage extends BasePage {
     readonly CHAT_BUBBLE_ROW: Locator;
     readonly ATTACH_BUTTON: Locator;
     readonly CHAT_INTRO: Locator;
+    readonly EMOJI_ICON: Locator;
+    readonly EMOJI_PICKER: Locator;
+    readonly EMOJIS: Locator;
+    readonly CHAT_INPUT_DRAFT_EDITOR: Locator;
+    readonly CHAT_HEADER_TEXT: Locator;
+    readonly COMPANY_POSITION: Locator;
+    readonly AVATAR_SMS_ICON: Locator;
+    readonly AVATAR_WHATSAPP_ICON: Locator;
+    readonly AVATAR: Locator;
+    readonly NEW_MESSAGE_LINE: Locator;
+    readonly CHAT_BUBBLE_IMAGE_CONTAINER: Locator;
+    readonly GROUP_TEXT_NAME: Locator;
+    readonly GROUP_TEXT_PARTICIPANTS: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -59,6 +72,8 @@ export class ChatPage extends BasePage {
         this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
         this.CHAT_INPUT_WRAPPER = this.CHATIFRAME.locator('.public-DraftEditor-content');
         this.CHAT_INPUT_SMS_WRAPPER = this.CHATIFRAME.locator('.chat-input-wrapper-sms');
+        this.CHAT_INPUT_DRAFT_EDITOR = this.CHATIFRAME.locator('.DraftEditor-root');
+
         this.CHAT_INPUT = this.CHATIFRAME.getByRole('textbox', { name: 'input-label' });
         this.SEND_BUTTON = this.CHATIFRAME.locator('.m-auto-send-btn');
         this.ACCEPT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-accept');
@@ -103,5 +118,17 @@ export class ChatPage extends BasePage {
             this.CHATIFRAME.getByTestId('is-typing-avatars').getByTestId('is-typing-overflow');
         this.ATTACH_BUTTON = this.CHATIFRAME.locator('.m-auto-attach-button');
         this.CHAT_INTRO = this.CHATIFRAME.getByTestId('chat-intro');
+        this.EMOJI_ICON = this.CHATIFRAME.getByTestId('emoji-button').locator('.gr-Icon-svgFill-ab99');
+        this.EMOJIS = this.CHATIFRAME.locator('.emoji-wrapper');
+        this.EMOJI_PICKER = this.CHATIFRAME.locator('.emoji-picker');
+        this.CHAT_HEADER_TEXT = this.CHATIFRAME.locator('.m-auto-chat-header-text');
+        this.COMPANY_POSITION = this.CHATIFRAME.locator('.company-position');
+        this.AVATAR_SMS_ICON = this.CHATIFRAME.getByTestId('avatar-sms-icon');
+        this.AVATAR_WHATSAPP_ICON = this.CHATIFRAME.getByTestId('avatar-whatsapp-icon');
+        this.AVATAR = this.CHATIFRAME.locator('.m-auto-header').getByTestId('test-avatar-main');
+        this.NEW_MESSAGE_LINE = this.CHATIFRAME.locator('.m-auto-new-message-line');
+        this.CHAT_BUBBLE_IMAGE_CONTAINER = this.CHATIFRAME.getByTestId('image-container');
+        this.GROUP_TEXT_NAME = this.CHATIFRAME.locator('.m-auto-group-text-name');
+        this.GROUP_TEXT_PARTICIPANTS = this.CHATIFRAME.locator('.m-auto-group-text-participants');
     }
 }
