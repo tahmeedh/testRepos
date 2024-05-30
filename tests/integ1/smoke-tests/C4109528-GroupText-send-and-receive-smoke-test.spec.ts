@@ -74,13 +74,13 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
     });
 
-    await test.step(`Step 3 - User1 can send message and emoji`, async () => {
+    await test.step(`Step 3 - User1 can send message`, async () => {
         await test.step(`WHEN`, async () => {
             await test.step(`User1 types in chat input`, async () => {
                 await app1.chatController.typeContent(randomContentFromUser1);
             });
 
-            await test.step(`AND User1 Clicks on send button`, async () => {
+            await test.step(`AND User1 clicks on send button`, async () => {
                 await app1.chatController.clickSendButton();
             });
         });
@@ -151,7 +151,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                 await app2.chatController.selectEmoji(0);
             });
 
-            await test.step(`AND User2 Clicks on send button`, async () => {
+            await test.step(`AND User2 clicks on send button`, async () => {
                 await app2.chatController.clickSendButton();
                 await expect(app2.chatController.Pom.EMOJI_PICKER).not.toBeVisible();
             });
@@ -302,11 +302,11 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                     await expect(app1.attachmentViewerController.Pom.DOWNLOAD_ICON).toBeVisible();
                 });
 
-                await test.step(`Image is displayed`, async () => {
+                await test.step(`AND Image is displayed`, async () => {
                     await expect(app1.attachmentViewerController.Pom.IMAGE_VIEWER).toBeVisible();
                 });
 
-                await test.step(`Caption is displayed`, async () => {
+                await test.step(`AND Caption is displayed`, async () => {
                     await expect(app1.attachmentViewerController.Pom.CAPTION).toHaveText(
                         randomContentFromUser3
                     );
@@ -334,11 +334,11 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
                     await expect(app2.attachmentViewerController.Pom.DOWNLOAD_ICON).toBeVisible();
                 });
 
-                await test.step(`Image is displayed`, async () => {
+                await test.step(`AND Image is displayed`, async () => {
                     await expect(app2.attachmentViewerController.Pom.IMAGE_VIEWER).toBeVisible();
                 });
 
-                await test.step(`Caption is displayed`, async () => {
+                await test.step(`AND Caption is displayed`, async () => {
                     await expect(app2.attachmentViewerController.Pom.CAPTION).toHaveText(
                         randomContentFromUser3
                     );
