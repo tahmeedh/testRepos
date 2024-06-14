@@ -41,6 +41,17 @@ export interface UserConfigType {
     entitlements: string[];
     company: CompanyType;
 }
+export interface CustomUserConfigType {
+    firstName?: string;
+    lastName?: string;
+    password?: string;
+    jobTitle?: string;
+    mobilePhone?: string;
+    workPhone?: string;
+    homePhone?: string;
+    entitlements?: string[];
+    company?: CompanyType;
+}
 export class User {
     userInfo: UserType;
     constructor(user: UserType) {
