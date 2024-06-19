@@ -248,4 +248,11 @@ export class ChatController {
             await this.Pom.EMOJIS.nth(emojiNumber).click();
         });
     }
+
+    async clickNewMessagesButton() {
+        await test.step(`Chat Controller: Click chat input`, async () => {
+            Log.info(`Chat Controller: Click chat input`);
+            await this.Pom.NEW_MESSAGE_BUTTON.click();
+        });
+    }
 }
