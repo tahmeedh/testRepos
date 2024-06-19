@@ -52,14 +52,10 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.portalController.closeEnableDesktopNotification();
 
-    await app.page.pause();
-
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
     await app1.startChatButtonController.ClickOnStartOneToOne();
     await app1.createChatController.CreateSUC(user1.userInfo.lastName);
     await app1.inviteController.acceptInvite('SUC');
-
-    await app.page.pause();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives message`);
     const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
@@ -88,8 +84,6 @@ test(`${testName} ${testTags}`, async () => {
     );
     await app1.chatController.clickNewMessagesButton();
     await expect(app.chatController.Pom.NEW_MESSAGE_LINE).toBeVisible();
-
-    await app.page.pause();
 
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });
