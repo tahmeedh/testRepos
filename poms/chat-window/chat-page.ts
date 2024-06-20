@@ -58,6 +58,7 @@ export class ChatPage extends BasePage {
     readonly CHAT_BUBBLE_IMAGE_CONTAINER: Locator;
     readonly GROUP_TEXT_NAME: Locator;
     readonly GROUP_TEXT_PARTICIPANTS: Locator;
+    readonly NEW_MESSAGE_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -130,5 +131,6 @@ export class ChatPage extends BasePage {
         this.CHAT_BUBBLE_IMAGE_CONTAINER = this.CHATIFRAME.getByTestId('image-container');
         this.GROUP_TEXT_NAME = this.CHATIFRAME.locator('.m-auto-group-text-name');
         this.GROUP_TEXT_PARTICIPANTS = this.CHATIFRAME.locator('.m-auto-group-text-participants');
+        this.NEW_MESSAGE_BUTTON = this.CHATIFRAME.getByRole('button', { name: 'New Messages' });
     }
 }
