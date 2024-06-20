@@ -250,8 +250,8 @@ export class ChatController {
     }
 
     async clickNewMessagesButton() {
-        await test.step(`Chat Controller: Click chat input`, async () => {
-            Log.info(`Chat Controller: Click chat input`);
+        await test.step(`Chat Controller: Click new message button`, async () => {
+            Log.info(`Chat Controller: Click new message button`);
             await this.Pom.NEW_MESSAGE_BUTTON.click();
         });
     }
