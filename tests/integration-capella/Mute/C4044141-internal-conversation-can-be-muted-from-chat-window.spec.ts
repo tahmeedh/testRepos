@@ -2,10 +2,10 @@ import { expect, test } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
-import { StringUtils } from 'helper/string-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
 import { ConfigUtils } from 'helper/config-utils';
+import { GrcpController } from 'Apis/grcp/grcp-controller';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
@@ -19,13 +19,29 @@ test.beforeAll(async ({ browser }) => {
         await ConfigUtils.isMessageHubFeatureFlagOff(browser, 'muteEnabled: 1'),
         'Mute feature is enabled by feature flag: muteEnabled.'
     );
-});
 
-test.beforeEach(async () => {
+    Log.info('======== START TEST SETUP: Create test data + Login. ========');
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    context.clearCookies();
+
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
     await company.addUserToEachOthersRoster([user1, user2]);
+
+    app = new BaseController(page);
+    await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
+
+    Log.info('Creating conversation via grcp.');
+    await GrcpController.createInternalConversation(
+        page,
+        user1.userInfo.grcpAlias,
+        user2.userInfo.grcpAlias,
+        'C4044141 Test Content'
+    );
+    Log.info('======== END TEST SETUP ========');
 });
 
 test(`${testName} ${testTags}`, async ({ page }) => {
@@ -37,12 +53,9 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     app = new BaseController(page);
     await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
-    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} starts a SUC`);
-    await app.startChatButtonController.ClickOnStartOneToOne();
-    await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-
-    const randomContent = StringUtils.generateString();
-    await app.chatController.sendContent(randomContent);
+    await app.conversationListController.clickOnConversationName(
+        `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
+    );
     await app.chatController.muteConversation();
     await app.messageHubController.clickSideBarChatsButton();
 
