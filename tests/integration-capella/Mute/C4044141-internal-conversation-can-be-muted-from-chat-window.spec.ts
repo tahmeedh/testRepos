@@ -24,8 +24,6 @@ test.beforeAll(async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
 
-    context.clearCookies();
-
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();

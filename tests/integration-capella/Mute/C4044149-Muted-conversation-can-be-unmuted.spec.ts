@@ -26,7 +26,6 @@ test.beforeAll(async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
 
-    context.clearCookies();
     const app = new BaseController(page);
     await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
