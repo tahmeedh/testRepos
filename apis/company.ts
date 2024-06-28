@@ -4,7 +4,7 @@ import { SMClient } from './sm/client';
 import { PlatformController } from './sm/platform/platform-controller';
 import { DirectoryController } from './sm/directory/directory-controller';
 import { COMPANY_DEFAULT_SETTINGS, USER_DEFAULT_SETTINGS } from './smconfig.config';
-import { User } from './user';
+import { CustomUserConfigType, User } from './user';
 import { ApplicationName } from './sm/platform/thrift-generated/Platform_types';
 import { Log } from './api-helpers/log-utils';
 import { MessageController } from './sm/message/message-controller';
@@ -118,7 +118,7 @@ export class Company {
         return this.companyInfo.platformController.getCompanyRoles(companyId, applicationId, format);
     }
 
-    async createUser() {
+    async createUser(customUserConfig?: CustomUserConfigType) {
         const defaultUserConfig = {
             firstName: USER_DEFAULT_SETTINGS.FIRST_NAME,
             lastName: USER_DEFAULT_SETTINGS.LAST_NAME(),
@@ -130,7 +130,11 @@ export class Company {
             homePhone: USER_DEFAULT_SETTINGS.HOME_PHONE(),
             company: this.companyInfo
         };
-        const user: User = await User.createUser(defaultUserConfig);
+
+        // Overide the default value if custom value are provided in customUserConfig
+        const userConfig = { ...defaultUserConfig, ...customUserConfig };
+
+        const user: User = await User.createUser(userConfig);
         return user;
     }
 
