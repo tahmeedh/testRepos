@@ -1,7 +1,12 @@
 import { Page } from '@playwright/test';
 
 export class GrcpBaseController {
-    static async getRequest(page: Page, msgData) {
+    /**
+     * Send a GRCP request to the backend.
+     * @param page PageFunction. Unused variable.
+     * @param msgData Message data to send.
+     */
+    static async sendRequest(page: Page, msgData) {
         await page
             .frameLocator('#message-iframe')
             .locator(':root')
