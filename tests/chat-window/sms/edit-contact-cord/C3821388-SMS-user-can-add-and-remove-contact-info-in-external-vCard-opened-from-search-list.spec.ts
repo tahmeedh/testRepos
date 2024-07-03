@@ -50,11 +50,15 @@ test(`${testName} ${testTags}`, async () => {
 
     await test.step('Step 1 - User can add info to vCard', async () => {
         await test.step('User clicks on avatar on contact list', async () => {
-            await app.contactListController.clickOnContactAvatar(`firstname lastname`);
+            await app.contactListController.clickOnContactAvatar(
+                `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
+            );
         });
 
         await test.step('vCard is displayed', async () => {
-            await expect(app.vCardController.Pom.FIRST_LAST_NAME).toHaveText(`firstname lastname`);
+            await expect(app.vCardController.Pom.FIRST_LAST_NAME).toHaveText(
+                `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
+            );
             await expect(app.vCardController.Pom.PHONE_NUMBER).toBeVisible();
             await expect(app.vCardController.Pom.TEXT_ICON).toBeVisible();
         });
@@ -64,8 +68,12 @@ test(`${testName} ${testTags}`, async () => {
         });
 
         await test.step('User info fields are populated', async () => {
-            await expect(app.vCardEditController.Pom.FIELD_FIRST_NAME).toHaveValue(`firstname`);
-            await expect(app.vCardEditController.Pom.FIELD_LAST_NAME).toHaveValue(`lastname`);
+            await expect(app.vCardEditController.Pom.FIELD_FIRST_NAME).toHaveValue(
+                `${user2.userInfo.firstName}`
+            );
+            await expect(app.vCardEditController.Pom.FIELD_LAST_NAME).toHaveValue(
+                `${user2.userInfo.lastName}`
+            );
             await expect(app.vCardEditController.Pom.FIELD_COMPANY).toHaveValue(``);
             await expect(app.vCardEditController.Pom.FIELD_EMAIL).toHaveValue(``);
             await expect(app.vCardEditController.Pom.FIELD_JOB_TITLE).toHaveValue(``);
