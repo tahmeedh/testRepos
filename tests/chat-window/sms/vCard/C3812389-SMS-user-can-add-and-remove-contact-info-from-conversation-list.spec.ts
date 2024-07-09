@@ -3,12 +3,13 @@ import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { Log } from 'Apis/api-helpers/log-utils';
+import { User } from 'Apis/user';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
 
 let company: Company;
-let user1 = null;
+let user1: User;
 
 test.beforeAll(async () => {
     company = await Company.createCompany();
