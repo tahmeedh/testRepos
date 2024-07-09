@@ -2,14 +2,15 @@ import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
-import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
+import { UidUtils } from 'Apis/api-helpers/uid-Utils';
+import { Log } from 'Apis/api-helpers/log-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
 
 let company: Company;
-let user1: User;
+let user1: User = null;
 
 test.beforeAll(async () => {
     company = await Company.createCompany();
@@ -29,6 +30,8 @@ test(`${testName} ${testTags}`, async ({ page }) => {
 
     app = new BaseController(page);
     let phoneNumber: string;
+    const uniqueFirstName = UidUtils.generateStringbyBytes(4);
+    let userName: string;
     await test.step('GIVEN - User has an existing SMS conversation', async () => {
         await test.step('Go to login page', async () => {
             await app.goToLoginPage();
@@ -42,21 +45,34 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await test.step('Starts a SMS conversation', async () => {
             await app.startChatButtonController.ClickOnStartSMS();
             phoneNumber = await app.createChatController.CreateSMS();
-            await app.chatController.fillRecipientInfoModal('firstname', 'lastname');
+            userName = `${uniqueFirstName} lastname`;
+            await app.chatController.fillRecipientInfoModal(uniqueFirstName, 'lastname');
         });
 
         await test.step('Return to conversations view', async () => {
             await app.messageHubController.clickSideBarChatsButton();
         });
+
+        await test.step('User search for the contact by name', async () => {
+            await app.globalSearchController.fillSearchField(userName);
+            //Sometimes the external user won't show up in global search results if we search immideiately after creating the conversation
+            //Since there are no element to wait for, this is a retry mechinism to overcome the above issue.
+            await expect(async () => {
+                await app.globalSearchController.clickOnSearchButton();
+                await expect(
+                    app.globalSearchController.Pom.SEARCH_RESULT_ROW.getByText(userName)
+                ).toBeVisible();
+            }).toPass();
+        });
     });
 
     await test.step('Step 1 - User can add info to vCard', async () => {
-        await test.step('User clicks on avatar on conversation list', async () => {
-            await app.conversationListController.clickOnConversationAvatar(`firstname lastname`);
+        await test.step('User clicks on avatar on global search result', async () => {
+            await app.globalSearchController.clickOnSearchResultRowAvatar(userName);
         });
 
         await test.step('vCard is displayed', async () => {
-            await expect(app.vCardController.Pom.FIRST_LAST_NAME).toHaveText(`firstname lastname`);
+            await expect(app.vCardController.Pom.FIRST_LAST_NAME).toHaveText(userName);
             await expect(app.vCardController.Pom.PHONE_NUMBER).toHaveText(phoneNumber);
             await expect(app.vCardController.Pom.TEXT_ICON).toBeVisible();
         });
@@ -66,7 +82,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
 
         await test.step('User info fields are populated', async () => {
-            await expect(app.vCardEditController.Pom.FIELD_FIRST_NAME).toHaveValue(`firstname`);
+            await expect(app.vCardEditController.Pom.FIELD_FIRST_NAME).toHaveValue(uniqueFirstName);
             await expect(app.vCardEditController.Pom.FIELD_LAST_NAME).toHaveValue(`lastname`);
             await expect(app.vCardEditController.Pom.FIELD_COMPANY).toHaveValue(``);
             await expect(app.vCardEditController.Pom.FIELD_EMAIL).toHaveValue(``);
