@@ -146,6 +146,13 @@ export class ChatController {
         });
     }
 
+    async hideChat() {
+        await test.step('Chat Controller: Hide Chat and Naviagate back to Message Hub', async () => {
+            await this.clickChatHeaderMenu();
+            await this.Pom.DROP_DOWN_HIDE.click();
+        });
+    }
+
     async muteConversation() {
         await test.step('Chat Controller: Mute Conversation', async () => {
             await this.clickChatHeaderMenu();
