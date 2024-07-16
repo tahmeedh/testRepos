@@ -2,6 +2,22 @@ import { test, type Page } from '@playwright/test';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { ConversationListPage } from 'Poms/message-hub/conversation-list-page';
 
+export enum FilterType {
+    HIDDEN = 'Hidden',
+    INVITATION = 'Invitation',
+    UNREAD = 'Unread',
+    FAVOURITES = 'Favourites',
+    FLAGGED = 'Flagged',
+    ONE_TO_ONE = 'One=to-One',
+    MULTI_PARTY = 'Multi-Party',
+    TEXT = 'Text',
+    WHATSAPP = 'WhatsApp',
+    ALL = 'All'
+}
+
+/**
+ * This component is part of the whole '.m-auto-accordion-item-conversations' div. Any child element should reside under this contoller.
+ */
 export class ConversationListController {
     readonly page: Page;
     readonly Pom: ConversationListPage;
@@ -48,6 +64,21 @@ export class ConversationListController {
             });
             const conversationIdremovedMAuto = longestClass.replace('m-auto-', '');
             return conversationIdremovedMAuto;
+        });
+    }
+
+    async filterConversations(filterType: FilterType) {
+        await test.step(`Filter Conversations based on ${filterType}`, async () => {
+            Log.info(`Filter Conversations based on ${filterType}`);
+            await this.Pom.FILTER_ICON.first().click();
+
+            switch (filterType) {
+                case FilterType.HIDDEN:
+                    await this.Pom.HIDDEN_BUTTON.click();
+                    break;
+                default:
+                    throw new Error(`Unsupported filter type: ${filterType}`);
+            }
         });
     }
 }

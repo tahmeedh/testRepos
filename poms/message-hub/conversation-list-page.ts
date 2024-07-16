@@ -10,6 +10,9 @@ export class ConversationListPage extends BasePage {
     readonly NEW_MESSAGE_BLUE_DOT: Locator;
     readonly NEW_MESSAGE_BLUE_BADGE: Locator;
     readonly NEW_INVITE_BADGE: Locator;
+    readonly FILTER_ICON: Locator;
+    readonly HIDDEN_BUTTON: Locator;
+    readonly FILTER_TAG: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -20,5 +23,8 @@ export class ConversationListPage extends BasePage {
         this.CONVERSATION_NAME = this.MESSAGEIFRAME.locator('.m-auto-name');
         this.EMPTY_HUB_CHANNEL_MESSAGE = this.MESSAGEIFRAME.locator('.m-auto-empty-hub-channel-message');
         this.NEW_INVITE_BADGE = this.MESSAGEIFRAME.locator('.m-auto-has-new-invite');
+        this.FILTER_ICON = this.MESSAGEIFRAME.locator('.m-auto-filter-menu-icon');
+        this.HIDDEN_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-filter-item-hidden');
+        this.FILTER_TAG = this.MESSAGEIFRAME.locator('.m-auto-filter-tag');
     }
 }
