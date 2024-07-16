@@ -61,8 +61,7 @@ test(`${testName} ${testTags}`, async () => {
         await expect(app.conversationListController.Pom.CONVERSATION_NAME).toBeVisible();
     });
 
-    await test.step('Filter List', async () => {
-        Log.info('Check on conversation row should exist');
+    await test.step('Check that conversation list consist of the hidden row', async () => {
         await expect(
             await app.conversationListController.Pom.CONVERSATION_ROW.filter({
                 hasText: `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
