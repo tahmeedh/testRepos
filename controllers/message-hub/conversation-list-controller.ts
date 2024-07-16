@@ -8,7 +8,7 @@ export enum FilterType {
     UNREAD = 'Unread',
     FAVOURITES = 'Favourites',
     FLAGGED = 'Flagged',
-    ONE_TO_ONE = 'One=to-One',
+    ONE_TO_ONE = 'One-to-One',
     MULTI_PARTY = 'Multi-Party',
     TEXT = 'Text',
     WHATSAPP = 'WhatsApp',
