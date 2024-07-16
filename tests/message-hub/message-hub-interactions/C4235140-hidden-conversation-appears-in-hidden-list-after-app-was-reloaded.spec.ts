@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, BrowserContext, Page } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
@@ -10,8 +10,8 @@ import { FilterType } from 'Controllers/message-hub/conversation-list-controller
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let user1: User;
 let user2: User;
-let context = null;
-let page = null;
+let context: BrowserContext;
+let page: Page;
 let app: BaseController;
 
 test.beforeAll(async ({ browser }) => {
