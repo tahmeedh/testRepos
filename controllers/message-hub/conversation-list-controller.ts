@@ -43,7 +43,7 @@ export class ConversationListController {
     async clickOnConversationName(conversationName: string) {
         await test.step(`Conversation List Controller : Click on conversation with name '${conversationName}'`, async () => {
             Log.info(`Conversation List Controller : Click on conversation with name '${conversationName}'`);
-            await this.Pom.CONVERSATION_NAME.getByText(conversationName).nth(0).click();
+            await this.Pom.CONVERSATION_NAME.getByText(conversationName, { exact: true }).nth(0).click();
         });
     }
 

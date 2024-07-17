@@ -4,8 +4,8 @@ import { BaseController } from 'Controllers/base-controller';
 import { users } from 'Constants/users';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
-const user1 = users.INTERNAL_ONLY1;
-const user2 = users.INTERNAL_ONLY2;
+const user1 = users.INTERNAL_1ONLY;
+const user2 = users.INTERNAL_2ONLY;
 
 test(`${testName} ${testTags} @static`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
@@ -56,8 +56,8 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
 
         await test.step(`User 1 and User 2 has SUC open`, async () => {
-            await app1.conversationListController.clickOnConversationName('internal only2');
-            await app2.conversationListController.clickOnConversationName('internal only1');
+            await app1.conversationListController.clickOnConversationName('internal 2only');
+            await app2.conversationListController.clickOnConversationName('internal 1only');
         });
     });
 
@@ -71,13 +71,13 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             });
         });
 
-        await test.step(`Is typing indicator can be continously displayed `, async () => {
+        await test.step(`Is typing indicator can be continuously displayed `, async () => {
             await test.step(`User 1 stops typing for 29 seconds `, async () => {
                 await app1.page.waitForTimeout(29000);
                 await expect(app2.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
 
-            await test.step(`User 1 types addditional chcaracters `, async () => {
+            await test.step(`User 1 types additional characters `, async () => {
                 await app1.chatController.typeContent('additional characters');
             });
 
