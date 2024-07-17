@@ -71,13 +71,13 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             });
         });
 
-        await test.step(`Is typing indicator can be continously displayed `, async () => {
+        await test.step(`Is typing indicator can be continuously displayed `, async () => {
             await test.step(`User 1 stops typing for 29 seconds `, async () => {
                 await app1.page.waitForTimeout(29000);
                 await expect(app2.chatController.Pom.IS_TYPING_INDICATOR).toBeVisible();
             });
 
-            await test.step(`User 1 types addditional chcaracters `, async () => {
+            await test.step(`User 1 types additional characters `, async () => {
                 await app1.chatController.typeContent('additional characters');
             });
 
