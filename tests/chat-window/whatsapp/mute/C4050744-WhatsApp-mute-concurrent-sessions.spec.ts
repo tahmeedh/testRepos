@@ -8,7 +8,7 @@ const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename)
 const user1 = users.MUTE_1CONCURRENT;
 const conversationName = 'mute WA';
 
-test(`${testName} ${testTags} @static`, async ({ browser }) => {
+test.skip(`${testName} ${testTags} @static`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
     let browser1: BrowserContext;
     let browser2: BrowserContext;

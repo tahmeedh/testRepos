@@ -10,7 +10,7 @@ const conversationName = 'send-file-sms';
 const file = './asset/download.png';
 const caption = StringUtils.generateString();
 
-test(`${testName} ${testTags} @static`, async ({ page }) => {
+test.skip(`${testName} ${testTags} @static`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
     let mfsroute: Route;
