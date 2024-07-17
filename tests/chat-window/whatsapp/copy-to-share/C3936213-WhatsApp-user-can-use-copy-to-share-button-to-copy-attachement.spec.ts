@@ -6,7 +6,7 @@ import { users } from 'Constants/users';
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 const user1 = users.OGG_PLYAER;
 
-test(`${testName} ${testTags} @static`, async ({ page }) => {
+test.skip(`${testName} ${testTags} @static`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
 

@@ -37,6 +37,6 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
     });
 
     await test.step(`THEN - File preview is displayed`, async () => {
-        await expect(app.previewAttachmentController.Pom.SEND_BUTTON).toBeVisible();
+        await expect(app.previewAttachmentController.Pom.PREVIEW_SEND_BUTTON).toBeVisible();
     });
 });
