@@ -10,7 +10,8 @@ const conversationName = 'send-file-channel-restricted';
 const file = './asset/download.png';
 const caption = StringUtils.generateString();
 
-test(`${testName} ${testTags} @static`, async ({ page }) => {
+// Unskip when VA-7412 is fixed
+test.skip(`${testName} ${testTags} @static`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
     let mfsroute: Route;

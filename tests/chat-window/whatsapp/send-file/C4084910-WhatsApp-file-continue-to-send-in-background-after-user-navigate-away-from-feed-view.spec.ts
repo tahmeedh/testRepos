@@ -10,6 +10,7 @@ const conversationName = 'send-file-wa';
 const file = './asset/download.png';
 const caption = StringUtils.generateString();
 
+// Unskip when VA-7412 is fixed
 test.skip(`${testName} ${testTags} @static`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
