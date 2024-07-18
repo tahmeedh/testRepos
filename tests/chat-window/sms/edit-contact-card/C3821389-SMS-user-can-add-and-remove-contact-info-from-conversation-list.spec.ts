@@ -37,6 +37,8 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await test.step('Login', async () => {
             await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
             await app.portalController.closeEnableDesktopNotification();
+            await app.newsAlertController.clickNextSMSEnabledNotification();
+            await app.portalController.clickCloseSMSEnabledNotification();
         });
 
         await test.step('Starts a SMS conversation', async () => {
@@ -62,6 +64,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
 
         await test.step('User clicks on the edit button', async () => {
+            await app.page.pause();
             await app.vCardController.clickOnEditButton();
         });
 
@@ -99,6 +102,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
 
     await test.step('Step 2 - User can remove info from vCard', async () => {
         await test.step('User clicks on the edit button', async () => {
+            await app.page.pause();
             await app.vCardController.clickOnEditButton();
         });
 
@@ -130,8 +134,4 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
     });
     Log.starDivider(`END TEST`);
-});
-
-test.afterAll(async () => {
-    await company.teardown();
 });

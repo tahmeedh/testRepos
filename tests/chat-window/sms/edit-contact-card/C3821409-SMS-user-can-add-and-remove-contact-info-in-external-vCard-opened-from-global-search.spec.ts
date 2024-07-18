@@ -147,7 +147,3 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     });
     Log.starDivider(`END TEST`);
 });
-
-test.afterAll(async () => {
-    await company.teardown();
-});
