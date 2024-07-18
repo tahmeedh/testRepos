@@ -1,24 +1,13 @@
 import { test, expect } from '@playwright/test';
-import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { User } from 'Apis/user';
+import { users } from 'Constants/users';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
 
-let company: Company;
-let user1: User = null;
-let user2: User = null;
-
-test.beforeAll(async () => {
-    company = await Company.createCompany();
-    user1 = await company.createUser();
-    user2 = await company.createUser();
-    await user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR');
-    await user1.requestAndAssignWhatsAppNumber();
-});
+const user1 = users.VCARD_1;
 
 test(`${testName} ${testTags}`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
@@ -31,35 +20,28 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
 
         await test.step('Login', async () => {
-            await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+            await app.loginController.loginToPortal(user1.EMAIL, user1.PASSWORD);
             await app.portalController.closeEnableDesktopNotification();
-        });
-    });
-
-    await test.step('User can navigate to company vCard in WhatsApp create', async () => {
-        await test.step(`User clicks on 'start-new-chat' button and select`, async () => {
-            await app.startChatButtonController.ClickOnStartWhatsapp();
         });
 
         await test.step(`User 1 searches for user 2`, async () => {
-            await app.createChatController.SearchSMSUser(
-                `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
-            );
+            await app.hubHeaderController.clickStartChatButton();
+            await app.hubHeaderController.selectHeaderMainMenuOption('WhatsApp');
+            await app.createChatController.SearchSMSUser('vCard 2');
         });
 
-        await test.step(`User 1 clicks on the avatar of the first result`, async () => {
-            await app.createChatController.clickOnSearchComponentRowAvatar(
-                `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
-            );
-            await expect(app.vCardController.Pom.COMPANY_NAME_INTERNAL).toHaveText(
-                `${user2.userInfo.company.companyName}`
+        await test.step(`User 1 clicks on the avatar of the internal vCard`, async () => {
+            await app.createChatController.clickRowAvatarByPhoneNumber('+1 604 263 2598');
+            await expect(app.vCardController.Pom.COMPANY_NAME_INTERNAL, `vCard is visible`).toHaveText(
+                `Vega Static Company`
             );
         });
 
         await test.step('Company vCard is displayed when user clicks on company name', async () => {
             await app.vCardController.Pom.COMPANY_NAME_INTERNAL.click();
-            await expect(app.companyVCardController.Pom.COMPANY_NAME).toHaveText(
-                `${user2.userInfo.company.companyName}`
+            await app.page.pause();
+            await expect(app.companyVCardController.Pom.COMPANY_NAME, `Company vCard is visible`).toHaveText(
+                `Vega Static Company`
             );
         });
     });
@@ -67,8 +49,8 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     await test.step('User can navigate to back to message hub from company vCard', async () => {
         await test.step('User vCard is displayed when user clicks on back button', async () => {
             await app.companyVCardController.clickOnBackButton();
-            await expect(app.vCardController.Pom.COMPANY_NAME_INTERNAL).toHaveText(
-                `${user2.userInfo.company.companyName}`
+            await expect(app.vCardController.Pom.COMPANY_NAME_INTERNAL, `vCard is visible`).toHaveText(
+                `Vega Static Company`
             );
         });
 
@@ -82,5 +64,4 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await expect(app.startChatButtonController.Pom.START_CHAT).toBeVisible();
         });
     });
-    Log.starDivider(`END TEST`);
 });

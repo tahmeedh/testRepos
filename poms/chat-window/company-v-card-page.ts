@@ -10,6 +10,6 @@ export class CompanyVCardPage extends BasePage {
         this.BACK_BUTTON = this.CHATIFRAME.locator(
             '.profile-outer-container .m-auto-chat-header-back-button'
         );
-        this.COMPANY_NAME = this.CHATIFRAME.locator('.CompanyProfile_company-profile-header-name__az1WD');
+        this.COMPANY_NAME = this.CHATIFRAME.locator('[class*="CompanyProfile_company-profile-header-name"]');
     }
 }
