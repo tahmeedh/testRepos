@@ -224,6 +224,17 @@ export class CreateChatController {
         });
     }
 
+    async clickRowAvatarByPhoneNumber(phoneNumber: string) {
+        await test.step(`Create Chat Controller: Click on the first row with phone number'${phoneNumber}'`, async () => {
+            Log.info(`Create Chat Controller: Click on first row with phone number '${phoneNumber}'`);
+            await this.Pom.SEARCH_COMPONENT_CONTACT_ROW.getByText(phoneNumber)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .click();
+        });
+    }
+
     async clickUserRowInternal(userName: string) {
         await test.step(`Create Chat Controller: Click on the row with user name'${userName}'`, async () => {
             Log.info(`Create Chat Controller: Click on the row with user name'${userName}'`);

@@ -104,5 +104,15 @@ export const users = {
         EMAIL: 'readReceipt4@vegastatic.com',
         PASSWORD: 'Password2@',
         NOTES: 'READ ONLY'
+    },
+    VCARD_1: {
+        EMAIL: 'vCard1@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
+    },
+    VCARD_2: {
+        EMAIL: 'vCard2@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
     }
 };
