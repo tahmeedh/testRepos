@@ -1,17 +1,18 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect, chromium, Browser, BrowserContext } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { BaseController } from '../../../../controllers/base-controller';
+import { User } from 'Apis/user';
+import { BaseController } from 'Controllers/base-controller';
 
-const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
-let browser = null;
-let context1 = null;
+const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
+let browser: Browser;
+let context1: BrowserContext;
 let app: BaseController;
 
 let company: Company;
-let user1 = null;
-let user2 = null;
+let user1: User;
+let user2: User;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
@@ -36,21 +37,29 @@ test(`${testName} ${testTags}`, async () => {
     context1 = await browser.newContext();
     const page1 = await context1.newPage();
     app = new BaseController(page1);
-    await app.goToLoginPage();
-    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
 
-    Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartSMS();
-    const randonNumber = await app.createChatController.CreateSMS();
-    await app.chatController.skipRecipientInfo();
-    await app.chatController.sendContent();
-    Log.success(
-        `SUCCESS: ${testChatType} conversation was created with '${randonNumber}' and random text string was '`
-    );
+    await test.step('GIVEN', async () => {
+        await test.step('User is logged in', async () => {
+            await app.goToLoginPage();
+            await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+            await app.portalController.closeEnableDesktopNotification();
+            await app.newsAlertController.clickNextSMSEnabledNotification();
+            await app.portalController.clickCloseSMSEnabledNotification();
+        });
 
-    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} presses back button`);
-    await app.chatController.backButton();
-    await expect(app.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
-    Log.starDivider(`END TEST: Test Execution Commpleted`);
+        await test.step('User has existing SMS conversation', async () => {
+            await app.startChatButtonController.ClickOnStartSMS();
+            await app.createChatController.CreateSMS();
+            await app.chatController.skipRecipientInfo();
+            await app.chatController.sendContent();
+        });
+    });
+
+    await test.step('WHEN', async () => {
+        await app.chatController.backButton();
+    });
+
+    await test.step('THEN', async () => {
+        await expect(app.messageHubController.Pom.HUB_CONTAINER, 'Hub is visible').toBeVisible();
+    });
 });

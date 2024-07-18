@@ -73,11 +73,11 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
 
         await test.step(`User 2 Accept MUC`, async () => {
-            await app2.conversationListController.clickOnConversationName('accept 1invite');
+            await app2.conversationListController.clickOnConversationName('accept 1Invite');
             await app2.inviteController.clickFooterButton('Accept');
         });
 
-        await test.step(`User 2 chatbubble count is 49 on initial load`, async () => {
+        await test.step(`User 2 chat bubble count is 49 on initial load`, async () => {
             await expect(app2.chatController.Pom.CHAT_BUBBLE_ROW).toHaveCount(49);
         });
     });

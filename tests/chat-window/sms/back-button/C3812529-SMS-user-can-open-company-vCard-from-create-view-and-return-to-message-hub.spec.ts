@@ -37,6 +37,8 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await test.step('Login', async () => {
             await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
             await app.portalController.closeEnableDesktopNotification();
+            await app.newsAlertController.clickNextSMSEnabledNotification();
+            await app.portalController.clickCloseSMSEnabledNotification();
         });
     });
 
@@ -87,8 +89,4 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
     });
     Log.starDivider(`END TEST`);
-});
-
-test.afterAll(async () => {
-    await company.teardown();
 });
