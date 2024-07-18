@@ -46,6 +46,8 @@ test(`${testName} ${testTags}`, async () => {
     await test.step('User login', async () => {
         await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
         await app.portalController.closeEnableDesktopNotification();
+        await app.newsAlertController.clickNextSMSEnabledNotification();
+        await app.portalController.clickCloseSMSEnabledNotification();
     });
 
     await test.step('User start text message', async () => {
