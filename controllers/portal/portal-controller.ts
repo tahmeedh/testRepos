@@ -28,7 +28,11 @@ export class PortalController {
     async clickCloseSMSEnabledNotification() {
         await test.step('Portal Controller : Click on Close text enabled notification', async () => {
             Log.info(`Portal Controller: Click on Close text enabled notification`);
-            await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
+            try {
+                await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
+            } catch {
+                Log.info('Enable SMS notification did not appear. Skipping to next step.');
+            }
         });
     }
 
@@ -38,7 +42,11 @@ export class PortalController {
             Log.info(
                 `Portal Controller: Close 'View your Global Relay number and set up call-forwarding in your profile.' notification`
             );
-            await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
+            try {
+                await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
+            } catch {
+                Log.info('GR phone number notification did not appear. Skipping to next step.');
+            }
         });
     }
 
