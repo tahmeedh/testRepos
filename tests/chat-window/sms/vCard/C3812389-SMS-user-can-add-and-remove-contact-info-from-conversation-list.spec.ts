@@ -1,79 +1,62 @@
 import { test, expect } from '@playwright/test';
-import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
-import { Log } from 'Apis/api-helpers/log-utils';
-import { User } from 'Apis/user';
+import { users } from 'Constants/users';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
-let app: BaseController;
-
-let company: Company;
-let user1: User;
-
-test.beforeAll(async () => {
-    company = await Company.createCompany();
-    user1 = await company.createUser();
-
-    await Promise.all([
-        user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
-        user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
-    ]);
-
-    await user1.requestAndAssignTwilioNumber();
-});
+const USER1 = users.VCARD_2;
 
 test(`${testName} ${testTags}`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
-    Log.starDivider(`START TEST`);
+    const app = new BaseController(page);
 
-    app = new BaseController(page);
-    let phoneNumber: string;
-    await test.step('GIVEN - User has an existing SMS conversation', async () => {
+    await test.step('GIVEN - User has vCard opened', async () => {
         await test.step('Go to login page', async () => {
             await app.goToLoginPage();
         });
 
         await test.step('Login', async () => {
-            await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+            await app.loginController.loginToPortal(USER1.EMAIL, USER1.PASSWORD);
             await app.portalController.closeEnableDesktopNotification();
         });
 
-        await test.step('Starts a SMS conversation', async () => {
-            await app.startChatButtonController.ClickOnStartSMS();
-            phoneNumber = await app.createChatController.CreateSMS();
-            await app.chatController.fillRecipientInfoModal('firstname', 'lastname');
-        });
-
-        await test.step('Return to conversations view', async () => {
-            await app.messageHubController.clickSideBarChatsButton();
+        await test.step('vCard is opened', async () => {
+            await app.conversationListController.clickConversationAvatarByRow(0);
         });
     });
 
-    await test.step('Step 1 - User can add info to vCard', async () => {
-        await test.step('User clicks on avatar on conversation list', async () => {
-            await app.conversationListController.clickOnConversationAvatar(`firstname lastname`);
-        });
-
-        await test.step('vCard is displayed', async () => {
-            await expect(app.vCardController.Pom.FIRST_LAST_NAME).toHaveText(`firstname lastname`);
-            await expect(app.vCardController.Pom.PHONE_NUMBER).toHaveText(phoneNumber);
-            await expect(app.vCardController.Pom.TEXT_ICON).toBeVisible();
-        });
-
-        await test.step('User clicks on the edit button', async () => {
+    await test.step('Step1 - User remove info from external vCard', async () => {
+        await test.step('WHEN - User clicks on the edit button', async () => {
             await app.vCardController.clickOnEditButton();
         });
 
-        await test.step('User info fields are populated', async () => {
-            await expect(app.vCardEditController.Pom.FIELD_FIRST_NAME).toHaveValue(`firstname`);
-            await expect(app.vCardEditController.Pom.FIELD_LAST_NAME).toHaveValue(`lastname`);
-            await expect(app.vCardEditController.Pom.FIELD_COMPANY).toHaveValue(``);
-            await expect(app.vCardEditController.Pom.FIELD_EMAIL).toHaveValue(``);
-            await expect(app.vCardEditController.Pom.FIELD_JOB_TITLE).toHaveValue(``);
+        await test.step('AND - User remove content in all fields', async () => {
+            await app.vCardEditController.fillFirstNameField(``);
+            await app.vCardEditController.fillLastNameField(``);
+            await app.vCardEditController.fillCompanyField(``);
+            await app.vCardEditController.fillEmailField(``);
+            await app.vCardEditController.fillJobTitleField(``);
         });
 
-        await test.step('User fill in the fields', async () => {
+        await test.step('AND - User clicks on the save button', async () => {
+            await app.vCardEditController.clickOnSaveButton();
+        });
+
+        await test.step('THEN - vCard only contain phone number', async () => {
+            await expect(app.vCardController.Pom.FIRST_LAST_NAME).toBeHidden();
+            await expect(app.vCardController.Pom.PHONE_NUMBER).toHaveText('+1 604 261 7168');
+            await expect(app.vCardController.Pom.COMPANY).toBeHidden();
+            await expect(app.vCardController.Pom.EMAIL).toBeHidden();
+            await expect(app.vCardController.Pom.JOB_TITLE).toBeHidden();
+        });
+    });
+
+    await test.step('Step3 - User add info to external vCard', async () => {
+        await test.step('WHEN - User clicks on the edit button', async () => {
+            await app.vCardController.clickOnEditButton();
+        });
+
+        await test.step('AND - User fill in the fields', async () => {
             await app.vCardEditController.fillFirstNameField(`first`);
             await app.vCardEditController.fillLastNameField(`last`);
             await app.vCardEditController.fillCompanyField(`company`);
@@ -81,24 +64,23 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await app.vCardEditController.fillJobTitleField(`jobtitle`);
         });
 
-        await test.step('User clicks on the save button', async () => {
+        await test.step('AND - User clicks on the save button', async () => {
             await app.vCardEditController.clickOnSaveButton();
         });
 
-        await test.step('User info are updated on vCard', async () => {
+        await test.step('THEN - User info are updated on vCard', async () => {
             await expect(app.vCardController.Pom.FIRST_LAST_NAME).toHaveText(`first last`);
-            await expect(app.vCardController.Pom.PHONE_NUMBER).toHaveText(phoneNumber);
+            await expect(app.vCardController.Pom.PHONE_NUMBER).toHaveText(`+1 604 261 7168`);
             await expect(app.vCardController.Pom.COMPANY).toHaveText(`company`);
             await expect(app.vCardController.Pom.EMAIL).toHaveText(`email@email.com`);
             await expect(app.vCardController.Pom.JOB_TITLE).toHaveText(`jobtitle`);
-
             await expect(app.vCardController.Pom.TEXT_ICON).toBeVisible();
             await expect(app.vCardController.Pom.CALL_ICON).toBeVisible();
         });
     });
 
-    await test.step('Step 2 - User can remove info from vCard', async () => {
-        await test.step('User clicks on the edit button', async () => {
+    await test.step('Step4 - User info is displayed in vCard edit view', async () => {
+        await test.step('WHEN - User clicks on the edit button', async () => {
             await app.vCardController.clickOnEditButton();
         });
 
@@ -109,25 +91,5 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await expect(app.vCardEditController.Pom.FIELD_EMAIL).toHaveValue(`email@email.com`);
             await expect(app.vCardEditController.Pom.FIELD_JOB_TITLE).toHaveValue(`jobtitle`);
         });
-
-        await test.step('User remove content in all fields', async () => {
-            await app.vCardEditController.fillFirstNameField(``);
-            await app.vCardEditController.fillLastNameField(``);
-            await app.vCardEditController.fillCompanyField(``);
-            await app.vCardEditController.fillEmailField(``);
-            await app.vCardEditController.fillJobTitleField(``);
-        });
-        await test.step('User clicks on the save button', async () => {
-            await app.vCardEditController.clickOnSaveButton();
-        });
-
-        await test.step('vCard only contain phone number', async () => {
-            await expect(app.vCardController.Pom.FIRST_LAST_NAME).toBeHidden();
-            await expect(app.vCardController.Pom.PHONE_NUMBER).toHaveText(phoneNumber);
-            await expect(app.vCardController.Pom.COMPANY).toBeHidden();
-            await expect(app.vCardController.Pom.EMAIL).toBeHidden();
-            await expect(app.vCardController.Pom.JOB_TITLE).toBeHidden();
-        });
     });
-    Log.starDivider(`END TEST`);
 });
