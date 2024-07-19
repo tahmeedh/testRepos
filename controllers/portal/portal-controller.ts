@@ -17,22 +17,14 @@ export class PortalController {
     async closeEnableDesktopNotification() {
         await test.step('Portal Controller : Click on enable desktop notification close button', async () => {
             Log.info(`Portal Controller: Click on enable desktop notification close button'`);
-            try {
-                await this.Pom.ENABLE_DESKTOP_NOTIFICATION_CLOSE_BUTTON.click();
-            } catch {
-                Log.info('Enable Desktop notification did not appear. Skipping to next step.');
-            }
+            await this.Pom.ENABLE_DESKTOP_NOTIFICATION_CLOSE_BUTTON.click();
         });
     }
 
     async clickCloseSMSEnabledNotification() {
         await test.step('Portal Controller : Click on Close text enabled notification', async () => {
             Log.info(`Portal Controller: Click on Close text enabled notification`);
-            try {
-                await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
-            } catch {
-                Log.info('Enable SMS notification did not appear. Skipping to next step.');
-            }
+            await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
         });
     }
 
@@ -42,11 +34,7 @@ export class PortalController {
             Log.info(
                 `Portal Controller: Close 'View your Global Relay number and set up call-forwarding in your profile.' notification`
             );
-            try {
-                await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
-            } catch {
-                Log.info('GR phone number notification did not appear. Skipping to next step.');
-            }
+            await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
         });
     }
 

@@ -19,13 +19,7 @@ export class NewsAlertController {
             Log.info(
                 `News Alert Controller: Close 'Text messaging is enabled for your account' notification`
             );
-            try {
-                await this.Pom.NEWS_ALERT_NEXT_BUTTON.click();
-            } catch {
-                Log.info(
-                    'Text messaging is enabled for your account notification did not appear. Skipping to next step.'
-                );
-            }
+            await this.Pom.NEWS_ALERT_NEXT_BUTTON.click();
         });
     }
 
@@ -34,13 +28,7 @@ export class NewsAlertController {
             Log.info(
                 `News Alert Controller: Close 'WhatsApp and Text messaging is enabled for your account' notification`
             );
-            try {
-                await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
-            } catch {
-                Log.info(
-                    'WhatsApp and Text messaging is enabled for your account notification did not appear. Skipping to next step.'
-                );
-            }
+            await this.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.click();
         });
     }
 }
