@@ -6,7 +6,7 @@ export class IgnoreErrorUtils {
      * This is useful in scenarios where SMS/WA/Portal/Desktop notification is not displayed consistently.
      * Notes: Wrap the action inside an anonymous function to prevent action from being triggered when passing an action with a parameter.
      * @example
-     * await IgnoreErrorUtils.ignoreError(async function () { await app.portalController.closeEnableDesktopNotification() })
+     * await IgnoreErrorUtils.ignoreError(async () => { await app.portalController.closeEnableDesktopNotification() })
      * @param action The method you want to continue to run when an error occur.
      * @returns Promise <void>
      */
