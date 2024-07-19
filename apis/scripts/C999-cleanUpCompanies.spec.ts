@@ -6,13 +6,17 @@ import test from '@playwright/test';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { EnvUtils } from 'Apis/api-helpers/env-utils';
 import { CleanUpUtils } from 'Apis/api-helpers/cleanUp-utils';
+import { GskController } from 'Apis/gas/gsk-controller';
+import { CsrfController } from 'Apis/mds/csrf-controller';
 
 test('C999', async () => {
     Log.info(`===================== START: Running company cleanup script =====================`);
     test.setTimeout(0);
     try {
         const stringToSearch = 'zebra-';
-        const { SM_THRIFT_HOST, SM_THRIFT_PORT } = EnvUtils.getEndPoints();
+        const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
+        const { SM_THRIFT_HOST, SM_THRIFT_PORT, MDS_ENDPOINT, GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL } =
+            EnvUtils.getEndPoints();
 
         //check string query is not empty
         if (!stringToSearch) {
@@ -38,12 +42,22 @@ test('C999', async () => {
         });
 
         // delete all companies in list
-        Log.highlight(`Deleteing the following companies: ${listOfCompanyIds}`);
+        Log.highlight(`Deleting the following companies: ${listOfCompanyIds}`);
         const deletedCompanies = [];
         const ignoredCompanies = [];
+
+        const gskToken = await GskController.getGskToken(
+            ADMIN_USERNAME,
+            ADMIN_PASSWORD,
+            GAS_LOGIN_ENDPOINT,
+            GAS_SERVICE_URL
+        );
+
+        const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
+
         for (const companyId of listOfCompanyIds) {
             try {
-                await CleanUpUtils.releaseAllPhoneNumbersFromCompany(companyId);
+                await CleanUpUtils.releaseAllPhoneNumbersFromCompany(companyId, gskToken, csrfToken);
                 await platformController.deleteCompany(companyId);
                 deletedCompanies.push(companyId);
             } catch (e) {

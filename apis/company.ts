@@ -10,7 +10,6 @@ import { Log } from './api-helpers/log-utils';
 import { MessageController } from './sm/message/message-controller';
 import 'dotenv/config';
 import { EndpointsType, EnvUtils } from './api-helpers/env-utils';
-import { CleanUpUtils } from './api-helpers/cleanUp-utils';
 
 export interface CompanyType {
     smClient: SMClient;
@@ -148,13 +147,5 @@ export class Company {
             }
         }
         await Promise.all(arrayOfPromises);
-    }
-
-    async teardown() {
-        Log.info(`===================== START: Tearing down company =====================`);
-        const { companyId } = this.companyInfo;
-        await CleanUpUtils.releaseAllPhoneNumbersFromCompany(companyId);
-        await this.deleteCompany();
-        Log.info('===================== END: Tear down completed =====================');
     }
 }
