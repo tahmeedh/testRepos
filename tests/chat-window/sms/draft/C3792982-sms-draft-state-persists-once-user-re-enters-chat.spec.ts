@@ -20,7 +20,7 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
             await app.portalController.closeEnableDesktopNotification();
         });
 
-        await test.step(`User is in SMS feed view`, async () => {
+        await test.step(`User is in feed view`, async () => {
             await app.conversationListController.clickOnConversationName(CONVERSATION_NAME);
         });
 
@@ -28,7 +28,7 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
             await app.chatController.typeContent(INPUT_CONTENT);
             await expect(
                 app.chatController.Pom.CHAT_INPUT_DRAFT_EDITOR,
-                `Chat input has text 'text message 1234'`
+                `Chat input has text '${CONVERSATION_NAME}'`
             ).toHaveText(INPUT_CONTENT);
         });
 
@@ -46,7 +46,7 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
     await test.step(`THEN`, async () => {
         await expect(
             app.chatController.Pom.CHAT_INPUT_DRAFT_EDITOR,
-            `Chat input has text 'text message 1234'`
+            `Chat input has text '${CONVERSATION_NAME}'`
         ).toHaveText(INPUT_CONTENT);
     });
 });
