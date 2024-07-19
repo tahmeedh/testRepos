@@ -7,7 +7,7 @@ export class IgnoreErrorUtils {
      * Notes: Wrap the action inside an anonymous function to prevent action from being triggered when passing an action with a parameter.
      * @example
      * await IgnoreErrorUtils.ignoreError(async () => { await app.portalController.closeEnableDesktopNotification() })
-     * @param action The method you want to continue to run when an error occur.
+     * @param action The action you want to ignore and continue if an error occurs.
      * @returns Promise <void>
      */
     static ignoreError(action: () => Promise<void>) {
