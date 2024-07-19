@@ -23,4 +23,15 @@ export class ContactListController {
                 .click();
         });
     }
+
+    async clickContactRowAvatarByPhoneNumber(phoneNumber: string) {
+        await test.step(`Contact list Controller: Click on the first row with phone number'${phoneNumber}'`, async () => {
+            Log.info(`Contact list Controller: Click on first row with phone number '${phoneNumber}'`);
+            await this.Pom.CONTACT_ROW.getByText(phoneNumber)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .click();
+        });
+    }
 }

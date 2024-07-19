@@ -1,53 +1,52 @@
-import { expect, test, chromium } from '@playwright/test';
-import { Company } from 'Apis/company';
-import { StringUtils } from 'helper/string-utils';
+import { test, expect } from '@playwright/test';
 import { TestUtils } from 'helper/test-utils';
+import { users } from 'Constants/users';
 import { BaseController } from 'Controllers/base-controller';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
-let browser = null;
-let context1 = null;
-let app = null;
-let company: Company;
-let user1 = null;
-let user2 = null;
 
-test.beforeEach(async () => {
-    browser = await chromium.launch();
-    company = await Company.createCompany();
-    user1 = await company.createUser();
-    user2 = await company.createUser();
-    await company.addUserToEachOthersRoster([user1, user2]);
-});
+const USER1 = users.DARFT_1;
+const CONVERSATION_NAME = 'draft-restricted-channel';
+const INPUT_CONTENT = 'test message 1234';
 
-test(`${testName} ${testTags}`, async () => {
+test(`${testName} ${testTags} @static`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
-    // user1 login
-    context1 = await browser.newContext();
-    const page1 = await context1.newPage();
-    app = new BaseController(page1);
-    await app.goToLoginPage();
-    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
+    const app = new BaseController(page);
 
-    // user create channel
-    await app.startChatButtonController.ClickOnStartChannel();
-    const title = StringUtils.generateString(3, 5);
-    await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
-    await app.createChatController.fillOutWhoCanPostForm();
-    await app.createChatController.fillOutWhoCanJoinForm(
-        'restricted',
-        [],
-        [`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]
-    );
-    await app.createChatController.CreateChannel();
+    await test.step(`GIVEN`, async () => {
+        await test.step(`User is logged in`, async () => {
+            await app.goToLoginPage();
+            await app.loginController.loginToPortal(USER1.EMAIL, USER1.PASSWORD);
+            await app.portalController.closeEnableDesktopNotification();
+        });
 
-    const draftText = StringUtils.generateString();
-    await app.chatController.sendContent();
-    await app.chatController.typeContent(draftText);
-    await app.messageHubController.clickSideBarChatsButton();
+        await test.step(`User is in feed view`, async () => {
+            await app.conversationListController.clickOnConversationName(CONVERSATION_NAME);
+        });
 
-    await app.messageHubController.clickMessageHubRow(title);
-    const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
-    await expect(secondaryLine).toHaveText(draftText);
+        await test.step(`User type in chat input`, async () => {
+            await app.chatController.typeContent(INPUT_CONTENT);
+            await expect(
+                app.chatController.Pom.CHAT_INPUT_DRAFT_EDITOR,
+                `Chat input has text '${CONVERSATION_NAME}'`
+            ).toHaveText(INPUT_CONTENT);
+        });
+
+        await test.step(`User navigate away from conversation`, async () => {
+            await app.navigationController.clickSideBarChatsButton();
+        });
+    });
+
+    await test.step(`WHEN`, async () => {
+        await test.step(`User re-open conversation`, async () => {
+            await app.conversationListController.clickOnConversationName(CONVERSATION_NAME);
+        });
+    });
+
+    await test.step(`THEN`, async () => {
+        await expect(
+            app.chatController.Pom.CHAT_INPUT_DRAFT_EDITOR,
+            `Chat input has text '${CONVERSATION_NAME}'`
+        ).toHaveText(INPUT_CONTENT);
+    });
 });
