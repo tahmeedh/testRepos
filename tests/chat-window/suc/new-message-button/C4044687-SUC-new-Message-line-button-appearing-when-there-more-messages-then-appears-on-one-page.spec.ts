@@ -1,90 +1,85 @@
-import { test, expect, chromium } from '@playwright/test';
-import { Company } from 'Apis/company';
-import { StringUtils } from 'helper/string-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
+import { test, expect, BrowserContext } from '@playwright/test';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../../controllers/base-controller';
+import { BaseController } from 'Controllers/base-controller';
+import { users } from 'Constants/users';
+import { StringUtils } from 'helper/string-utils';
 
-const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
-let browser = null;
-let context1 = null;
-let app = null;
-let context2 = null;
-let app1 = null;
+const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
+const user1 = users.NEWMESSAGE_1;
+const user2 = users.NEWMESSAGE_2;
 
-let company: Company;
-let user1 = null;
-let user2 = null;
-
-test.beforeEach(async () => {
-    browser = await chromium.launch();
-    company = await Company.createCompany();
-    user1 = await company.createUser();
-    user2 = await company.createUser();
-    await company.addUserToEachOthersRoster([user1, user2]);
-});
-
-test(`${testName} ${testTags}`, async () => {
+test(`${testName} ${testTags} @static`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
-    Log.starDivider(
-        `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
-    );
+    let browser1: BrowserContext;
+    let browser2: BrowserContext;
+    let app1: BaseController;
+    let app2: BaseController;
 
-    context1 = await browser.newContext();
-    const page1 = await context1.newPage();
-    app = new BaseController(page1);
-    await app.goToLoginPage();
-    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
+    await test.step(`GIVEN`, async () => {
+        await test.step(`Open browsers`, async () => {
+            browser1 = await browser.newContext();
+            const user1Page = await browser1.newPage();
+            app1 = new BaseController(user1Page);
 
-    Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartOneToOne();
-    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
-    await app.createChatController.CreateSUC(user2fullName);
+            browser2 = await browser.newContext();
+            const user2Page = await browser2.newPage();
+            app2 = new BaseController(user2Page);
+        });
 
-    const randomContent = StringUtils.generateString();
-    await app.chatController.sendContent(randomContent);
+        await test.step(`Users Login`, async () => {
+            return Promise.all([
+                test.step(`User1 is logged in`, async () => {
+                    await expect(async () => {
+                        await browser1.clearCookies();
+                        await app1.goToLoginPage();
+                        await app1.loginController.loginToPortal(user1.EMAIL, user1.PASSWORD);
+                        await expect(
+                            app1.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
+                        ).toHaveText('No channels');
+                    }).toPass();
+                }),
+                test.step(`User2 is logged in`, async () => {
+                    await expect(async () => {
+                        await browser2.clearCookies();
+                        await app2.goToLoginPage();
+                        await app2.loginController.loginToPortal(user2.EMAIL, user2.PASSWORD);
+                        await expect(
+                            app2.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
+                        ).toHaveText('No channels');
+                    }).toPass();
+                })
+            ]);
+        });
 
-    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    context2 = await browser.newContext();
-    const page2 = await context2.newPage();
-    app1 = new BaseController(page2);
-    await app1.goToLoginPage();
-    await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.portalController.closeEnableDesktopNotification();
+        await test.step(`Close desktop notification`, async () => {
+            await app1.portalController.closeEnableDesktopNotification();
+            await app2.portalController.closeEnableDesktopNotification();
+        });
 
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.startChatButtonController.ClickOnStartOneToOne();
-    await app1.createChatController.CreateSUC(user1.userInfo.lastName);
-    await app1.inviteController.acceptInvite('SUC');
+        await test.step(`User 1 has SUC open and send long content twice`, async () => {
+            await app1.conversationListController.clickOnConversationName('newmessage 2');
+            await app1.chatController.typeContent(StringUtils.repeatString('a', 8192));
+            await app1.chatController.clickSendButton();
+            await app1.chatController.typeContent(StringUtils.repeatString('b', 8192));
+            await app1.chatController.clickSendButton();
+        });
+    });
 
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives message`);
-    const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
-    await expect(messageReceived).toHaveText(randomContent);
+    await test.step(`STEP1. New message button should be visible when user 2 opens conversation`, async () => {
+        await test.step(`WHEN - User 2 opens conversation`, async () => {
+            await app2.conversationListController.clickOnConversationName('newmessage 1');
+        });
+        await test.step(`THEN - New Messages button should be visible`, async () => {
+            await expect(app2.chatController.Pom.NEW_MESSAGE_BUTTON).toBeVisible();
+        });
+    });
 
-    Log.info(
-        `${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event and returns to message hub`
-    );
-    const systemEvent = app1.Pom.CHATIFRAME.getByText('You joined');
-    await expect(systemEvent).toHaveText('You joined');
-    await app1.messageHubController.clickSideBarChatsButton();
-
-    Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends 50 message`);
-    for (let i = 0; i < 50; i++) {
-        app.chatController.sendContent(StringUtils.generateString());
-    }
-
-    Log.info(
-        `${user2.userInfo.firstName} ${user2.userInfo.lastName} returns to chat with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
-    );
-    await app1.startChatButtonController.ClickOnStartOneToOne();
-    await app1.createChatController.CreateSUC(user1.userInfo.lastName);
-
-    Log.info(
-        `${user2.userInfo.firstName} ${user2.userInfo.lastName} clicks new message button and see new message line`
-    );
-    await app1.chatController.clickNewMessagesButton();
-    await expect(app.chatController.Pom.NEW_MESSAGE_LINE).toBeVisible();
-
-    Log.starDivider(`END TEST: Test Execution Commpleted`);
+    await test.step(`STEP2. New message line should be visible when user clicks on New Messages button`, async () => {
+        await test.step(`WHEN - User 2 clicks on New Messages button`, async () => {
+            await app2.chatController.clickNewMessagesButton();
+        });
+        await test.step(`THEN - New message button should be visible`, async () => {
+            await expect(app2.chatController.Pom.NEW_MESSAGE_LINE).toBeVisible();
+        });
+    });
 });

@@ -5,6 +5,11 @@ export class StringUtils {
         return ['604', '778'];
     }
 
+    static repeatString(input: string, times: number) {
+        const result = input.repeat(times);
+        return result;
+    }
+
     static generateString(min = 2, max = 15) {
         return (
             Math.random().toString(36).substring(min, max) + Math.random().toString(36).substring(min, max)
