@@ -6,6 +6,7 @@ import { LOGIN_ENDPOINTS } from 'Constants/login-endpoints';
 import { LoginEndpointUtils } from 'helper/login-endpoint-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { BasePage } from 'Poms/base-page';
+import { IgnoreErrorUtils } from 'helper/ignore-error-utils';
 import { LoginController } from './login/login-controller';
 import { StartChatButtonController } from './message-hub/start-chat-button-controller';
 import { CreateChatController } from './chat-window/create-chat-controller';
@@ -140,7 +141,9 @@ export class BaseController {
         await this.goToLoginPage();
         await this.loginController.loginToPortal(username, password);
         await this.waitForInitialLoad();
-        await this.portalController.closeEnableDesktopNotification();
+        await IgnoreErrorUtils.ignoreError(async () =>
+            this.portalController.closeEnableDesktopNotification()
+        );
     }
 
     /**
