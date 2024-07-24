@@ -38,6 +38,10 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
             await app.chatController.selectFromChatBubbleMenu('Copy to Share');
         });
 
+        await test.step(`File is displayed in feed view only once`, async () => {
+            await expect(app.chatController.Pom.ALL_CONTENT.getByText(CAPTION1)).toHaveCount(1);
+        });
+
         await test.step(`User focus on chat input`, async () => {
             await app.chatController.clickChatInput();
         });

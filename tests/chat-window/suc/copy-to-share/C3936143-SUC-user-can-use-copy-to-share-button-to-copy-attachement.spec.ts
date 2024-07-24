@@ -32,6 +32,10 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
             await app.previewAttachmentController.clickSendButton();
         });
 
+        await test.step(`File is displayed in feed view only once`, async () => {
+            await expect(app.chatController.Pom.ALL_CONTENT.getByText(CAPTION1)).toHaveCount(1);
+        });
+
         await test.step(`User clicks on 'Copy to share' option`, async () => {
             await app.chatController.hoverOverMessageRow(CAPTION1);
             await app.chatController.clickOnChatBubbleMenu();
