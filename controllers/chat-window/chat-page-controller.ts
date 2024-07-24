@@ -262,4 +262,11 @@ export class ChatController {
             await this.Pom.NEW_MESSAGE_BUTTON.click();
         });
     }
+
+    async clickThumbnailByRow(rowNumber: number) {
+        await test.step(`Chat Controller: Click thumbnail in row numebr ${rowNumber}`, async () => {
+            Log.info(`Chat Controller: Click new message button`);
+            await this.Pom.IMAGE_THUMBNAIL.nth(rowNumber).click();
+        });
+    }
 }

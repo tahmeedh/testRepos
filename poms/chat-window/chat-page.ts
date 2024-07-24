@@ -60,6 +60,7 @@ export class ChatPage extends BasePage {
     readonly GROUP_TEXT_NAME: Locator;
     readonly GROUP_TEXT_PARTICIPANTS: Locator;
     readonly NEW_MESSAGE_BUTTON: Locator;
+    readonly IMAGE_THUMBNAIL: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -134,5 +135,6 @@ export class ChatPage extends BasePage {
         this.GROUP_TEXT_NAME = this.CHATIFRAME.locator('.m-auto-group-text-name');
         this.GROUP_TEXT_PARTICIPANTS = this.CHATIFRAME.locator('.m-auto-group-text-participants');
         this.NEW_MESSAGE_BUTTON = this.CHATIFRAME.getByRole('button', { name: 'New Messages' });
+        this.IMAGE_THUMBNAIL = this.CHATIFRAME.locator('.m-auto-thumbnail');
     }
 }
