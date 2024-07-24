@@ -41,13 +41,14 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
         await test.step(`User drag thumbnail`, async () => {
             await app.chatController.Pom.VIDEO_THUMBNAIL.nth(-1).hover();
             await app.page.mouse.down();
+            // this double hover is recommended by playwright when using drag and drop for the dragover event https://playwright.dev/docs/input#drag-and-drop
             await app.chatController.Pom.CHAT_INPUT.hover();
             await app.chatController.Pom.CHAT_INPUT.hover();
             await expect(app.chatController.Pom.DROP_ZONE).toBeInViewport();
         });
     });
 
-    await test.step(`STEP1. User can paste copied attachment into chat input`, async () => {
+    await test.step(`STEP1. User can drop attachment into chat input`, async () => {
         await test.step(`WHEN - User drop to release`, async () => {
             await app.page.mouse.up();
         });
