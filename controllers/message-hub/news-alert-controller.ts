@@ -19,7 +19,6 @@ export class NewsAlertController {
             Log.info(
                 `News Alert Controller: Close 'Text messaging is enabled for your account' notification`
             );
-
             await this.Pom.NEWS_ALERT_NEXT_BUTTON.click();
         });
     }

@@ -115,6 +115,21 @@ export const users = {
         PASSWORD: 'Password2@',
         NOTES: 'READ ONLY'
     },
+    NEWMESSAGE_1: {
+        EMAIL: 'newmessage1@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
+    },
+    NEWMESSAGE_2: {
+        EMAIL: 'newmessage2@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
+    },
+    DARFT_1: {
+        EMAIL: 'draft1@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
+    },
     COPY_TO_SHARE_1: {
         EMAIL: 'copytoshare1@vegastatic.com',
         PASSWORD: 'Password2@',
