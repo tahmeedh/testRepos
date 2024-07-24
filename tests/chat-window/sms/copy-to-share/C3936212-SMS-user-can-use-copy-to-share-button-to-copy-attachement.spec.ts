@@ -12,7 +12,7 @@ const CAPTION1 = StringUtils.generateString();
 const CAPTION2 = StringUtils.generateString();
 
 //unskip when GRCP 13 flag is off
-test(`${testName} ${testTags} @static`, async ({ page }) => {
+test.skip(`${testName} ${testTags} @static`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
 
