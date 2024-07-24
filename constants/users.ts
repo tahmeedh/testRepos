@@ -114,5 +114,10 @@ export const users = {
         EMAIL: 'vCard2@vegastatic.com',
         PASSWORD: 'Password2@',
         NOTES: 'READ ONLY'
+    },
+    COPY_TO_SHARE_1: {
+        EMAIL: 'copytoshare1@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
     }
 };
