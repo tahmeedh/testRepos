@@ -61,6 +61,9 @@ export class ChatPage extends BasePage {
     readonly GROUP_TEXT_PARTICIPANTS: Locator;
     readonly NEW_MESSAGE_BUTTON: Locator;
     readonly IMAGE_THUMBNAIL: Locator;
+    readonly VIDEO_THUMBNAIL: Locator;
+    readonly DROP_ZONE: Locator;
+    readonly LOAD_SPINNER: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -136,5 +139,8 @@ export class ChatPage extends BasePage {
         this.GROUP_TEXT_PARTICIPANTS = this.CHATIFRAME.locator('.m-auto-group-text-participants');
         this.NEW_MESSAGE_BUTTON = this.CHATIFRAME.getByRole('button', { name: 'New Messages' });
         this.IMAGE_THUMBNAIL = this.CHATIFRAME.locator('.m-auto-thumbnail');
+        this.VIDEO_THUMBNAIL = this.CHATIFRAME.locator('.m-auto-video');
+        this.LOAD_SPINNER = this.CHATIFRAME.getByTestId('loading');
+        this.DROP_ZONE = this.CHATIFRAME.getByTestId('drop-zone');
     }
 }

@@ -269,4 +269,11 @@ export class ChatController {
             await this.Pom.IMAGE_THUMBNAIL.nth(rowNumber).click();
         });
     }
+
+    async clickVideoThumbnailByRow(rowNumber: number) {
+        await test.step(`Chat Controller: Click thumbnail in row number ${rowNumber}`, async () => {
+            Log.info(`Chat Controller: Click thumbnail in row number`);
+            await this.Pom.VIDEO_THUMBNAIL.nth(rowNumber).click();
+        });
+    }
 }
