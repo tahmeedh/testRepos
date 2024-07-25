@@ -7,7 +7,7 @@ def buildImageVersion = '0.0.5-beta'
 def buildImage = "docker-repo.globalrelay.net/test-automation/va-test-image:${buildImageVersion}"
 def buildNode = 'linux'
 def targetEnv = 'cpqa2-va1'
-def testCommand = 'npx playwright test -g @message-hub'
+def testCommand = 'npx playwright test -g @chat-window'
 
 pipeline {
     agent {
