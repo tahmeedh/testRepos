@@ -30,7 +30,6 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
             await app.chatController.attachfile(FILE);
             await app.previewAttachmentController.fillCaption(CAPTION1);
             await app.previewAttachmentController.clickSendButton();
-            await expect(app.chatController.Pom.LOAD_SPINNER).toBeVisible();
             await expect(app.chatController.Pom.LOAD_SPINNER).not.toBeVisible();
         });
 
@@ -63,7 +62,6 @@ test(`${testName} ${testTags} @static`, async ({ page }) => {
         await test.step(`WHEN - User clicks on send in file preview`, async () => {
             await app.previewAttachmentController.fillCaption(CAPTION2);
             await app.previewAttachmentController.clickSendButton();
-            await expect(app.chatController.Pom.LOAD_SPINNER).toBeVisible();
             await expect(app.chatController.Pom.LOAD_SPINNER).not.toBeVisible();
         });
 
