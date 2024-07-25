@@ -1,4 +1,4 @@
-def email_recipients = 'jason.chih@globalrelay.net'
+def email_recipients = 'sam.leung@globalrelay.net'
 def nodeVersion = 'v18.17.0'
 def buildsToKeep = 20
 def timeOutTime = 40
