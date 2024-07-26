@@ -106,6 +106,7 @@ pipeline {
                                 currentBuild.displayName = "#${buildNumber} Target Env.: ${targetEnv} "
 
                                 echo 'Publishing Allure reports'
+                                ls
                                 allure commandline: 'Allure-2.12.1', includeProperties: true, jdk: '', properties: [[key: 'allure.tests.management.pattern', value: 'https://testrail.globalrelay.net/index.php?/cases/view/%s'], [key: 'allure.issues.tracker.pattern', value: 'https://jira.globalrelay.net/browse/%s']], results: [[path: 'jsat-e2e-chat-window/allure-results']]
                         }
                     }
