@@ -82,7 +82,7 @@ pipeline {
                         ${NVM_BIN}/$testCommand| tee playwright_tests.log
                         echo "Playwright test command exit code is [$?]"
                         set -e
-                        grep "Running [0-9]* test. using [0-9]* worker" playwright_tests.log
+                        grep "Running [0-9]* test" playwright_tests.log
                         '''
                     }
                     }
