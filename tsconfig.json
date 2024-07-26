@@ -1,8 +1,5 @@
 {
     "compilerOptions": {
-        "lib": [ "es2015", "dom"],
-    // or
-    "downlevelIteration": true,
         "baseUrl": ".", // This must be specified if "paths" is.
         "paths": {
             "Constants/*": [
@@ -24,7 +21,6 @@
                 "apis/*"
             ]
         },
-        "allowJs": true,
     },
     "include": [
         "."

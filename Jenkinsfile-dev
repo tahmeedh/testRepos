@@ -1,9 +1,9 @@
 def email_recipients = 'jeff.jiang@globalrelay.net'
-def nodeVersion = 'v18.17.0'
+def nodeVersion = 'v18.18.0'
 def buildsToKeep = 20
 def timeOutTime = 40
 def buildNumber = env.BUILD_NUMBER.toInteger()
-def buildImageVersion = '0.0.5-beta'
+def buildImageVersion = '1.0.0'
 def buildImage = "docker-repo.globalrelay.net/test-automation/va-test-image:${buildImageVersion}"
 def buildNode = 'linux'
 def targetEnv = ["cpqa2-va1", "cpqa2-pd1", "cpqa2-pd2", "cpqa2-ca1", "cpqa2-sq1", "cpqa2", "cpqa1"]
