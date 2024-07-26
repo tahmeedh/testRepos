@@ -1,7 +1,6 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from '../../../../controllers/base-controller';
 
@@ -9,8 +8,6 @@ const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestIn
 let browser = null;
 let context1 = null;
 let app = null;
-let context2 = null;
-let app1 = null;
 let title = null;
 
 let company: Company;
@@ -50,36 +47,27 @@ test(`${testName} ${testTags}`, async () => {
         await app.chatController.sendContent(randomContent);
     });
 
-    await test.step('Click favourite button and return from chatlist ', async () => {
+    await test.step('Step 1 WHEN - Click favourite button and return to chatlist ', async () => {
         await app.chatController.clickChatFavouriteButton();
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
         await app.chatController.clickOnBackButton();
+    });
+
+    await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
         await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
         await app.open(title);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
-        await app1.page.pause();
     });
 
-    Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    context2 = await browser.newContext();
-    const page2 = await context2.newPage();
-    app1 = new BaseController(page2);
-    await app1.goToLoginPage();
-    await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
-    await app1.portalController.closeEnableDesktopNotification();
+    await test.step('Step 2 WHEN - Click favourite button and return to chatlist ', async () => {
+        await app.chatController.clickChatFavouriteButton();
+        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).not.toBeVisible();
+        await app.chatController.clickOnBackButton();
+    });
 
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.open(title);
-    await app1.page.pause();
-    await app1.inviteController.acceptInvite('MUC');
-
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives message`);
-    const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);
-    await expect(messageReceived).toHaveText(randomContent);
-
-    Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives system event`);
-    const systemEvent = app1.Pom.CHATIFRAME.getByText('You joined');
-    await expect(systemEvent).toHaveText('You joined');
-
-    Log.starDivider(`END TEST: Test Execution Commpleted`);
+    await test.step('step 2 THEN - favourite icon not visible and return to conversation and favourite icon not visible ', async () => {
+        await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
+        await app.open(title);
+        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).not.toBeVisible();
+    });
 });

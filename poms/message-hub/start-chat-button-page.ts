@@ -20,7 +20,7 @@ export class StartChatButtonPage extends BasePage {
         this.START_CHAT_DROPDOWN = this.MESSAGEIFRAME.locator('.m-auto-start-chat-menu-dropdown');
         this.START_ONE_ON_ONE = this.MESSAGEIFRAME.locator('.m-auto-start-one-to-one-chat');
         this.START_MUC = this.MESSAGEIFRAME.locator('.m-auto-start-muc-chat');
-        this.START_SMS = this.MESSAGEIFRAME.getByTestId('m-auto-start-sms-chat');
+        this.START_SMS = this.MESSAGEIFRAME.locator('.m-auto-start-sms-chat');
         this.START_WHATSAPP = this.MESSAGEIFRAME.locator('.m-auto-start-whatsapp-chat');
         this.START_CHANNEL = this.MESSAGEIFRAME.locator('.m-auto-start-channel-chat');
     }
