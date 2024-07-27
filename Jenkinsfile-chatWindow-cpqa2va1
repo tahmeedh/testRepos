@@ -73,7 +73,6 @@ pipeline {
                         echo "NVM_BIN is set to [$NVM_BIN]"
                         echo "Test command is set to [$testCommand]"
                         cd ./jsat-e2e-chat-window
-                        git checkout 'VA-7452-update-framework-add-allure-report'
                         npm ci
                         git status
                         echo 'Install playwright'
