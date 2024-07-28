@@ -177,4 +177,13 @@ export class BaseController {
 
         Log.info('Finished waiting for initial load.');
     }
+
+    async enableDebug() {
+        await test.step('Base Controller: Enabling debug mode', async () => {
+            await this.Pom.CHATIFRAME.locator(':root').evaluate(() => {
+                (window as any).gr.config.xdmOutgoing = 1;
+                (window as any).gr.config.xdmIncoming = 1;
+            });
+        });
+    }
 }

@@ -10,6 +10,7 @@ export class AttachmentViewerPage extends BasePage {
     readonly DOWNLOAD_ICON: Locator;
     readonly IMAGE_VIEWER: Locator;
     readonly CAPTION: Locator;
+    readonly PLAY_BUTTON: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -32,5 +33,8 @@ export class AttachmentViewerPage extends BasePage {
             '.m-auto-file-attachment-preview-container .m-auto-file-display-body-image'
         );
         this.CAPTION = this.CHATIFRAME.locator('.m-auto-file-attachment-preview-container .m-auto-caption');
+        this.PLAY_BUTTON = this.CHATIFRAME.locator(
+            '.m-auto-gr-video-player-container .click-to-play-or-pause'
+        );
     }
 }
