@@ -1,6 +1,5 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from '../../../../controllers/base-controller';
 
@@ -40,9 +39,7 @@ test(`${testName} ${testTags}`, async () => {
     await test.step(`Start ${testChatType} chat and send message`, async () => {
         await app.startChatButtonController.ClickOnStartOneToOne();
         await app.createChatController.CreateSUC(user2fullName);
-        const randomContent = StringUtils.generateString();
-        await app.page.pause();
-        await app.chatController.sendContent(randomContent);
+        await app.chatController.sendContent();
     });
 
     await test.step('Step 1 WHEN - Click favourite button and return to chatlist ', async () => {

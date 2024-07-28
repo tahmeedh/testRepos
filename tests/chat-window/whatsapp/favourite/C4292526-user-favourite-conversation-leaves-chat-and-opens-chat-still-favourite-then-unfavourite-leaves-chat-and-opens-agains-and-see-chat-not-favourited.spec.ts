@@ -37,7 +37,6 @@ test(`${testName} ${testTags}`, async () => {
         await app.goToLoginPage();
         await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
         await app.portalController.closeEnableDesktopNotification();
-        await app.page.pause();
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
@@ -58,7 +57,6 @@ test(`${testName} ${testTags}`, async () => {
 
     await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
         await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
-        await app.page.pause();
         await app.conversationListController.clickConversationByRow(0);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
     });

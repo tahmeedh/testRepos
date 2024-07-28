@@ -42,7 +42,6 @@ test(`${testName} ${testTags}`, async () => {
             await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
             await app.portalController.closeEnableDesktopNotification();
             await app.newsAlertController.clickNextSMSEnabledNotification();
-            await app.page.pause();
         });
     });
 
@@ -64,7 +63,6 @@ test(`${testName} ${testTags}`, async () => {
         await app.conversationListController.clickConversationByRow(0);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
     });
-    await app.page.pause();
 
     await test.step('Step 2 WHEN - Click favourite button and return to chatlist ', async () => {
         await app.chatController.clickChatFavouriteButton();
