@@ -56,7 +56,6 @@ test(`${testName} ${testTags}`, async () => {
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.portalController.closeEnableDesktopNotification();
-    await app1.page.pause();
     await app1.open(title);
 
     await app1.inviteController.acceptInvite('MUC');

@@ -1,32 +1,29 @@
 import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { Log } from 'Apis/api-helpers/log-utils';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from 'Controllers/base-controller';
+import { Log } from 'Apis/api-helpers/log-utils';
+import { BaseController } from '../../../../controllers/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
-let app = null;
-
+let app: BaseController;
 let company: Company;
 let user1 = null;
-let user2 = null;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
-    user2 = await company.createUser();
-    await company.addUserToEachOthersRoster([user1, user2]);
 
     await Promise.all([
         user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
         user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
     ]);
 
-    await user1.requestAndAssignTwilioNumber();
+    await user1.requestAndAssignWhatsAppNumber();
 });
+
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
     Log.starDivider(
@@ -37,22 +34,22 @@ test(`${testName} ${testTags}`, async () => {
     app = new BaseController(page1);
 
     await test.step('GIVEN', async () => {
-        await test.step('User is logged in', async () => {
-            await app.goToLoginPage();
-            await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-            await app.portalController.closeEnableDesktopNotification();
-            await app.newsAlertController.clickNextSMSEnabledNotification();
-            await app.page.pause();
-        });
+        await app.goToLoginPage();
+        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+        await app.portalController.closeEnableDesktopNotification();
+        await app.page.pause();
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
-        await app.startChatButtonController.ClickOnStartSMS();
-        await app.createChatController.CreateSMS();
+        await app.startChatButtonController.ClickOnStartWhatsapp();
+        app.createChatController.CreateWhatsapp();
         await app.chatController.skipRecipientInfo();
         await app.chatController.sendContent();
     });
 
+    Log.success(
+        `SUCCESS: ${testChatType} conversation was created with '${testChatType}' number and random text string was '`
+    );
     await test.step('Step 1 WHEN - Click favourite button and return to chatlist ', async () => {
         await app.chatController.clickChatFavouriteButton();
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
@@ -61,10 +58,10 @@ test(`${testName} ${testTags}`, async () => {
 
     await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
         await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+        await app.page.pause();
         await app.conversationListController.clickConversationByRow(0);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
     });
-    await app.page.pause();
 
     await test.step('Step 2 WHEN - Click favourite button and return to chatlist ', async () => {
         await app.chatController.clickChatFavouriteButton();
