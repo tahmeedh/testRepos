@@ -2,7 +2,8 @@ import { test, expect, chromium } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
-import { BaseController } from '../../../../controllers/base-controller';
+import { BaseController } from 'Controllers/base-controller';
+import { User } from 'Apis/user';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
@@ -11,17 +12,15 @@ let app = null;
 let title = null;
 
 let company: Company;
-let user1 = null;
-let user2 = null;
-let user3 = null;
+let user1: User;
+let user2: User;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
-    user3 = await company.createUser();
-    await company.addUserToEachOthersRoster([user1, user2, user3]);
+    await company.addUserToEachOthersRoster([user1, user2]);
 });
 
 test(`${testName} ${testTags}`, async () => {

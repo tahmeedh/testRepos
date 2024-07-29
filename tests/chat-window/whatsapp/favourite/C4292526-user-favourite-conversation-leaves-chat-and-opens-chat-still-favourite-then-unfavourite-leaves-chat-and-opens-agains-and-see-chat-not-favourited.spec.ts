@@ -41,7 +41,7 @@ test(`${testName} ${testTags}`, async () => {
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
         await app.startChatButtonController.ClickOnStartWhatsapp();
-        app.createChatController.CreateWhatsapp();
+        await app.createChatController.CreateWhatsapp();
         await app.chatController.skipRecipientInfo();
         await app.chatController.sendContent();
     });
