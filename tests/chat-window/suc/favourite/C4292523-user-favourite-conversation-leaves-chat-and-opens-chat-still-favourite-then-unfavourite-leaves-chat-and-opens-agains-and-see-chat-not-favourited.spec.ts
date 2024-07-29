@@ -1,16 +1,16 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect, chromium, Browser, BrowserContext } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
+import { User } from 'Apis/user';
 import { BaseController } from '../../../../controllers/base-controller';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
-let browser = null;
-let context1 = null;
-let app = null;
-
+let browser: Browser;
+let context1: BrowserContext;
+let app: BaseController;
 let company: Company;
-let user1 = null;
-let user2 = null;
+let user1: User;
+let user2: User;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();

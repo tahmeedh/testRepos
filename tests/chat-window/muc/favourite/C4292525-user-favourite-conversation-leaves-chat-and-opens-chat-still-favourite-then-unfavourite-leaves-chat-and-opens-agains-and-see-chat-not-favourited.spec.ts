@@ -1,4 +1,4 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect, chromium, Browser, BrowserContext } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
@@ -6,9 +6,9 @@ import { BaseController } from 'Controllers/base-controller';
 import { User } from 'Apis/user';
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
-let browser = null;
-let context1 = null;
-let app = null;
+let browser: Browser;
+let context1: BrowserContext;
+let app: BaseController;
 let title = null;
 
 let company: Company;
