@@ -52,7 +52,6 @@ test(`${testName} ${testTags}`, async () => {
     // to verify that favourite icon shows up in the message hub
     await app.chatController.clickOnBackButton();
 
-    await app.page.pause();
     // Verify the flag
     await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);

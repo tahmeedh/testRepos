@@ -60,6 +60,7 @@ export class ChatPage extends BasePage {
     readonly GROUP_TEXT_NAME: Locator;
     readonly GROUP_TEXT_PARTICIPANTS: Locator;
     readonly NEW_MESSAGE_BUTTON: Locator;
+    readonly CHAT_FAVOURITE_BUTTON_FILLED: Locator;
     readonly IMAGE_THUMBNAIL: Locator;
     readonly VIDEO_THUMBNAIL: Locator;
     readonly DROP_ZONE: Locator;
@@ -93,6 +94,7 @@ export class ChatPage extends BasePage {
 
         this.CHAT_BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-back-button-container');
         this.CHAT_FLAG_BUTTON = this.CHATIFRAME.locator('.m-auto-flag-icon');
+        this.CHAT_FAVOURITE_BUTTON_FILLED = this.CHATIFRAME.locator(`[data-id="star-fill"]`);
         this.CHAT_FAVOURITE_BUTTON = this.CHATIFRAME.locator('.m-auto-favourite-icon');
 
         this.INCOMING_PARTIAL = this.CHATIFRAME.locator('.m-auto-chat-bubble-incoming');

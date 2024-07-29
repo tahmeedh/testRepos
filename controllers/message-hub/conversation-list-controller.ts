@@ -46,6 +46,13 @@ export class ConversationListController {
             await this.Pom.CONVERSATION_ROW.locator('.m-auto-avatar-container').nth(rowNumber).click();
         });
     }
+
+    async clickConversationByRow(rowNumber: number) {
+        await test.step(`Conversation List Controller: clicking on avatar of row ${rowNumber}`, async () => {
+            Log.info(`Conversation List Controller: clicking on avatar of row ${rowNumber}`);
+            await this.Pom.CONVERSATION_ROW.nth(rowNumber).click();
+        });
+    }
     async clickOnConversationName(conversationName: string) {
         await test.step(`Conversation List Controller : Click on conversation with name '${conversationName}'`, async () => {
             Log.info(`Conversation List Controller : Click on conversation with name '${conversationName}'`);
