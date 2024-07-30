@@ -63,4 +63,22 @@ export class GrcpController {
         };
         await GrcpBaseController.sendRequest(page, sendContentData);
     }
+
+    /**
+     * Remove users from channel via grcp call.
+     * @param page Page object that contains the message-iframe for use to make the grcp call.
+     * @param conversationId Id of the conversation to mute.
+     * @param grId GrId of the user we want to remove from a channel
+     */
+    static async removeUserFromChannel(page: Page, channelId: string, grId: string) {
+        const data = {
+            channelId,
+            clientRequestId: randomUUID(),
+            msgType: 'channel.ServerGrantChannelRolesMsg',
+            roles: {
+                none: [grId]
+            }
+        };
+        await GrcpBaseController.sendRequest(page, data);
+    }
 }
