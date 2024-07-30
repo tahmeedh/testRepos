@@ -67,7 +67,7 @@ export class GrcpController {
     /**
      * Remove users from channel via grcp call.
      * @param page Page object that contains the message-iframe for use to make the grcp call.
-     * @param conversationId Id of the conversation to mute.
+     * @param channelId Id of the channel.
      * @param grId GrId of the user we want to remove from a channel
      */
     static async removeUserFromChannel(page: Page, channelId: string, grId: string) {
