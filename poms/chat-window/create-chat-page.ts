@@ -38,6 +38,8 @@ export class CreateChatPage extends BasePage {
     readonly JOIN_BUTTON: Locator;
     readonly CANCEL_BUTTON: Locator;
 
+    readonly AVATAR: Locator;
+
     constructor(page: Page) {
         super(page);
 
@@ -85,5 +87,6 @@ export class CreateChatPage extends BasePage {
         this.SELECT_PARTICIPANTS_BUTTON = this.CHATIFRAME.locator('.m-auto-invite-members-button');
 
         this.SELECT_PARTICIPANTS_INPUT = this.CHATIFRAME.getByPlaceholder('Search to select participants');
+        this.AVATAR = this.CHATIFRAME.locator('.m-auto-avatar-container');
     }
 }

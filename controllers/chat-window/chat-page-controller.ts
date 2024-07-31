@@ -174,13 +174,6 @@ export class ChatController {
         });
     }
 
-    async clickInviteParicipantsChannels() {
-        await test.step('Chat Controller: Leave Chat and Naviagate Channel Details then invite particpants', async () => {
-            await this.clickChatHeaderMenu();
-            await this.Pom.DROP_DOWN_VIEW_DETAILS.click();
-        });
-    }
-
     async clickVoiceNotePlayButton() {
         await test.step('Chat Controller: Click voice note play button', async () => {
             await this.Pom.VOICE_NOTE_PLAY_BUTTON.click();
@@ -231,6 +224,7 @@ export class ChatController {
             | 'Hide'
             | 'Mute'
             | 'Unmute'
+            | 'Invite Participants'
     ) {
         await test.step(`Chat Controller - Selecting ${selection} on Chat Header Menu`, async () => {
             Log.info(`Chat Controller - Selecting ${selection} on Chat Header Menu`);

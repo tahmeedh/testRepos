@@ -71,7 +71,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginAndInitialize(user2.userInfo.email, user2.userInfo.password);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.inviteController.acceptInvite('Channel');
 
     await test.step('Reply to the channel by the participant', async () => {
@@ -79,7 +79,7 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     Log.info('Unmute the Channel');
-    await app.open(title);
+    await app.conversationListController.clickOnConversationName(title);
     await app.chatController.unMuteConversation();
     await app.navigationController.clickSideBarChatsButton();
 

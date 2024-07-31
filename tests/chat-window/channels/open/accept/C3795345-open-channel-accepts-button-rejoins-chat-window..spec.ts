@@ -59,17 +59,20 @@ test(`${testName} ${testTags}`, async () => {
     await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.inviteController.acceptInvite('Channel');
 
     const user2Message = await app1.chatController.sendContent();
     await app1.chatController.leaveChat();
 
     Log.info(`Re-invite ${user2.userInfo.firstName} ${user2.userInfo.lastName} to ${testChatType}`);
-    await app.inviteParticipants([`${user2.userInfo.firstName} ${user2.userInfo.lastName}`], 'channel');
+    await app.chatController.clickChatHeaderMenu();
+    await app.chatController.selectFromChatHeaderMenu('View Details');
+    await app.detailsController.clickMemberRolesButton();
+    await app.createChatController.inviteChannels([`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} rejoins channel`);
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.inviteController.acceptInvite('Channel');
 
     Log.info('Chat Window is visible');

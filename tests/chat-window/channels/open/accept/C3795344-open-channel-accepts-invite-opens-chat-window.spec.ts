@@ -59,7 +59,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.inviteController.acceptInvite('Channel');
 
     await expect(app1.chatController.Pom.CHAT_WINDOW).toBeVisible();

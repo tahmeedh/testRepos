@@ -56,7 +56,7 @@ test(`C3868089-sms-updating-the-subject-should-update-the-subject-in-the-convers
         );
 
         const subjectText = StringUtils.generateString();
-        await app.chatController.openChatDetails();
+        await app.chatController.conversationListController.clickOnConversationNameChatDetails();
         await app.detailsController.renameGroupChat(subjectText);
 
         Log.info(`${testChatType} chat expects ${subjectText} string in Group SMS Chat title state`);

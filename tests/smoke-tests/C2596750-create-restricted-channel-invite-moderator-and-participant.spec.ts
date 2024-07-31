@@ -64,7 +64,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.inviteController.acceptInvite('Channel');
 
     // assert receive message
@@ -80,7 +80,7 @@ test(`${testName} ${testTags}`, async () => {
     await app2.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user3.userInfo.firstName} ${user3.userInfo.lastName} declines invite`);
-    await app2.open(title);
+    await app2.conversationListController.clickOnConversationName(title);
     await app2.inviteController.declineInvite('Channel');
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

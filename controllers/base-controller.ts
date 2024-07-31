@@ -75,22 +75,6 @@ export class BaseController {
         this.searchResultController = new SearchResultController(this.page);
     }
 
-    /**
-     * @param {String} title Title of MUC / Channel to be opened
-     */
-    async open(title: string) {
-        await test.step('Base Controller : Open MUC or Channel', async () => {
-            const chat = this.Pom.MESSAGEIFRAME.getByText(title);
-            await chat.click();
-        });
-    }
-
-    async clickAvatar(nth: string) {
-        await test.step('Click avatar in enter v-card', async () => {
-            await this.Pom.AVATAR.nth(parseFloat(nth)).click();
-        });
-    }
-
     async goToLoginPage(envOverride?: string): Promise<void> {
         await test.step('Base Controller : Go to login page', async () => {
             const env = envOverride || process.env.SERVER;
@@ -101,17 +85,6 @@ export class BaseController {
             }
             await this.page.goto(LOGIN_ENDPOINTS[env]);
         });
-    }
-
-    async inviteParticipants(users, type = 'muc') {
-        if (type === 'channel') {
-            await this.chatController.clickInviteParicipantsChannels();
-            await this.detailsController.clickMemberRolesButton();
-            await this.createChatController.inviteChannels(users);
-        } else {
-            await this.chatController.clickInviteParicipants();
-            await this.createChatController.inviteMUC(users);
-        }
     }
 
     async pressKey(keys: string) {
