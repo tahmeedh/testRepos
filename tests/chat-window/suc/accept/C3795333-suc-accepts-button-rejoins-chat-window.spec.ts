@@ -37,7 +37,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('1-1');
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     await app.createChatController.CreateSUC(user2fullName);
 
@@ -53,7 +54,8 @@ test(`${testName} ${testTags}`, async () => {
     await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.startChatButtonController.ClickOnStartOneToOne();
+    await app1.hubHeaderController.clickStartChatButton();
+    await app1.hubHeaderController.selectHeaderMainMenuOption('1-1');
     await app1.createChatController.CreateSUC(user1.userInfo.lastName);
     await app1.inviteController.acceptInvite('SUC');
 
@@ -61,7 +63,8 @@ test(`${testName} ${testTags}`, async () => {
     await app1.chatController.leaveChat();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} rejoins ${testChatType}`);
-    await app1.startChatButtonController.ClickOnStartOneToOne();
+    await app1.hubHeaderController.clickStartChatButton();
+    await app1.hubHeaderController.selectHeaderMainMenuOption('1-1');
     const user1fullName = `${user1.userInfo.firstName} ${user1.userInfo.lastName}`;
     await app1.createChatController.CreateSUC(user1fullName);
     await app1.inviteController.clickJoin();

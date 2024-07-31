@@ -39,7 +39,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartWhatsapp();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('WhatsApp');
     const randonNumber = await app.createChatController.CreateWhatsapp();
     await app.chatController.skipRecipientInfo();
     const draftText = StringUtils.generateString();

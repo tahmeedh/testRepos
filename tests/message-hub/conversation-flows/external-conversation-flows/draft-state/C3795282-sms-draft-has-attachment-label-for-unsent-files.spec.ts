@@ -38,7 +38,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartSMS();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Text');
     const randonNumber = await app.createChatController.CreateSMS();
     await app.chatController.skipRecipientInfo();
     await app.chatController.sendContent();

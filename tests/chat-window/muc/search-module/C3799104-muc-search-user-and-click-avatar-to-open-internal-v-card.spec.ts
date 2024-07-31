@@ -35,7 +35,8 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(
         `Start ${testChatType} chat and search for ${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
-    await app.startChatButtonController.ClickOnStartMUC();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
     await app.createChatController.SearchMucUser(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
 
     Log.info(`click ${user2.userInfo.firstName} ${user2.userInfo.lastName} avatar and expect v-card`);

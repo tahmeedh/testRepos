@@ -48,7 +48,8 @@ test(`${testName} ${testTags}`, async () => {
         });
 
         await test.step('User has existing SMS conversation', async () => {
-            await app.startChatButtonController.ClickOnStartSMS();
+            await app.hubHeaderController.clickStartChatButton();
+            await app.hubHeaderController.selectHeaderMainMenuOption('Text');
             await app.createChatController.CreateSMS();
             await app.chatController.skipRecipientInfo();
             await app.chatController.sendContent();

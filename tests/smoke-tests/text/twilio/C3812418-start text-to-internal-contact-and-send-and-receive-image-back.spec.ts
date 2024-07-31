@@ -48,7 +48,8 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     });
 
     await test.step('User start text message with an internal contact', async () => {
-        await app.startChatButtonController.ClickOnStartSMS();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('Text');
         await app.createChatController.CreateInternalText(user2.userInfo.twilioNumber);
     });
 

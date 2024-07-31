@@ -39,7 +39,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
-        await app.startChatButtonController.ClickOnStartMUC();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
         const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
         title = await app.createChatController.createMUC([user2fullName]);
         const randomContent = StringUtils.generateString();
