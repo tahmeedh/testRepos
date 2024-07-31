@@ -59,6 +59,6 @@ test(`${testName} ${testTags}`, async () => {
     await app1.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app1.createChatController.CreateSUC(user1.userInfo.lastName);
     await app1.chatController.backButton();
-    await expect(app1.Pom.HUB_CONTAINER).toBeVisible();
+    await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

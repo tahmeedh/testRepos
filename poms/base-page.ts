@@ -7,8 +7,6 @@ export class BasePage {
     readonly CHATIFRAME: FrameLocator;
     readonly AVATAR: Locator;
     readonly LOAD_GR_APP_SPINNER: Locator;
-    readonly HUB_CONTAINER: Locator;
-    readonly WELCOME_TEXT: Locator;
 
     /**
      * @param {import('@playwright/test').Page} page
