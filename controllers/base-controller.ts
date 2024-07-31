@@ -18,7 +18,6 @@ import { DetailsController } from './chat-window/details-controller';
 import { VCardEditController } from './chat-window/v-card-edit-controller';
 import 'dotenv/config';
 import { ContactListController } from './message-hub/contact-list-controller';
-import { GlobalSearchController } from './message-hub/global-search-controller';
 import { ConversationListController } from './message-hub/conversation-list-controller';
 import { CompanyVCardController } from './chat-window/company-v-card-controller';
 import { PortalController } from './portal/portal-controller';
@@ -44,7 +43,6 @@ export class BaseController {
     readonly detailsController: DetailsController;
     readonly vCardEditController: VCardEditController;
     readonly contactListController: ContactListController;
-    readonly globalSearchController: GlobalSearchController;
     readonly conversationListController: ConversationListController;
     readonly companyVCardController: CompanyVCardController;
     readonly portalController: PortalController;
@@ -71,7 +69,6 @@ export class BaseController {
         this.detailsController = new DetailsController(this.page);
         this.vCardEditController = new VCardEditController(this.page);
         this.contactListController = new ContactListController(this.page);
-        this.globalSearchController = new GlobalSearchController(this.page);
         this.conversationListController = new ConversationListController(this.page);
         this.companyVCardController = new CompanyVCardController(this.page);
         this.portalController = new PortalController(this.page);

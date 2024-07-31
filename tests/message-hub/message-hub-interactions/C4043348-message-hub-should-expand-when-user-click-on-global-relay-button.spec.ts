@@ -31,7 +31,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     await app.portalController.selectGrDirectoryButton();
 
     await test.step('Verify that Message Hub is in collapsed state', async () => {
-        await expect(app.globalSearchController.Pom.SEARCH_FIELD).not.toBeVisible();
+        await expect(app.hubHeaderController.Pom.SEARCH_FIELD).not.toBeVisible();
         await expect(app.startChatButtonController.Pom.START_CHAT).not.toBeVisible();
     });
 
@@ -39,7 +39,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     await app.portalController.selectGrWorkspaceButton();
 
     test.step('Verify that Message Hub is expanded and welcome text is shown', async () => {
-        await expect(app.globalSearchController.Pom.SEARCH_FIELD).toBeVisible();
+        await expect(app.hubHeaderController.Pom.SEARCH_FIELD).toBeVisible();
         await expect(app.startChatButtonController.Pom.START_CHAT).toBeVisible();
         await expect(app.messageHubController.Pom.WELCOME_TEXT).toBeVisible();
     });
