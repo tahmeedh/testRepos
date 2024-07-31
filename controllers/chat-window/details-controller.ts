@@ -43,5 +43,23 @@ export class DetailsController {
             await this.Pom.CHAT_SUBJECT_SAVE_BUTTON.click();
         });
     }
-    Chat;
+
+    async clickSelectParticipants() {
+        await test.step('Details Controller: Click Select participants button', async () => {
+            await this.Pom.SELECT_PARTICIPANTS.click();
+        });
+    }
+
+    async selectParticipant(userName: string) {
+        await test.step(`Details Controller: Select participants ${userName}`, async () => {
+            await this.Pom.CONTACT_LIST_USER_ROW.getByText(userName).first().click();
+        });
+    }
+
+    async clickFooterButton(buttonText: 'Select' | 'Cancel') {
+        await test.step(`Create Chat Controller: Click on '${buttonText}' button`, async () => {
+            Log.info(`Create Chat Controller: Click on '${buttonText}' button`);
+            await this.Pom.BUTTON.getByText(buttonText).click();
+        });
+    }
 }
