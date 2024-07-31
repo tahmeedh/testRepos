@@ -58,7 +58,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.sendContent();
 
     await app.chatController.muteConversation();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
     await test.step('Verify that Mute icon is shown for muted channel', async () => {
         await expect(app.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();
@@ -81,7 +81,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.info('Unmute the Channel');
     await app.open(title);
     await app.chatController.unMuteConversation();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
     await test.step('Reply to the channel by the participant ', async () => {
         await app1.chatController.sendContent();
@@ -92,7 +92,7 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('Verify that new message should update badge counter on the channel list and Side Bar', async () => {
-        await expect(app.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
+        await expect(app.navigationController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
         await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toBeVisible();
     });
 

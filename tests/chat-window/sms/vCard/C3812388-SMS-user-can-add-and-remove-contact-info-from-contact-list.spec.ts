@@ -21,7 +21,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         });
 
         await test.step('Go to contact list view', async () => {
-            await app.messageHubController.clickSideBarContactsButton();
+            await app.navigationController.clickSideBarContactsButton();
         });
 
         await test.step('vCard is opened', async () => {

@@ -60,7 +60,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
     await appUser1.chatController.unMuteConversation();
-    await appUser1.messageHubController.clickSideBarChatsButton();
+    await appUser1.conversationListController.clickSideBarChatsButton();
 
     // User 2
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
@@ -85,7 +85,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
     });
 
     await test.step('Verify that new message should update badge counter on the conversation list and Side Bar', async () => {
-        await expect(appUser1.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
+        await expect(appUser1.navigationController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
         await expect(appUser1.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toBeVisible();
         await expect(appUser1.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toHaveText('1');
     });

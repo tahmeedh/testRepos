@@ -51,10 +51,12 @@ test(`${testName} ${testTags}`, async () => {
 
     Log.info(`${testChatType} chat expects ${draftText} string in draft state to be removed `);
     await app.chatController.typeContent(draftText);
-    await app.messageHubController.clickSideBarChatsButton();
-    await app.messageHubController.clickMessageHubRow(randonNumber);
+    await app.navigationController.clickSideBarChatsButton();
+
+    await app.conversationListController.clickOnConversationName(randonNumber);
     await app.chatController.removeContent();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
+
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveCount(0);
     Log.starDivider(`END TEST: Test Execution Commpleted`);

@@ -55,7 +55,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
     await app.chatController.muteConversation();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
     await test.step('Verify that Mute icon is shown for muted chat', async () => {
         await expect(app.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();

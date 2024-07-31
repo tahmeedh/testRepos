@@ -56,8 +56,8 @@ test(`${testName} ${testTags}`, async () => {
     await app1.createChatController.CreateSUC(user1.userInfo.lastName);
 
     await app1.chatController.clickChatFlagButton();
-    await app1.messageHubController.clickSideBarChatsButton();
+    await app1.conversationListController.clickSideBarChatsButton();
 
     // Verify the flag
-    await expect(app1.messageHubController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
+    await expect(app1.conversationListController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
 });

@@ -57,7 +57,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends message`);
     await app1.chatController.sendContent();
     await app1.chatController.muteConversation();
-    await app1.messageHubController.clickSideBarChatsButton();
+    await app1.conversationListController.clickSideBarChatsButton();
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await newBrowser.newContext();
@@ -79,7 +79,7 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('Verify that new message should not update badge counter on channel list and Side Bar', async () => {
-        await expect(app1.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
+        await expect(app1.navigationController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
         await expect(app1.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).not.toBeVisible();
     });
 

@@ -56,7 +56,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
     await appUser1.chatController.muteConversation();
-    await appUser1.messageHubController.clickSideBarChatsButton();
+    await appUser1.conversationListController.clickSideBarChatsButton();
     await expect(appUser1.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();
 
     // User 2
@@ -85,7 +85,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
     });
 
     await test.step('Verify that new message should not update badge counter on channel list and Side Bar', async () => {
-        await expect(appUser1.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
+        await expect(appUser1.navigationController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
         await expect(appUser1.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).not.toBeVisible();
     });
 
