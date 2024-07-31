@@ -49,7 +49,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('User start a text Message', async () => {
-        await app.startChatButtonController.ClickOnStartSMS();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('Text');
         randomNumber = await app.createChatController.CreateSMS();
         await app.chatController.skipRecipientInfo();
     });

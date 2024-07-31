@@ -8,7 +8,6 @@ import { Log } from 'Apis/api-helpers/log-utils';
 import { BasePage } from 'Poms/base-page';
 import { IgnoreErrorUtils } from 'helper/ignore-error-utils';
 import { LoginController } from './login/login-controller';
-import { StartChatButtonController } from './message-hub/start-chat-button-controller';
 import { CreateChatController } from './chat-window/create-chat-controller';
 import { ChatController } from './chat-window/chat-page-controller';
 import { InviteController } from './chat-window/invite-controller';
@@ -32,7 +31,6 @@ export class BaseController {
     readonly page: Page;
     readonly Pom: BasePage;
     readonly loginController: LoginController;
-    readonly startChatButtonController: StartChatButtonController;
     readonly createChatController: CreateChatController;
     readonly chatController: ChatController;
     readonly previewAttachmentController: PreviewAttachmentController;
@@ -58,7 +56,6 @@ export class BaseController {
         this.page = page;
         this.Pom = new BasePage(this.page);
         this.loginController = new LoginController(this.page);
-        this.startChatButtonController = new StartChatButtonController(this.page);
         this.createChatController = new CreateChatController(this.page);
         this.chatController = new ChatController(this.page);
         this.previewAttachmentController = new PreviewAttachmentController(this.page);

@@ -86,7 +86,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
 
         await test.step('THEN', async () => {
             await expect(
-                app.startChatButtonController.Pom.START_CHAT,
+                app.hubHeaderController.Pom.START_CHAT,
                 'message hub start chat button is visible'
             ).toBeVisible();
         });

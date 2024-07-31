@@ -37,7 +37,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     // user start 1-1
-    await app.startChatButtonController.ClickOnStartSMS();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Text');
     await app.chatController.skipRecipientInfo();
 
     // user send message in conversation

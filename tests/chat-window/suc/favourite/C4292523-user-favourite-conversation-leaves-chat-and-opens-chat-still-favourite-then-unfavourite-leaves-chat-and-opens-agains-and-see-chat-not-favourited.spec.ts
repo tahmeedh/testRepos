@@ -37,7 +37,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
-        await app.startChatButtonController.ClickOnStartOneToOne();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
         await app.createChatController.CreateSUC(user2fullName);
         await app.chatController.sendContent();
     });

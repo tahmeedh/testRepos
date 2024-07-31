@@ -44,7 +44,8 @@ test(`C3868089-sms-updating-the-subject-should-update-the-subject-in-the-convers
         await app.portalController.closeEnableDesktopNotification();
 
         Log.info(`Start ${testChatType} chat and send message`);
-        await app.startChatButtonController.ClickOnStartSMS();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('Text');
 
         const randonNumbers = [StringUtils.generatePhoneNumber(), StringUtils.generatePhoneNumber()];
 

@@ -35,7 +35,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     await app.chatController.sendContent();
     const draftText = StringUtils.generateString();

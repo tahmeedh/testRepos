@@ -41,7 +41,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
     await app.portalController.closeEnableDesktopNotification();
 
-    await app.startChatButtonController.ClickOnStartMUC();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
     const title = StringUtils.generateString(3, 5);
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
