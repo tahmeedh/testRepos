@@ -60,7 +60,7 @@ test(`C3868089-sms-updating-the-subject-should-update-the-subject-in-the-convers
         await app.detailsController.renameGroupChat(subjectText);
 
         Log.info(`${testChatType} chat expects ${subjectText} string in Group SMS Chat title state`);
-        await app.messageHubController.clickSideBarChatsButton();
+        await app.navigationController.clickSideBarChatsButton();
         const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(subjectText);
         await expect(secondaryLine).toHaveText(subjectText);
         Log.starDivider(`END TEST: Test Execution Commpleted`);

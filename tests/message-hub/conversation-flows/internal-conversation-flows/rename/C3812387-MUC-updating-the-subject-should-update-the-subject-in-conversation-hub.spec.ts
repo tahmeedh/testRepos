@@ -52,7 +52,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.detailsController.renameMUC(subjectText);
 
     Log.info(`${testChatType} chat expects ${subjectText} string in Chat title state `);
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
+
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(subjectText);
     await expect(secondaryLine).toHaveText(subjectText);
     Log.starDivider(`END TEST: Test Execution Commpleted`);

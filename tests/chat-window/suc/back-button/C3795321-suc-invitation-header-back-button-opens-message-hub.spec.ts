@@ -56,7 +56,7 @@ test(`${testName} ${testTags}`, async () => {
         `${user2.userInfo.firstName} ${user2.userInfo.lastName} goes to invite screen and back to message hub`
     );
     await app1.hubHeaderController.clickStartChatButton();
-    await app1.hubHeaderController.selectHeaderMainMenuOption('1-1');
+    await app1.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app1.createChatController.CreateSUC(user1.userInfo.lastName);
     await app1.chatController.backButton();
     await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();

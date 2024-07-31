@@ -59,9 +59,9 @@ test(`${testName} ${testTags}`, async () => {
     await app1.createChatController.CreateSUC(user1.userInfo.lastName);
 
     await app1.chatController.clickChatFavouriteButton();
-    await app1.messageHubController.clickSideBarChatsButton();
+    await app1.navigationController.clickSideBarChatsButton();
 
     // Verify the favourite star
-    await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+    await expect(app1.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

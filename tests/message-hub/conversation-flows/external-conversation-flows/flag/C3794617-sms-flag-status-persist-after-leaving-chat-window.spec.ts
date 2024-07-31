@@ -51,5 +51,5 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.clickOnBackButton();
 
     // Verify the flag
-    await expect(app.messageHubController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
+    await expect(app.conversationListController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
 });

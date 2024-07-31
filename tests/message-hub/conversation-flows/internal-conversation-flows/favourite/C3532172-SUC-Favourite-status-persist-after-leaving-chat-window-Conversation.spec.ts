@@ -65,6 +65,6 @@ test(`${testName} ${testTags}`, async () => {
     await app1.chatController.clickOnBackButton();
 
     // Verify the flag
-    await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+    await expect(app1.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

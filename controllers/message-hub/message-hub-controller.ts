@@ -12,17 +12,4 @@ export class MessageHubController {
         this.page = page;
         this.Pom = new MessageHubPage(this.page);
     }
-
-    async clickSideBarChatsButton() {
-        await this.Pom.CHATS_BUTTON.click();
-    }
-
-    async clickSideBarContactsButton() {
-        await this.Pom.CONTACTS_BUTTON.click();
-    }
-
-    async clickMessageHubRow(chatName) {
-        const ClickName = this.Pom.CHAT_NAME.getByText(chatName).click();
-        return ClickName;
-    }
 }

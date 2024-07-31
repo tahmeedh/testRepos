@@ -46,10 +46,10 @@ test(`${testName} ${testTags}`, async () => {
     const PNG = './asset/download.png';
     await app.chatController.waitForHeader();
     await app.previewAttachmentController.attachFile(PNG);
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
-    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+    expect(app.conversationListController.Pom.DRAFT_TEXT_LINE).toBeVisible();
+    expect(app.conversationListController.Pom.ATTACHMENT_ICON).toBeVisible();
+    expect(app.conversationListController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

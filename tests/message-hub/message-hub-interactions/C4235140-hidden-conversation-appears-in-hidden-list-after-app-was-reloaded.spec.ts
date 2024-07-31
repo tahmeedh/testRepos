@@ -50,7 +50,7 @@ test(`${testName} ${testTags}`, async () => {
     );
 
     await app.chatController.hideChat();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
     await app.page.reload();
     await app.portalController.closeEnableDesktopNotification();
