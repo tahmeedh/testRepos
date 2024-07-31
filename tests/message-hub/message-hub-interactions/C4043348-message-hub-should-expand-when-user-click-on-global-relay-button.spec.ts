@@ -41,7 +41,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     test.step('Verify that Message Hub is expanded and welcome text is shown', async () => {
         await expect(app.hubHeaderController.Pom.SEARCH_FIELD).toBeVisible();
         await expect(app.hubHeaderController.Pom.START_CHAT).toBeVisible();
-        await expect(app.conversationListController.Pom.WELCOME_TEXT).toBeVisible();
+        await expect(app.Pom.WELCOME_TEXT).toBeVisible();
     });
 
     Log.starDivider(`END TEST: Test Execution Commpleted`);

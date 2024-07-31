@@ -51,6 +51,6 @@ test(`${testName} ${testTags}`, async () => {
 
     Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} presses back button`);
     await app.chatController.backButton();
-    await expect(app.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
+    await expect(app.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

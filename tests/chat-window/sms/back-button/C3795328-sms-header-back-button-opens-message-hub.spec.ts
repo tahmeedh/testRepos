@@ -61,6 +61,6 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('THEN', async () => {
-        await expect(app.conversationListController.Pom.HUB_CONTAINER, 'Hub is visible').toBeVisible();
+        await expect(app.Pom.HUB_CONTAINER, 'Hub is visible').toBeVisible();
     });
 });

@@ -62,6 +62,6 @@ test(`${testName} ${testTags}`, async () => {
 
     await app1.open(title);
     await app1.chatController.backButton();
-    await expect(app1.conversationListController.Pom.HUB_CONTAINER).toBeVisible();
+    await expect(app1.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

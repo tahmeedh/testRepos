@@ -11,6 +11,7 @@ import { LoginController } from './login/login-controller';
 import { CreateChatController } from './chat-window/create-chat-controller';
 import { ChatController } from './chat-window/chat-page-controller';
 import { InviteController } from './chat-window/invite-controller';
+import { MessageHubController } from './message-hub/message-hub-controller';
 import { VCardController } from './chat-window/v-card-controller';
 import { DetailsController } from './chat-window/details-controller';
 import { VCardEditController } from './chat-window/v-card-edit-controller';
@@ -35,6 +36,7 @@ export class BaseController {
     readonly previewAttachmentController: PreviewAttachmentController;
     readonly attachmentViewerController: AttachmentViewerController;
     readonly inviteController: InviteController;
+    readonly messageHubController: MessageHubController;
     readonly vCardController: VCardController;
     readonly detailsController: DetailsController;
     readonly vCardEditController: VCardEditController;
@@ -59,6 +61,7 @@ export class BaseController {
         this.previewAttachmentController = new PreviewAttachmentController(this.page);
         this.attachmentViewerController = new AttachmentViewerController(this.page);
         this.inviteController = new InviteController(this.page);
+        this.messageHubController = new MessageHubController(this.page);
         this.vCardController = new VCardController(this.page);
         this.detailsController = new DetailsController(this.page);
         this.vCardEditController = new VCardEditController(this.page);
