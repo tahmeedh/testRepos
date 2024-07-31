@@ -56,7 +56,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
     await appUser1.chatController.muteConversation();
-    await appUser1.conversationListController.clickSideBarChatsButton();
+    await appUser1.navigationController.clickSideBarChatsButton();
     await expect(appUser1.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();
 
     // User 2

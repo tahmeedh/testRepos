@@ -60,7 +60,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
     await appUser1.chatController.unMuteConversation();
-    await appUser1.conversationListController.clickSideBarChatsButton();
+    await appUser1.navigationController.clickSideBarChatsButton();
 
     // User 2
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
