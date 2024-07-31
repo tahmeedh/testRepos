@@ -61,7 +61,7 @@ test(`${testName} ${testTags}`, async () => {
 
     await app1.inviteController.acceptInvite('MUC');
     await app1.chatController.clickChatFlagButton();
-    await app1.conversationListController.clickSideBarChatsButton();
+    await app1.navigationController.clickSideBarChatsButton();
     // verify that chat is flagged
     await expect(app1.conversationListController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
     // again open the chat again
@@ -69,6 +69,6 @@ test(`${testName} ${testTags}`, async () => {
 
     // unflag chat
     await app1.chatController.clickChatFlagButton();
-    await app1.conversationListController.clickSideBarChatsButton();
+    await app1.navigationController.clickSideBarChatsButton();
     await expect(app1.conversationListController.Pom.CHAT_FLAG_INDICATOR).toBeHidden();
 });

@@ -57,7 +57,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends message`);
     await app1.chatController.sendContent();
     await app1.chatController.muteConversation();
-    await app1.conversationListController.clickSideBarChatsButton();
+    await app1.navigationController.clickSideBarChatsButton();
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await newBrowser.newContext();

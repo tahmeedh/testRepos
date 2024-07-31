@@ -63,7 +63,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.open(title);
 
     await app1.chatController.clickChatFavouriteButton();
-    await app1.conversationListController.clickSideBarChatsButton();
+    await app1.navigationController.clickSideBarChatsButton();
 
     await expect(app1.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
