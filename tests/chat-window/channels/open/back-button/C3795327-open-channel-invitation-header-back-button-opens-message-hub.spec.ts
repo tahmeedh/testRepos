@@ -61,7 +61,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName} goes to invite screen and back to message hub`
     );
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.chatController.backButton();
     await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);

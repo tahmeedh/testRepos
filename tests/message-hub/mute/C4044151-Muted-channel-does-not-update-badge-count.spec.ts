@@ -66,7 +66,7 @@ test(`${testName} ${testTags}`, async () => {
     await app2.loginAndInitialize(user2.userInfo.email, user2.userInfo.password);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app2.open(title);
+    await app2.conversationListController.clickOnConversationName(title);
     await app2.inviteController.acceptInvite('Channel');
 
     await test.step('Reply to the channel by the participant', async () => {

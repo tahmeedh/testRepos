@@ -7,7 +7,7 @@ import { BaseController } from '../../../../controllers/base-controller';
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser = null;
 let context1 = null;
-let app = null;
+let app: BaseController;
 let context2 = null;
 let app1 = null;
 
@@ -44,7 +44,9 @@ test(`${testName} ${testTags}`, async () => {
     const title = await app.createChatController.createMUC([user2fullName]);
 
     await app.chatController.sendContent();
-    await app.inviteParticipants([`${user3.userInfo.firstName} ${user3.userInfo.lastName}`]);
+    await app.chatController.clickChatHeaderMenu();
+    await app.chatController.selectFromChatHeaderMenu('Invite Participants');
+    await app.createChatController.inviteMUC([`${user3.userInfo.firstName} ${user3.userInfo.lastName}`]);
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await browser.newContext();
@@ -55,17 +57,20 @@ test(`${testName} ${testTags}`, async () => {
     await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.inviteController.acceptInvite('MUC');
 
     const user2Message = await app1.chatController.sendContent();
     await app1.chatController.leaveChat();
 
     Log.info(`Re-invite ${user2.userInfo.firstName} ${user2.userInfo.lastName} to ${testChatType}`);
-    await app.inviteParticipants([`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]);
+    await app.chatController.sendContent();
+    await app.chatController.clickChatHeaderMenu();
+    await app.chatController.selectFromChatHeaderMenu('Invite Participants');
+    await app.createChatController.inviteMUC([`${user2.userInfo.firstName} ${user2.userInfo.lastName}`]);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} rejoins ${testChatType}`);
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.Pom.CHATIFRAME.getByRole('button', { name: 'Accept' }).nth(0).click();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} sees their previous message`);

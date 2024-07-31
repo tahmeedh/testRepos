@@ -57,14 +57,14 @@ test(`${testName} ${testTags}`, async () => {
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.portalController.closeEnableDesktopNotification();
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.chatController.clickChatFlagButton();
     await app1.navigationController.clickSideBarChatsButton();
 
     // verify that chat is flagged
     await expect(app1.conversationListController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
     // again open the chat again
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
 
     // unflag chat
     await app1.chatController.clickChatFlagButton();

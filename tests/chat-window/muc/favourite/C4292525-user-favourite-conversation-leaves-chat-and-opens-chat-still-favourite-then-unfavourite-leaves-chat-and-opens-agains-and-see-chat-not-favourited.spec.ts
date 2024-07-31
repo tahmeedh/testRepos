@@ -55,7 +55,7 @@ test(`${testName} ${testTags}`, async () => {
 
     await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
         await expect(app.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
-        await app.open(title);
+        await app.conversationListController.clickOnConversationName(title);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
     });
 
@@ -67,7 +67,7 @@ test(`${testName} ${testTags}`, async () => {
 
     await test.step('step 2 THEN - favourite icon not visible and return to conversation and favourite icon not visible ', async () => {
         await expect(app.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
-        await app.open(title);
+        await app.conversationListController.clickOnConversationName(title);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).not.toBeVisible();
     });
 });

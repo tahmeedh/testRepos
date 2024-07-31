@@ -60,7 +60,7 @@ test(`${testName} ${testTags}`, async () => {
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
 
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.inviteController.acceptInvite('Channel');
 
     const messageReceived = app1.Pom.CHATIFRAME.getByText(randomContent);

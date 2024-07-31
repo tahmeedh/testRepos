@@ -48,7 +48,7 @@ test(`${testName} ${testTags}`, async () => {
         `SUCCESS: ${testChatType} conversation was created with '${user2.userInfo.firstName} ${user2.userInfo.lastName}''`
     );
 
-    await app.chatController.openChatDetails();
+    await app.chatController.conversationListController.clickOnConversationNameChatDetails();
     await app.detailsController.renameMUC(subjectText);
 
     Log.info(`${testChatType} chat expects ${subjectText} string in Chat title state `);

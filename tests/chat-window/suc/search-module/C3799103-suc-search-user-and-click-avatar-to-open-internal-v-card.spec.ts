@@ -40,7 +40,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.createChatController.SearchSucUser(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
 
     Log.info(`click ${user2.userInfo.firstName} ${user2.userInfo.lastName} avatar and expect v-card`);
-    await app.clickAvatar('1');
+    await app.createChatController.clickAvatarByRow(1);
     await expect(app.vCardController.Pom.VCARD_CONTAINER).toBeVisible();
     await app.navigationController.clickSideBarChatsButton();
 

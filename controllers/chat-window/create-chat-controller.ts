@@ -242,6 +242,13 @@ export class CreateChatController {
         });
     }
 
+    async clickAvatarByRow(rowNumber: number) {
+        await test.step(`Create Chat Controller: Click on the avatar on row '${rowNumber}'`, async () => {
+            Log.info(`Create Chat Controller: Click on the avatar on row '${rowNumber}'`);
+            await this.Pom.AVATAR.nth(rowNumber).click();
+        });
+    }
+
     async clickFooterButton(buttonText: 'Next' | 'Cancel') {
         await test.step(`Create Chat Controller: Click on '${buttonText}' button`, async () => {
             Log.info(`Create Chat Controller: Click on '${buttonText}' button`);

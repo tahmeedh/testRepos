@@ -60,7 +60,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.portalController.closeEnableDesktopNotification();
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
 
     await app1.chatController.clickChatFavouriteButton();
     await app1.navigationController.clickSideBarChatsButton();
