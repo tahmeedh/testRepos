@@ -4,7 +4,7 @@ import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import {
     MockInboundMessageController,
-    MockInboundMessageType
+    MockMsgDataType
 } from 'Apis/mock-inbound-message/mock-inbound-message-controller';
 import { Log } from 'Apis/api-helpers/log-utils';
 
@@ -59,13 +59,12 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('Receive backtext message', async () => {
-        const mockTwilioMessage: MockInboundMessageType = {
+        const mockWhatsAppMessage: MockMsgDataType = {
+            type: 'SMS',
             senderPhoneNumber: randomNumber,
-            receipientGrId: GrId,
-            message: mockSMSMessage,
-            type: 'TWILIO'
+            content: mockSMSMessage
         };
-        await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
+        await MockInboundMessageController.receiveInboundExternalMsg(GrId, mockWhatsAppMessage);
     });
 
     await test.step('Check for response text', async () => {
