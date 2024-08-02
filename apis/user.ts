@@ -298,7 +298,7 @@ export class User {
         const { endpoints, companyId } = this.userInfo.company;
         const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
         const { email, password, userId } = this.userInfo;
-        const accountId = PhoneNumberUtils.randomPhone();
+        const accountId = PhoneNumberUtils.randomPhoneNumber();
         const gskToken = await GskController.getGskToken(
             email,
             password,

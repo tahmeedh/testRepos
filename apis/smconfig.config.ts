@@ -12,9 +12,9 @@ export const USER_DEFAULT_SETTINGS = {
     LAST_NAME: () => UidUtils.generateStringbyBytes(2),
     PASSWORD: 'Password2@',
     JOB_TITLE: 'job title',
-    WORK_PHONE: () => PhoneNumberUtils.randomPhone(),
-    MOBILE_PHONE: () => PhoneNumberUtils.randomPhone(),
-    HOME_PHONE: () => PhoneNumberUtils.randomPhone(),
+    WORK_PHONE: () => PhoneNumberUtils.randomPhoneNumber(),
+    MOBILE_PHONE: () => PhoneNumberUtils.randomPhoneNumber(),
+    HOME_PHONE: () => PhoneNumberUtils.randomPhoneNumber(),
     ENTITLEMENTS: [
         'Directory.Public',
         'Directory.ManageCompanyChannels',

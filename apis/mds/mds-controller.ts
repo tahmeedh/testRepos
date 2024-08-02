@@ -69,4 +69,24 @@ export class MdsController {
         const user = response.data;
         return user;
     }
+
+    async getEndPointByGrId(grId: number, type: 'SMS_SERVICE' | 'WHATSAPP') {
+        const config = {
+            method: 'get',
+            url: `${this.endpoint}/users/gr:${grId}`,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'gr-csrf': this.csrf,
+                Cookie: this.gsk
+            }
+        };
+        const response = await AxiosUtils.axiosRequest(
+            config,
+            `request to MDS to retrieve user ${type} endpoint with GrId '${grId}'`
+        );
+        const allEndpoints = response.data.endpoints;
+        const targetEndpoint = allEndpoints.find((endpoint) => endpoint.type === type);
+        return targetEndpoint;
+    }
 }
