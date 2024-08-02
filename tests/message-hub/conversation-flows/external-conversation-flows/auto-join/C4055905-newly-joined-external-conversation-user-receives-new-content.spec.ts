@@ -3,11 +3,11 @@ import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import {
     MockInboundMessageController,
-    MockInboundMessageType
+    MockMsgDataType
 } from 'Apis/mock-inbound-message/mock-inbound-message-controller';
 import { BaseController } from 'controllers/base-controller';
-import { StringUtils } from 'helper/string-utils';
 import { User } from 'Apis/user';
+import { PhoneNumberUtils } from 'Apis/api-helpers/phoneNumber-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
@@ -42,13 +42,12 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     });
 
     await test.step('Get an external chat message', async () => {
-        const mockTwilioMessage: MockInboundMessageType = {
-            senderPhoneNumber: StringUtils.generatePhoneNumber(),
-            receipientGrId: GrId,
-            message: ResponseText,
-            type: 'TWILIO'
+        const mockWhatsAppMessage: MockMsgDataType = {
+            type: 'SMS',
+            senderPhoneNumber: PhoneNumberUtils.randomPhoneNumber(),
+            content: ResponseText
         };
-        await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
+        await MockInboundMessageController.receiveInboundExternalMsg(GrId, mockWhatsAppMessage);
     });
 
     await test.step('External conversation invite shows up without the invite badge', async () => {
