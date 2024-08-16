@@ -32,52 +32,22 @@ export class GrcpController {
     }
 
     /**
-     * Create a new one-to-one conversation between a pair of users via grcp calls.
+     * Update group text subject via grcp call.
      * @param page Page object that contains the message-iframe for use to make the grcp call.
-     * @param sendingUser grcpAlias of the user starting the conversation.
-     * @param receivingUser grcpAlias of the user
-     * @param content Text content to start the conversation.
+     * @param conversationId Id of the Group text.
+     * @param subject Subject name of the Group text
      */
-    static async createInternalConversation(
-        page: Page,
-        sendingUser: string,
-        receivingUser: string,
-        content: string
-    ) {
-        const guid = randomUUID();
-
-        //Establish default conversation between the pair of users.
-        const resolveDefaultConvoData = {
-            clientRequestId: guid,
-            otherParty: `${receivingUser}`,
-            msgType: 'conversation.ServerResolveDefaultConversationMsg'
-        };
-        await GrcpBaseController.sendRequest(page, resolveDefaultConvoData);
-
-        // Sending a new content message to the receiving user.
-        const sendContentData = {
-            clientRequestId: guid,
-            conversationId: `d:${sendingUser}:${receivingUser}:`,
-            content: `${content}`,
-            msgType: 'conversation.ServerSendContentMsg'
-        };
-        await GrcpBaseController.sendRequest(page, sendContentData);
-    }
-
-    /**
-     * Remove users from channel via grcp call.
-     * @param page Page object that contains the message-iframe for use to make the grcp call.
-     * @param channelId Id of the channel.
-     * @param grId GrId of the user we want to remove from a channel
-     */
-    static async removeUserFromChannel(page: Page, channelId: string, grId: string) {
+    static async updateGroupTextSubject(page: Page, conversationId: string, subject: string) {
         const data = {
-            channelId,
+            conversationId,
             clientRequestId: randomUUID(),
-            msgType: 'channel.ServerGrantChannelRolesMsg',
-            roles: {
-                none: [grId]
-            }
+            msgType: 'external.ServerUpdateExternalConversationHeadersMsg',
+            updates: [
+                {
+                    name: 'name',
+                    newValue: subject
+                }
+            ]
         };
         await GrcpBaseController.sendRequest(page, data);
     }
