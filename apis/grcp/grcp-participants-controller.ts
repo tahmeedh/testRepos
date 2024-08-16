@@ -4,7 +4,8 @@ import { GrcpBaseController } from './grcp-base-controller';
 
 export class GrcpParticipantsController {
     /**
-     * Add users to channel via grcp call.
+     * Add user to a restricted/business channel's moderators list via grcp call.
+     * Notes: This does NOT send an invite to the user, use 'inviteParticipantToChannel' to send an invite.
      * @param page Page object that contains the message-iframe for use to make the grcp call.
      * @param channelId Id of the channel.
      * @param grcpAlias Grcp Alias of the user we want to remove from a channel
@@ -22,7 +23,9 @@ export class GrcpParticipantsController {
     }
 
     /**
-     * Add users to channel via grcp call.
+     * Send a channel invite to a user via grcp call.
+     * Notes: For restricted/business channel,
+     * use 'addUserToChannelModeratorList/addUserToChannelParticipantList' to add user to the list before sending an invite.
      * @param page Page object that contains the message-iframe for use to make the grcp call.
      * @param channelId Id of the channel.
      * @param grcpAlias Grcp Alias of the user we want to remove from a channel
@@ -38,7 +41,8 @@ export class GrcpParticipantsController {
     }
 
     /**
-     * Add users to channel via grcp call.
+     * Add user to a restricted/business channel's participants list via grcp call.
+     * Notes: This does NOT send an invite to the user, use 'inviteParticipantToChannel' to send an invite.
      * @param page Page object that contains the message-iframe for use to make the grcp call.
      * @param channelId Id of the channel.
      * @param grcpAlias Grcp Alias of the user we want to remove from a channel
@@ -56,7 +60,7 @@ export class GrcpParticipantsController {
     }
 
     /**
-     * Remove users from channel via grcp call.
+     * Remove users from a restricted/business channel via grcp call.
      * @param page Page object that contains the message-iframe for use to make the grcp call.
      * @param channelId Id of the channel.
      * @param grcpAlias Grcp Alias of the user we want to remove from a channel
