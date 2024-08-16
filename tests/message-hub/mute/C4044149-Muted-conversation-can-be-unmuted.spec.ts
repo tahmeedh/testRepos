@@ -6,6 +6,7 @@ import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
 import { ConfigUtils } from 'helper/config-utils';
 import { GrcpController } from 'Apis/grcp/grcp-controller';
+import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let user1: User;
@@ -30,12 +31,12 @@ test.beforeAll(async ({ browser }) => {
     await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     Log.info('Creating conversation + mute conversation via grcp');
-    await GrcpController.createInternalConversation(
-        page,
-        user1.userInfo.grcpAlias,
-        user2.userInfo.grcpAlias,
-        'C4044149 Test Content'
-    );
+    const createSUCData = {
+        senderGrcpAlias: user1.userInfo.grcpAlias,
+        receiverGrcpAlias: user2.userInfo.grcpAlias,
+        content: 'C4044149 Test Content'
+    };
+    await GrcpCreateController.createSUC(page, createSUCData);
     await page.reload();
     const convoId = await app.conversationListController.getConversationId(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
