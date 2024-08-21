@@ -13,7 +13,7 @@ export class InviteController {
     }
 
     async acceptInvite(type = 'SUC') {
-        await test.step('Create Chat Controller : Accept Invite', async () => {
+        await test.step('Invite Controller : Accept Invite', async () => {
             if (type === 'MUC') {
                 await this.Pom.ACCEPT_BUTTON_MUC.click();
             } else {
@@ -23,7 +23,7 @@ export class InviteController {
     }
 
     async declineInvite(type = 'SUC') {
-        await test.step('Create Chat Controller : Accept Invite', async () => {
+        await test.step('Invite Controller : Accept Invite', async () => {
             if (type === 'MUC') {
                 await this.Pom.DECLINE_BUTTON_MUC.click();
             } else {
@@ -33,15 +33,51 @@ export class InviteController {
     }
 
     async clickJoin() {
-        await test.step('Re-join SUC Chat : Click Join', async () => {
+        await test.step('Invite Controller : Click Join', async () => {
             await this.Pom.JOIN_BUTTON.click();
         });
     }
 
     async clickFooterButton(buttonText: 'Accept' | 'Decline' | 'Hide') {
-        await test.step(`Create Chat Controller: Click on '${buttonText}' button`, async () => {
-            Log.info(`Create Chat Controller: Click on '${buttonText}' button`);
+        await test.step(`Invite Controller: Click on '${buttonText}' button`, async () => {
+            Log.info(`Invite Controller: Click on '${buttonText}' button`);
             await this.Pom.CHAT_ACTION_FOOTER_BUTTON.getByText(buttonText).last().click();
+        });
+    }
+
+    async clickMemberRolesButton() {
+        await test.step(`Invite Controller: Click members and roles button`, async () => {
+            Log.info(`Invite Controller: Click members and roles button`);
+            await this.Pom.MEMBER_ROLES_BUTTON.click();
+        });
+    }
+
+    async hoverHeaderAvatar() {
+        await test.step(`Invite Controller: Hover over chat header avatar`, async () => {
+            Log.info(`Invite Controller: Hover over chat header avatar`);
+            await this.Pom.HEADER_AVATAR.hover();
+        });
+    }
+
+    async hoverParticipantListAvatarByRow(userName: string) {
+        await test.step(`Invite Controller: Hover over the avatar on row '${userName}'`, async () => {
+            Log.info(`Invite Controller: Hover over the avatar on row '${userName}'`);
+            await this.Pom.DETAILS_PARTICIPANTS_LIST.getByText(userName)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .hover();
+        });
+    }
+
+    async hoverAdministratorListAvatarByRow(userName: string) {
+        await test.step(`Invite Controller: Hover over administrator list avatar on row '${userName}'`, async () => {
+            Log.info(`Invite Controller: Hover over administrator list avatar on row '${userName}'`);
+            await this.Pom.ADMINISTRATOR_LIST.getByText(userName)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .hover();
         });
     }
 }

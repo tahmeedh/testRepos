@@ -249,7 +249,7 @@ export class CreateChatController {
         });
     }
 
-    async clickFooterButton(buttonText: 'Next' | 'Cancel') {
+    async clickFooterButton(buttonText: 'Next' | 'Cancel' | 'Select') {
         await test.step(`Create Chat Controller: Click on '${buttonText}' button`, async () => {
             Log.info(`Create Chat Controller: Click on '${buttonText}' button`);
             await this.Pom.BUTTON.getByText(buttonText).click();
@@ -274,6 +274,53 @@ export class CreateChatController {
         await test.step(`Create Chat Controller: Click Add Phone Number`, async () => {
             Log.info(`Create Chat Controller: Click Add Phone Number`);
             await this.Pom.ADD_EXTERNAL_NUMBER.click();
+        });
+    }
+
+    async hoverAvatarByRow(userName: string) {
+        await test.step(`Create Chat Controller: Hover over the avatar on row '${userName}'`, async () => {
+            Log.info(`Create Chat Controller: Hover over the avatar on row '${userName}'`);
+            await this.Pom.MSC_CONTACT_LIST_ITEM.getByText(userName)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .hover();
+        });
+    }
+
+    async hoverAvatarByRowExternal(userName: string) {
+        await test.step(`Create Chat Controller: Hover over the avatar on row '${userName}' external`, async () => {
+            Log.info(`Create Chat Controller: Hover over the avatar on row '${userName}' external `);
+            await this.Pom.SEARCH_COMPONENT_CONTACT_ROW.getByText(userName)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .hover();
+        });
+    }
+
+    async fillChannelName(channelName: string) {
+        await test.step(`Create Chat Controller: Fill channel name ${channelName}`, async () => {
+            Log.info(`Create Chat Controller: Fill channel name as ${channelName}`);
+            await this.Pom.CHANNEL_NAME_BUTTON.fill(channelName);
+        });
+    }
+
+    async clickAddModeratorBtn() {
+        await test.step(`Create Chat Controller: Click add moderator button`, async () => {
+            Log.info(`Create Chat Controller: Click add moderator button`);
+            await this.Pom.SELECT_MODERATORS_BUTTON.click();
+        });
+    }
+
+    async hoverParticipantListAvatarByRow(userName: string) {
+        await test.step(`Create Chat Controller: Hover over the avatar on row '${userName}'`, async () => {
+            Log.info(`Create Chat Controller: Hover over the avatar on row '${userName}'`);
+            await this.Pom.DETAILS_PARTICIPANTS_LIST.getByText(userName)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .hover();
         });
     }
 }

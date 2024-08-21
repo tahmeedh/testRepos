@@ -51,4 +51,30 @@ export class GrcpController {
         };
         await GrcpBaseController.sendRequest(page, data);
     }
+
+    /**
+     * Send content to a conversation.
+     * @param page Page object that contains the message-iframe for use to make the grcp call.
+     * @param conversationId Id of the Conversation.
+     * @param content Content to send.
+     */
+    static async sendContent(page: Page, conversationId: string, content: string) {
+        const data = {
+            conversationId,
+            clientRequestId: randomUUID(),
+            msgType: 'conversation.ServerSendContentMsg',
+            content
+        };
+        await GrcpBaseController.sendRequest(page, data);
+    }
+
+    static async sendContentToChannel(page: Page, channelId: string, content: string) {
+        const data = {
+            channelId,
+            clientRequestId: randomUUID(),
+            msgType: 'channel.ServerSendChannelTextMsg',
+            text: content
+        };
+        await GrcpBaseController.sendRequest(page, data);
+    }
 }

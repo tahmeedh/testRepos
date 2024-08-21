@@ -1,6 +1,6 @@
 import { test, type Page } from '@playwright/test';
 import { Log } from 'Apis/api-helpers/log-utils';
-import { MiniVCardPage } from 'Poms/mini-vCard/mini-vcard-page';
+import { MiniVCardPage } from 'Poms/mini-vCard/mini-vCard-page';
 
 export class MiniVCardController {
     readonly page: Page;

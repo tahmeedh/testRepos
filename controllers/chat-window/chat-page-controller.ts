@@ -270,4 +270,11 @@ export class ChatController {
             await this.Pom.VIDEO_THUMBNAIL.nth(rowNumber).click();
         });
     }
+
+    async hoverOverMessageRowAvatar(rowNumber: number) {
+        await test.step(`Chat Controller: Hover over message row ${rowNumber} avatar`, async () => {
+            Log.info(`Chat Controller: Hover over message row ${rowNumber} avatar`);
+            await this.Pom.MESSAGE_ROW_CONTAINER.nth(rowNumber).locator('.m-auto-avatar-container').hover();
+        });
+    }
 }

@@ -15,6 +15,8 @@ export class DetailsPage extends BasePage {
     readonly SELECT_PARTICIPANTS: Locator;
     readonly CONTACT_LIST_USER_ROW: Locator;
     readonly BUTTON: Locator;
+    readonly DETAILS_PARTICIPANTS_LIST: Locator;
+    readonly ADMINISTRATOR_LIST: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -36,5 +38,7 @@ export class DetailsPage extends BasePage {
         this.SELECT_PARTICIPANTS = this.CHATIFRAME.locator('.m-auto-invite-members-button');
         this.CONTACT_LIST_USER_ROW = this.CHATIFRAME.getByTestId('contact-list-user-row');
         this.BUTTON = this.CHATIFRAME.getByRole('button');
+        this.DETAILS_PARTICIPANTS_LIST = this.CHATIFRAME.locator('.participants-list');
+        this.ADMINISTRATOR_LIST = this.CHATIFRAME.locator('.administrator-list');
     }
 }

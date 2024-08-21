@@ -62,4 +62,26 @@ export class DetailsController {
             await this.Pom.BUTTON.getByText(buttonText).click();
         });
     }
+
+    async hoverParticipantListAvatarByRow(userName: string) {
+        await test.step(`Invite Controller: Hover over the avatar on row '${userName}'`, async () => {
+            Log.info(`Invite Controller: Hover over the avatar on row '${userName}'`);
+            await this.Pom.DETAILS_PARTICIPANTS_LIST.getByText(userName)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .hover();
+        });
+    }
+
+    async hoverAdministratorListAvatarByRow(userName: string) {
+        await test.step(`Invite Controller: Hover over administrator list avatar on row '${userName}'`, async () => {
+            Log.info(`Invite Controller: Hover over administrator list avatar on row '${userName}'`);
+            await this.Pom.ADMINISTRATOR_LIST.getByText(userName)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .hover();
+        });
+    }
 }
