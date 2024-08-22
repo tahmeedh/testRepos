@@ -8,6 +8,7 @@ import { TestUtils } from 'helper/test-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 
+//skipping until VA-7559 is fixed
 test.skip(`${testName} ${testTags}`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
     const browser1 = await browser.newContext();
