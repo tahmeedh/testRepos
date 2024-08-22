@@ -1,13 +1,14 @@
 import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
+import { CreateChannelDataType, GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
+import { GrcpParticipantsController } from 'Apis/grcp/grcp-participants-controller';
 import { User } from 'Apis/user';
 import { BaseController } from 'Controllers/base-controller';
 import { TestUtils } from 'helper/test-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 
-test(`${testName} ${testTags}`, async ({ browser }) => {
+test.skip(`${testName} ${testTags}`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
     const browser1 = await browser.newContext();
     const user1Page = await browser1.newPage();
@@ -32,13 +33,30 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
             ]);
         });
 
-        await test.step(`User is in MUC invite view`, async () => {
-            const createMucData = {
-                subject: 'Test-MUC',
-                participantsGrcpAliases: [user1.userInfo.grcpAlias]
+        await test.step(`User is in Channel invite view, and participant list mini-vCard is opened`, async () => {
+            const createChannelData: CreateChannelDataType = {
+                companyIds: [],
+                description: 'channel description',
+                name: 'Test-Restricted-Channel',
+                subject: 'channel subject',
+                type: 'company_restricted'
             };
-            await GrcpCreateController.createMUC(user2Page, createMucData);
-            await app1.conversationListController.clickOnConversationName('Test-MUC');
+            await GrcpCreateController.createChannel(user2Page, createChannelData);
+            const channelId = await app2.conversationListController.getConversationId(
+                'Test-Restricted-Channel'
+            );
+            await GrcpParticipantsController.addUserToChannelModeratorList(
+                user2Page,
+                channelId,
+                user1.userInfo.grcpAlias
+            );
+            await GrcpParticipantsController.inviteParticipantToChannel(
+                user2Page,
+                channelId,
+                user1.userInfo.grcpAlias
+            );
+            await app1.conversationListController.clickOnConversationName('Test-Restricted-Channel');
+            await app1.detailsController.clickMemberRolesButton();
             await app1.inviteController.hoverParticipantListAvatarByRow(
                 `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
             );

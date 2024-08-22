@@ -1,14 +1,16 @@
 import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
+import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
 import { User } from 'Apis/user';
 import { BaseController } from 'Controllers/base-controller';
 import { TestUtils } from 'helper/test-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 
-test(`${testName} ${testTags}`, async ({ page, context }) => {
+test(`${testName} ${testTags}`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
+
     let user1: User;
     let user2: User;
 
@@ -17,28 +19,25 @@ test(`${testName} ${testTags}`, async ({ page, context }) => {
             const company = await Company.createCompany();
             [user1, user2] = await Promise.all([company.createUser(), company.createUser()]);
             await company.addUserToEachOthersRoster([user1, user2]);
-            await user1.requestAndAssignTwilioNumber();
         });
 
         await test.step(`User is logged in`, async () => {
-            await expect(async () => {
-                await context.clearCookies();
-                await app.goToLoginPage();
-                await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-                await expect(app.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE).toHaveText(
-                    'No channels'
-                );
-                await app.portalController.closeEnableDesktopNotification();
-            }).toPass();
-
-            await app.newsAlertController.clickNextSMSEnabledNotification();
-            await app.portalController.clickCloseSMSEnabledNotification();
+            await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
         });
 
-        await test.step(`User is in MUC create view`, async () => {
-            await app.hubHeaderController.clickStartChatButton();
-            await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
-            await app.createChatController.hoverAvatarByRow(user2.userInfo.lastName);
+        await test.step(`User is in MUC details view, and participant search mini-vCard is opened`, async () => {
+            const createMucData = {
+                subject: 'Test-MUC',
+                participantsGrcpAliases: []
+            };
+            await GrcpCreateController.createMUC(page, createMucData);
+            await app.conversationListController.clickOnConversationName('Test-MUC');
+            await app.chatController.clickChatHeaderMenu();
+            await app.chatController.selectFromChatHeaderMenu('View Details');
+            await app.detailsController.clickSelectParticipants();
+            await app.detailsController.hoverSearchResultsAvatarByName(
+                `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
+            );
         });
     });
 

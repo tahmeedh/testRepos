@@ -6,7 +6,7 @@ import { TestUtils } from 'helper/test-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 
-test(`${testName} ${testTags}`, async ({ page, context }) => {
+test(`${testName} ${testTags}`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
     let user1: User;
@@ -17,29 +17,22 @@ test(`${testName} ${testTags}`, async ({ page, context }) => {
             const company = await Company.createCompany();
             [user1, user2] = await Promise.all([company.createUser(), company.createUser()]);
             await company.addUserToEachOthersRoster([user1, user2]);
-            await Promise.all([
-                user1.requestAndAssignWhatsAppNumber(),
-                user1.requestAndAssignTwilioNumber(),
-                user2.requestAndAssignTwilioNumber()
-            ]);
         });
 
         await test.step(`User is logged in`, async () => {
-            await expect(async () => {
-                await context.clearCookies();
-                await app.goToLoginPage();
-                await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-                await expect(app.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE).toHaveText(
-                    'No channels'
-                );
-                await app.portalController.closeEnableDesktopNotification();
-            }).toPass();
+            await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
         });
 
-        await test.step(`User is in SMS create view`, async () => {
+        await test.step(`User is in Channel create view, and participant list mini-vCard is opened`, async () => {
             await app.hubHeaderController.clickStartChatButton();
-            await app.hubHeaderController.selectHeaderMainMenuOption('WhatsApp');
-            await app.createChatController.hoverAvatarByRowExternal(user2.userInfo.lastName);
+            await app.hubHeaderController.selectHeaderMainMenuOption('Channel');
+            await app.createChatController.fillChannelName('hello');
+            await app.createChatController.clickFooterButton('Next');
+            await app.createChatController.clickFooterButton('Next');
+            await app.createChatController.clickAddModeratorBtn();
+            await app.createChatController.clickUserRowInternal(user2.userInfo.lastName);
+            await app.createChatController.clickFooterButton('Select');
+            await app.createChatController.hoverParticipantListAvatarByRow(user2.userInfo.lastName);
         });
     });
 

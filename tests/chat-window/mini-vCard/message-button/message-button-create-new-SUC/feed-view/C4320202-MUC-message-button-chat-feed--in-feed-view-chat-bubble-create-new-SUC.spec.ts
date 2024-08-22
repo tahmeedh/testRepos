@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
+import { GrcpController } from 'Apis/grcp/grcp-controller';
 import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
 import { GrcpInviteController } from 'Apis/grcp/grcp-invite-controller';
 import { User } from 'Apis/user';
@@ -17,7 +18,6 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
     const browser2 = await browser.newContext();
     const user2Page = await browser2.newPage();
     const app2 = new BaseController(user2Page);
-
     let user1: User;
     let user2: User;
 
@@ -34,19 +34,17 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
             ]);
         });
 
-        await test.step(`User is in SUC create view`, async () => {
-            const sucCreateData = {
-                senderGrcpAlias: user2.userInfo.grcpAlias,
-                receiverGrcpAlias: user1.userInfo.grcpAlias,
-                content: 'Hello test message'
+        await test.step(`User is in MUC feed view, and chat bubble mini-vCard is opened`, async () => {
+            const createMucData = {
+                subject: 'Test-MUC',
+                participantsGrcpAliases: [user1.userInfo.grcpAlias]
             };
-            await GrcpCreateController.createSUC(user2Page, sucCreateData);
+            await GrcpCreateController.createMUC(user2Page, createMucData);
             const conversationID = await app1.conversationListController.getConversationId('Test-MUC');
-            await GrcpInviteController.acceptSUCInvite(user1Page, conversationID);
-            await app1.conversationListController.clickOnConversationName(
-                `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
-            );
-            await app1.inviteController.hoverHeaderAvatar();
+            await GrcpController.sendContent(user2Page, conversationID, 'Test message 1234');
+            await GrcpInviteController.acceptMUCInvite(user1Page, conversationID);
+            await app1.conversationListController.clickOnConversationName('Test-MUC');
+            await app1.chatController.hoverOverMessageRowAvatar(0);
         });
     });
 
@@ -55,13 +53,24 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
     });
 
     await test.step(`THEN - User is in draft mode`, async () => {
-        await expect(app1.chatController.Pom.CHAT_INTRO).toHaveText('Invitation to connect');
+        await expect(app1.chatController.Pom.CHAT_INTRO).toHaveText('Post a message to start conversation');
     });
 
     await test.step(`WHEN - User send a message`, async () => {
         await expect(app1.chatController.Pom.CHAT_BACK_BUTTON).toBeVisible();
+        await expect(app1.chatController.Pom.CHAT_FAVOURITE_BUTTON).not.toBeVisible();
+        await expect(app1.chatController.Pom.CHAT_FLAG_BUTTON).not.toBeVisible();
+        await expect(app1.chatController.Pom.CHAT_HEADER_MENU).not.toBeVisible();
+        await app1.chatController.typeContent('hello test message');
+        await app1.chatController.clickSendButton();
+    });
+
+    await test.step(`THEN - Conversation is created`, async () => {
+        await expect(app1.chatController.Pom.CHAT_INTRO).not.toBeVisible();
+        await expect(app1.chatController.Pom.CHAT_BACK_BUTTON).toBeVisible();
         await expect(app1.chatController.Pom.CHAT_FAVOURITE_BUTTON).toBeVisible();
         await expect(app1.chatController.Pom.CHAT_FLAG_BUTTON).toBeVisible();
-        await expect(app1.chatController.Pom.CHAT_HEADER_MENU).not.toBeVisible();
+        await expect(app1.chatController.Pom.CHAT_HEADER_MENU).toBeVisible();
+        await expect(app1.chatController.Pom.ALL_CONTENT.last()).toHaveText('hello test message');
     });
 });

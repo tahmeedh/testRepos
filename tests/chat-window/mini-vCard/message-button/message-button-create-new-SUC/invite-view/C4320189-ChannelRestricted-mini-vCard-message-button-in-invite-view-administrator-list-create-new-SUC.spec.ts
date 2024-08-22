@@ -33,7 +33,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
             ]);
         });
 
-        await test.step(`User is in MUC invite view`, async () => {
+        await test.step(`User is in Channel invite view, and administrator list mini-vCard is opened`, async () => {
             const createChannelData: CreateChannelDataType = {
                 companyIds: [],
                 description: 'channel description',

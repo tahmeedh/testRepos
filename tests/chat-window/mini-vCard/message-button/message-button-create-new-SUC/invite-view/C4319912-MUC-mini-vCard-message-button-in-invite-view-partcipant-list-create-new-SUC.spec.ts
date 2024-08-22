@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
-import { GrcpInviteController } from 'Apis/grcp/grcp-invite-controller';
 import { User } from 'Apis/user';
 import { BaseController } from 'Controllers/base-controller';
 import { TestUtils } from 'helper/test-utils';
@@ -33,18 +32,14 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
             ]);
         });
 
-        await test.step(`User is in MUC invite view`, async () => {
+        await test.step(`User is in MUC invite view, and participant list mini-vCard is opened`, async () => {
             const createMucData = {
                 subject: 'Test-MUC',
                 participantsGrcpAliases: [user1.userInfo.grcpAlias]
             };
             await GrcpCreateController.createMUC(user2Page, createMucData);
-            const conversationID = await app1.conversationListController.getConversationId('Test-MUC');
-            await GrcpInviteController.acceptMUCInvite(user1Page, conversationID);
             await app1.conversationListController.clickOnConversationName('Test-MUC');
-            await app1.chatController.clickChatHeaderMenu();
-            await app1.chatController.selectFromChatHeaderMenu('View Details');
-            await app1.detailsController.hoverParticipantListAvatarByRow(
+            await app1.inviteController.hoverParticipantListAvatarByRow(
                 `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
             );
         });

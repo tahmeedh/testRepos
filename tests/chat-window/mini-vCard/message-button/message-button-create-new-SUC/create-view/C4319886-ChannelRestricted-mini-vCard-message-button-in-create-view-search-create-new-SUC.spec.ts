@@ -1,7 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { CreateChannelDataType, GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
-import { GrcpParticipantsController } from 'Apis/grcp/grcp-participants-controller';
 import { User } from 'Apis/user';
 import { BaseController } from 'Controllers/base-controller';
 import { TestUtils } from 'helper/test-utils';
@@ -18,36 +16,21 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await test.step(`User is created`, async () => {
             const company = await Company.createCompany();
             [user1, user2] = await Promise.all([company.createUser(), company.createUser()]);
+            await company.addUserToEachOthersRoster([user1, user2]);
         });
 
         await test.step(`User is logged in`, async () => {
             await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
         });
 
-        await test.step(`User is in Channel details view, and moderators list mini-vCard is opened`, async () => {
-            const createChannelData: CreateChannelDataType = {
-                companyIds: [],
-                description: 'channel description',
-                name: 'Test-Restricted-Channel',
-                subject: 'channel subject',
-                type: 'company_restricted'
-            };
-            await GrcpCreateController.createChannel(page, createChannelData);
-            const channelId = await app.conversationListController.getConversationId(
-                'Test-Restricted-Channel'
-            );
-            await GrcpParticipantsController.addUserToChannelModeratorList(
-                page,
-                channelId,
-                user2.userInfo.grcpAlias
-            );
-            await app.conversationListController.clickOnConversationName('Test-Restricted-Channel');
-            await app.chatController.clickChatHeaderMenu();
-            await app.chatController.selectFromChatHeaderMenu('View Details');
-            await app.detailsController.clickMemberRolesButton();
-            await app.detailsController.hoverParticipantListAvatarByRow(
-                `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
-            );
+        await test.step(`User is in ChannelRestricted create view and mini-vCard is opened`, async () => {
+            await app.hubHeaderController.clickStartChatButton();
+            await app.hubHeaderController.selectHeaderMainMenuOption('Channel');
+            await app.createChatController.fillChannelName('hello');
+            await app.createChatController.clickFooterButton('Next');
+            await app.createChatController.clickFooterButton('Next');
+            await app.createChatController.clickAddModeratorBtn();
+            await app.createChatController.hoverAvatarByRow(user2.userInfo.lastName);
         });
     });
 

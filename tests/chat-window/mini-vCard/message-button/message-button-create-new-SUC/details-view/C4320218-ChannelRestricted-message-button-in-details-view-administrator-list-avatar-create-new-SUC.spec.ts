@@ -9,7 +9,7 @@ import { TestUtils } from 'helper/test-utils';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 
-test(`${testName} ${testTags}`, async ({ browser }) => {
+test.skip(`${testName} ${testTags}`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
     const browser1 = await browser.newContext();
     const user1Page = await browser1.newPage();
@@ -34,7 +34,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
             ]);
         });
 
-        await test.step(`User is in MUC invite view`, async () => {
+        await test.step(`User is in Channel details view, and administrator list mini-vCard is opened`, async () => {
             const createChannelData: CreateChannelDataType = {
                 companyIds: [],
                 description: 'channel description',

@@ -57,15 +57,15 @@ export class DetailsController {
     }
 
     async clickFooterButton(buttonText: 'Select' | 'Cancel') {
-        await test.step(`Create Chat Controller: Click on '${buttonText}' button`, async () => {
-            Log.info(`Create Chat Controller: Click on '${buttonText}' button`);
+        await test.step(`Details Controller: Click on '${buttonText}' button`, async () => {
+            Log.info(`Details Controller: Click on '${buttonText}' button`);
             await this.Pom.BUTTON.getByText(buttonText).click();
         });
     }
 
     async hoverParticipantListAvatarByRow(userName: string) {
-        await test.step(`Invite Controller: Hover over the avatar on row '${userName}'`, async () => {
-            Log.info(`Invite Controller: Hover over the avatar on row '${userName}'`);
+        await test.step(`Details Controller: Hover over the avatar on row '${userName}'`, async () => {
+            Log.info(`Details Controller: Hover over the avatar on row '${userName}'`);
             await this.Pom.DETAILS_PARTICIPANTS_LIST.getByText(userName)
                 .first()
                 .locator('../..')
@@ -75,9 +75,20 @@ export class DetailsController {
     }
 
     async hoverAdministratorListAvatarByRow(userName: string) {
-        await test.step(`Invite Controller: Hover over administrator list avatar on row '${userName}'`, async () => {
-            Log.info(`Invite Controller: Hover over administrator list avatar on row '${userName}'`);
+        await test.step(`Details Controller: Hover over administrator list avatar on row '${userName}'`, async () => {
+            Log.info(`Details Controller: Hover over administrator list avatar on row '${userName}'`);
             await this.Pom.ADMINISTRATOR_LIST.getByText(userName)
+                .first()
+                .locator('../..')
+                .locator('.m-auto-avatar-container')
+                .hover();
+        });
+    }
+
+    async hoverSearchResultsAvatarByName(userName: string) {
+        await test.step(`Details Controller: Hover over the avatar on row '${userName}'`, async () => {
+            Log.info(`Details Controller: Hover over the avatar on row '${userName}'`);
+            await this.Pom.MSC_CONTACT_LIST_ITEM.getByText(userName)
                 .first()
                 .locator('../..')
                 .locator('.m-auto-avatar-container')

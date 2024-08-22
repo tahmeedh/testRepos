@@ -17,7 +17,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             const company = await Company.createCompany();
             [user1, user2] = await Promise.all([company.createUser(), company.createUser()]);
             await company.addUserToEachOthersRoster([user1, user2]);
-            await user1.requestAndAssignTwilioNumber();
+            await Promise.all([user1.requestAndAssignTwilioNumber(), user2.requestAndAssignTwilioNumber()]);
         });
 
         await test.step(`User is logged in`, async () => {
@@ -26,10 +26,10 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await app.portalController.clickCloseSMSEnabledNotification();
         });
 
-        await test.step(`User is in SUC create view`, async () => {
+        await test.step(`User is in GroupText create view and mini-vCard is opened`, async () => {
             await app.hubHeaderController.clickStartChatButton();
-            await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
-            await app.createChatController.hoverAvatarByRow(user2.userInfo.lastName);
+            await app.hubHeaderController.selectHeaderMainMenuOption('Text');
+            await app.createChatController.hoverAvatarByRowExternal(user2.userInfo.lastName);
         });
     });
 
