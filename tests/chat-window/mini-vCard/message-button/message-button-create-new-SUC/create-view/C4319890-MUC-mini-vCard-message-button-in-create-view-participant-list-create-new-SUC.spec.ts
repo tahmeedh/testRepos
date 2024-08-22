@@ -28,7 +28,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
             await app.createChatController.clickUserRowInternal(user2.userInfo.lastName);
             await app.createChatController.clickFooterButton('Next');
-            await app.createChatController.hoverParticipantListAvatarByRow(user2.userInfo.lastName);
+            await app.createChatController.hoverParticipantListAvatarByName(user2.userInfo.lastName);
         });
     });
 

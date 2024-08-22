@@ -45,7 +45,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await app.chatController.clickChatHeaderMenu();
             await app.chatController.selectFromChatHeaderMenu('View Details');
             await app.detailsController.clickMemberRolesButton();
-            await app.detailsController.hoverParticipantListAvatarByRow(
+            await app.detailsController.hoverParticipantListAvatarByName(
                 `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
             );
         });

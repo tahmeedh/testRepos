@@ -26,7 +26,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await test.step(`User is in SUC create view and mini-vCard is opened`, async () => {
             await app.hubHeaderController.clickStartChatButton();
             await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
-            await app.createChatController.hoverAvatarByRow(user2.userInfo.lastName);
+            await app.createChatController.hoverAvatarByName(user2.userInfo.lastName);
         });
     });
 

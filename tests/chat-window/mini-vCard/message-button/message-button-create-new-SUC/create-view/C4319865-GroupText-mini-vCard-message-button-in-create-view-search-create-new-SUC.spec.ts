@@ -29,7 +29,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await test.step(`User is in GroupText create view and mini-vCard is opened`, async () => {
             await app.hubHeaderController.clickStartChatButton();
             await app.hubHeaderController.selectHeaderMainMenuOption('Text');
-            await app.createChatController.hoverAvatarByRowExternal(user2.userInfo.lastName);
+            await app.createChatController.hoverAvatarByNameExternal(user2.userInfo.lastName);
         });
     });
 

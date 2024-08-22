@@ -56,7 +56,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
                 user1.userInfo.grcpAlias
             );
             await app1.conversationListController.clickOnConversationName('Test-Restricted-Channel');
-            await app1.inviteController.hoverAdministratorListAvatarByRow(
+            await app1.inviteController.hoverAdministratorListAvatarByName(
                 `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
             );
         });

@@ -58,7 +58,7 @@ test.skip(`${testName} ${testTags}`, async ({ browser }) => {
             );
             await app1.conversationListController.clickOnConversationName('Test-Restricted-Channel');
             await app1.detailsController.clickMemberRolesButton();
-            await app1.inviteController.hoverParticipantListAvatarByRow(
+            await app1.inviteController.hoverParticipantListAvatarByName(
                 `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
             );
         });

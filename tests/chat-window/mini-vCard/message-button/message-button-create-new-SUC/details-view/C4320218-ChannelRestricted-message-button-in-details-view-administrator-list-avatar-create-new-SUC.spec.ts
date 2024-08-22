@@ -60,7 +60,7 @@ test.skip(`${testName} ${testTags}`, async ({ browser }) => {
             await app1.conversationListController.clickOnConversationName('Test-Restricted-Channel');
             await app1.chatController.clickChatHeaderMenu();
             await app1.chatController.selectFromChatHeaderMenu('View Details');
-            await app1.detailsController.hoverAdministratorListAvatarByRow(
+            await app1.detailsController.hoverAdministratorListAvatarByName(
                 `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
             );
         });

@@ -30,7 +30,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await app.createChatController.clickFooterButton('Next');
             await app.createChatController.clickFooterButton('Next');
             await app.createChatController.clickAddModeratorBtn();
-            await app.createChatController.hoverAvatarByRow(user2.userInfo.lastName);
+            await app.createChatController.hoverAvatarByName(user2.userInfo.lastName);
         });
     });
 

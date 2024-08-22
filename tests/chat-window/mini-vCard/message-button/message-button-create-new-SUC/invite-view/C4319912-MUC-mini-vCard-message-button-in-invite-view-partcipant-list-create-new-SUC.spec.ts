@@ -39,7 +39,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
             };
             await GrcpCreateController.createMUC(user2Page, createMucData);
             await app1.conversationListController.clickOnConversationName('Test-MUC');
-            await app1.inviteController.hoverParticipantListAvatarByRow(
+            await app1.inviteController.hoverParticipantListAvatarByName(
                 `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
             );
         });

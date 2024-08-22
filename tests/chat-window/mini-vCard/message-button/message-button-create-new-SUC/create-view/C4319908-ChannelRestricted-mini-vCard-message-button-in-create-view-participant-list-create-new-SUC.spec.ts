@@ -32,7 +32,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await app.createChatController.clickAddModeratorBtn();
             await app.createChatController.clickUserRowInternal(user2.userInfo.lastName);
             await app.createChatController.clickFooterButton('Select');
-            await app.createChatController.hoverParticipantListAvatarByRow(user2.userInfo.lastName);
+            await app.createChatController.hoverParticipantListAvatarByName(user2.userInfo.lastName);
         });
     });
 

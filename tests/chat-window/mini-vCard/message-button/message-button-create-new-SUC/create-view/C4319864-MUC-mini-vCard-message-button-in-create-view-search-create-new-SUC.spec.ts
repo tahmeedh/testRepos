@@ -26,7 +26,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         await test.step(`User is in MUC create view and mini-vCard is opened`, async () => {
             await app.hubHeaderController.clickStartChatButton();
             await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
-            await app.createChatController.hoverAvatarByRow(user2.userInfo.lastName);
+            await app.createChatController.hoverAvatarByName(user2.userInfo.lastName);
         });
     });
 

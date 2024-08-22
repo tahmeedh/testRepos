@@ -277,7 +277,7 @@ export class CreateChatController {
         });
     }
 
-    async hoverAvatarByRow(userName: string) {
+    async hoverAvatarByName(userName: string) {
         await test.step(`Create Chat Controller: Hover over the avatar on row '${userName}'`, async () => {
             Log.info(`Create Chat Controller: Hover over the avatar on row '${userName}'`);
             await this.Pom.MSC_CONTACT_LIST_ITEM.getByText(userName)
@@ -288,7 +288,7 @@ export class CreateChatController {
         });
     }
 
-    async hoverAvatarByRowExternal(userName: string) {
+    async hoverAvatarByNameExternal(userName: string) {
         await test.step(`Create Chat Controller: Hover over the avatar on row '${userName}' external`, async () => {
             Log.info(`Create Chat Controller: Hover over the avatar on row '${userName}' external `);
             await this.Pom.SEARCH_COMPONENT_CONTACT_ROW.getByText(userName)
@@ -313,7 +313,7 @@ export class CreateChatController {
         });
     }
 
-    async hoverParticipantListAvatarByRow(userName: string) {
+    async hoverParticipantListAvatarByName(userName: string) {
         await test.step(`Create Chat Controller: Hover over the avatar on row '${userName}'`, async () => {
             Log.info(`Create Chat Controller: Hover over the avatar on row '${userName}'`);
             await this.Pom.DETAILS_PARTICIPANTS_LIST.getByText(userName)

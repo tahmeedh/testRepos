@@ -59,7 +59,7 @@ export class InviteController {
         });
     }
 
-    async hoverParticipantListAvatarByRow(userName: string) {
+    async hoverParticipantListAvatarByName(userName: string) {
         await test.step(`Invite Controller: Hover over the avatar on row '${userName}'`, async () => {
             Log.info(`Invite Controller: Hover over the avatar on row '${userName}'`);
             await this.Pom.DETAILS_PARTICIPANTS_LIST.getByText(userName)
@@ -70,7 +70,7 @@ export class InviteController {
         });
     }
 
-    async hoverAdministratorListAvatarByRow(userName: string) {
+    async hoverAdministratorListAvatarByName(userName: string) {
         await test.step(`Invite Controller: Hover over administrator list avatar on row '${userName}'`, async () => {
             Log.info(`Invite Controller: Hover over administrator list avatar on row '${userName}'`);
             await this.Pom.ADMINISTRATOR_LIST.getByText(userName)
