@@ -50,6 +50,12 @@ export class DetailsController {
         });
     }
 
+    async clickSelectParticipantsMUC() {
+        await test.step('Details Controller: Click Select participants button', async () => {
+            await this.Pom.SELECT_PARTICIPANTS_MUC.click();
+        });
+    }
+
     async selectParticipant(userName: string) {
         await test.step(`Details Controller: Select participants ${userName}`, async () => {
             await this.Pom.CONTACT_LIST_USER_ROW.getByText(userName).first().click();

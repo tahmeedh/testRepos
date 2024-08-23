@@ -34,7 +34,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
             await app.conversationListController.clickOnConversationName('Test-MUC');
             await app.chatController.clickChatHeaderMenu();
             await app.chatController.selectFromChatHeaderMenu('View Details');
-            await app.detailsController.clickSelectParticipants();
+            await app.detailsController.clickSelectParticipantsMUC();
             await app.detailsController.hoverSearchResultsAvatarByName(
                 `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
             );
