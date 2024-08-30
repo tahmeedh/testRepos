@@ -32,17 +32,16 @@ test(`${testName} ${testTags}`, async ({ page }) => {
 
     await test.step('Remove the GR message app entitlement', async () => {
         await user.removeEntitlement('MESSAGE_APPLICATION');
-        await app.page.waitForTimeout(8000); // Error page takes some time to load
     });
 
     await test.step('Verify that Error page with Entitlement Issus is shown', async () => {
-        await expect(app.messageHubController.Pom.GR_MESSAGE_LOGO).toBeVisible();
-        await expect(app.messageHubController.Pom.ERROR_PAGE_TITLE).toBeVisible();
-        await expect(app.messageHubController.Pom.NO_PERMISSION_ERROR_TITLE).toBeVisible();
-        await expect(app.messageHubController.Pom.ERROR_PAGE_TITLE).toHaveText(
+        await expect(app.ErrorController.Pom.GR_MESSAGE_LOGO).toBeVisible({ timeout: 15000 });
+        await expect(app.ErrorController.Pom.ERROR_PAGE_TITLE).toBeVisible();
+        await expect(app.ErrorController.Pom.NO_PERMISSION_ERROR_TITLE).toBeVisible();
+        await expect(app.ErrorController.Pom.ERROR_PAGE_TITLE).toHaveText(
             'You do not have permission to access Global Relay App.'
         );
-        await expect(app.messageHubController.Pom.NO_PERMISSION_ERROR_TITLE).toHaveText(
+        await expect(app.ErrorController.Pom.NO_PERMISSION_ERROR_TITLE).toHaveText(
             'For assistance, contact your company administrator.'
         );
     });
