@@ -42,6 +42,8 @@ test(`${testName} ${testTags}`, async () => {
             await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
             await app.portalController.closeEnableDesktopNotification();
             await app.newsAlertController.clickNextSMSEnabledNotification();
+            await app.page.pause();
+            await app.newsAlertController.closeSmsAndWhatsAppEnabledNotification();
         });
     });
 
