@@ -32,7 +32,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
 
     await test.step('Remove the GR message app entitlement', async () => {
         await user.removeEntitlement('MESSAGE_APPLICATION');
-        await app.page.waitForTimeout(8000); // Error page milliseconds = 10 seconds
+        await app.page.waitForTimeout(8000); // Error page takre some time to load
     });
 
     await test.step('Verify that Error page with Entitlement Issus is shown', async () => {
