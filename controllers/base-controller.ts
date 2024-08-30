@@ -27,7 +27,7 @@ import { SearchResultController } from './message-hub/search-result-controller';
 import { PreviewAttachmentController } from './chat-window/preview-attachment-controller';
 import { AttachmentViewerController } from './chat-window/attachment-viewer-controller';
 import { MiniVCardController } from './mini-vCard/mini-vCard-controller';
-import { ErrorController } from './message-hub/error-page-controller';
+import { ErrorController } from './message-hub/error-controller';
 
 export class BaseController {
     readonly page: Page;
