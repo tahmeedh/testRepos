@@ -65,6 +65,8 @@ export class ChatPage extends BasePage {
     readonly VIDEO_THUMBNAIL: Locator;
     readonly DROP_ZONE: Locator;
     readonly LOAD_SPINNER: Locator;
+    readonly CHAT_HEADER: Locator;
+    readonly CHAT_HEADER_BUTTONS: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -86,6 +88,8 @@ export class ChatPage extends BasePage {
         this.SEND_BUTTON = this.CHATIFRAME.locator('.m-auto-send-btn');
         this.ACCEPT_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-accept');
         this.CHAT_HEADER_MENU = this.CHATIFRAME.locator('.chat-header-menu-button');
+        this.CHAT_HEADER = this.CHATIFRAME.locator('.m-auto-header');
+        this.CHAT_HEADER_BUTTONS = this.CHATIFRAME.locator('.shared-header-container-buttons-menu');
 
         this.TIMESTAMP_CONTAINER = this.CHATIFRAME.locator('.m-auto-timestamp-region');
         this.ALL_CONTENT = this.CHATIFRAME.locator(

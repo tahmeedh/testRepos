@@ -9,12 +9,16 @@ const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestIn
 let browser: Browser;
 let context1: BrowserContext;
 let app: BaseController;
+let browser2: Browser;
+let context2: BrowserContext;
+let app2: BaseController;
 let company: Company;
 let user1: User;
 let user2: User;
 
 test.beforeEach(async () => {
     browser = await chromium.launch();
+    browser2 = await chromium.launch();
     company = await Company.createCompany();
     user1 = await company.createUser();
     user2 = await company.createUser();
@@ -25,7 +29,7 @@ test.beforeEach(async () => {
         user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
     ]);
 
-    await user1.requestAndAssignTwilioNumber();
+    await user1.requestAndAssignWhatsAppNumber();
 });
 test(`${testName} ${testTags}`, async () => {
     test.info().annotations.push(testAnnotation);
@@ -36,45 +40,61 @@ test(`${testName} ${testTags}`, async () => {
     const page1 = await context1.newPage();
     app = new BaseController(page1);
 
+    context2 = await browser2.newContext();
+    const page2 = await context2.newPage();
+    app2 = new BaseController(page2);
+
     await test.step('GIVEN', async () => {
         await test.step('User is logged in', async () => {
             await app.goToLoginPage();
             await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
             await app.portalController.closeEnableDesktopNotification();
-            await app.newsAlertController.clickNextSMSEnabledNotification();
-            await app.page.pause();
+            await app.newsAlertController.closeSmsAndWhatsAppEnabledNotification();
             await app.portalController.clickCloseSMSEnabledNotification();
+        });
+        await test.step('User is logged in', async () => {
+            await app2.goToLoginPage();
+            await app2.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+            await app2.portalController.closeEnableDesktopNotification();
         });
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
-        await app.startChatButtonController.ClickOnStartSMS();
-        await app.createChatController.CreateSMS();
+        await app.startChatButtonController.ClickOnStartWhatsapp();
+        await app.createChatController.CreateWhatsapp();
         await app.chatController.skipRecipientInfo();
         await app.chatController.sendContent();
+    });
+
+    await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
+        await expect(app2.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
+        await app2.conversationListController.clickConversationByRow(0);
     });
 
     await test.step('Step 1 WHEN - Click favourite button and return to chatlist ', async () => {
         await app.chatController.clickChatFavouriteButton();
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
-        await app.chatController.clickOnBackButton();
+        await app.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
+            path: `tests/chat-window/sms/favourite/C3532165-SMS-favourite-is-reflected-in-
+            concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png`
+        });
     });
 
     await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
-        await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
-        await app.conversationListController.clickConversationByRow(0);
-        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
-    });
+        await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
+        await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
+            maxDiffPixelRatio: 0.1
+        });
 
-    await test.step('Step 2 WHEN - Click favourite button and return to chatlist ', async () => {
-        await app.chatController.clickChatFavouriteButton();
-        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).not.toBeVisible();
-        await app.chatController.clickOnBackButton();
-    });
-
-    await test.step('step 2 THEN - favourite icon not visible and return to conversation and favourite icon not visible ', async () => {
-        await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
-        await app.conversationListController.clickConversationByRow(0);
-        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).not.toBeVisible();
+        expect(
+            await app2.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
+                path: `tests/chat-window/sms/favourite/C3532166-SMS-favourite-is-reflected-in-
+                concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png`
+            })
+        ).toMatchSnapshot({
+            name: `/C3532166-SMS-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/
+            C3532166-SMS-favourite-is-reflected-in-concurr-44482-onnects-chat-window-suc-favourite-static-1-Google-Chrome-linux.png`,
+            maxDiffPixels: 0.1
+        });
     });
 });
