@@ -10,6 +10,8 @@ export class NewsAlertPage extends BasePage {
         super(page);
 
         this.NEWS_ALERT_NEXT_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-news-alert-next-link');
-        this.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON = this.MESSAGEIFRAME.locator('[data-id="close-sm"]');
+        this.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON = this.MESSAGEIFRAME.locator(
+            '.m-auto-new-feature-tooltip-close'
+        );
     }
 }
