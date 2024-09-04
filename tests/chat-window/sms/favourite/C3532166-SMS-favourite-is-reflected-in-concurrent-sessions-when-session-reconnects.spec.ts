@@ -53,7 +53,7 @@ test(`${testName} ${testTags}`, async () => {
             await app.newsAlertController.clickNextSMSEnabledNotification();
             await app.portalController.clickCloseSMSEnabledNotification();
         });
-        await test.step('User is logged in', async () => {
+        await test.step('Login concurrent session', async () => {
             await app2.goToLoginPage();
             await app2.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
         });
@@ -66,7 +66,7 @@ test(`${testName} ${testTags}`, async () => {
         await app.chatController.sendContent();
     });
 
-    await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
+    await test.step('step 1 THEN - Favourite icon not visible and return to conversation in concurrent session', async () => {
         await expect(app2.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
         await app2.conversationListController.clickConversationByRow(0);
     });
@@ -79,7 +79,7 @@ test(`${testName} ${testTags}`, async () => {
         });
     });
 
-    await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
+    await test.step('step 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
         await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
         await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
             maxDiffPixelRatio: 0.1

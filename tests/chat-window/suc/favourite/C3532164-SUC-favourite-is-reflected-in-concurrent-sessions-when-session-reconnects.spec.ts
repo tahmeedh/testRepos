@@ -25,12 +25,13 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     await test.step(`GIVEN`, async () => {
-        await test.step(`Open browsers`, async () => {
+        await test.step(`Login`, async () => {
             browser1 = await browser.newContext();
             const user1Page = await browser1.newPage();
             app1 = new BaseController(user1Page);
             await app1.goToLoginPage();
-
+        });
+        await test.step(`Login concurrent sessions`, async () => {
             browser2 = await browser.newContext();
             const user1Page2 = await browser2.newPage();
             app2 = new BaseController(user1Page2);
@@ -58,7 +59,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             await app1.chatController.sendContent();
         });
 
-        await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
+        await test.step('step 1 THEN - Favourite icon not visible and return to conversation in concurrent session ', async () => {
             await expect(app2.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
             await app2.messageHubController.clickMessageHubRow(user2fullName);
         });
@@ -71,7 +72,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             });
         });
 
-        await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
+        await test.step('step 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
             await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
             await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
                 maxDiffPixelRatio: 0.1
