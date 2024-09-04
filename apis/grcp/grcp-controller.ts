@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test';
 import { randomUUID } from 'crypto';
+import { Log } from 'Apis/api-helpers/log-utils';
 import { GrcpBaseController } from './grcp-base-controller';
 
 export class GrcpController {
@@ -61,6 +62,7 @@ export class GrcpController {
             content: `${content}`,
             msgType: 'conversation.ServerSendContentMsg'
         };
+        Log.info(`Start SUC chat and send message`);
         await GrcpBaseController.sendRequest(page, sendContentData);
     }
 }

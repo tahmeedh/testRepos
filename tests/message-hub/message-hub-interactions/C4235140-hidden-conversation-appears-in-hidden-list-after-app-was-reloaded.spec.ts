@@ -26,7 +26,7 @@ test.beforeAll(async ({ browser }) => {
 
     app = new BaseController(page);
     await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
+    // await app.portalController.closeEnableDesktopNotification();
 
     Log.info('Creating conversation');
     await GrcpController.createInternalConversation(
@@ -44,7 +44,7 @@ test(`${testName} ${testTags}`, async () => {
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
 
-    await app.portalController.closeEnableDesktopNotification();
+    // await app.portalController.closeEnableDesktopNotification();
     await app.conversationListController.clickOnConversationName(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );

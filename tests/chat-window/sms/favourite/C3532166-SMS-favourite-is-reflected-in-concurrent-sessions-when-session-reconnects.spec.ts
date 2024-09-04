@@ -32,7 +32,7 @@ test.beforeEach(async () => {
 
     await user1.requestAndAssignTwilioNumber();
 });
-test(`${testName} ${testTags}`, async () => {
+test(`${testName} ${testTags} @VA-7592`, async () => {
     test.info().annotations.push(testAnnotation);
     Log.starDivider(
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
@@ -66,33 +66,28 @@ test(`${testName} ${testTags}`, async () => {
         await app.chatController.sendContent();
     });
 
-    await test.step('step 1 THEN - Favourite icon not visible and return to conversation in concurrent session', async () => {
-        await expect(app2.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
-        await app2.conversationListController.clickConversationByRow(0);
-    });
-
-    await test.step('Step 1 WHEN - Click favourite button and return to chatlist ', async () => {
+    await test.step('Phase 1 WHEN - Click favourite button and favourite button filled ', async () => {
         await app.chatController.clickChatFavouriteButton();
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
-        await app.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
-            path: `tests/chat-window/sms/favourite/C3532166-SMS-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png`
-        });
     });
 
-    await test.step('step 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
+    await test.step('Phase 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
         await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
         await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
             maxDiffPixelRatio: 0.1
         });
+    });
 
-        expect(
-            await app2.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
-                path: 'tests/chat-window/sms/favourite/C3532166-SMS-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png'
-            })
-        ).toMatchSnapshot({
-            name: `/C3532166-SMS-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/
-            C3532166-SMS-favourite-is-reflected-in-concurr-44482-onnects-chat-window-suc-favourite-static-1-Google-Chrome-linux.png`,
-            maxDiffPixels: 0.1
+    await test.step('Phase 2 WHEN - Click favourite button and favourite button unfilled ', async () => {
+        await app.chatController.clickChatFavouriteButton();
+        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON).toBeVisible();
+    });
+
+    await test.step('Phase 2 THEN - Favourite icon not visible and return to conversation in concurrent session', async () => {
+        await expect(app2.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
+        await app2.conversationListController.clickConversationByRow(0);
+        await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
+            maxDiffPixelRatio: 0.1
         });
     });
 });

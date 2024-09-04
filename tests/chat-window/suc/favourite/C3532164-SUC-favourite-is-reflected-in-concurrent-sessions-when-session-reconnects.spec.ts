@@ -2,10 +2,11 @@ import { test, BrowserContext, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { User } from 'Apis/user';
+import { GrcpController } from 'Apis/grcp/grcp-controller';
 import { BaseController } from '../../../../controllers/base-controller';
 /* eslint-disable max-len*/
 
-const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
+const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let company: Company;
 let user1: User;
 let user2: User;
@@ -21,7 +22,7 @@ test.beforeEach(async () => {
     await company.addUserToEachOthersRoster([user1, user2]);
 });
 
-test(`${testName} ${testTags} @static`, async ({ browser }) => {
+test(`${testName} ${testTags} @VA-7592`, async ({ browser }) => {
     test.info().annotations.push(testAnnotation);
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     await test.step(`GIVEN`, async () => {
@@ -30,6 +31,17 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             const user1Page = await browser1.newPage();
             app1 = new BaseController(user1Page);
             await app1.goToLoginPage();
+            await app1.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
+
+            await test.step('Creating conversation via grcp.', async () => {
+                await GrcpController.createInternalConversation(
+                    user1Page,
+                    user1.userInfo.grcpAlias,
+                    user2.userInfo.grcpAlias,
+                    'C3532164 Test Content'
+                );
+            });
+            await app1.messageHubController.clickMessageHubRow(user2fullName);
         });
         await test.step(`Login concurrent sessions`, async () => {
             browser2 = await browser.newContext();
@@ -39,12 +51,6 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
 
         await Promise.all([
-            test.step(`Browser1 - User1 is logged in`, async () => {
-                await test.step('Login ', async () => {
-                    await app1.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-                    await app1.portalController.closeEnableDesktopNotification();
-                });
-            }),
             test.step(`Browser2 - User1 is logged in`, async () => {
                 await test.step('Login ', async () => {
                     await app2.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
@@ -53,23 +59,9 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             })
         ]);
 
-        await test.step(`Start ${testChatType} chat and send message`, async () => {
-            await app1.startChatButtonController.ClickOnStartOneToOne();
-            await app1.createChatController.CreateSUC(user2fullName);
-            await app1.chatController.sendContent();
-        });
-
-        await test.step('step 1 THEN - Favourite icon not visible and return to conversation in concurrent session ', async () => {
-            await expect(app2.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
-            await app2.messageHubController.clickMessageHubRow(user2fullName);
-        });
-
-        await test.step('Step 1 WHEN - Click favourite button and return to chatlist ', async () => {
+        await test.step('Phase 1 THEN - Click favourite button and favourite button filled ', async () => {
             await app1.chatController.clickChatFavouriteButton();
             await expect(app1.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
-            await app1.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
-                path: 'tests/chat-window/suc/favourite/C3532164-SUC-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png'
-            });
         });
 
         await test.step('step 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
@@ -77,15 +69,18 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
                 maxDiffPixelRatio: 0.1
             });
+        });
 
-            expect(
-                await app2.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
-                    path: 'tests/chat-window/suc/favourite/C3532164-SUC-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png'
-                })
-            ).toMatchSnapshot({
-                name: `/C3532164-SUC-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/
-                C3532164-SUC-favourite-is-reflected-in-concurr-44482-onnects-chat-window-suc-favourite-static-1-Google-Chrome-linux.png`,
-                maxDiffPixels: 0.1
+        await test.step('Phase 2 WHEN - Click favourite button and favourite button unfilled ', async () => {
+            await app1.chatController.clickChatFavouriteButton();
+            await expect(app1.chatController.Pom.CHAT_FAVOURITE_BUTTON).toBeVisible();
+        });
+
+        await test.step('Phase 2 THEN - Favourite icon not visible and return to conversation in concurrent session ', async () => {
+            await expect(app2.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
+            await app2.messageHubController.clickMessageHubRow(user2fullName);
+            await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
+                maxDiffPixelRatio: 0.1
             });
         });
     });
