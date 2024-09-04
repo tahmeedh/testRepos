@@ -3,6 +3,7 @@ import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { User } from 'Apis/user';
 import { BaseController } from '../../../../controllers/base-controller';
+/* eslint-disable max-len*/
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let company: Company;
@@ -66,8 +67,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
             await app1.chatController.clickChatFavouriteButton();
             await expect(app1.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
             await app1.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
-                path: `tests/chat-window/suc/favourite/C3532164-SUC-favourite-is-reflected-in-
-                concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png`
+                path: 'tests/chat-window/suc/favourite/C3532164-SUC-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png'
             });
         });
 
@@ -79,8 +79,7 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
 
             expect(
                 await app2.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
-                    path: `tests/chat-window/suc/favourite/C3532164-SUC-favourite-is-reflected-in-
-                    concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png`
+                    path: 'tests/chat-window/suc/favourite/C3532164-SUC-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png'
                 })
             ).toMatchSnapshot({
                 name: `/C3532164-SUC-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/

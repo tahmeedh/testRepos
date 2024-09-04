@@ -4,6 +4,7 @@ import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
 import { BaseController } from '../../../../controllers/base-controller';
+/* eslint-disable max-len*/
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser: Browser;
@@ -49,8 +50,6 @@ test(`${testName} ${testTags}`, async () => {
             await app.goToLoginPage();
             await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
             await app.portalController.closeEnableDesktopNotification();
-            await app.newsAlertController.closeSmsAndWhatsAppEnabledNotification();
-            await app.portalController.clickCloseSMSEnabledNotification();
         });
         await test.step('User is logged in', async () => {
             await app2.goToLoginPage();
@@ -75,8 +74,7 @@ test(`${testName} ${testTags}`, async () => {
         await app.chatController.clickChatFavouriteButton();
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
         await app.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
-            path: `tests/chat-window/sms/favourite/C3532165-SMS-favourite-is-reflected-in-
-            concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png`
+            path: 'C3532167-Whatsapp-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png'
         });
     });
 
@@ -88,12 +86,11 @@ test(`${testName} ${testTags}`, async () => {
 
         expect(
             await app2.chatController.Pom.CHAT_HEADER_BUTTONS.screenshot({
-                path: `tests/chat-window/sms/favourite/C3532166-SMS-favourite-is-reflected-in-
-                concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png`
+                path: 'tests/chat-window/whatsapp/favourite/C3532167-Whatsapp-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/header_buttons.png'
             })
         ).toMatchSnapshot({
-            name: `/C3532166-SMS-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/
-            C3532166-SMS-favourite-is-reflected-in-concurr-44482-onnects-chat-window-suc-favourite-static-1-Google-Chrome-linux.png`,
+            name: `/C3532167-Whatsapp-favourite-is-reflected-in-concurrent-sessions-when-session-reconnects.spec.ts-snapshots/
+            C3532167-Whatsapp-favourite-is-reflected-in-concurr-44482-onnects-chat-window-whatsapp-favourite-static-1-Google-Chrome-linux.png`,
             maxDiffPixels: 0.1
         });
     });
