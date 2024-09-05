@@ -36,7 +36,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartMUC();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
     await app.createChatController.createMUC([user2fullName, user3fullName]);
@@ -49,10 +50,10 @@ test(`${testName} ${testTags}`, async () => {
     const PNG = './asset/download.png';
     await app.chatController.waitForHeader();
     await app.previewAttachmentController.attachFile(PNG);
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
-    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+    expect(app.conversationListController.Pom.DRAFT_TEXT_LINE).toBeVisible();
+    expect(app.conversationListController.Pom.ATTACHMENT_ICON).toBeVisible();
+    expect(app.conversationListController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

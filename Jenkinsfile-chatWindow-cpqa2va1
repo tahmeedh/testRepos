@@ -1,9 +1,9 @@
 def email_recipients = 'sam.leung@globalrelay.net'
-def nodeVersion = 'v18.17.0'
+def nodeVersion = 'v18.18.0'
 def buildsToKeep = 20
 def timeOutTime = 40
 def buildNumber = env.BUILD_NUMBER.toInteger()
-def buildImageVersion = '0.0.5-beta'
+def buildImageVersion = '1.0.0'
 def buildImage = "docker-repo.globalrelay.net/test-automation/va-test-image:${buildImageVersion}"
 def buildNode = 'linux'
 def targetEnv = 'cpqa2-va1'
@@ -82,7 +82,7 @@ pipeline {
                         ${NVM_BIN}/$testCommand| tee playwright_tests.log
                         echo "Playwright test command exit code is [$?]"
                         set -e
-                        grep "Running [0-9]* test. using [0-9]* worker" playwright_tests.log
+                        grep "Running [0-9]* test" playwright_tests.log
                         '''
                     }
                     }
@@ -104,9 +104,12 @@ pipeline {
                     reportName: 'jsat-e2e-chat-window Test Report'
                 ]
                                 currentBuild.displayName = "#${buildNumber} Target Env.: ${targetEnv} "
-                            }
+
+                                echo 'Publishing Allure reports'
+                                allure commandline: 'Allure-2.12.1', includeProperties: true, jdk: '', properties: [[key: 'allure.tests.management.pattern', value: 'https://testrail.globalrelay.net/index.php?/cases/view/%s'], [key: 'allure.issues.tracker.pattern', value: 'https://jira.globalrelay.net/browse/%s']], results: [[path: 'jsat-e2e-chat-window/allure-results']]
                         }
                     }
+                }
 
                     stage('Archiving Videos') {
                         steps {

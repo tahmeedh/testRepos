@@ -41,7 +41,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartMUC();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
     const title = StringUtils.generateString(3, 5);
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
@@ -59,7 +60,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.inviteController.acceptInvite('MUC');
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} receives message`);
@@ -79,7 +80,7 @@ test(`${testName} ${testTags}`, async () => {
     await app2.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user3.userInfo.firstName} ${user3.userInfo.lastName} declines invite`);
-    await app2.open(title);
+    await app2.conversationListController.clickOnConversationName(title);
     await app2.inviteController.declineInvite('MUC');
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

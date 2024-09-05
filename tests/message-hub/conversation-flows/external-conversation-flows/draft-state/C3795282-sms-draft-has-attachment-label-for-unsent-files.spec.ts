@@ -38,7 +38,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartSMS();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Text');
     const randonNumber = await app.createChatController.CreateSMS();
     await app.chatController.skipRecipientInfo();
     await app.chatController.sendContent();
@@ -48,10 +49,10 @@ test(`${testName} ${testTags}`, async () => {
     const PNG = './asset/download.png';
     await app.chatController.waitForHeader();
     await app.previewAttachmentController.attachFile(PNG);
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
-    expect(app.messageHubController.Pom.DRAFT_TEXT_LINE).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_ICON).toBeVisible();
-    expect(app.messageHubController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
+    expect(app.conversationListController.Pom.DRAFT_TEXT_LINE).toBeVisible();
+    expect(app.conversationListController.Pom.ATTACHMENT_ICON).toBeVisible();
+    expect(app.conversationListController.Pom.ATTACHMENT_TEXT_LINE).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

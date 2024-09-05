@@ -35,12 +35,14 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(
         `Start ${testChatType} chat and search for ${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
-    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app.createChatController.SearchSucUser(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
 
     Log.info(`click ${user2.userInfo.firstName} ${user2.userInfo.lastName} avatar and expect v-card`);
-    await app.clickAvatar('1');
+    await app.createChatController.clickAvatarByRow(1);
     await expect(app.vCardController.Pom.VCARD_CONTAINER).toBeVisible();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
+
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

@@ -34,7 +34,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartChannel();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Channel');
     const title = StringUtils.generateString(3, 5);
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
     await app.createChatController.fillOutWhoCanPostForm();
@@ -52,7 +53,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.typeContent(draftText);
 
     Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
+
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveText(draftText);
     Log.starDivider(`END TEST: Test Execution Commpleted`);

@@ -41,7 +41,8 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartSMS();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Text');
     const randonNumber = await app.createChatController.CreateSMS();
     await app.chatController.skipRecipientInfo();
     await app.chatController.sendContent();
@@ -50,7 +51,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     );
 
     await app.chatController.muteConversation();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
     await test.step('Verify that Mute icon is shown for muted chat', async () => {
         await expect(app.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();

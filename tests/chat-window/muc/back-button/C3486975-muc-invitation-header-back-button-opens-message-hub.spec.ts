@@ -39,7 +39,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartMUC();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
     const title = StringUtils.generateString(3, 5);
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
@@ -60,7 +61,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName} goes to invite screen and back to message hub`
     );
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.chatController.backButton();
     await expect(app1.messageHubController.Pom.HUB_CONTAINER).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);

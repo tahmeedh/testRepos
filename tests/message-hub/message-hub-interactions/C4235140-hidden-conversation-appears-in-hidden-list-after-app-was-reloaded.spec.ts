@@ -4,8 +4,8 @@ import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
-import { GrcpController } from 'Apis/grcp/grcp-controller';
 import { FilterType } from 'Controllers/message-hub/conversation-list-controller';
+import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let user1: User;
@@ -29,12 +29,12 @@ test.beforeAll(async ({ browser }) => {
     // await app.portalController.closeEnableDesktopNotification();
 
     Log.info('Creating conversation');
-    await GrcpController.createInternalConversation(
-        page,
-        user1.userInfo.grcpAlias,
-        user2.userInfo.grcpAlias,
-        'C4044149 Test Content'
-    );
+    const createSUCData = {
+        senderGrcpAlias: user1.userInfo.grcpAlias,
+        receiverGrcpAlias: user2.userInfo.grcpAlias,
+        content: 'C4235140 Test Content'
+    };
+    await GrcpCreateController.createSUC(page, createSUCData);
     Log.info('======== END TEST SETUP ========');
 });
 
@@ -50,7 +50,7 @@ test(`${testName} ${testTags}`, async () => {
     );
 
     await app.chatController.hideChat();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
     await app.page.reload();
     await app.portalController.closeEnableDesktopNotification();

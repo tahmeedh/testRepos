@@ -37,7 +37,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartMUC();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
     await app.createChatController.createMUC([user2fullName, user3fullName]);
@@ -49,7 +50,8 @@ test(`${testName} ${testTags}`, async () => {
 
     Log.info(`${testChatType} chat expects ${draftText} string in draft state `);
     await app.chatController.typeContent(draftText);
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
+
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftText);
     await expect(secondaryLine).toHaveText(draftText);
     Log.starDivider(`END TEST: Test Execution Commpleted`);

@@ -12,7 +12,10 @@ export class InvitePage extends BasePage {
     // MUC
     readonly ACCEPT_BUTTON_MUC: Locator;
     readonly DECLINE_BUTTON_MUC: Locator;
-    readonly;
+    readonly HEADER_AVATAR: Locator;
+    readonly DETAILS_PARTICIPANTS_LIST: Locator;
+    readonly MEMBER_ROLES_BUTTON: Locator;
+    readonly ADMINISTRATOR_LIST: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -26,5 +29,10 @@ export class InvitePage extends BasePage {
         //MUC
         this.ACCEPT_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-accept');
         this.DECLINE_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-decline');
+
+        this.HEADER_AVATAR = this.CHATIFRAME.locator('.m-auto-header').getByTestId('test-avatar-main');
+        this.DETAILS_PARTICIPANTS_LIST = this.CHATIFRAME.locator('.participants-list');
+        this.MEMBER_ROLES_BUTTON = this.CHATIFRAME.locator('.m-auto-members-roles-button');
+        this.ADMINISTRATOR_LIST = this.CHATIFRAME.locator('.administrator-list');
     }
 }

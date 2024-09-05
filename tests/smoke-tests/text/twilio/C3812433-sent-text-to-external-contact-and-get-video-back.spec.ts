@@ -4,7 +4,7 @@ import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import {
     MockInboundMessageController,
-    MockInboundMessageType
+    MockMsgDataType
 } from 'Apis/mock-inbound-message/mock-inbound-message-controller';
 import { Log } from 'Apis/api-helpers/log-utils';
 
@@ -49,7 +49,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('User start a text Message', async () => {
-        await app.startChatButtonController.ClickOnStartSMS();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('Text');
         randomNumber = await app.createChatController.CreateSMS();
         await app.chatController.skipRecipientInfo();
     });
@@ -62,14 +63,13 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('Get Media Back', async () => {
-        const mockTwilioMessage: MockInboundMessageType = {
+        const mockTwilioMessage: MockMsgDataType = {
+            type: 'SMS',
             senderPhoneNumber: randomNumber,
-            receipientGrId: GrId,
-            message: mockSMSMessage,
-            type: 'TWILIO',
+            content: mockSMSMessage,
             attachmentId: '5263eb4a-bbdd-4172-9bf2-c8de58770ff2'
         };
-        await MockInboundMessageController.sendInboundMessage(mockTwilioMessage);
+        await MockInboundMessageController.receiveInboundExternalMsg(GrId, mockTwilioMessage);
     });
 
     await test.step('Download Media Response', async () => {

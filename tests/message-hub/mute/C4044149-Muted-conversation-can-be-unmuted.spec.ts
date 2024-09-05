@@ -6,6 +6,7 @@ import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
 import { ConfigUtils } from 'helper/config-utils';
 import { GrcpController } from 'Apis/grcp/grcp-controller';
+import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let user1: User;
@@ -30,12 +31,12 @@ test.beforeAll(async ({ browser }) => {
     await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     Log.info('Creating conversation + mute conversation via grcp');
-    await GrcpController.createInternalConversation(
-        page,
-        user1.userInfo.grcpAlias,
-        user2.userInfo.grcpAlias,
-        'C4044149 Test Content'
-    );
+    const createSUCData = {
+        senderGrcpAlias: user1.userInfo.grcpAlias,
+        receiverGrcpAlias: user2.userInfo.grcpAlias,
+        content: 'C4044149 Test Content'
+    };
+    await GrcpCreateController.createSUC(page, createSUCData);
     await page.reload();
     const convoId = await app.conversationListController.getConversationId(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
@@ -60,7 +61,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
     await appUser1.chatController.unMuteConversation();
-    await appUser1.messageHubController.clickSideBarChatsButton();
+    await appUser1.navigationController.clickSideBarChatsButton();
 
     // User 2
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
@@ -85,7 +86,7 @@ test(`${testName} ${testTags}`, async ({ browser }) => {
     });
 
     await test.step('Verify that new message should update badge counter on the conversation list and Side Bar', async () => {
-        await expect(appUser1.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
+        await expect(appUser1.navigationController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
         await expect(appUser1.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toBeVisible();
         await expect(appUser1.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toHaveText('1');
     });

@@ -139,5 +139,15 @@ export const users = {
         EMAIL: 'draganddrop1@vegastatic.com',
         PASSWORD: 'Password2@',
         NOTES: 'READ ONLY'
+    },
+    CHANNEL_1: {
+        EMAIL: 'channel1@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
+    },
+    CHANNEL_2: {
+        EMAIL: 'channel2@vegastatic.com',
+        PASSWORD: 'Password2@',
+        NOTES: 'READ ONLY'
     }
 };

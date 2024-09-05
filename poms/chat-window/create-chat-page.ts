@@ -17,6 +17,7 @@ export class CreateChatPage extends BasePage {
     readonly ACCEPT_BUTTON_MUC: Locator;
     readonly DECLINE_BUTTON_MUC: Locator;
     readonly INVITE_BUTTON: Locator;
+    readonly DETAILS_PARTICIPANTS_LIST: Locator;
 
     //SMS
     readonly EXTERNAL_SEARCH_INPUT: Locator;
@@ -38,8 +39,12 @@ export class CreateChatPage extends BasePage {
     readonly JOIN_BUTTON: Locator;
     readonly CANCEL_BUTTON: Locator;
 
+    readonly AVATAR: Locator;
+    readonly MSC_CONTACT_LIST_ITEM: Locator;
     constructor(page: Page) {
         super(page);
+
+        this.MSC_CONTACT_LIST_ITEM = this.CHATIFRAME.getByTestId('gr-msc-contact-list-item');
 
         this.JOIN_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-join');
         this.SUC_SEARCH_INPUT = this.CHATIFRAME.getByPlaceholder('Search by name');
@@ -57,6 +62,7 @@ export class CreateChatPage extends BasePage {
         this.ACCEPT_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-accept');
         this.DECLINE_BUTTON_MUC = this.CHATIFRAME.locator('.top-view-container .m-auto-footer-decline');
         this.INVITE_BUTTON = this.CHATIFRAME.locator('.m-auto-footer-invite');
+        this.DETAILS_PARTICIPANTS_LIST = this.CHATIFRAME.locator('.participants-list');
 
         //SMS
         this.EXTERNAL_SEARCH_INPUT = this.CHATIFRAME.locator('.m-auto-invite-input');
@@ -85,5 +91,6 @@ export class CreateChatPage extends BasePage {
         this.SELECT_PARTICIPANTS_BUTTON = this.CHATIFRAME.locator('.m-auto-invite-members-button');
 
         this.SELECT_PARTICIPANTS_INPUT = this.CHATIFRAME.getByPlaceholder('Search to select participants');
+        this.AVATAR = this.CHATIFRAME.locator('.m-auto-avatar-container');
     }
 }

@@ -1,6 +1,5 @@
 import { Page } from '@playwright/test';
 import { randomUUID } from 'crypto';
-import { Log } from 'Apis/api-helpers/log-utils';
 import { GrcpBaseController } from './grcp-base-controller';
 
 export class GrcpController {
@@ -33,36 +32,49 @@ export class GrcpController {
     }
 
     /**
-     * Create a new one-to-one conversation between a pair of users via grcp calls.
+     * Update group text subject via grcp call.
      * @param page Page object that contains the message-iframe for use to make the grcp call.
-     * @param sendingUser grcpAlias of the user starting the conversation.
-     * @param receivingUser grcpAlias of the user
-     * @param content Text content to start the conversation.
+     * @param conversationId Id of the Group text.
+     * @param subject Subject name of the Group text
      */
-    static async createInternalConversation(
-        page: Page,
-        sendingUser: string,
-        receivingUser: string,
-        content: string
-    ) {
-        const guid = randomUUID();
-
-        //Establish default conversation between the pair of users.
-        const resolveDefaultConvoData = {
-            clientRequestId: guid,
-            otherParty: `${receivingUser}`,
-            msgType: 'conversation.ServerResolveDefaultConversationMsg'
+    static async updateGroupTextSubject(page: Page, conversationId: string, subject: string) {
+        const data = {
+            conversationId,
+            clientRequestId: randomUUID(),
+            msgType: 'external.ServerUpdateExternalConversationHeadersMsg',
+            updates: [
+                {
+                    name: 'name',
+                    newValue: subject
+                }
+            ]
         };
-        await GrcpBaseController.sendRequest(page, resolveDefaultConvoData);
+        await GrcpBaseController.sendRequest(page, data);
+    }
 
-        // Sending a new content message to the receiving user.
-        const sendContentData = {
-            clientRequestId: guid,
-            conversationId: `d:${sendingUser}:${receivingUser}:`,
-            content: `${content}`,
-            msgType: 'conversation.ServerSendContentMsg'
+    /**
+     * Send content to a conversation.
+     * @param page Page object that contains the message-iframe for use to make the grcp call.
+     * @param conversationId Id of the Conversation.
+     * @param content Content to send.
+     */
+    static async sendContent(page: Page, conversationId: string, content: string) {
+        const data = {
+            conversationId,
+            clientRequestId: randomUUID(),
+            msgType: 'conversation.ServerSendContentMsg',
+            content
         };
-        Log.info(`Start SUC chat and send message`);
-        await GrcpBaseController.sendRequest(page, sendContentData);
+        await GrcpBaseController.sendRequest(page, data);
+    }
+
+    static async sendContentToChannel(page: Page, channelId: string, content: string) {
+        const data = {
+            channelId,
+            clientRequestId: randomUUID(),
+            msgType: 'channel.ServerSendChannelTextMsg',
+            text: content
+        };
+        await GrcpBaseController.sendRequest(page, data);
     }
 }

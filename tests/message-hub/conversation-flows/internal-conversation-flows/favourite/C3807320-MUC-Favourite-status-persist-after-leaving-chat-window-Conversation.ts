@@ -42,7 +42,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     // user create MUC
-    await app.startChatButtonController.ClickOnStartMUC();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
     const title = StringUtils.generateString(3, 5);
     const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
     const user3fullName = `${user3.userInfo.firstName} ${user3.userInfo.lastName}`;
@@ -59,18 +60,18 @@ test(`${testName} ${testTags}`, async () => {
     await app1.goToLoginPage();
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.portalController.closeEnableDesktopNotification();
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
 
     await app1.chatController.clickChatFavouriteButton();
-    await app1.messageHubController.clickSideBarChatsButton();
+    await app1.navigationController.clickSideBarChatsButton();
 
-    await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+    await expect(app1.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
     // again open the chat again
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
 
     // unfavourite chat
     await app1.chatController.clickChatFavouriteButton();
-    await app1.messageHubController.clickSideBarChatsButton();
-    await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeHidden();
+    await app1.navigationController.clickSideBarChatsButton();
+    await expect(app1.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeHidden();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

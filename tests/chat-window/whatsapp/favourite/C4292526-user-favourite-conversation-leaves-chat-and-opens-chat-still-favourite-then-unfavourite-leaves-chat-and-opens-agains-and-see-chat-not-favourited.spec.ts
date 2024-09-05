@@ -41,7 +41,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
-        await app.startChatButtonController.ClickOnStartWhatsapp();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('WhatsApp');
         await app.createChatController.CreateWhatsapp();
         await app.chatController.skipRecipientInfo();
         await app.chatController.sendContent();
@@ -57,7 +58,7 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
-        await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+        await expect(app.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
         await app.conversationListController.clickConversationByRow(0);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
     });
@@ -69,7 +70,7 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('step 2 THEN - favourite icon not visible and return to conversation and favourite icon not visible ', async () => {
-        await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
+        await expect(app.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
         await app.conversationListController.clickConversationByRow(0);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).not.toBeVisible();
     });

@@ -1,44 +1,50 @@
 import { AxiosUtils } from 'Apis/api-helpers/axios-utils';
-import { randomUUID } from 'crypto';
 
-export interface MockExternalMessageDataType {
-    type: 'WHATSAPP' | 'TWILIO' | 'BANDWIDTH';
+// {
+//     type: addressType,
+//     recipientUserId: mockData.recipientUserId,
+//     recipientAddress: mockData.recipientAddress,
+//     recipientEndpointId: mockData.recipientEndpointId,
+//     senderContactId: mockData.senderContactId,
+//     senderAddress: `+${mockData.senderAddress}`,
+//     senderEndpointId: mockData.senderEndpointId,
+//     content: mockData.message,
+//     attachmentId: mockData.attachmentId ? mockData.attachmentId : null,
+//     groupId: mockData.type === 'BANDWIDTH' ? randomUUID() : null,
+//     participants:
+//         mockData.type === 'BANDWIDTH'
+//             ? [mockData.recipientAddress, `+${mockData.senderAddress}`].concat(
+//                   mockData.additionalParticipants
+//               )
+//             : null
+// }
+export interface ExternalContactDataType {
+    senderPhoneNumber: string;
+    type: 'WHATSAPP' | 'SMS';
+}
+export interface MockExternalMsgDataType {
+    type: 'WHATSAPP' | 'SMS_SERVICE';
     senderContactId: number;
     senderAddress: string;
     senderEndpointId: string;
     recipientUserId: number;
     recipientAddress: string;
     recipientEndpointId: string;
-    message: string;
+    content: string;
     attachmentId?: string;
-    additionalParticipants?: string[];
+    groupId?: string;
+    participants?: string[];
 }
-
-export interface MockExternalSenderType {
-    senderGrid: number;
-    senderExternalNumber: string;
-    type: 'WHATSAPP' | 'TWILIO' | 'BANDWIDTH';
-}
-
 export class CoreController {
-    static async generateMockExternalContact(mockExternalSender: MockExternalSenderType, endpoint: string) {
-        const { senderGrid, senderExternalNumber, type } = mockExternalSender;
-        let addressType: string;
-        if (mockExternalSender.type === 'BANDWIDTH') {
-            addressType = 'SMS'; // BANDWIDTH AND TWILIO are both considered SMS
-        }
-
-        if (mockExternalSender.type === 'TWILIO') {
-            addressType = 'SMS';
-        }
-
-        if (mockExternalSender.type === 'WHATSAPP') {
-            addressType = 'WHATSAPP';
-        }
-
+    static async addExternalContactToUser(
+        grId: number,
+        externalContactData: ExternalContactDataType,
+        endpoint: string
+    ) {
+        const { senderPhoneNumber, type } = externalContactData;
         const config = {
             method: 'get',
-            url: `${endpoint}/user/${senderGrid}/contacts?addressContext=CA&type=${addressType}&address=%2B${senderExternalNumber}`,
+            url: `${endpoint}/user/${grId}/contacts?addressContext=CA&type=${type}&address=%2B${senderPhoneNumber}`,
             headers: {
                 Accept: 'application/json'
             }
@@ -46,24 +52,12 @@ export class CoreController {
 
         const response = await AxiosUtils.axiosRequest(
             config,
-            `request to Core to generate a mock external ${type} contact`
+            `request to Core to add an external contact with phone number ${senderPhoneNumber}`
         );
         return response.data;
     }
 
-    static async sendInboundExternalMessageRequest(mockData: MockExternalMessageDataType, endpoint: string) {
-        let addressType: string;
-        if (mockData.type === 'BANDWIDTH') {
-            addressType = 'SMS_SERVICE';
-        }
-
-        if (mockData.type === 'TWILIO') {
-            addressType = 'SMS_SERVICE';
-        }
-
-        if (mockData.type === 'WHATSAPP') {
-            addressType = 'WHATSAPP';
-        }
+    static async receiveExternalMsg(mockData: MockExternalMsgDataType, endpoint: string) {
         const config = {
             method: 'POST',
             url: `${endpoint}/external-conversation/send`,
@@ -72,24 +66,7 @@ export class CoreController {
                 'Content-Type': 'application/json',
                 charset: 'UTF-8'
             },
-            data: {
-                type: addressType,
-                recipientUserId: mockData.recipientUserId,
-                recipientAddress: mockData.recipientAddress,
-                recipientEndpointId: mockData.recipientEndpointId,
-                senderContactId: mockData.senderContactId,
-                senderAddress: `+${mockData.senderAddress}`,
-                senderEndpointId: mockData.senderEndpointId,
-                content: mockData.message,
-                attachmentId: mockData.attachmentId ? mockData.attachmentId : null,
-                groupId: mockData.type === 'BANDWIDTH' ? randomUUID() : null,
-                participants:
-                    mockData.type === 'BANDWIDTH'
-                        ? [mockData.recipientAddress, `+${mockData.senderAddress}`].concat(
-                              mockData.additionalParticipants
-                          )
-                        : null
-            }
+            data: mockData
         };
         const response = await AxiosUtils.axiosRequest(
             config,

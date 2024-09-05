@@ -38,7 +38,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartWhatsapp();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('WhatsApp');
     const randonNumber = app.createChatController.CreateWhatsapp();
     await app.chatController.skipRecipientInfo();
     await app.chatController.sendContent();
@@ -51,5 +52,5 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.clickOnBackButton();
 
     Log.info(`${testChatType} chat expects flag in message hub `);
-    await expect(app.messageHubController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
+    await expect(app.conversationListController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
 });

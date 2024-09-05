@@ -1,88 +1,91 @@
 import { EnvUtils } from 'Apis/api-helpers/env-utils';
-import { Log } from 'Apis/api-helpers/log-utils';
-import { CoreController, MockExternalMessageDataType } from 'Apis/core/core-controller';
+import { PhoneNumberUtils } from 'Apis/api-helpers/phoneNumber-utils';
+import { CoreController, ExternalContactDataType, MockExternalMsgDataType } from 'Apis/core/core-controller';
 import { GskController } from 'Apis/gas/gsk-controller';
 import { CsrfController } from 'Apis/mds/csrf-controller';
 import { MdsController } from 'Apis/mds/mds-controller';
+import { randomUUID } from 'crypto';
 
-export interface MockInboundMessageType {
+export interface MockMsgDataType {
+    type: 'SMS' | 'WHATSAPP' | 'GROUPTEXT';
     senderPhoneNumber: string;
-    receipientGrId: number;
-    message: string;
-    type: 'WHATSAPP' | 'TWILIO';
+    content: string;
     attachmentId?: string;
-}
-export interface MockInboundMessageBandWidthType {
-    senderPhoneNumber: string;
-    receipientGrId: number;
-    message: string;
-    type: 'BANDWIDTH';
-    attachmentId?: string;
-    additionalParticipants: string[];
+    participants?: string[];
 }
 export class MockInboundMessageController {
-    static async sendInboundMessage(input: MockInboundMessageType | MockInboundMessageBandWidthType) {
-        const { senderPhoneNumber, receipientGrId, message, type, attachmentId } = input;
-        const additionalParticipants = input.type === 'BANDWIDTH' ? input.additionalParticipants : null;
+    static async receiveInboundExternalMsg(grId: number, mockMsgData: MockMsgDataType) {
+        const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT, CORE_ENDPOINT } = EnvUtils.getEndPoints();
         const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
-        const { MDS_ENDPOINT, GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, CORE_ENDPOINT } = EnvUtils.getEndPoints();
-
         const gskToken = await GskController.getGskToken(
             ADMIN_USERNAME,
             ADMIN_PASSWORD,
             GAS_LOGIN_ENDPOINT,
             GAS_SERVICE_URL
         );
+
         const csrfToken = await CsrfController.getCsrfToken(gskToken, MDS_ENDPOINT);
         const mdsController = new MdsController(gskToken, csrfToken, MDS_ENDPOINT);
 
-        const mockExternalSender = {
-            senderGrid: receipientGrId, // it doesn't matter what GRID we use as long as it is a valid one. So using receipient GrId as Sender GrId.
-            senderExternalNumber: senderPhoneNumber,
-            type
+        // get user's endpoint
+        let serviceType: 'SMS_SERVICE' | 'WHATSAPP' = 'SMS_SERVICE';
+        if (mockMsgData.type === 'WHATSAPP') {
+            serviceType = 'WHATSAPP';
+        }
+        const USER_ENDPOINTS = await mdsController.getEndPointByGrId(grId, serviceType);
+
+        // throw error if sender phone number is invalid
+        if (!PhoneNumberUtils.isPhoneNumberValid(mockMsgData.senderPhoneNumber)) {
+            throw new Error(
+                `FAILURE: SenderPhoneNumber ${mockMsgData.senderPhoneNumber} is not a valid number. Please use E164 format e.g. +17786813456`
+            );
+        }
+
+        // add external contact and get external contact endpoints
+        let contactType: 'SMS' | 'WHATSAPP' = 'SMS';
+        if (mockMsgData.type === 'WHATSAPP') {
+            contactType = 'WHATSAPP';
+        }
+        const EXTERNAL_CONTACT_DATA: ExternalContactDataType = {
+            senderPhoneNumber: mockMsgData.senderPhoneNumber,
+            type: contactType
         };
-
-        const sender = await CoreController.generateMockExternalContact(mockExternalSender, CORE_ENDPOINT);
-
-        const receipient = await mdsController.getUserByGrId(receipientGrId);
-        const receipientEndPoints = receipient.endpoints;
-
-        let addressType = '';
-        if (type === 'BANDWIDTH') {
-            addressType = 'SMS_SERVICE';
-        }
-
-        if (type === 'TWILIO') {
-            addressType = 'SMS_SERVICE';
-        }
-
-        if (type === 'WHATSAPP') {
-            addressType = 'WHATSAPP';
-        }
-
-        const receipientExternalEndpoint = receipientEndPoints.find(
-            (endpoint) => endpoint.type === addressType
+        const EXTERNAL_CONTACT_ENDPOINT = await CoreController.addExternalContactToUser(
+            grId,
+            EXTERNAL_CONTACT_DATA,
+            CORE_ENDPOINT
         );
-        if (!receipientExternalEndpoint.address) {
-            const error = new Error();
-            Log.error(`Mock inbound message controller: Unable to find user's ${type} address`, error);
-            throw error;
-        }
-        const recipientAddress = receipientExternalEndpoint.address;
-        const recipientEndpointId = receipientExternalEndpoint.id;
-        const mockData: MockExternalMessageDataType = {
-            senderContactId: sender.contactId,
-            senderAddress: senderPhoneNumber,
-            senderEndpointId: sender.endpointId,
-            recipientUserId: receipient.grid,
-            recipientAddress,
-            recipientEndpointId,
-            message,
-            type,
-            attachmentId,
-            additionalParticipants
+
+        // send inbound Message
+
+        const MSG_DATA: MockExternalMsgDataType = {
+            type: serviceType,
+            senderContactId: EXTERNAL_CONTACT_ENDPOINT.contactId,
+            senderAddress: mockMsgData.senderPhoneNumber,
+            senderEndpointId: EXTERNAL_CONTACT_ENDPOINT.endpointId,
+            recipientUserId: grId,
+            recipientAddress: USER_ENDPOINTS.address,
+            recipientEndpointId: USER_ENDPOINTS.id,
+            content: mockMsgData.content,
+            attachmentId: mockMsgData.attachmentId
         };
 
-        await CoreController.sendInboundExternalMessageRequest(mockData, CORE_ENDPOINT);
+        if (mockMsgData.type === 'GROUPTEXT') {
+            // throw error if participant phone numbers are invalid
+            const ALL_PARTICIPANTS_PHONENUMBER = mockMsgData.participants;
+            for (const phoneNumber of ALL_PARTICIPANTS_PHONENUMBER) {
+                if (!PhoneNumberUtils.isPhoneNumberValid(phoneNumber)) {
+                    throw new Error(
+                        `FAILURE: SenderPhoneNumber ${mockMsgData.senderPhoneNumber} is not a valid number. Please use E164 format e.g. +17786813456`
+                    );
+                }
+            }
+
+            MSG_DATA.groupId = randomUUID();
+            MSG_DATA.participants = [USER_ENDPOINTS.address, mockMsgData.senderPhoneNumber].concat(
+                mockMsgData.participants
+            );
+        }
+        await CoreController.receiveExternalMsg(MSG_DATA, CORE_ENDPOINT);
     }
 }

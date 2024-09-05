@@ -35,7 +35,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     const draftState = StringUtils.generateString();
     await app.chatController.sendContent();
@@ -44,13 +45,15 @@ test(`${testName} ${testTags}`, async () => {
     );
 
     const draftText = await app.chatController.typeContent(draftState);
-    await app.messageHubController.clickSideBarChatsButton();
-    await app.messageHubController.clickMessageHubRow(
+    await app.navigationController.clickSideBarChatsButton();
+
+    await app.conversationListController.clickOnConversationName(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
     Log.info(`${testChatType} chat expects ${draftText} string in draft state to be removed `);
     await app.chatController.removeContent();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
+
     const secondaryLine = await app.Pom.MESSAGEIFRAME.getByText(draftState);
     await expect(secondaryLine).toHaveCount(0);
     Log.starDivider(`END TEST: Test Execution Commpleted`);

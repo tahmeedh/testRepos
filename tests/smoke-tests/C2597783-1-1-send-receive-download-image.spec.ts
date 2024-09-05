@@ -37,7 +37,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     const randomContent = StringUtils.generateString();
     await app.chatController.sendContent(randomContent);
@@ -51,7 +52,8 @@ test(`${testName} ${testTags}`, async () => {
     await app1.portalController.closeEnableDesktopNotification();
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.startChatButtonController.ClickOnStartOneToOne();
+    await app1.hubHeaderController.clickStartChatButton();
+    await app1.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app1.createChatController.CreateSUC(`${user1.userInfo.firstName} ${user1.userInfo.lastName}`);
     await app1.inviteController.acceptInvite('SUC');
 

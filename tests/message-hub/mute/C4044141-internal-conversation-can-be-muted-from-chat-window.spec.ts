@@ -5,7 +5,7 @@ import { BaseController } from 'Controllers/base-controller';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
 import { ConfigUtils } from 'helper/config-utils';
-import { GrcpController } from 'Apis/grcp/grcp-controller';
+import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let app: BaseController;
@@ -33,12 +33,12 @@ test.beforeAll(async ({ browser }) => {
     await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     Log.info('Creating conversation via grcp.');
-    await GrcpController.createInternalConversation(
-        page,
-        user1.userInfo.grcpAlias,
-        user2.userInfo.grcpAlias,
-        'C4044141 Test Content'
-    );
+    const createSUCData = {
+        senderGrcpAlias: user1.userInfo.grcpAlias,
+        receiverGrcpAlias: user2.userInfo.grcpAlias,
+        content: 'C4044141 Test Content'
+    };
+    await GrcpCreateController.createSUC(page, createSUCData);
     Log.info('======== END TEST SETUP ========');
 });
 
@@ -55,7 +55,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
     await app.chatController.muteConversation();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
     await test.step('Verify that Mute icon is shown for muted chat', async () => {
         await expect(app.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();

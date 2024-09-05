@@ -12,6 +12,13 @@ export class DetailsPage extends BasePage {
     readonly MUC_DETAIL_EDIT_BUTTON: Locator;
     readonly MUC_SUBJECT_EDIT_FIELD: Locator;
     readonly CHAT_SUBJECT_SAVE_BUTTON: Locator;
+    readonly SELECT_PARTICIPANTS: Locator;
+    readonly SELECT_PARTICIPANTS_MUC: Locator;
+    readonly CONTACT_LIST_USER_ROW: Locator;
+    readonly BUTTON: Locator;
+    readonly DETAILS_PARTICIPANTS_LIST: Locator;
+    readonly ADMINISTRATOR_LIST: Locator;
+    readonly MSC_CONTACT_LIST_ITEM: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -30,5 +37,12 @@ export class DetailsPage extends BasePage {
         );
         this.GROUP_TEXT_DETAIL_EDIT_BUTTON = this.CHATIFRAME.locator('.m-auto-edit-group-text-subject-btn');
         this.CHAT_SUBJECT_SAVE_BUTTON = this.CHATIFRAME.locator('.m-auto-saveEditBtn');
+        this.SELECT_PARTICIPANTS = this.CHATIFRAME.locator('.m-auto-invite-members-button');
+        this.SELECT_PARTICIPANTS_MUC = this.CHATIFRAME.locator('.m-auto-add-participants');
+        this.CONTACT_LIST_USER_ROW = this.CHATIFRAME.getByTestId('contact-list-user-row');
+        this.BUTTON = this.CHATIFRAME.getByRole('button');
+        this.DETAILS_PARTICIPANTS_LIST = this.CHATIFRAME.locator('.participants-list');
+        this.ADMINISTRATOR_LIST = this.CHATIFRAME.locator('.administrator-list');
+        this.MSC_CONTACT_LIST_ITEM = this.CHATIFRAME.getByTestId('gr-msc-contact-list-item');
     }
 }

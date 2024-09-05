@@ -42,7 +42,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     // user start 1-1
-    await app.startChatButtonController.ClickOnStartSMS();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Text');
     await app.chatController.skipRecipientInfo();
 
     // user send message in conversation
@@ -53,6 +54,6 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.clickOnBackButton();
 
     // Verify the flag
-    await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+    await expect(app.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

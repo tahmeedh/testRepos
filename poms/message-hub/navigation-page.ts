@@ -6,11 +6,13 @@ export class NavigationPage extends BasePage {
     readonly CHATS_BUTTON: Locator;
     readonly CONTACTS_BUTTON: Locator;
     readonly MESSAGE_HUB_HIDE_BUTTON: Locator;
+    readonly NEW_MESSAGE_RED_BADGE: Locator;
 
     constructor(page: Page) {
         super(page);
         this.CHATS_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-chats-button');
         this.CONTACTS_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-contacts-button');
         this.MESSAGE_HUB_HIDE_BUTTON = this.MESSAGEIFRAME.locator('.m-auto-toggle-hide-button');
+        this.NEW_MESSAGE_RED_BADGE = this.MESSAGEIFRAME.locator('.m-auto-red-badge');
     }
 }

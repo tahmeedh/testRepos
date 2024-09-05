@@ -8,7 +8,6 @@ import { Log } from 'Apis/api-helpers/log-utils';
 import { BasePage } from 'Poms/base-page';
 import { IgnoreErrorUtils } from 'helper/ignore-error-utils';
 import { LoginController } from './login/login-controller';
-import { StartChatButtonController } from './message-hub/start-chat-button-controller';
 import { CreateChatController } from './chat-window/create-chat-controller';
 import { ChatController } from './chat-window/chat-page-controller';
 import { InviteController } from './chat-window/invite-controller';
@@ -18,7 +17,6 @@ import { DetailsController } from './chat-window/details-controller';
 import { VCardEditController } from './chat-window/v-card-edit-controller';
 import 'dotenv/config';
 import { ContactListController } from './message-hub/contact-list-controller';
-import { GlobalSearchController } from './message-hub/global-search-controller';
 import { ConversationListController } from './message-hub/conversation-list-controller';
 import { CompanyVCardController } from './chat-window/company-v-card-controller';
 import { PortalController } from './portal/portal-controller';
@@ -28,12 +26,12 @@ import { NavigationController } from './message-hub/navigation-controller';
 import { SearchResultController } from './message-hub/search-result-controller';
 import { PreviewAttachmentController } from './chat-window/preview-attachment-controller';
 import { AttachmentViewerController } from './chat-window/attachment-viewer-controller';
+import { MiniVCardController } from './mini-vCard/mini-vCard-controller';
 
 export class BaseController {
     readonly page: Page;
     readonly Pom: BasePage;
     readonly loginController: LoginController;
-    readonly startChatButtonController: StartChatButtonController;
     readonly createChatController: CreateChatController;
     readonly chatController: ChatController;
     readonly previewAttachmentController: PreviewAttachmentController;
@@ -44,7 +42,6 @@ export class BaseController {
     readonly detailsController: DetailsController;
     readonly vCardEditController: VCardEditController;
     readonly contactListController: ContactListController;
-    readonly globalSearchController: GlobalSearchController;
     readonly conversationListController: ConversationListController;
     readonly companyVCardController: CompanyVCardController;
     readonly portalController: PortalController;
@@ -52,7 +49,7 @@ export class BaseController {
     readonly hubHeaderController: HubHeaderController;
     readonly navigationController: NavigationController;
     readonly searchResultController: SearchResultController;
-
+    readonly miniVCardController: MiniVCardController;
     /**
      * @param {import('@playwright/test').Page} page
      */
@@ -60,7 +57,6 @@ export class BaseController {
         this.page = page;
         this.Pom = new BasePage(this.page);
         this.loginController = new LoginController(this.page);
-        this.startChatButtonController = new StartChatButtonController(this.page);
         this.createChatController = new CreateChatController(this.page);
         this.chatController = new ChatController(this.page);
         this.previewAttachmentController = new PreviewAttachmentController(this.page);
@@ -71,7 +67,6 @@ export class BaseController {
         this.detailsController = new DetailsController(this.page);
         this.vCardEditController = new VCardEditController(this.page);
         this.contactListController = new ContactListController(this.page);
-        this.globalSearchController = new GlobalSearchController(this.page);
         this.conversationListController = new ConversationListController(this.page);
         this.companyVCardController = new CompanyVCardController(this.page);
         this.portalController = new PortalController(this.page);
@@ -79,22 +74,7 @@ export class BaseController {
         this.hubHeaderController = new HubHeaderController(this.page);
         this.navigationController = new NavigationController(this.page);
         this.searchResultController = new SearchResultController(this.page);
-    }
-
-    /**
-     * @param {String} title Title of MUC / Channel to be opened
-     */
-    async open(title: string) {
-        await test.step('Base Controller : Open MUC or Channel', async () => {
-            const chat = this.Pom.MESSAGEIFRAME.getByText(title);
-            await chat.click();
-        });
-    }
-
-    async clickAvatar(nth: string) {
-        await test.step('Click avatar in enter v-card', async () => {
-            await this.Pom.AVATAR.nth(parseFloat(nth)).click();
-        });
+        this.miniVCardController = new MiniVCardController(this.page);
     }
 
     async goToLoginPage(envOverride?: string): Promise<void> {
@@ -107,17 +87,6 @@ export class BaseController {
             }
             await this.page.goto(LOGIN_ENDPOINTS[env]);
         });
-    }
-
-    async inviteParticipants(users, type = 'muc') {
-        if (type === 'channel') {
-            await this.chatController.clickInviteParicipantsChannels();
-            await this.detailsController.clickMemberRolesButton();
-            await this.createChatController.inviteChannels(users);
-        } else {
-            await this.chatController.clickInviteParicipants();
-            await this.createChatController.inviteMUC(users);
-        }
     }
 
     async pressKey(keys: string) {

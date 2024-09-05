@@ -35,7 +35,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     // user start 1-1
-    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
 
     // user start conversation with user 2
@@ -50,12 +51,13 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginController.loginToPortal(user2.userInfo.email, user2.userInfo.password);
     await app1.portalController.closeEnableDesktopNotification();
 
-    await app1.startChatButtonController.ClickOnStartOneToOne();
+    await app1.hubHeaderController.clickStartChatButton();
+    await app1.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app1.createChatController.CreateSUC(user1.userInfo.lastName);
 
     await app1.chatController.clickChatFlagButton();
-    await app1.messageHubController.clickSideBarChatsButton();
+    await app1.navigationController.clickSideBarChatsButton();
 
     // Verify the flag
-    await expect(app1.messageHubController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
+    await expect(app1.conversationListController.Pom.CHAT_FLAG_INDICATOR).toBeVisible();
 });

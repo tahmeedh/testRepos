@@ -42,7 +42,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app.startChatButtonController.ClickOnStartChannel();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Channel');
     const title = StringUtils.generateString(3, 5);
     await app.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
     await app.createChatController.fillOutWhoCanPostForm();
@@ -57,7 +58,7 @@ test(`${testName} ${testTags}`, async () => {
     await app.chatController.sendContent();
 
     await app.chatController.muteConversation();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
     await test.step('Verify that Mute icon is shown for muted channel', async () => {
         await expect(app.conversationListController.Pom.MUTE_CHAT_ICON).toBeVisible();
@@ -70,7 +71,7 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginAndInitialize(user2.userInfo.email, user2.userInfo.password);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app1.open(title);
+    await app1.conversationListController.clickOnConversationName(title);
     await app1.inviteController.acceptInvite('Channel');
 
     await test.step('Reply to the channel by the participant', async () => {
@@ -78,9 +79,9 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     Log.info('Unmute the Channel');
-    await app.open(title);
+    await app.conversationListController.clickOnConversationName(title);
     await app.chatController.unMuteConversation();
-    await app.messageHubController.clickSideBarChatsButton();
+    await app.navigationController.clickSideBarChatsButton();
 
     await test.step('Reply to the channel by the participant ', async () => {
         await app1.chatController.sendContent();
@@ -91,7 +92,7 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('Verify that new message should update badge counter on the channel list and Side Bar', async () => {
-        await expect(app.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
+        await expect(app.navigationController.Pom.NEW_MESSAGE_RED_BADGE).toBeVisible();
         await expect(app.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).toBeVisible();
     });
 

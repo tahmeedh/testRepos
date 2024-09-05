@@ -8,6 +8,7 @@ import { CsrfController } from './mds/csrf-controller';
 import { WhatsAppController } from './mds/whatsApp-controller';
 import { PhoneNumberUtils } from './api-helpers/phoneNumber-utils';
 import { PhoneNumberController } from './mds/phoneNumber-controller';
+import { EnvUtils } from './api-helpers/env-utils';
 
 export interface UserType {
     firstName: string;
@@ -253,11 +254,12 @@ export class User {
     async requestAndAssignTwilioNumber() {
         const { endpoints, companyId } = this.userInfo.company;
         const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
-        const { email, password, userId } = this.userInfo;
+        const { userId } = this.userInfo;
+        const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
 
         const gskToken = await GskController.getGskToken(
-            email,
-            password,
+            ADMIN_USERNAME,
+            ADMIN_PASSWORD,
             GAS_LOGIN_ENDPOINT,
             GAS_SERVICE_URL
         );
@@ -297,11 +299,12 @@ export class User {
     async requestAndAssignWhatsAppNumber() {
         const { endpoints, companyId } = this.userInfo.company;
         const { GAS_LOGIN_ENDPOINT, GAS_SERVICE_URL, MDS_ENDPOINT } = endpoints;
-        const { email, password, userId } = this.userInfo;
-        const accountId = PhoneNumberUtils.randomPhone();
+        const { userId } = this.userInfo;
+        const { ADMIN_USERNAME, ADMIN_PASSWORD } = EnvUtils.getAdminUser();
+        const accountId = PhoneNumberUtils.randomPhoneNumber();
         const gskToken = await GskController.getGskToken(
-            email,
-            password,
+            ADMIN_USERNAME,
+            ADMIN_PASSWORD,
             GAS_LOGIN_ENDPOINT,
             GAS_SERVICE_URL
         );

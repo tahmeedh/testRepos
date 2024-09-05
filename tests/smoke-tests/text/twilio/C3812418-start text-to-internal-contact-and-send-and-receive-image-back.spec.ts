@@ -4,7 +4,7 @@ import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import {
     MockInboundMessageController,
-    MockInboundMessageType
+    MockMsgDataType
 } from 'Apis/mock-inbound-message/mock-inbound-message-controller';
 import { User } from 'Apis/user';
 
@@ -48,27 +48,26 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     });
 
     await test.step('User start text message with an internal contact', async () => {
-        await app.startChatButtonController.ClickOnStartSMS();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('Text');
         await app.createChatController.CreateInternalText(user2.userInfo.twilioNumber);
     });
 
     await test.step('Send and Receive a message back', async () => {
-        const mockTwilioMessage1: MockInboundMessageType = {
+        const mockTwilioMessage1: MockMsgDataType = {
+            type: 'SMS',
             senderPhoneNumber: user2.userInfo.twilioNumber,
-            receipientGrId: GrId1,
-            message: mockSMSMessage,
-            type: 'TWILIO',
+            content: mockSMSMessage,
             attachmentId: '5263eb4a-bbdd-4172-9bf2-c8de58770ff2'
         };
-        await MockInboundMessageController.sendInboundMessage(mockTwilioMessage1);
+        await MockInboundMessageController.receiveInboundExternalMsg(GrId1, mockTwilioMessage1);
 
-        const mockTwilioMessage2: MockInboundMessageType = {
+        const mockTwilioMessage2: MockMsgDataType = {
+            type: 'SMS',
             senderPhoneNumber: user2.userInfo.twilioNumber,
-            receipientGrId: GrId1,
-            message: mockSMSMessage,
-            type: 'TWILIO'
+            content: mockSMSMessage
         };
-        await MockInboundMessageController.sendInboundMessage(mockTwilioMessage2);
+        await MockInboundMessageController.receiveInboundExternalMsg(GrId1, mockTwilioMessage2);
 
         const PNG = './asset/download.png';
         await app.chatController.waitForHeader();

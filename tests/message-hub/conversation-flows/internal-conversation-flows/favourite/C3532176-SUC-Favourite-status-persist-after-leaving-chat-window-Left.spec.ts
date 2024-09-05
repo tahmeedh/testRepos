@@ -38,7 +38,8 @@ test(`${testName} ${testTags}`, async () => {
     await app.portalController.closeEnableDesktopNotification();
 
     // user start 1-1
-    await app.startChatButtonController.ClickOnStartOneToOne();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app.createChatController.CreateSUC(`${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
 
     // user start conversation with user 2
@@ -54,7 +55,8 @@ test(`${testName} ${testTags}`, async () => {
     await app1.portalController.closeEnableDesktopNotification();
 
     // user 2 accept invitation with user 1
-    await app1.startChatButtonController.ClickOnStartOneToOne();
+    await app1.hubHeaderController.clickStartChatButton();
+    await app1.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
     await app1.createChatController.CreateSUC(`${user1.userInfo.firstName} ${user1.userInfo.lastName}`);
     await app1.inviteController.acceptInvite('SUC');
 
@@ -65,6 +67,6 @@ test(`${testName} ${testTags}`, async () => {
     await app1.chatController.leaveChat();
 
     // Verify the Favourite star
-    await expect(app1.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+    await expect(app1.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
     Log.starDivider(`END TEST: Test Execution Commpleted`);
 });

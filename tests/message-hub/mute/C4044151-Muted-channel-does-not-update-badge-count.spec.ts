@@ -42,7 +42,8 @@ test(`${testName} ${testTags}`, async () => {
     await app1.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     Log.info(`Start ${testChatType} chat and send message`);
-    await app1.startChatButtonController.ClickOnStartChannel();
+    await app.hubHeaderController.clickStartChatButton();
+    await app.hubHeaderController.selectHeaderMainMenuOption('Channel');
     const title = StringUtils.generateString(3, 5);
     await app1.createChatController.fillOutWhatIsItAboutForm(title, 'sub', 'descri');
     await app1.createChatController.fillOutWhoCanPostForm();
@@ -56,7 +57,7 @@ test(`${testName} ${testTags}`, async () => {
     Log.info(`${user1.userInfo.firstName} ${user1.userInfo.lastName} sends message`);
     await app1.chatController.sendContent();
     await app1.chatController.muteConversation();
-    await app1.messageHubController.clickSideBarChatsButton();
+    await app1.navigationController.clickSideBarChatsButton();
 
     Log.info(`login with ${user2.userInfo.firstName} ${user2.userInfo.lastName}`);
     context2 = await newBrowser.newContext();
@@ -65,7 +66,7 @@ test(`${testName} ${testTags}`, async () => {
     await app2.loginAndInitialize(user2.userInfo.email, user2.userInfo.password);
 
     Log.info(`${user2.userInfo.firstName} ${user2.userInfo.lastName} accepts invite`);
-    await app2.open(title);
+    await app2.conversationListController.clickOnConversationName(title);
     await app2.inviteController.acceptInvite('Channel');
 
     await test.step('Reply to the channel by the participant', async () => {
@@ -78,7 +79,7 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('Verify that new message should not update badge counter on channel list and Side Bar', async () => {
-        await expect(app1.messageHubController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
+        await expect(app1.navigationController.Pom.NEW_MESSAGE_RED_BADGE).not.toBeVisible();
         await expect(app1.conversationListController.Pom.NEW_MESSAGE_BLUE_BADGE).not.toBeVisible();
     });
 

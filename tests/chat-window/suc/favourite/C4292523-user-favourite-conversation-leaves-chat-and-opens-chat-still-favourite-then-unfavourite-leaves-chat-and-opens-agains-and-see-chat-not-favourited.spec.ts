@@ -37,7 +37,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
-        await app.startChatButtonController.ClickOnStartOneToOne();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('One-to-One');
         await app.createChatController.CreateSUC(user2fullName);
         await app.chatController.sendContent();
     });
@@ -49,8 +50,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('step 1 THEN - See favourite icon and return to conversation and see favourite icon ', async () => {
-        await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
-        await app.messageHubController.clickMessageHubRow(user2fullName);
+        await expect(app.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).toBeVisible();
+        await app.conversationListController.clickOnConversationName(user2fullName);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
     });
 
@@ -61,8 +62,8 @@ test(`${testName} ${testTags}`, async () => {
     });
 
     await test.step('step 2 THEN - favourite icon not visible and return to conversation and favourite icon not visible ', async () => {
-        await expect(app.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
-        await app.messageHubController.clickMessageHubRow(user2fullName);
+        await expect(app.conversationListController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
+        await app.conversationListController.clickOnConversationName(user2fullName);
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).not.toBeVisible();
     });
 });
