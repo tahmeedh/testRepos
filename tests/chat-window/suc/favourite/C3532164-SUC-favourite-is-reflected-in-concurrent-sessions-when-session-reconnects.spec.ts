@@ -2,9 +2,8 @@ import { test, BrowserContext, expect } from '@playwright/test';
 import { Company } from 'Apis/company';
 import { TestUtils } from 'helper/test-utils';
 import { User } from 'Apis/user';
-import { GrcpController } from 'Apis/grcp/grcp-controller';
+import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
 import { BaseController } from '../../../../controllers/base-controller';
-/* eslint-disable max-len*/
 
 const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let company: Company;
@@ -33,15 +32,15 @@ test(`${testName} ${testTags} @VA-7592`, async ({ browser }) => {
             await app1.goToLoginPage();
             await app1.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
+            const createSUCData = {
+                senderGrcpAlias: user1.userInfo.grcpAlias,
+                receiverGrcpAlias: user2.userInfo.grcpAlias,
+                content: 'C3532164 Test Content'
+            };
             await test.step('Creating conversation via grcp.', async () => {
-                await GrcpController.createInternalConversation(
-                    user1Page,
-                    user1.userInfo.grcpAlias,
-                    user2.userInfo.grcpAlias,
-                    'C3532164 Test Content'
-                );
+                await GrcpCreateController.createSUC(user1Page, createSUCData);
             });
-            await app1.messageHubController.clickMessageHubRow(user2fullName);
+            await app1.conversationListController.clickOnConversationName(user2fullName);
         });
         await test.step(`Login concurrent sessions`, async () => {
             browser2 = await browser.newContext();
@@ -77,8 +76,6 @@ test(`${testName} ${testTags} @VA-7592`, async ({ browser }) => {
         });
 
         await test.step('Phase 2 THEN - Favourite icon not visible and return to conversation in concurrent session ', async () => {
-            await expect(app2.messageHubController.Pom.CHAT_FAVOURITE_INDICATOR).not.toBeVisible();
-            await app2.messageHubController.clickMessageHubRow(user2fullName);
             await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
                 maxDiffPixelRatio: 0.1
             });

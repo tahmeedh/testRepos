@@ -4,7 +4,6 @@ import { TestUtils } from 'helper/test-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
 import { User } from 'Apis/user';
 import { BaseController } from '../../../../controllers/base-controller';
-/* eslint-disable max-len*/
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser: Browser;
@@ -59,7 +58,8 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
-        await app.startChatButtonController.ClickOnStartWhatsapp();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('WhatsApp');
         await app.createChatController.CreateWhatsapp();
         await app.chatController.skipRecipientInfo();
         await app.chatController.sendContent();

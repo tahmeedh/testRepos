@@ -4,7 +4,6 @@ import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { User } from 'Apis/user';
-/* eslint-disable max-len*/
 
 const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
 let browser: Browser;
@@ -53,7 +52,8 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {
-        await app.startChatButtonController.ClickOnStartMUC();
+        await app.hubHeaderController.clickStartChatButton();
+        await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
         title = await app.createChatController.createMUC([user2fullName]);
         const randomContent = StringUtils.generateString();
         await app.chatController.sendContent(randomContent);
@@ -65,7 +65,7 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
     });
 
     await test.step('Phase 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
-        await app2.open(title);
+        await app2.conversationListController.clickOnConversationName(title);
         await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
         await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
             maxDiffPixelRatio: 0.1
