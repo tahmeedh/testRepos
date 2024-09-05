@@ -64,6 +64,7 @@ test(`${testName} ${testTags} @VA-7592`, async ({ browser }) => {
         });
 
         await test.step('step 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
+            await app2.conversationListController.clickOnConversationName(user2fullName);
             await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
             await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
                 maxDiffPixelRatio: 0.1
