@@ -27,6 +27,7 @@ import { SearchResultController } from './message-hub/search-result-controller';
 import { PreviewAttachmentController } from './chat-window/preview-attachment-controller';
 import { AttachmentViewerController } from './chat-window/attachment-viewer-controller';
 import { MiniVCardController } from './mini-vCard/mini-vCard-controller';
+import { ErrorController } from './message-hub/error-controller';
 
 export class BaseController {
     readonly page: Page;
@@ -50,6 +51,7 @@ export class BaseController {
     readonly navigationController: NavigationController;
     readonly searchResultController: SearchResultController;
     readonly miniVCardController: MiniVCardController;
+    readonly ErrorController: ErrorController;
     /**
      * @param {import('@playwright/test').Page} page
      */
@@ -75,6 +77,7 @@ export class BaseController {
         this.navigationController = new NavigationController(this.page);
         this.searchResultController = new SearchResultController(this.page);
         this.miniVCardController = new MiniVCardController(this.page);
+        this.ErrorController = new ErrorController(this.page);
     }
 
     async goToLoginPage(envOverride?: string): Promise<void> {

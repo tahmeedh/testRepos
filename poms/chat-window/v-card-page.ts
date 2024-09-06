@@ -10,6 +10,7 @@ export class VCardPage extends BasePage {
     readonly COMPANY_NAME_INTERNAL: Locator;
     readonly EDIT_BUTTON: Locator;
     readonly BACK_BUTTON: Locator;
+    readonly ADD_CONTACT: Locator;
     readonly PHONE_NUMBER: Locator;
     readonly JOB_TITLE: Locator;
     readonly COMPANY: Locator;
@@ -26,6 +27,7 @@ export class VCardPage extends BasePage {
         this.COMPANY_NAME_INTERNAL = this.CHATIFRAME.locator('.m-auto-company-name');
         this.EDIT_BUTTON = this.CHATIFRAME.locator('.m-auto-external-vcard-edit-button');
         this.BACK_BUTTON = this.CHATIFRAME.locator('.m-auto-vcard-container .m-auto-chat-header-back-button');
+        this.ADD_CONTACT = this.CHATIFRAME.getByTestId('add-contact');
         this.PHONE_NUMBER = this.CHATIFRAME.locator('.m-auto-phone-number-primary');
         this.CHAT_HEADER_MENU = this.CHATIFRAME.locator('.m-auto-menu-button');
         this.JOB_TITLE = this.CHATIFRAME.locator('.m-auto-job-title');

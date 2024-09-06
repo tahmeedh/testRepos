@@ -9,9 +9,10 @@ export class LoginPage extends BasePage {
 
     constructor(page: Page) {
         super(page);
-        this.LOGIN_ID_FIELD = this.page.getByLabel('Login ID', { exact: true });
-        this.NEXT_BUTTON = this.page.getByRole('button', { name: 'Next' });
-        this.PASSWORD_FIELD = this.page.getByLabel('Password');
-        this.LOGIN_BUTTON = this.page.getByRole('button', { name: 'Log in' });
+        // This is made to be compatible with old GAS and new GAS page
+        this.LOGIN_ID_FIELD = this.page.locator('[id="loginId"]');
+        this.NEXT_BUTTON = this.page.locator('[id="signInSubmitNext"]');
+        this.PASSWORD_FIELD = this.page.locator('[id="loginPassword"]');
+        this.LOGIN_BUTTON = this.page.locator('[id="signInSubmitStep2"]');
     }
 }
