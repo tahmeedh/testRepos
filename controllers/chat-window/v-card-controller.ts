@@ -24,4 +24,10 @@ export class VCardController {
             await this.Pom.BACK_BUTTON.click();
         });
     }
+    async clickOnAddToContactsButton() {
+        await test.step(`VCard Controller: Click on back button`, async () => {
+            Log.info(`VCard Controller: Click on back button`);
+            await this.Pom.ADD_CONTACT.click();
+        });
+    }
 }
