@@ -25,8 +25,8 @@ export class VCardController {
         });
     }
     async clickOnAddToContactsButton() {
-        await test.step(`VCard Controller: Click on back button`, async () => {
-            Log.info(`VCard Controller: Click on back button`);
+        await test.step(`VCard Controller: Click on Add to Contact button`, async () => {
+            Log.info(`VCard Controller: Click on Add to Contact button`);
             await this.Pom.ADD_CONTACT.click();
         });
     }
