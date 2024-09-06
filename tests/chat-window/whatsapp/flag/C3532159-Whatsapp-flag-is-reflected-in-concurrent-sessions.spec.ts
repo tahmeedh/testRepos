@@ -62,12 +62,12 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
 
     await test.step('Step 1 WHEN - Click favourite button and favourite button filled ', async () => {
         await app.chatController.clickChatFlagButton();
-        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
+        await expect(app.chatController.Pom.CHAT_FLAG_BUTTON_FILLED).toBeVisible();
     });
 
     await test.step('step 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
         await app2.conversationListController.clickConversationByRow(0);
-        await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
+        await expect(app2.chatController.Pom.CHAT_FLAG_BUTTON_FILLED).toBeVisible();
         await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
             maxDiffPixelRatio: 0.1
         });

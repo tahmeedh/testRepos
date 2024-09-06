@@ -62,7 +62,7 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
 
     await test.step('Phase 1 WHEN - Click favourite button and favourite button filled ', async () => {
         await app.chatController.clickChatFlagButton();
-        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
+        await expect(app.chatController.Pom.CHAT_FLAG_BUTTON_FILLED).toBeVisible();
     });
 
     await test.step('Phase 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
