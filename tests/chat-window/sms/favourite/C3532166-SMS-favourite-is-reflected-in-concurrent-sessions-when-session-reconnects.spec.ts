@@ -24,11 +24,6 @@ test.beforeEach(async () => {
     user2 = await company.createUser();
     await company.addUserToEachOthersRoster([user1, user2]);
 
-    await Promise.all([
-        user1.assignServiceManagerRole('MESSAGE_ADMINISTRATOR'),
-        user1.assignDirectoryRole('SMS_USER_WITH_CALL_FORWARD')
-    ]);
-
     await user1.requestAndAssignTwilioNumber();
 });
 test(`${testName} ${testTags} @VA-7592`, async () => {
