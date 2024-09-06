@@ -33,7 +33,7 @@ test(`${testName} ${testTags} @VA-7592`, async ({ browser }) => {
             const createSUCData = {
                 senderGrcpAlias: user1.userInfo.grcpAlias,
                 receiverGrcpAlias: user2.userInfo.grcpAlias,
-                content: 'C3532164 Test Content'
+                content: 'C4348762 Test Content'
             };
             await test.step('Creating conversation via grcp.', async () => {
                 await GrcpCreateController.createSUC(user1Page, createSUCData);
@@ -43,6 +43,7 @@ test(`${testName} ${testTags} @VA-7592`, async ({ browser }) => {
         });
 
         await test.step('Phase 1 WHEN - Click Add to Contacts button ', async () => {
+            await expect(app1.vCardController.Pom.ADD_CONTACT).toBeVisible();
             await app1.vCardController.clickOnAddToContactsButton();
         });
 
