@@ -44,7 +44,7 @@ test(`${testName} ${testTags}`, async () => {
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
     );
 
-    // await app.portalController.closeEnableDesktopNotification();
+    await app.portalController.closeEnableDesktopNotification();
     await app.conversationListController.clickOnConversationName(
         `${user2.userInfo.firstName} ${user2.userInfo.lastName}`
     );
