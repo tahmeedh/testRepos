@@ -1,18 +1,19 @@
 import { test, expect, chromium, Browser, BrowserContext } from '@playwright/test';
 import { Company } from 'Apis/company';
-import { StringUtils } from 'helper/string-utils';
 import { TestUtils } from 'helper/test-utils';
 import { BaseController } from 'Controllers/base-controller';
 import { User } from 'Apis/user';
+import { GrcpCreateController } from 'Apis/grcp/grcp-create-controller';
 
-const { testAnnotation, testName, testTags, testChatType } = TestUtils.getTestInfo(__filename);
+const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename);
 let browser: Browser;
 let context1: BrowserContext;
 let app: BaseController;
 let browser2: Browser;
 let context2: BrowserContext;
 let app2: BaseController;
-let title = null;
+let page1;
+let page2;
 
 let company: Company;
 let user1: User;
@@ -29,15 +30,14 @@ test.beforeEach(async () => {
 
 test(`${testName} ${testTags} @VA-7592`, async () => {
     test.info().annotations.push(testAnnotation);
-    const user2fullName = `${user2.userInfo.firstName} ${user2.userInfo.lastName}`;
 
     await test.step('GIVEN - User login', async () => {
         context1 = await browser.newContext();
-        const page1 = await context1.newPage();
+        page1 = await context1.newPage();
         app = new BaseController(page1);
         await app.goToLoginPage();
         context2 = await browser2.newContext();
-        const page2 = await context2.newPage();
+        page2 = await context2.newPage();
         app2 = new BaseController(page2);
         await app2.goToLoginPage();
     });
@@ -51,12 +51,13 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
         await app2.portalController.closeEnableDesktopNotification();
     });
 
-    await test.step(`Start ${testChatType} chat and send message`, async () => {
-        await app.hubHeaderController.clickStartChatButton();
-        await app.hubHeaderController.selectHeaderMainMenuOption('Multi-Party');
-        title = await app.createChatController.createMUC([user2fullName]);
-        const randomContent = StringUtils.generateString();
-        await app.chatController.sendContent(randomContent);
+    await test.step(`User create MUC`, async () => {
+        const createMucData = {
+            subject: 'Test-MUC',
+            participantsGrcpAliases: [user2.userInfo.grcpAlias]
+        };
+        await GrcpCreateController.createMUC(page1, createMucData);
+        await app.conversationListController.clickOnConversationName('Test-MUC');
     });
 
     await test.step('Phase 1 WHEN - Click favourite button and favourite button filled ', async () => {
@@ -65,21 +66,20 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
     });
 
     await test.step('Phase 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
-        await app2.conversationListController.clickOnConversationName(title);
+        await app2.conversationListController.clickOnConversationName('Test-MUC');
         await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
         await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
             maxDiffPixelRatio: 0.1
         });
+    });
+    await test.step('Phase 2  WHEN - Click favourite button and favourite button unfilled ', async () => {
+        await app.chatController.clickChatFavouriteButton();
+        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON).toBeVisible();
+    });
 
-        await test.step('Phase 2  WHEN - Click favourite button and favourite button unfilled ', async () => {
-            await app.chatController.clickChatFavouriteButton();
-            await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON).toBeVisible();
-        });
-
-        await test.step('Phase 2 THEN - Favourite icon not visible and return to conversation in concurrent session ', async () => {
-            await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
-                maxDiffPixelRatio: 0.1
-            });
+    await test.step('Phase 2 THEN - Favourite icon not visible and return to conversation in concurrent session ', async () => {
+        await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
+            maxDiffPixelRatio: 0.1
         });
     });
 });

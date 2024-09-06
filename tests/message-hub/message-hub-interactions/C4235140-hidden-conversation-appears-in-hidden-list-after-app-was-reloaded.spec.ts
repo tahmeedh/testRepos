@@ -26,7 +26,7 @@ test.beforeAll(async ({ browser }) => {
 
     app = new BaseController(page);
     await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
-    // await app.portalController.closeEnableDesktopNotification();
+    await app.portalController.closeEnableDesktopNotification();
 
     Log.info('Creating conversation');
     const createSUCData = {
