@@ -58,7 +58,7 @@ test(`${testName} ${testTags} @VA-7592`, async ({ browser }) => {
             })
         ]);
 
-        await test.step('Phase 1 THEN - Click favourite button and favourite button filled ', async () => {
+        await test.step('Step 1 WHEN - Click flag button and flag button filled', async () => {
             await app1.chatController.clickChatFlagButton();
             await expect(app1.chatController.Pom.CHAT_FLAG_BUTTON_FILLED).toBeVisible();
         });
