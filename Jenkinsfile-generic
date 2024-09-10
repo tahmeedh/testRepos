@@ -17,8 +17,8 @@ pipeline {
         timeout(time: timeOutTime, unit: 'MINUTES')
     }
     parameters {
-        string(name: 'testCommandParam', defaultValue: false, description: 'npx playwright commands')
-        choice(name:'targetEnvParam', defaultValue: false, description:'Test enviroment to run on')
+        string(name: 'testCommandParam', description: 'npx playwright commands')
+        choice(name:'targetEnvParam', description:'Test enviroment to run on')
         gitParameter(branch: '',
                      branchFilter: 'origin/(.*)',
                      defaultValue: 'master',
