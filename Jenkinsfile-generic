@@ -6,8 +6,6 @@ def buildNumber = env.BUILD_NUMBER.toInteger()
 def buildImageVersion = '1.0.0'
 def buildImage = "docker-repo.globalrelay.net/test-automation/va-test-image:${buildImageVersion}"
 def buildNode = 'linux'
-def targetEnvChocies = ['cpqa2-va1', 'cpqa2-pd1', 'cpqa2-pd2', 'cpqa2-ca1', 'cpqa2-sq1', 'cpqa2', 'cpqa1']
-def defaultTestCommand = 'npx playwright test'
 
 pipeline {
     agent {
@@ -19,8 +17,8 @@ pipeline {
         timeout(time: timeOutTime, unit: 'MINUTES')
     }
     parameters {
-        string(name: 'testCommandParam', defaultValue: defaultTestCommand, description: 'npx playwright commands')
-        choice(name:'targetEnvParam', choices: targetEnvChocies, description:'Test enviroment to run on')
+        string(name: 'testCommandParam', defaultValue: false, description: 'npx playwright commands')
+        choice(name:'targetEnvParam', defaultValue: false, description:'Test enviroment to run on')
         gitParameter(branch: '',
                      branchFilter: 'origin/(.*)',
                      defaultValue: 'master',
