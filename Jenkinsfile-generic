@@ -16,20 +16,6 @@ pipeline {
         timestamps()
         timeout(time: timeOutTime, unit: 'MINUTES')
     }
-    parameters {
-        string(name: 'testCommandParam', description: 'npx playwright commands')
-        choice(name:'targetEnvParam', description:'Test enviroment to run on')
-        gitParameter(branch: '',
-                     branchFilter: 'origin/(.*)',
-                     defaultValue: 'master',
-                     description: 'defaults to master branch',
-                     name: 'jsatE2EChatWindowParam',
-                     quickFilterEnabled: true,
-                     selectedValue: 'NONE',
-                     sortMode: 'ASCENDING',
-                     tagFilter: '*',
-                     type: 'PT_BRANCH')
-    }
     stages {
         stage('Preparation') {
             steps {
