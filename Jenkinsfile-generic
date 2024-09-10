@@ -1,13 +1,13 @@
 def email_recipients = 'sam.leung@globalrelay.net'
 def nodeVersion = 'v18.18.0'
 def buildsToKeep = 20
-def timeOutTime = 40
+def timeOutTime = 80
 def buildNumber = env.BUILD_NUMBER.toInteger()
 def buildImageVersion = '1.0.0'
 def buildImage = "docker-repo.globalrelay.net/test-automation/va-test-image:${buildImageVersion}"
 def buildNode = 'linux'
-def targetEnv = 'cpqa1'
-def testCommand = 'npx playwright test -g @message-hub'
+def targetEnvChocies = ['cpqa2-va1', 'cpqa2-pd1', 'cpqa2-pd2', 'cpqa2-ca1', 'cpqa2-sq1', 'cpqa2', 'cpqa1']
+def defaultTestCommand = 'npx playwright test'
 
 pipeline {
     agent {
@@ -19,16 +19,51 @@ pipeline {
         timeout(time: timeOutTime, unit: 'MINUTES')
     }
     parameters {
-        string(name: 'testCommand', defaultValue: "${testCommand}", description: 'Test command to run. Envrioment variable will not work here.')
+        string(name: 'testCommandParam', defaultValue: defaultTestCommand, description: 'npx playwright commands')
+        choice(name:'targetEnvParam', choices: targetEnvChocies, description:'Test enviroment to run on')
+        gitParameter(branch: '',
+                     branchFilter: 'origin/(.*)',
+                     defaultValue: 'master',
+                     description: 'defaults to master branch',
+                     name: 'jsatE2EChatWindowParam',
+                     quickFilterEnabled: true,
+                     selectedValue: 'NONE',
+                     sortMode: 'ASCENDING',
+                     tagFilter: '*',
+                     type: 'PT_BRANCH')
     }
     stages {
         stage('Preparation') {
             steps {
                     // Wipe out workspace for clean build each time
                     deleteDir()
-                    sh '''
-                        git clone ssh://git@stash.globalrelay.net:7999/portal/jsat-e2e-chat-window.git
-                    '''
+                    script {
+                        // Clone and checkout the correct JSAT-E2E-CHAT-WINDOW branch
+                        sh """
+                            git clone ssh://git@stash.globalrelay.net:7999/portal/jsat-e2e-chat-window.git
+                            cd ./jsat-e2e-chat-window
+                            git checkout ${params.jsatE2EChatWindowParam}
+                            git status
+                            echo "SERVER='${params.targetEnvParam}'" > .env
+                        """
+                        // Get admin username and password rom secret server and write it into .env file
+                        with_ss_token() {
+                            with_ss_credentials([[secret_id: 110646, field: 'Username', variable: 'LOGIN_NAME'], [secret_id: 110646, field: 'Password', variable: 'PASSWORD']]) {
+                                sh """
+                              echo "ADMIN_USERNAME='${LOGIN_NAME}'" >> .env
+                              echo "ADMIN_PASSWORD='${PASSWORD}'" >> .env
+                            """
+                            }
+                        }
+
+                        def commitHash = sh(script: 'cd ./jsat-e2e-chat-window && git rev-parse --short HEAD', returnStdout: true)
+                        // Tag current build to run
+                        currentBuild.displayName = "#${buildNumber} ${params.targetEnvParam}"
+                        currentBuild.description = "ENV: ${params.targetEnvParam}<br>" +
+                                                    "HASH: ${commitHash}<br>" + 
+                                                    "CMD: ${params.testCommandParam}<br>" +
+                                                    "BR: ${params.jsatE2EChatWindowParam}<br>"
+                    }
             }
         }
 
@@ -54,36 +89,20 @@ pipeline {
                     nvmNodeJsOrgMirror: 'https://nodejs.org/dist',
                     version: "${nodeVersion}") {
                     script {
-                        with_ss_token() {
-                            with_ss_credentials([[secret_id: 110646, field: 'Username', variable: 'LOGIN_NAME'], [secret_id: 110646, field: 'Password', variable: 'PASSWORD']]) {
-                                sh """
-                              echo "ADMIN_USERNAME='${LOGIN_NAME}'" > jsat-e2e-chat-window/.env
-                              echo "ADMIN_PASSWORD='${PASSWORD}'" >> jsat-e2e-chat-window/.env
-                            """
-                            }
-                        }
-
-                        sh """
-                              echo "SERVER='${targetEnv}'" >> jsat-e2e-chat-window/.env
-                    """
-
-                        sh  '''
+                        // Install Playwright and run tests
+                        sh  """
                         export PATH="$NVM_BIN:$PATH"
                         echo "PATH is set to [$PATH]"
                         echo "NVM_BIN is set to [$NVM_BIN]"
-                        echo "Test command is set to [$testCommand]"
                         cd ./jsat-e2e-chat-window
                         npm ci
-                        git status
+                        echo "Test command is set to [$params.testCommandParam] on [$params.targetEnvParam]"
                         echo 'Install playwright'
                         ${NVM_BIN}/npx playwright install chromium
-                        echo "Running tests with the test command [$testCommand] on [${targetEnv}]"
-                        set +e
-                        ${NVM_BIN}/$testCommand| tee playwright_tests.log
-                        echo "Playwright test command exit code is [$?]"
-                        set -e
+                        echo "Running tests with the test command [$params.testCommandParam]"
+                        ${NVM_BIN}/$params.testCommandParam | tee playwright_tests.log || exit 0
                         grep "Running [0-9]* test" playwright_tests.log
-                        '''
+                        """
                     }
                     }
             }
@@ -91,9 +110,9 @@ pipeline {
 
         stage('Publishing reports and archiving videos in parallel') {
             parallel {
-                stage('Publishing Reports') {
-                    steps {
-                        script {
+                    stage('Publishing Reports') {
+                        steps {
+                            script {
                                 echo 'Publish test result report'
                                 publishHTML target: [
                     allowMissing: true,
@@ -101,15 +120,13 @@ pipeline {
                     keepAll: true,
                     reportDir: './jsat-e2e-chat-window/playwright-report',
                     reportFiles: 'index.html',
-                    reportName: 'jsat-e2e-chat-window Test Report'
+                    reportName: 'Jsat-E2E-chat-window HTML Report'
                 ]
-                                currentBuild.displayName = "#${buildNumber} Target Env.: ${targetEnv} "
-
                                 echo 'Publishing Allure reports'
                                 allure commandline: 'Allure-2.12.1', includeProperties: true, jdk: '', properties: [[key: 'allure.tests.management.pattern', value: 'https://testrail.globalrelay.net/index.php?/cases/view/%s'], [key: 'allure.issues.tracker.pattern', value: 'https://jira.globalrelay.net/browse/%s']], results: [[path: 'jsat-e2e-chat-window/allure-results']]
+                            }
                         }
                     }
-                }
 
                     stage('Archiving Videos') {
                         steps {
