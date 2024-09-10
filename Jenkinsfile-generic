@@ -24,7 +24,7 @@ pipeline {
         gitParameter(branch: '',
                      branchFilter: 'origin/(.*)',
                      defaultValue: 'master',
-                     description: '',
+                     description: 'defaults to master branch',
                      name: 'jsatE2EChatWindowParam',
                      quickFilterEnabled: true,
                      selectedValue: 'NONE',
