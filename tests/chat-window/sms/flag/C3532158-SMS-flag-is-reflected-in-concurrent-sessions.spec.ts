@@ -67,7 +67,7 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
         await expect(app.chatController.Pom.CHAT_FLAG_BUTTON_FILLED).toBeVisible();
     });
 
-    await test.step('Phase 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
+    await test.step('Phase 1 THEN - See flag icon and return to conversation in concurrent session ', async () => {
         await app2.conversationListController.clickConversationByRow(0);
         await expect(app2.chatController.Pom.CHAT_FLAG_BUTTON_FILLED).toBeVisible();
         await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
@@ -75,12 +75,12 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
         });
     });
 
-    await test.step('Phase 2 WHEN - Click favourite button and favourite button unfilled ', async () => {
+    await test.step('Phase 2 WHEN - Click flag button and flag button unfilled ', async () => {
         await app.chatController.clickChatFavouriteButton();
         await expect(app.chatController.Pom.CHAT_FLAG_BUTTON).toBeVisible();
     });
 
-    await test.step('Phase 2 THEN - Favourite icon not visible and return to conversation in concurrent session', async () => {
+    await test.step('Phase 2 THEN - Flag icon not visible and return to conversation in concurrent session', async () => {
         await app2.chatController.clickChatFlagButton();
         await expect(app2.chatController.Pom.CHAT_FLAG_BUTTON).toBeVisible();
         await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
