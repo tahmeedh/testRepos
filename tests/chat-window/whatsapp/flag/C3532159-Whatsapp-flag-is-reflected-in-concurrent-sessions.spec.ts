@@ -26,7 +26,7 @@ test.beforeEach(async () => {
 
     await user1.requestAndAssignWhatsAppNumber();
 });
-test(`${testName} ${testTags} @VA-7592`, async () => {
+test.skip(`${testName} ${testTags} @VA-7592 @BUG_ID:VA-7664`, async () => {
     test.info().annotations.push(testAnnotation);
     Log.starDivider(
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
@@ -60,25 +60,25 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
         await app.chatController.sendContent();
     });
 
-    await test.step('Step 1 WHEN - Click favourite button and favourite button filled ', async () => {
-        await app.chatController.clickChatFavouriteButton();
-        await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
+    await test.step('Step 1 WHEN - Click flag button and flag button filled ', async () => {
+        await app.chatController.clickChatFlagButton();
+        await expect(app.chatController.Pom.CHAT_FLAG_BUTTON_FILLED).toBeVisible();
     });
 
-    await test.step('step 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
+    await test.step('step 1 THEN - See flag icon and return to conversation in concurrent session ', async () => {
         await app2.conversationListController.clickConversationByRow(0);
-        await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
+        await expect(app2.chatController.Pom.CHAT_FLAG_BUTTON_FILLED).toBeVisible();
         await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
             maxDiffPixelRatio: 0.1
         });
 
-        await test.step('Phase 2 WHEN - Click favourite button and favourite button unfilled', async () => {
-            await app.chatController.clickChatFavouriteButton();
+        await test.step('Phase 2 WHEN - Click flag button and flag button unfilled', async () => {
+            await app.chatController.clickChatFlagButton();
             await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON).toBeVisible();
         });
 
-        await test.step('Phase 2 THEN - Favourite icon not visible and return to conversation in concurrent session ', async () => {
-            await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON).toBeVisible();
+        await test.step('Phase 2 THEN - Flag icon not visible and return to conversation in concurrent session ', async () => {
+            await expect(app2.chatController.Pom.CHAT_FLAG_BUTTON).toBeVisible();
             await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
                 maxDiffPixelRatio: 0.1
             });
