@@ -26,11 +26,7 @@ test.beforeEach(async () => {
 
     await user1.requestAndAssignTwilioNumber();
 });
-test.skip(`${testName} ${testTags} @VA-7592`, async () => {
-    test.info().annotations.push({
-        type: 'BUG_ID',
-        description: `https://jira.globalrelay.net/browse/VA-${7664}`
-    });
+test.skip(`${testName} ${testTags} @VA-7592 @BUG_ID:VA-7664`, async () => {
     test.info().annotations.push(testAnnotation);
     Log.starDivider(
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
