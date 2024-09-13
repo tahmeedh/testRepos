@@ -34,8 +34,8 @@ pipeline {
                         with_ss_token() {
                             with_ss_credentials([[secret_id: 110646, field: 'Username', variable: 'LOGIN_NAME'], [secret_id: 110646, field: 'Password', variable: 'PASSWORD']]) {
                                 sh """
-                              echo "ADMIN_USERNAME='${LOGIN_NAME}'" >> .env
-                              echo "ADMIN_PASSWORD='${PASSWORD}'" >> .env
+                              echo "ADMIN_USERNAME='${LOGIN_NAME}'" >> jsat-e2e-chat-window/.env
+                              echo "ADMIN_PASSWORD='${PASSWORD}'" >> jsat-e2e-chat-window/.env
                             """
                             }
                         }
