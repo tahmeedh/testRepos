@@ -5,6 +5,7 @@ export class ConversationListPage extends BasePage {
     readonly page: Page;
     readonly CONVERSATION_ROW: Locator;
     readonly CONVERSATION_NAME: Locator;
+    readonly EMPTY_HUB_CONVERSATION_MESSAGE: Locator;
     readonly EMPTY_HUB_CHANNEL_MESSAGE: Locator;
     readonly MUTE_CHAT_ICON: Locator;
     readonly NEW_MESSAGE_BLUE_DOT: Locator;
@@ -27,6 +28,9 @@ export class ConversationListPage extends BasePage {
         this.NEW_MESSAGE_BLUE_BADGE = this.MESSAGEIFRAME.locator('.m-auto-blue-badge');
         this.CONVERSATION_ROW = this.MESSAGEIFRAME.locator('.m-auto-list-item-row');
         this.CONVERSATION_NAME = this.MESSAGEIFRAME.locator('.m-auto-name');
+        this.EMPTY_HUB_CONVERSATION_MESSAGE = this.MESSAGEIFRAME.locator(
+            '.m-auto-empty-hub-conversation-text'
+        );
         this.EMPTY_HUB_CHANNEL_MESSAGE = this.MESSAGEIFRAME.locator('.m-auto-empty-hub-channel-message');
         this.NEW_INVITE_BADGE = this.MESSAGEIFRAME.locator('.m-auto-has-new-invite');
         this.FILTER_ICON = this.MESSAGEIFRAME.locator('.m-auto-filter-menu-icon');

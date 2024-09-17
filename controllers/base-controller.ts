@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 
 import type { Page } from '@playwright/test';
-import { errors, test } from '@playwright/test';
+import { errors, expect, test } from '@playwright/test';
 import { LOGIN_ENDPOINTS } from 'Constants/login-endpoints';
 import { LoginEndpointUtils } from 'helper/login-endpoint-utils';
 import { Log } from 'Apis/api-helpers/log-utils';
@@ -110,12 +110,28 @@ export class BaseController {
      * @param password login password.
      */
     async loginAndInitialize(username: string, password: string) {
-        await this.goToLoginPage();
-        await this.loginController.loginToPortal(username, password);
-        await this.waitForInitialLoad();
-        await IgnoreErrorUtils.ignoreError(async () =>
-            this.portalController.closeEnableDesktopNotification()
-        );
+        await expect(async () => {
+            await this.page.context().clearCookies();
+            await this.goToLoginPage();
+            await this.loginController.loginToPortal(username, password);
+            await this.waitForInitialLoad();
+            await expect(
+                this.conversationListController.Pom.CONVERSATION_ROW.or(
+                    this.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
+                )
+                    .or(this.conversationListController.Pom.EMPTY_HUB_CONVERSATION_MESSAGE)
+                    .first()
+            ).toBeVisible();
+            await IgnoreErrorUtils.ignoreError(async () =>
+                this.portalController.closeEnableDesktopNotification()
+            );
+            if (await this.newsAlertController.Pom.NEW_FEATURE_TOOLTIP_CLOSE_BUTTON.isVisible()) {
+                await this.newsAlertController.closeSmsAndWhatsAppEnabledNotification();
+            } else if (await this.newsAlertController.Pom.NEWS_ALERT_NEXT_BUTTON.isVisible()) {
+                await this.newsAlertController.clickNextSMSEnabledNotification();
+                await this.portalController.clickCloseSMSEnabledNotification();
+            }
+        }).toPass();
     }
 
     /**

@@ -35,14 +35,10 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         await test.step(`Users are logged in`, async () => {
             return Promise.all([
                 test.step(`User1 is logged in`, async () => {
-                    await app1.goToLoginPage();
-                    await app1.loginController.loginToPortal(user1.EMAIL, user1.PASSWORD);
-                    await app1.portalController.closeEnableDesktopNotification();
+                    await app1.loginAndInitialize(user1.EMAIL, user1.PASSWORD);
                 }),
                 test.step(`User2 is logged in`, async () => {
-                    await app2.goToLoginPage();
-                    await app2.loginController.loginToPortal(user2.EMAIL, user2.PASSWORD);
-                    await app2.portalController.closeEnableDesktopNotification();
+                    await app2.loginAndInitialize(user2.EMAIL, user2.PASSWORD);
                 })
             ]);
         });

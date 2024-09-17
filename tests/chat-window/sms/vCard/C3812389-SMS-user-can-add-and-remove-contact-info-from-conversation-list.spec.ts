@@ -11,13 +11,8 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     const app = new BaseController(page);
 
     await test.step('GIVEN - User has vCard opened', async () => {
-        await test.step('Go to login page', async () => {
-            await app.goToLoginPage();
-        });
-
         await test.step('Login', async () => {
-            await app.loginController.loginToPortal(USER1.EMAIL, USER1.PASSWORD);
-            await app.portalController.closeEnableDesktopNotification();
+            await app.loginAndInitialize(USER1.EMAIL, USER1.PASSWORD);
         });
 
         await test.step('vCard is opened', async () => {

@@ -33,11 +33,7 @@ test(`${testName} ${testTags}`, async () => {
 
     await test.step('GIVEN', async () => {
         await test.step('User is logged in', async () => {
-            await app.goToLoginPage();
-            await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-            await app.portalController.closeEnableDesktopNotification();
-            await app.newsAlertController.clickNextSMSEnabledNotification();
-            await app.portalController.clickCloseSMSEnabledNotification();
+            await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
         });
     });
 

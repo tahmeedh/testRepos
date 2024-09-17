@@ -46,14 +46,12 @@ test(`${testName} ${testTags} @VA-7592`, async ({ browser }) => {
             browser2 = await browser.newContext();
             const user1Page2 = await browser2.newPage();
             app2 = new BaseController(user1Page2);
-            await app2.goToLoginPage();
         });
 
         await Promise.all([
             test.step(`Browser2 - User1 is logged in`, async () => {
                 await test.step('Login ', async () => {
-                    await app2.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-                    await app2.portalController.closeEnableDesktopNotification();
+                    await app2.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
                 });
             })
         ]);

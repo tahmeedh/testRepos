@@ -40,11 +40,7 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     await test.step('Create Browser and Log in ', async () => {
         app = new BaseController(page);
-        await app.goToLoginPage();
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.portalController.closeEnableDesktopNotification();
-        await app.newsAlertController.clickNextSMSEnabledNotification();
-        await app.portalController.clickCloseSMSEnabledNotification();
+        await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
     });
 
     await test.step('User start text message with an internal contact', async () => {
