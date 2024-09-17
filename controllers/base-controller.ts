@@ -122,6 +122,7 @@ export class BaseController {
                     .or(this.conversationListController.Pom.EMPTY_HUB_CONVERSATION_MESSAGE)
                     .first()
             ).toBeVisible();
+            await expect(this.conversationListController.Pom.SKELETON_ROW).not.toBeVisible();
             await IgnoreErrorUtils.ignoreError(async () =>
                 this.portalController.closeEnableDesktopNotification()
             );

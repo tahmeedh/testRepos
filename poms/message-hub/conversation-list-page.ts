@@ -21,6 +21,8 @@ export class ConversationListPage extends BasePage {
     readonly ATTACHMENT_TEXT_LINE: Locator;
     readonly CHAT_FLAG_INDICATOR: Locator;
     readonly CHAT_FAVOURITE_INDICATOR: Locator;
+    readonly SKELETON_ROW: Locator;
+
     constructor(page: Page) {
         super(page);
         this.MUTE_CHAT_ICON = this.MESSAGEIFRAME.locator('.m-auto-muted-chat-icon');
@@ -42,5 +44,6 @@ export class ConversationListPage extends BasePage {
         this.ATTACHMENT_TEXT_LINE = this.MESSAGEIFRAME.getByText('Attachment');
         this.CHAT_FLAG_INDICATOR = this.MESSAGEIFRAME.locator('.grid-item__flag');
         this.CHAT_FAVOURITE_INDICATOR = this.MESSAGEIFRAME.locator('.gr-icon-star_filled');
+        this.SKELETON_ROW = this.MESSAGEIFRAME.locator('.skeleton-row');
     }
 }
