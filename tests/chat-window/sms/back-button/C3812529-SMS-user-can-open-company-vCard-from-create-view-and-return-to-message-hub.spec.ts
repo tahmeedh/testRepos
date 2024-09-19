@@ -13,13 +13,8 @@ test(`${testName} ${testTags}`, async ({ page }) => {
     app = new BaseController(page);
 
     await test.step('GIVEN', async () => {
-        await test.step('Go to login page', async () => {
-            await app.goToLoginPage();
-        });
-
         await test.step('Login', async () => {
-            await app.loginController.loginToPortal(user1.EMAIL, user1.PASSWORD);
-            await app.portalController.closeEnableDesktopNotification();
+            await app.loginAndInitialize(user1.EMAIL, user1.PASSWORD);
         });
 
         await test.step(`User 1 searches for user 2`, async () => {

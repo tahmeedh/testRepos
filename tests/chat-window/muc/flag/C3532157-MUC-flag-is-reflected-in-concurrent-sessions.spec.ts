@@ -43,12 +43,10 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
     });
 
     await test.step('Login ', async () => {
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.portalController.closeEnableDesktopNotification();
+        await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
     });
     await test.step('Login concurrent session ', async () => {
-        await app2.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app2.portalController.closeEnableDesktopNotification();
+        await app2.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
     });
 
     await test.step(`User create MUC`, async () => {

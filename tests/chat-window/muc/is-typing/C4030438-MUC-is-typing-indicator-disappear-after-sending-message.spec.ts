@@ -63,87 +63,26 @@ test(`${testName} ${testTags} @static`, async ({ browser }) => {
         await test.step(`Users Login`, async () => {
             await Promise.all([
                 test.step(`User1 is logged in`, async () => {
-                    await expect(async () => {
-                        await browser1.clearCookies();
-                        await app1.goToLoginPage();
-                        await app1.loginController.loginToPortal(user1.EMAIL, user1.PASSWORD);
-                        await expect(
-                            app1.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
-                        ).toHaveText('No channels');
-                    }).toPass();
+                    await app1.loginAndInitialize(user1.EMAIL, user1.PASSWORD);
                 }),
                 test.step(`User2 is logged in`, async () => {
-                    await expect(async () => {
-                        await browser2.clearCookies();
-                        await app2.goToLoginPage();
-                        await app2.loginController.loginToPortal(user2.EMAIL, user2.PASSWORD);
-                        await expect(
-                            app2.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
-                        ).toHaveText('No channels');
-                    }).toPass();
+                    await app2.loginAndInitialize(user2.EMAIL, user2.PASSWORD);
                 }),
                 test.step(`User3 is logged in`, async () => {
-                    await expect(async () => {
-                        await browser3.clearCookies();
-                        await app3.goToLoginPage();
-                        await app3.loginController.loginToPortal(user3.EMAIL, user3.PASSWORD);
-                        await expect(
-                            app3.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
-                        ).toHaveText('No channels');
-                    }).toPass();
+                    await app3.loginAndInitialize(user3.EMAIL, user3.PASSWORD);
                 }),
                 test.step(`User4 is logged in`, async () => {
-                    await expect(async () => {
-                        await browser4.clearCookies();
-                        await app4.goToLoginPage();
-                        await app4.loginController.loginToPortal(user4.EMAIL, user4.PASSWORD);
-                        await expect(
-                            app4.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
-                        ).toHaveText('No channels');
-                    }).toPass();
+                    await app4.loginAndInitialize(user4.EMAIL, user4.PASSWORD);
                 }),
                 test.step(`User5 is logged in`, async () => {
-                    await expect(async () => {
-                        await browser5.clearCookies();
-                        await app5.goToLoginPage();
-                        await app5.loginController.loginToPortal(user5.EMAIL, user5.PASSWORD);
-                        await expect(
-                            app5.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
-                        ).toHaveText('No channels');
-                    }).toPass();
+                    await app5.loginAndInitialize(user5.EMAIL, user5.PASSWORD);
                 }),
                 test.step(`User6 is logged in`, async () => {
-                    await expect(async () => {
-                        await browser6.clearCookies();
-                        await app6.goToLoginPage();
-                        await app6.loginController.loginToPortal(user6.EMAIL, user6.PASSWORD);
-                        await expect(
-                            app6.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
-                        ).toHaveText('No channels');
-                    }).toPass();
+                    await app6.loginAndInitialize(user6.EMAIL, user6.PASSWORD);
                 }),
                 test.step(`User7 is logged in`, async () => {
-                    await expect(async () => {
-                        await browser7.clearCookies();
-                        await app7.goToLoginPage();
-                        await app7.loginController.loginToPortal(user7.EMAIL, user7.PASSWORD);
-                        await expect(
-                            app7.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
-                        ).toHaveText('No channels');
-                    }).toPass();
+                    await app7.loginAndInitialize(user7.EMAIL, user7.PASSWORD);
                 })
-            ]);
-        });
-
-        await test.step(`Close desktop notification`, async () => {
-            await Promise.all([
-                app1.portalController.closeEnableDesktopNotification(),
-                app2.portalController.closeEnableDesktopNotification(),
-                app3.portalController.closeEnableDesktopNotification(),
-                app4.portalController.closeEnableDesktopNotification(),
-                app5.portalController.closeEnableDesktopNotification(),
-                app6.portalController.closeEnableDesktopNotification(),
-                app7.portalController.closeEnableDesktopNotification()
             ]);
         });
 

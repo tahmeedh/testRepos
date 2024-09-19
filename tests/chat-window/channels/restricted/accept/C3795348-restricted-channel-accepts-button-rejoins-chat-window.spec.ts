@@ -34,25 +34,12 @@ test.skip(`${testName} ${testTags} @static`, async ({ browser }) => {
 
         await Promise.all([
             test.step(`Browser1 - User1 is logged in`, async () => {
-                await expect(async () => {
-                    await browser1.clearCookies();
-                    await app1.goToLoginPage();
-                    await app1.loginController.loginToPortal(USER1.EMAIL, USER1.PASSWORD);
-                }).toPass();
+                await app1.loginAndInitialize(USER1.EMAIL, USER1.PASSWORD);
             }),
             test.step(`Browser2 - User2 is logged in`, async () => {
-                await expect(async () => {
-                    await browser2.clearCookies();
-                    await app2.goToLoginPage();
-                    await app2.loginController.loginToPortal(USER2.EMAIL, USER2.PASSWORD);
-                }).toPass();
+                await app2.loginAndInitialize(USER2.EMAIL, USER2.PASSWORD);
             })
         ]);
-
-        await test.step(`Close desktop notification`, async () => {
-            await app1.portalController.closeEnableDesktopNotification();
-            await app2.portalController.closeEnableDesktopNotification();
-        });
 
         await test.step(`Browser1 - User1 has conversation opened`, async () => {
             await app1.conversationListController.clickOnConversationName(CONVERSATION_NAME);

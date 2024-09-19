@@ -10,7 +10,7 @@ const { testAnnotation, testName, testTags } = TestUtils.getTestInfo(__filename)
 const file = './asset/download.png';
 const caption = StringUtils.generateString();
 
-test(`${testName} ${testTags}`, async ({ page, context }) => {
+test(`${testName} ${testTags}`, async ({ page }) => {
     test.info().annotations.push(testAnnotation);
     const app = new BaseController(page);
     let user1: User;
@@ -24,15 +24,7 @@ test(`${testName} ${testTags}`, async ({ page, context }) => {
         });
 
         await test.step(`User is logged in`, async () => {
-            await expect(async () => {
-                await context.clearCookies();
-                await app.goToLoginPage();
-                await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-                await expect(app.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE).toHaveText(
-                    'No channels'
-                );
-                await app.portalController.closeEnableDesktopNotification();
-            }).toPass();
+            await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
         });
 
         await test.step(`User is in SUC feed view`, async () => {

@@ -40,14 +40,10 @@ test(`${testName} ${testTags}`, async () => {
         context1 = await browser.newContext();
         const page1 = await context1.newPage();
         app = new BaseController(page1);
-        await app.goToLoginPage();
     });
 
     await test.step('User login', async () => {
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.portalController.closeEnableDesktopNotification();
-        await app.newsAlertController.clickNextSMSEnabledNotification();
-        await app.portalController.clickCloseSMSEnabledNotification();
+        await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
     });
 
     await test.step('User start text message', async () => {

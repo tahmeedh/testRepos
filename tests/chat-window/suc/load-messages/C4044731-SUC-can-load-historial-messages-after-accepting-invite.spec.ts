@@ -36,37 +36,12 @@ test.skip(`${testName} ${testTags}`, async ({ browser }) => {
         await test.step(`Users Login`, async () => {
             return Promise.all([
                 test.step(`User1 is logged in`, async () => {
-                    await expect(async () => {
-                        await browser1.clearCookies();
-                        await app1.goToLoginPage();
-                        await app1.loginController.loginToPortal(
-                            user1.userInfo.email,
-                            user1.userInfo.password
-                        );
-                        await expect(
-                            app1.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
-                        ).toHaveText('No channels');
-                    }).toPass();
+                    await app1.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
                 }),
                 test.step(`User2 is logged in`, async () => {
-                    await expect(async () => {
-                        await browser2.clearCookies();
-                        await app2.goToLoginPage();
-                        await app2.loginController.loginToPortal(
-                            user2.userInfo.email,
-                            user2.userInfo.password
-                        );
-                        await expect(
-                            app2.conversationListController.Pom.EMPTY_HUB_CHANNEL_MESSAGE
-                        ).toHaveText('No channels');
-                    }).toPass();
+                    await app2.loginAndInitialize(user2.userInfo.email, user2.userInfo.password);
                 })
             ]);
-        });
-
-        await test.step(`Close desktop notification`, async () => {
-            await app1.portalController.closeEnableDesktopNotification();
-            await app2.portalController.closeEnableDesktopNotification();
         });
 
         await test.step(`User 1 Create SUC`, async () => {

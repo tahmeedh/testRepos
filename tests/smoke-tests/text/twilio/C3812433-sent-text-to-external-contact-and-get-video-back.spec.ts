@@ -41,11 +41,10 @@ test(`${testName} ${testTags}`, async () => {
         context1 = await browser.newContext();
         page1 = await context1.newPage();
         app = new BaseController(page1);
-        await app.goToLoginPage();
     });
 
     await test.step('User Login', async () => {
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
+        await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
     });
 
     await test.step('User start a text Message', async () => {

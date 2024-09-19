@@ -27,26 +27,13 @@ test.skip(`${testName} ${testTags} @static`, async ({ browser }) => {
         });
 
         await Promise.all([
-            test.step(`Browser1 - User1 is logged in`, async () => {
-                await expect(async () => {
-                    await browser1.clearCookies();
-                    await app1.goToLoginPage();
-                    await app1.loginController.loginToPortal(user1.EMAIL, user1.PASSWORD);
-                }).toPass();
+            test.step(`User1 is logged in`, async () => {
+                await app1.loginAndInitialize(user1.EMAIL, user1.PASSWORD);
             }),
-            test.step(`Browser2 - User1 is logged in`, async () => {
-                await expect(async () => {
-                    await browser2.clearCookies();
-                    await app2.goToLoginPage();
-                    await app2.loginController.loginToPortal(user1.EMAIL, user1.PASSWORD);
-                }).toPass();
+            test.step(`User2 is logged in`, async () => {
+                await app2.loginAndInitialize(user1.EMAIL, user1.PASSWORD);
             })
         ]);
-
-        await test.step(`Close desktop notification`, async () => {
-            await app1.portalController.closeEnableDesktopNotification();
-            await app2.portalController.closeEnableDesktopNotification();
-        });
 
         await test.step(`Browser 1 - Send grcp request to reset chat to unmute`, async () => {
             const conversationId = await app1.conversationListController.getConversationId(conversationName);

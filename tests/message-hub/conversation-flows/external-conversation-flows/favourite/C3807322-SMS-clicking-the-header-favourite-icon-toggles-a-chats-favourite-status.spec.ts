@@ -36,10 +36,8 @@ test(`${testName} ${testTags}`, async () => {
     const page1 = await context1.newPage();
     app = new BaseController(page1);
 
-    await app.goToLoginPage();
     // user login
-    await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-    await app.portalController.closeEnableDesktopNotification();
+    await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
     // user start 1-1
     await app.hubHeaderController.clickStartChatButton();
