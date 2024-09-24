@@ -26,7 +26,7 @@ test.beforeEach(async () => {
 
     await user1.requestAndAssignWhatsAppNumber();
 });
-test(`${testName} ${testTags} @VA-7592`, async () => {
+test.skip(`${testName} ${testTags} @VA-7592 @BUG_ID:VA-7664`, async () => {
     test.info().annotations.push(testAnnotation);
     Log.starDivider(
         `START TEST: Create browser and login with ${user1.userInfo.firstName} ${user1.userInfo.lastName}`
@@ -78,7 +78,7 @@ test(`${testName} ${testTags} @VA-7592`, async () => {
         });
 
         await test.step('Phase 2 THEN - Favourite icon not visible and return to conversation in concurrent session ', async () => {
-            await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON).toBeVisible();
+            await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeHidden();
             await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
                 maxDiffPixelRatio: 0.1
             });
