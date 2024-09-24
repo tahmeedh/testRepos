@@ -128,6 +128,10 @@ pipeline {
     }
 
     post {
+        always{
+                junit 'jsat-e2e-chat-window/junit-results.xml'
+        }
+
         failure {
             script {
                 echo "Sending notification email to $email_recipients"

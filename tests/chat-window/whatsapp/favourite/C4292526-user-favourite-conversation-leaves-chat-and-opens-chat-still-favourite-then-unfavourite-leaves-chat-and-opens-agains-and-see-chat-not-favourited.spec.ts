@@ -35,9 +35,7 @@ test(`${testName} ${testTags}`, async () => {
     app = new BaseController(page1);
 
     await test.step('GIVEN', async () => {
-        await app.goToLoginPage();
-        await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-        await app.portalController.closeEnableDesktopNotification();
+        await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
     });
 
     await test.step(`Start ${testChatType} chat and send message`, async () => {

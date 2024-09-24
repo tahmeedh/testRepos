@@ -12,9 +12,7 @@ test.skip(`${testName} ${testTags} @static`, async ({ page }) => {
 
     await test.step(`GIVEN`, async () => {
         await test.step(`User is logged in`, async () => {
-            await app.goToLoginPage();
-            await app.loginController.loginToPortal(user1.EMAIL, user1.PASSWORD);
-            await app.portalController.closeEnableDesktopNotification();
+            await app.loginAndInitialize(user1.EMAIL, user1.PASSWORD);
         });
 
         await test.step(`User is in SUC feed view`, async () => {
