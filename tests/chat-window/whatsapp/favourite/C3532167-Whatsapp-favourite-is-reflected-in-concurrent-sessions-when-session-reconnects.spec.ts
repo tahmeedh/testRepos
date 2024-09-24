@@ -60,12 +60,12 @@ test.skip(`${testName} ${testTags} @VA-7592 @BUG_ID:VA-7664`, async () => {
         await app.chatController.sendContent();
     });
 
-    await test.step('Step 1 WHEN - Click favourite button and favourite button filled ', async () => {
+    await test.step('Phase 1 WHEN - Click favourite button and favourite button filled ', async () => {
         await app.chatController.clickChatFavouriteButton();
         await expect(app.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
     });
 
-    await test.step('step 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
+    await test.step('Phase 1 THEN - See favourite icon and return to conversation in concurrent session ', async () => {
         await app2.conversationListController.clickConversationByRow(0);
         await expect(app2.chatController.Pom.CHAT_FAVOURITE_BUTTON_FILLED).toBeVisible();
         await expect(app2.chatController.Pom.CHAT_HEADER_BUTTONS).toHaveScreenshot({
