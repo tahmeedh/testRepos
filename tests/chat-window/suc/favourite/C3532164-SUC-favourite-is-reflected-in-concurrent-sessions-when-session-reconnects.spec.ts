@@ -29,7 +29,6 @@ test(`${testName} ${testTags} @VA-7592`, async ({ browser }) => {
             browser1 = await browser.newContext();
             const user1Page = await browser1.newPage();
             app1 = new BaseController(user1Page);
-            await app1.goToLoginPage();
             await app1.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
 
             const createSUCData = {

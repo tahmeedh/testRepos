@@ -41,14 +41,10 @@ test.skip(`${testName} ${testTags} @VA-7592 @BUG_ID:VA-7664`, async () => {
 
     await test.step('GIVEN', async () => {
         await test.step('User is logged in', async () => {
-            await app.goToLoginPage();
-            await app.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-            await app.portalController.closeEnableDesktopNotification();
+            await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
         });
         await test.step('Login concurrent session', async () => {
-            await app2.goToLoginPage();
-            await app2.loginController.loginToPortal(user1.userInfo.email, user1.userInfo.password);
-            await app2.portalController.closeEnableDesktopNotification();
+            await app.loginAndInitialize(user1.userInfo.email, user1.userInfo.password);
         });
     });
 
